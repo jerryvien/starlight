@@ -9,7 +9,7 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>Patient - Home</title>
+        <title>Patient - Dashboard</title>
 
         <!-- Custom fonts for this template-->
         <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -56,48 +56,29 @@
 
                 <!-- Nav Item - Appointment Menu -->
                 <li class="nav-item">
-                    <a class="nav-link" href="appointment.html">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                        aria-expanded="true" aria-controls="collapseTwo">
                         <i class="fas fa-calendar"></i>
-                        <span>View Appointment</span></a>
+                        <span>Appointment</span>
+                    </a>
+                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <a class="collapse-item" href="appointment.html">Manage Appointment</a>
+                            <a class="collapse-item" href="past-app.html">View Upcoming</a>
+                            <a class="collapse-item" href="upcoming-app.html">View Past</a>
+                        </div>
+                    </div>
                 </li>
-
+                
+                <hr class="sidebar-divider d-none d-md-block">
 
                 <!-- Nav Item - View Patient -->
                 <li class="nav-item">
-                    <a class="nav-link" href="view-patient.html">
-                        <i class="fas fa-user"></i>
-                        <span>View Patient</span></a>
+                    <a class="nav-link" href="view-payment.html">
+                        <i class="fas fa-money-check-alt"></i>
+                        <span>View Payment</span></a>
                 </li>
-
-
-
-
-
-                <!-- Nav Item - Pages Collapse Menu -->
-                <!--            <li class="nav-item">
-                                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
-                                    aria-expanded="true" aria-controls="collapsePages">
-                                    <i class="fas fa-fw fa-folder"></i>
-                                    <span>Pages</span>
-                                </a>
-                                <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                                    <div class="bg-white py-2 collapse-inner rounded">
-                                        <h6 class="collapse-header">Login Screens:</h6>
-                                        <a class="collapse-item" href="login.html">Login</a>
-                                        <a class="collapse-item" href="register.html">Register</a>
-                                        <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
-                                        <div class="collapse-divider"></div>
-                                        <h6 class="collapse-header">Other Pages:</h6>
-                                        <a class="collapse-item" href="404.html">404 Page</a>
-                                        <a class="collapse-item" href="blank.html">Blank Page</a>
-                                    </div>
-                                </div>
-                            </li>-->
-
-
-
-
-
+                
                 <!-- Divider -->
                 <hr class="sidebar-divider d-none d-md-block">
 
@@ -105,8 +86,6 @@
                 <div class="text-center d-none d-md-inline">
                     <button class="rounded-circle border-0" id="sidebarToggle"></button>
                 </div>
-
-
 
             </ul>
             <!-- End of Sidebar -->
@@ -133,36 +112,20 @@
                         <!-- Topbar Navbar -->
                         <ul class="navbar-nav ml-auto">
 
-
-
-
-
-
-
                             <div class="topbar-divider d-none d-sm-block"></div>
 
                             <!-- Nav Item - User Information -->
                             <li class="nav-item dropdown no-arrow">
-                                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">Patient Name</span>
-                                    <img class="img-profile rounded-circle"
-                                         src="../img/undraw_profile.svg">
+                                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" 
+                                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">John Smith</span>
+                                    <img class="img-profile rounded-circle" src="../img/undraw_profile.svg">
                                 </a>
                                 <!-- Dropdown - User Information -->
-                                <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                     aria-labelledby="userDropdown">
+                                <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
                                     <a class="dropdown-item" href="#">
                                         <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                         Profile
-                                    </a>
-                                    <a class="dropdown-item" href="#">
-                                        <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Settings
-                                    </a>
-                                    <a class="dropdown-item" href="#">
-                                        <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Activity Log
                                     </a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
@@ -191,26 +154,27 @@
                             <div class="row">
 
                                 <!-- Appointment Card -->
+                                
                                 <div class="col-xl-3 col-md-6 mb-4">
-                                    <div class="card bg-white shadow h-100 py-2">
+                                    <div class="card border-left-warning shadow h-100 py-2">
                                         <div class="card-body">
                                             <div class="row no-gutters align-items-center">
                                                 <div class="col mr-2">
-                                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                        Appointment (Upcoming)</div>
+                                                    <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                                        Upcoming Appointment</div>
                                                     <hr class="mt-1">
-
-                                                    <div class="h6 mb-0 font-weight-bold text-primary">29 May 2024</div>
-                                                    <div class="text-xs font-weight-bold text-primary">
-                                                        (8.00 a.m. - 10 a.m.)</div>
+                                                    <div class="h6 mb-0 font-weight-bold text-gray-800">29 May 2024</div>
+                                                    <div class="text-xs font-weight-bold text-gray-800">
+                                                        (8.00 A.M. - 10 A.M.)</div>
                                                 </div>
                                                 <div class="col-auto">
-                                                    <i class="fas fa-calendar fa-2x text-primary"></i>
+                                                    <i class="fas fa-calendar fa-2x text-gray-300"></i>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                                
                             </div>
                         </div>
 
@@ -218,71 +182,73 @@
 
                         <!-- Content Row -->
                         <div class="row">
-
+                            
                             <!-- Content Column -->
-                            <div class="col-xl-3 col-md-6 mb-4">
-
-                                <div class="col mb-4">
+                                <div class="col">
 
                                     <!-- Profile -->
                                     <div class="row mx-1 justify-content-between">
                                         <h5 class="font-weight-bold my-2">Profile</h5>
-                                        <button type="button" class="btn btn-success mb-2">
+                                        <button type="button" class="btn btn-warning mb-2">
                                             <i class="fas fa-pencil-alt"></i>
                                         </button>
                                     </div>
                                     <div class="card shadow mb-4">
                                         <div class="card-body ">
                                             <div class="flex flex-column">
-                                                <h4 class="text-dark font-weight-bold">
+                                                <h5 class="text-dark font-weight-bold">
                                                     John Smith
                                                 </h4>
                                                 <ul>
-                                                    <li>Phone:<span class="mx-4 text-primary">  987654321</span></li> 
+                                                    <li>IC Number:<span class="mx-4 text-primary">011010-14-1848</span></li> 
                                                 
                                                     <li>
-                                                        Email:<span class="mx-4 text-primary">  example@gmail.com</span>
+                                                        Gender:<span class="mx-4 text-primary">Male</span>
+                                                    </li>
+                                                    <li>
+                                                        Address:<span class="mx-4 text-primary">No 28 Jalan Kesuma 7/20, 43700 Beranang, Selangor, Malaysia</span>
+                                                    </li>
+                                                    <li>
+                                                        Email:<span class="mx-4 text-primary">unknownworld24@gmail.com</span>
+                                                    </li>
+                                                    <li>
+                                                        Contact Number:<span class="mx-4 text-primary">016-2423323</span>
+                                                    </li>
+                                                    <li>
+                                                        Age:<span class="mx-4 text-primary">23</span>
                                                     </li>
                                                 </ul>
                                             </div>
                                         </div>
                                     </div>
-
                                 </div>
-                            </div>
-                            <div class="col-lg-12 mb-4">
-
-                                <div class="col mb-4">
-
-                                    <!-- Profile -->
+                            
+                                <div class="col">
+                                    <!-- Medical History -->
                                     <div class="row mx-1 justify-content-between">
                                         <h5 class="font-weight-bold my-2">Medical History</h5>
-                                        <button type="button" class="btn btn-success mb-2">
-                                            <i class="fas fa-pencil-alt"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-success mb-2">
+                                        <button type="button" class="btn btn-warning mb-2">
                                             <i class="fas fa-pencil-alt"></i>
                                         </button>
                                     </div>
                                     <div class="card shadow mb-4">
                                         <div class="card-body ">
                                             <div class="flex flex-column">
-                                                <h4 class="text-dark font-weight-bold">
-                                                    John Smith
-                                                </h4>
                                                 <ul>
-                                                    <li>Phone:<span class="mx-4 text-primary">  987654321</span></li> 
-                                                
                                                     <li>
-                                                        Email:<span class="mx-4 text-primary">  example@gmail.com</span>
+                                                        Existing Illness:<span class="mx-4 text-primary">Post Traumatic Stress Disorder (PTSD)</span>
+                                                    </li> 
+                                                    <li>
+                                                        Duration:<span class="mx-4 text-primary">2 1/2 years</span>
+                                                    </li>
+                                                    <li>
+                                                        Medication Details:<span class="mx-4 text-primary">Paroxetine 10mg</span>
                                                     </li>
                                                 </ul>
                                             </div>
                                         </div>
                                     </div>
-
                                 </div>
-                            </div>
                         </div>
                         
                         
