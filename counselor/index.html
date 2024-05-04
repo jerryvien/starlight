@@ -273,11 +273,41 @@
                                                         </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        ...
+                                                        <form action="">
+                                                            <table class="table">
+                                                                <tr>
+                                                                    <td>Name: </td>
+                                                                    <td><input type="text" name="name"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>IC No </td>
+                                                                    <td><input type="text" name="icNo"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Address: </td>
+                                                                    <td><textarea id="message" name="message" rows="4" ></textarea></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Gender: </td>
+                                                                    <td>
+                                                                        <input type="radio" id="male" name="gender" value="Male"><label for="male">Male</label> <br/>
+                                                                        <input type="radio" id="female" name="gender" value="Female"><label for="female">Female</label>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Email: </td>
+                                                                    <td><input type="email" name="email"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Contact No: </td>
+                                                                    <td><input type="text" name="contact"></td>
+                                                                </tr>
+                                                            </table>
+                                                        </form>
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                        <button type="button" class="btn btn-primary">Save changes</button>
+                                                        <button type="button" class="btn btn-primary" data-dismiss="modal">Save changes</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -285,18 +315,39 @@
                                     </div>
                                     <div class="card shadow mb-4">
                                         <div class="card-body ">
-                                            <div class="flex flex-column">
-                                                <h4 class="text-dark font-weight-bold">
-                                                    John Doe
-                                                </h4>
-                                                <ul>
-                                                    <li>Counselor ID: <span class="mx-4 text-primary"> 11111</span></li> 
-                                                    <li>Phone:<span class="mx-4 text-primary">  987654321</span></li> 
-
-                                                    <li>
-                                                        Email:<span class="mx-4 text-primary">  example@gmail.com</span>
-                                                    </li>
-                                                </ul>
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>Counselor ID</td>
+                                                            <td>2024000111</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Name</td>
+                                                            <td>Dennis Ritchie</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>IC No</td>
+                                                            <td>010101-10-0101</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Address</td>
+                                                            <td>No 66 Jalan Kesuma 7/20, 43700 Beranang, Selangor, Malaysia</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Gender</td>
+                                                            <td>Male</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Email</td>
+                                                            <td>unknownworld24@gmail.com</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Contact Number</td>
+                                                            <td>+60135559878</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
                                             </div>
                                         </div>
                                     </div>
