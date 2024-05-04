@@ -54,7 +54,7 @@
 
 
                 <!-- Nav Item - Appointment Menu -->
-                <li class="nav-item">
+                <li class="nav-item active">
                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                        aria-expanded="true" aria-controls="collapseTwo">
                         <i class="fas fa-calendar"></i>
@@ -390,6 +390,61 @@
                                                 <td>A03</td>
                                                 <td>Regulus Corneas</td>
 
+
+                                                <td>
+                                                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#edit">
+                                                        Edit 
+                                                    </button>
+                                                    <!-- Modal -->
+                                                    <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="editTitle" aria-hidden="true">
+                                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="example2ModalLongTitle">Edit</h5>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <form action="">
+                                                                        <table class="table">
+                                                                            <tr>
+                                                                                <td>Date: </td>
+                                                                                <td><input type="date" id="app_date" name="app_date"></td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>Time: </td>
+                                                                                <td><input type="time" id="appt" name="appt"></td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>Room: </td>
+                                                                                <td>
+                                                                                    <select name="rooms" id="rooms">
+                                                                                        <option value="room1">A01</option>
+                                                                                        <option value="room2">A02</option>
+                                                                                        <option value="room3">A03</option>
+                                                                                    </select>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </form>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                    <button type="button" class="btn btn-primary">Save changes</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>04</td>
+                                                <td>TBD</td>
+                                                <td>29-05-2024</td>
+                                                <td>8.00 a.m.</td>
+                                                <td>A01</td>
+                                                <td>John Smith</td>
 
                                                 <td>
                                                     <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#edit">
