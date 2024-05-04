@@ -9,7 +9,7 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>Manage Appointment</title>
+        <title>Add Appointment</title>
 
         <!-- Custom fonts for this template-->
         <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -62,7 +62,7 @@
                     </a>
                     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
-                            <a class="collapse-item" href="appointment.html">Manage Appointment</a>
+                            <a class="collapse-item" href="add-app.html">Add Appointment</a>
                             <a class="collapse-item" href="upcoming-app.html">View Upcoming</a>
                             <a class="collapse-item" href="past-app.html">View Past</a>
                         </div>
@@ -123,9 +123,9 @@
                                 <!-- Dropdown - User Information -->
                                 <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                      aria-labelledby="userDropdown">
-                                    <a class="dropdown-item" href="#">
+                                    <a class="dropdown-item" href="edit-profile.html">
                                         <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Profile
+                                        Edit Profile
                                     </a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
@@ -143,46 +143,39 @@
                     <div class="container-fluid">
 
                         <!-- Page Heading -->
-                        <h1 class="h3 mb-2 text-gray-800">Manage Appointment</h1>
+                        <h1 class="h3 mb-2 text-gray-800">Add Appointment</h1>
 
                         <!-- DataTales Example -->
                         <div class="card shadow mb-4">
                             <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                        <thead>
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Age</th>
-                                                <th>Medical History</th>
-                                                <th>Description</th>
-                                            </tr>
-                                        </thead>
-                                       
-                                        <tbody>
-                                            <tr>
-                                                <td>Tiger Nixon</td>
-                                                <td>18</td>
-                                                <td>None</td>
-                                                <td></td>
-
-                                            </tr>
-                                            <tr>
-                                                <td>Garrett Winters</td>
-                                                <td>25</td>
-                                                <td>Depression</td>
-                                                <td></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Ashton Cox</td>
-                                                <td>22</td>
-                                                <td>None</td>
-                                                <td></td>
-                                            </tr>
-                                            
-                                        </tbody>
-                                    </table>
-                                </div>
+                                <form>
+                                    <div class="form-group col-md-6">
+                                      <label for="input-appDate">Appointment Date</label>
+                                      <input type="date" class="form-control" id="input-appDate">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                      <label for="inputCounselor">Counselor</label>
+                                      <select id="inputCounselor" class="form-control">
+                                        <option selected>Choose one</option>
+                                        <option value="1">Adelia Marcius</option>
+                                        <option value="2">Faezah Nor</option>
+                                      </select>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                      <label for="inputTimeSlot">Available time slot</label>
+                                      <select id="inputTimeSlot" class="form-control col-auto" required>
+                                        <option selected>None selected</option>
+                                        <option value="08:00 AM - 10:00 AM">08:00 AM - 10:00 AM</option>
+                                        <option value="10:00 AM - 12:00 PM">10:00 AM - 12:00 PM</option>
+                                        <option value="02:00 PM - 04:00 PM">02:00 PM - 04:00 PM</option>
+                                        <option value="04:00 PM - 06:00 PM">04:00 PM - 06:00 PM</option>
+                                      </select>
+                                    </div>
+                                    
+                                    <input type="hidden" id="apmRoom" value="TBD">
+                                    
+                                    <button type="submit" class="btn btn-primary mt-5">Add Appointment</button>
+                                </form>
                             </div>
                         </div>
 
