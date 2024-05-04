@@ -10,7 +10,10 @@
         <meta name="author" content="">
 
         <title>Admin-Appointment</title>
-
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <script src="https://unpkg.com/gijgo@1.9.14/js/gijgo.min.js" type="text/javascript"></script>
+        <link href="https://unpkg.com/gijgo@1.9.14/css/gijgo.min.css" rel="stylesheet" type="text/css" />
         <!-- Custom fonts for this template-->
         <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
         <link
@@ -67,7 +70,7 @@
                         <i class="fas fa-user"></i>
                         <span>Patient</span></a>
                 </li>
-                
+
                 <!-- Nav Item - View Patient -->
                 <li class="nav-item">
                     <a class="nav-link" href="manage_counselor.html">
@@ -183,12 +186,18 @@
                     <div class="container-fluid">
 
                         <!-- Page Heading -->
-                        <h1 class="h3 mb-2 text-gray-800">Appointment &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Thursday, 02/05/2024</h1>
-
-                        <!-- DataTales Example -->
-                        <div class="card shadow mb-4">
+                        <h1 class="h3 mb-2 text-gray-800">Appointment</h1>
+                        <input id="datepicker" width="276" />
+                        <script>
+                            $('#datepicker').datepicker({
+                                uiLibrary: 'bootstrap4'
+                            });
+                        </script>
+                        
+                        <!-- DataTables Example -->
+                        <div class="card shadow mb-4 mt-4">
                             <div class="card-header py-3">
-                                <!--                            <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>-->
+                                <h1 class="h3 mb-2 text-gray-800">Appointment</h1>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -207,7 +216,7 @@
                                                 <th>Description</th>
                                             </tr>
                                         </thead>
-                                       
+
                                         <tbody>
                                             <tr>
                                                 <td>01.</td>
@@ -246,7 +255,7 @@
                                                 <td>Albus Dumbledore</td>
                                                 <td>Patient want a counseling on his Hogward Academy application.</td>
                                             </tr>
-                                            
+
                                         </tbody>
                                     </table>
                                 </div>
