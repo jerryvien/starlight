@@ -62,7 +62,7 @@
                     </a>
                     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
-                            
+
                             <a class="collapse-item" href="upcoming-app.html">Upcoming appointment</a>
                             <a class="collapse-item" href="past-app.html">Past appointment</a>
                         </div>
@@ -193,20 +193,51 @@
                             <!-- Button trigger modal -->
 
                             <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModalCenter">
-                                Create
+                                Create Follow-Up
                             </button>
                             <!-- Modal -->
                             <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLongTitle">Create new appointment</h5>
+                                            <h5 class="modal-title" id="exampleModalLongTitle">Create follow-up appointment</h5>
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
                                         </div>
                                         <div class="modal-body">
-                                            ...
+                                            <form action="">
+                                                <table class="table">
+                                                    <tr>
+                                                        <td>Patient: </td>
+                                                        <td>
+                                                            <select name="patients" id="patients">
+                                                                <option value="patient1">Alan Turing</option>
+                                                                <option value="patient2">Ada Lovelace</option>
+                                                                <option value="patient3">Ken Thompson</option>
+                                                            </select>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Date: </td>
+                                                        <td><input type="date" id="app_date" name="app_date"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Time: </td>
+                                                        <td><input type="time" id="appt" name="appt"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Room: </td>
+                                                        <td>
+                                                            <select name="rooms" id="rooms">
+                                                                <option value="room1">A01</option>
+                                                                <option value="room2">A02</option>
+                                                                <option value="room3">A03</option>
+                                                            </select>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </form>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -235,7 +266,7 @@
                                                 <th>Room</th>
                                                 <th>Patient</th>
                                                 <th></th>
-                                                
+
                                             </tr>
                                         </thead>
 
@@ -247,13 +278,13 @@
                                                 <td>8.00 a.m.</td>
                                                 <td>A01</td>
                                                 <td>Richard Nixon</td>
-                                                
+
                                                 <td>
-                                                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#example2ModalCenter">
-                                                        Edit
+                                                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#edit">
+                                                        Edit 
                                                     </button>
                                                     <!-- Modal -->
-                                                    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                                    <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="editTitle" aria-hidden="true">
                                                         <div class="modal-dialog modal-dialog-centered" role="document">
                                                             <div class="modal-content">
                                                                 <div class="modal-header">
@@ -263,7 +294,28 @@
                                                                     </button>
                                                                 </div>
                                                                 <div class="modal-body">
-                                                                    ...
+                                                                    <form action="">
+                                                                        <table class="table">
+                                                                            <tr>
+                                                                                <td>Date: </td>
+                                                                                <td><input type="date" id="app_date" name="app_date"></td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>Time: </td>
+                                                                                <td><input type="time" id="appt" name="appt"></td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>Room: </td>
+                                                                                <td>
+                                                                                    <select name="rooms" id="rooms">
+                                                                                        <option value="room1">A01</option>
+                                                                                        <option value="room2">A02</option>
+                                                                                        <option value="room3">A03</option>
+                                                                                    </select>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </form>
                                                                 </div>
                                                                 <div class="modal-footer">
                                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -281,14 +333,14 @@
                                                 <td>8.00 a.m.</td>
                                                 <td>A02</td>
                                                 <td>Betelguese Contee</td>
-                                                
-                                                
+
+
                                                 <td>
-                                                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#example2ModalCenter">
-                                                        Edit
+                                                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#edit">
+                                                        Edit 
                                                     </button>
                                                     <!-- Modal -->
-                                                    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                                    <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="editTitle" aria-hidden="true">
                                                         <div class="modal-dialog modal-dialog-centered" role="document">
                                                             <div class="modal-content">
                                                                 <div class="modal-header">
@@ -298,7 +350,28 @@
                                                                     </button>
                                                                 </div>
                                                                 <div class="modal-body">
-                                                                    ...
+                                                                    <form action="">
+                                                                        <table class="table">
+                                                                            <tr>
+                                                                                <td>Date: </td>
+                                                                                <td><input type="date" id="app_date" name="app_date"></td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>Time: </td>
+                                                                                <td><input type="time" id="appt" name="appt"></td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>Room: </td>
+                                                                                <td>
+                                                                                    <select name="rooms" id="rooms">
+                                                                                        <option value="room1">A01</option>
+                                                                                        <option value="room2">A02</option>
+                                                                                        <option value="room3">A03</option>
+                                                                                    </select>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </form>
                                                                 </div>
                                                                 <div class="modal-footer">
                                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -316,14 +389,14 @@
                                                 <td>8.00 a.m.</td>
                                                 <td>A03</td>
                                                 <td>Regulus Corneas</td>
-                                                
-                                                
+
+
                                                 <td>
-                                                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#example2ModalCenter">
-                                                        Edit
+                                                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#edit">
+                                                        Edit 
                                                     </button>
                                                     <!-- Modal -->
-                                                    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                                    <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="editTitle" aria-hidden="true">
                                                         <div class="modal-dialog modal-dialog-centered" role="document">
                                                             <div class="modal-content">
                                                                 <div class="modal-header">
@@ -333,7 +406,28 @@
                                                                     </button>
                                                                 </div>
                                                                 <div class="modal-body">
-                                                                    ...
+                                                                    <form action="">
+                                                                        <table class="table">
+                                                                            <tr>
+                                                                                <td>Date: </td>
+                                                                                <td><input type="date" id="app_date" name="app_date"></td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>Time: </td>
+                                                                                <td><input type="time" id="appt" name="appt"></td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>Room: </td>
+                                                                                <td>
+                                                                                    <select name="rooms" id="rooms">
+                                                                                        <option value="room1">A01</option>
+                                                                                        <option value="room2">A02</option>
+                                                                                        <option value="room3">A03</option>
+                                                                                    </select>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </form>
                                                                 </div>
                                                                 <div class="modal-footer">
                                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -347,7 +441,7 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                
+
                                 <!-- Modal -->
                                 <div class="modal fade" id="request" tabindex="-1" role="dialog" aria-labelledby="request" aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-centered" role="document">
