@@ -11201,3 +11201,7 @@ body {
 .footer {
   padding: 5rem 0;
 }
+
+.hover-patient {
+    background-color: blue; /* Change background color on hover */
+}
