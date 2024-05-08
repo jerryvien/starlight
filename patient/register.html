@@ -31,8 +31,10 @@
                     <div class="card-body p-0">
                         <div class="p-5">
                             <div class="text-center">
-                                <h1 class="h4 text-gray-900 mb-4">Create Account</h1>
+                                <h1 class="h4 text-gray-900 mb-4">Register</h1>
                             </div>
+                            <hr>
+                            <h5 class="mb-4">Account</h5>
                             <form class="user">
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
@@ -57,17 +59,21 @@
                                     </div>
                                 </div>
                                 <div class="form-row">
-                                    <div class="col-2">
-                                        <select class="mr-sm-2 form-control form-control-user" id="PatientGender">
-                                          <option value="2" selected>Male</option>
+                                    <div class="form-group col-md-6">
+                                        <select class="form-control form-control-user" id="PatientGender">
+                                          <option selected>Male</option>
                                           <option value="1">Female</option>
-                                          <option value="3">Prefer not to say</option>
+                                          <option value="2">Prefer not to say</option>
                                         </select>
                                     </div>
-                                    <div class="col-4">
-                                        <input type="text" class="form-control form-control-user" id="PatientLastName"
+                                    <div class="form-group col-md-6">
+                                        <input type="text" class="form-control form-control-user" id="PatientContactNum"
                                             placeholder="Contact Number">
                                     </div>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control form-control-user" id="PatientAddress"
+                                        placeholder="Home Address">
                                 </div>
                                 <div class="form-group">
                                     <input type="email" class="form-control form-control-user" id="PatientEmail"
@@ -83,6 +89,23 @@
                                             id="PatientConfirmPassword" placeholder="Confirm Password">
                                     </div>
                                 </div>
+                                <hr>
+                                
+                                <h5 class="mb-4">Medical History</h5>
+                                <div class="form-group">
+                                    <input type="text" class="form-control form-control-user" id="PatientIllness"
+                                        placeholder="Existing Illness">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control form-control-user" id="PatientIllnessDuration"
+                                        placeholder="Duration">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="mb-5 form-control form-control-user" id="PatientMedDetails"
+                                        placeholder="Medication Details">
+                                </div>
+                                
+                                
                                 <a href="login.html" class="btn btn-primary btn-user btn-block">
                                     Register Account
                                 </a>
