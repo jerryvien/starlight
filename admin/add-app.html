@@ -33,16 +33,16 @@
                 <!-- Sidebar - Brand -->
                 <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
                     <div class="sidebar-brand-icon ">
-                        <i class="fas fa-hospital-user"></i>
-                    </div>
-                    <div class="sidebar-brand-text mx-3">Patient</div>
+                        <i class="fas fa-user-cog"></i>
+                    </div>  
+                    <div class="sidebar-brand-text mx-3">Admin</div>
                 </a>
 
                 <!-- Divider -->
                 <hr class="sidebar-divider my-0">
 
                 <!-- Nav Item - Dashboard -->
-                <li class="nav-item active">
+                <li class="nav-item">
                     <a class="nav-link" href="index.html">
                         <i class="fas fa-fw fa-tachometer-alt"></i>
                         <span>Dashboard</span></a>
@@ -54,30 +54,62 @@
 
 
                 <!-- Nav Item - Appointment Menu -->
-                <li class="nav-item">
+                <li class="nav-item active">
                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                        aria-expanded="true" aria-controls="collapseTwo">
+                       aria-expanded="true" aria-controls="collapseTwo">
                         <i class="fas fa-calendar"></i>
                         <span>Appointment</span>
                     </a>
-                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
-                            <a class="collapse-item" href="add-app.html">Add Appointment</a>
+                            <a class="collapse-item active" href="add-app.html">Add Appointment</a>
                             <a class="collapse-item" href="upcoming-app.html">View Upcoming</a>
                             <a class="collapse-item" href="past-app.html">View Past</a>
                         </div>
                     </div>
                 </li>
-                
+
                 <hr class="sidebar-divider d-none d-md-block">
 
-                <!-- Nav Item - View Patient -->
+                <!-- Nav Item - Manage Patient -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree"
+                       aria-expanded="true" aria-controls="collapseThree">
+                        <i class="fas fa-calendar"></i>
+                        <span>Patient</span>
+                    </a>
+                    <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <a class="collapse-item" href="upcoming-app.html">Add Patient</a>
+                            <a class="collapse-item" href="manage_patient.html">View Patient</a>
+                        </div>
+                    </div>
+                </li>
+
+                <hr class="sidebar-divider d-none d-md-block">
+                <!-- Nav Item - Manage Counselor -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFour"
+                       aria-expanded="true" aria-controls="collapseFour">
+                        <i class="fas fa-calendar"></i>
+                        <span>Counselor</span>
+                    </a>
+                    <div id="collapseFour" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <a class="collapse-item" href="manage_counselor.html">Add Counselor</a>
+                            <a class="collapse-item" href="upcoming-app.html">View Counselor</a>
+                        </div>
+                    </div>
+                </li>
+
+                <hr class="sidebar-divider d-none d-md-block">
+                <!-- Nav Item - Manage Payment -->
                 <li class="nav-item">
                     <a class="nav-link" href="view-payment.html">
-                        <i class="fas fa-money-check-alt"></i>
-                        <span>View Payment</span></a>
+                        <i class="fas fa-user"></i>
+                        <span>Payment</span></a>
                 </li>
-                
+
                 <!-- Divider -->
                 <hr class="sidebar-divider d-none d-md-block">
 
@@ -150,30 +182,30 @@
                             <div class="card-body">
                                 <form>
                                     <div class="form-group col-md-6">
-                                      <label for="input-appDate">Appointment Date</label>
-                                      <input type="date" class="form-control" id="input-appDate">
+                                        <label for="input-appDate">Appointment Date</label>
+                                        <input type="date" class="form-control" id="input-appDate">
                                     </div>
                                     <div class="form-group col-md-6">
-                                      <label for="inputCounselor">Counselor</label>
-                                      <select id="inputCounselor" class="form-control">
-                                        <option selected>Choose one</option>
-                                        <option value="1">Adelia Marcius</option>
-                                        <option value="2">Faezah Nor</option>
-                                      </select>
+                                        <label for="inputCounselor">Counselor</label>
+                                        <select id="inputCounselor" class="form-control">
+                                            <option selected>Choose one</option>
+                                            <option value="1">Adelia Marcius</option>
+                                            <option value="2">Faezah Nor</option>
+                                        </select>
                                     </div>
                                     <div class="form-group col-md-4">
-                                      <label for="inputTimeSlot">Available time slot</label>
-                                      <select id="inputTimeSlot" class="form-control col-auto" required>
-                                        <option selected>None selected</option>
-                                        <option value="08:00 AM - 10:00 AM">08:00 AM - 10:00 AM</option>
-                                        <option value="10:00 AM - 12:00 PM">10:00 AM - 12:00 PM</option>
-                                        <option value="02:00 PM - 04:00 PM">02:00 PM - 04:00 PM</option>
-                                        <option value="04:00 PM - 06:00 PM">04:00 PM - 06:00 PM</option>
-                                      </select>
+                                        <label for="inputTimeSlot">Available time slot</label>
+                                        <select id="inputTimeSlot" class="form-control col-auto" required>
+                                            <option selected>None selected</option>
+                                            <option value="08:00 AM - 10:00 AM">08:00 AM - 10:00 AM</option>
+                                            <option value="10:00 AM - 12:00 PM">10:00 AM - 12:00 PM</option>
+                                            <option value="02:00 PM - 04:00 PM">02:00 PM - 04:00 PM</option>
+                                            <option value="04:00 PM - 06:00 PM">04:00 PM - 06:00 PM</option>
+                                        </select>
                                     </div>
-                                    
+
                                     <input type="hidden" id="apmRoom" value="TBD">
-                                    
+
                                     <button type="submit" class="btn btn-primary mt-5">Add Appointment</button>
                                 </form>
                             </div>

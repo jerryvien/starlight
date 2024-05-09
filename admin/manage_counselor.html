@@ -33,8 +33,8 @@
                 <!-- Sidebar - Brand -->
                 <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
                     <div class="sidebar-brand-icon ">
-                        <i class="fas fa-user-md"></i>
-                    </div>
+                        <i class="fas fa-user-cog"></i>
+                    </div>  
                     <div class="sidebar-brand-text mx-3">Admin</div>
                 </a>
 
@@ -42,7 +42,7 @@
                 <hr class="sidebar-divider my-0">
 
                 <!-- Nav Item - Dashboard -->
-                <li class="nav-item ">
+                <li class="nav-item active">
                     <a class="nav-link" href="index.html">
                         <i class="fas fa-fw fa-tachometer-alt"></i>
                         <span>Dashboard</span></a>
@@ -55,24 +55,60 @@
 
                 <!-- Nav Item - Appointment Menu -->
                 <li class="nav-item">
-                    <a class="nav-link" href="appointment.html">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                       aria-expanded="true" aria-controls="collapseTwo">
                         <i class="fas fa-calendar"></i>
-                        <span>Appointment</span></a>
+                        <span>Appointment</span>
+                    </a>
+                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <a class="collapse-item" href="add-app.html">Add Appointment</a>
+                            <a class="collapse-item" href="upcoming-app.html">View Upcoming</a>
+                            <a class="collapse-item" href="past-app.html">View Past</a>
+
+                        </div>
+                    </div>
                 </li>
 
+                <hr class="sidebar-divider d-none d-md-block">
 
-                <!-- Nav Item - View Patient -->
+                <!-- Nav Item - Manage Patient -->
                 <li class="nav-item">
-                    <a class="nav-link" href="manage_patient.html">
-                        <i class="fas fa-user"></i>
-                        <span>Patient</span></a>
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree"
+                       aria-expanded="true" aria-controls="collapseThree">
+                        <i class="fas fa-calendar"></i>
+                        <span>Patient</span>
+                    </a>
+                    <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <a class="collapse-item" href="upcoming-app.html">Add Patient</a>
+                            <a class="collapse-item" href="manage_patient.html">View Patient</a>
+                        </div>
+                    </div>
                 </li>
 
-                 <!-- Nav Item - View Patient -->
+                <hr class="sidebar-divider d-none d-md-block">
+                <!-- Nav Item - Manage Counselor -->
                 <li class="nav-item active">
-                    <a class="nav-link" href="manage_counselor.html">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFour"
+                       aria-expanded="true" aria-controls="collapseFour">
+                        <i class="fas fa-calendar"></i>
+                        <span>Counselor</span>
+                    </a>
+                    <div id="collapseFour" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <a class="collapse-item" href="manage_counselor.html">Add Counselor</a>
+                            <a class="collapse-item active" href="upcoming-app.html">View Counselor</a>
+                        </div>
+                    </div>
+                </li>
+
+                <hr class="sidebar-divider d-none d-md-block">
+                <!-- Nav Item - Manage Payment -->
+                <li class="nav-item">
+                    <a class="nav-link" href="view-payment.html">
                         <i class="fas fa-user"></i>
-                        <span>Counselor</span></a>
+                        <span>Payment</span></a>
                 </li>
 
 
@@ -204,7 +240,7 @@
                                                 <th>Phone Number</th>
                                             </tr>
                                         </thead>
-                                       
+
                                         <tbody>
                                             <tr>
                                                 <td>01.</td>
@@ -240,7 +276,7 @@
                                                 <td>abracadabra@gmail.com</td>
                                                 <td>+6011-11111111</td>
                                             </tr>
-                                            
+
                                         </tbody>
                                     </table>
                                 </div>

@@ -9,7 +9,7 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>Admin-Patient</title>
+        <title>Past Appointment</title>
 
         <!-- Custom fonts for this template-->
         <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -42,7 +42,7 @@
                 <hr class="sidebar-divider my-0">
 
                 <!-- Nav Item - Dashboard -->
-                <li class="nav-item active">
+                <li class="nav-item">
                     <a class="nav-link" href="index.html">
                         <i class="fas fa-fw fa-tachometer-alt"></i>
                         <span>Dashboard</span></a>
@@ -54,41 +54,41 @@
 
 
                 <!-- Nav Item - Appointment Menu -->
-                <li class="nav-item">
+                <li class="nav-item active active">
                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                        aria-expanded="true" aria-controls="collapseTwo">
                         <i class="fas fa-calendar"></i>
                         <span>Appointment</span>
                     </a>
-                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
                             <a class="collapse-item" href="add-app.html">Add Appointment</a>
                             <a class="collapse-item" href="upcoming-app.html">View Upcoming</a>
-                            <a class="collapse-item" href="past-app.html">View Past</a>
+                            <a class="collapse-item active" href="past-app.html">View Past</a>
                         </div>
                     </div>
                 </li>
-                
+
                 <hr class="sidebar-divider d-none d-md-block">
-                
+
                 <!-- Nav Item - Manage Patient -->
-                <li class="nav-item active">
+                <li class="nav-item">
                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree"
                        aria-expanded="true" aria-controls="collapseThree">
                         <i class="fas fa-calendar"></i>
                         <span>Patient</span>
                     </a>
-                    <div id="collapseThree" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
                             <a class="collapse-item" href="upcoming-app.html">Add Patient</a>
-                            <a class="collapse-item active" href="manage_patient.html">View Patient</a>
+                            <a class="collapse-item" href="manage_patient.html">View Patient</a>
                         </div>
                     </div>
                 </li>
-                
+
                 <hr class="sidebar-divider d-none d-md-block">
                 <!-- Nav Item - Manage Counselor -->
-               <li class="nav-item">
+                <li class="nav-item">
                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFour"
                        aria-expanded="true" aria-controls="collapseFour">
                         <i class="fas fa-calendar"></i>
@@ -110,35 +110,6 @@
                         <span>Payment</span></a>
                 </li>
 
-
-
-
-
-                <!-- Nav Item - Pages Collapse Menu -->
-                <!--            <li class="nav-item">
-                                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
-                                    aria-expanded="true" aria-controls="collapsePages">
-                                    <i class="fas fa-fw fa-folder"></i>
-                                    <span>Pages</span>
-                                </a>
-                                <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                                    <div class="bg-white py-2 collapse-inner rounded">
-                                        <h6 class="collapse-header">Login Screens:</h6>
-                                        <a class="collapse-item" href="login.html">Login</a>
-                                        <a class="collapse-item" href="register.html">Register</a>
-                                        <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
-                                        <div class="collapse-divider"></div>
-                                        <h6 class="collapse-header">Other Pages:</h6>
-                                        <a class="collapse-item" href="404.html">404 Page</a>
-                                        <a class="collapse-item" href="blank.html">Blank Page</a>
-                                    </div>
-                                </div>
-                            </li>-->
-
-
-
-
-
                 <!-- Divider -->
                 <hr class="sidebar-divider d-none d-md-block">
 
@@ -146,8 +117,6 @@
                 <div class="text-center d-none d-md-inline">
                     <button class="rounded-circle border-0" id="sidebarToggle"></button>
                 </div>
-
-
 
             </ul>
             <!-- End of Sidebar -->
@@ -173,34 +142,22 @@
 
 
 
-
-
-
-
                             <div class="topbar-divider d-none d-sm-block"></div>
 
                             <!-- Nav Item - User Information -->
                             <li class="nav-item dropdown no-arrow">
                                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">Admin Name</span>
+                                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">John Smith</span>
                                     <img class="img-profile rounded-circle"
                                          src="../img/undraw_profile.svg">
                                 </a>
                                 <!-- Dropdown - User Information -->
                                 <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                      aria-labelledby="userDropdown">
-                                    <a class="dropdown-item" href="#">
+                                    <a class="dropdown-item" href="edit-profile.html">
                                         <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Profile
-                                    </a>
-                                    <a class="dropdown-item" href="#">
-                                        <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Settings
-                                    </a>
-                                    <a class="dropdown-item" href="#">
-                                        <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Activity Log
+                                        Edit Profile
                                     </a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
@@ -218,70 +175,63 @@
                     <div class="container-fluid">
 
                         <!-- Page Heading -->
-                        <h1 class="h3 mb-2 text-gray-800">Patient List</h1>
+                        <h1 class="h3 mb-3 text-gray-800">View Past Appointment</h1>
+
+                        <!--Calendar-->
+                        <form class="row row-cols-lg-auto g-3 align-items-center">
+                            <div class="col-3">
+                                <input type="date" class="form-control" id="input-appDate">
+                            </div>
+
+                        </form>
 
                         <!-- DataTales Example -->
-                        <div class="card shadow mb-4">
+                        <div class="card shadow mt-3 mb-4">
                             <div class="card-header py-3">
-                                <!--                            <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>-->
+                                <h1 class="h3 mb-2 text-gray-800">Chosen Date</h1>
                             </div>
                             <div class="card-body">
+
                                 <div class="table-responsive">
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
                                             <tr>
-                                                <th>No.</th>
-                                                <th>Patient ID</th>
-                                                <th>Full Name</th>
-                                                <th>IC Number</th>
-                                                <th>Age</th>
-                                                <th>Birth Date</th>
-                                                <th>Gender</th>
-                                                <th>Address</th>
-                                                <th>Email Address</th>
-                                                <th>Phone Number</th>
+                                                <th>Appointment ID</th>
+                                                <th>Date</th>
+                                                <th>Time Slot</th>
+                                                <th>Room</th>
+                                                <th>Counselor</th>
                                             </tr>
                                         </thead>
-                                       
                                         <tbody>
                                             <tr>
-                                                <td>01.</td>
-                                                <td>P20240502001</td>
-                                                <td>Iman Encem</td>
-                                                <td>040409-02-0056</td>
-                                                <td>20</td>
-                                                <td>09 April 2004</td>
-                                                <td>Male</td>
-                                                <td>No.69, Block 69, Apartment SME, Jalan Marijua, 40000, Shah Alam, Selangor</td>
-                                                <td>lelakiidamanwanita@gmail.com</td>
-                                                <td>+6012-55546789</td>
-
+                                                <td>A2024021301</td>
+                                                <td>13/02/2024</td>
+                                                <td> 08:00 AM - 10:00 AM</td>
+                                                <td>A01</td>
+                                                <td>Faezah Nor</td>
                                             </tr>
                                             <tr>
-                                                <td>02.</td>
-                                                <td>P20240502002</td>
-                                                <td>Cristiano Messi</td>
-                                                <td>970409-02-0056</td>
-                                                <td>27</td>
-                                                <td>09 April 1997</td>
-                                                <td>Male</td>
-                                                <td>No.420, Block 69, Apartment GOAT, Jalan The Goat, 40000, Shah Alam, Selangor</td>
-                                                <td>kambingterbaik@gmail.com</td>
-                                                <td>+6013-55546789</td>
+                                                <td>A2024031301</td>
+                                                <td>13/03/2024</td>
+                                                <td>02:00 PM - 04:00PM</td>
+                                                <td>C03</td>
+                                                <td>Adelia Marcius</td>
                                             </tr>
                                             <tr>
-                                               <td>03.</td>
-                                                <td>P20240502003</td>
-                                                <td>Harry Potter</td>
-                                                <td>000409-02-0056</td>
-                                                <td>24</td>
-                                                <td>09 April 2000</td>
-                                                <td>Male</td>
-                                                <td>No.02, Block 2, Apartment Gryfyndor, Jalan Hogward, 40000, Shah Alam, Selangor</td>
-                                                <td>thechosenone@gmail.com</td>
-                                                <td>+6012-222222222</td>
+                                                <td>A2024042501</td>
+                                                <td>25/04/2024</td>
+                                                <td>10:00 AM - 12:00 PM</td>
+                                                <td>B02</td>
+                                                <td>Faezah Nor</td>
                                             </tr>
-                                            
+                                            <tr>
+                                                <td>A2024050401</td>
+                                                <td>04/05/2024</td>
+                                                <td>02:00 PM - 04:00 PM</td>
+                                                <td>A03</td>
+                                                <td>Adelia Marcius</td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
