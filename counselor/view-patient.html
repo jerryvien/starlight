@@ -62,9 +62,9 @@
                     </a>
                     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
-
-                            <a class="collapse-item" href="upcoming-app.html">Upcoming appointment</a>
-                            <a class="collapse-item" href="past-app.html">Past appointment</a>
+                            <a class="collapse-item" href="add-app.html">Add Follow Up</a>
+                            <a class="collapse-item" href="upcoming-app.html">View Upcoming</a>
+                            <a class="collapse-item" href="past-app.html">View Past</a>
                         </div>
                     </div>
                 </li>
@@ -185,10 +185,11 @@
                     <div class="container-fluid">
 
                         <!-- Page Heading -->
-                        <h1 class="h3 mb-5 text-dark font-weight-bold">Patient List</h1>
+                        <h1 class="h3  text-gray-800">Patient List</h1>
+                        <input type="date" id="app_date" name="app_date">
 
                         <!-- DataTales Example -->
-                        <div class="card shadow mb-4">
+                        <div class="card shadow mt-4 mb-4">
                             <div class="card-header py-3">
                                 <!--                            <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>-->
                             </div>
@@ -203,7 +204,6 @@
                                                 <th>IC No</th>
                                                 <th>Email</th>
                                                 <th>Phone No</th>
-
                                             </tr>
                                         </thead>
 
