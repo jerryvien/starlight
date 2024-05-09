@@ -9,7 +9,7 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>Add Follow Up Appointment</title>
+        <title>Counselor-Patient</title>
 
         <!-- Custom fonts for this template-->
         <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -42,7 +42,7 @@
                 <hr class="sidebar-divider my-0">
 
                 <!-- Nav Item - Dashboard -->
-                <li class="nav-item">
+                <li class="nav-item ">
                     <a class="nav-link" href="index.html">
                         <i class="fas fa-fw fa-tachometer-alt"></i>
                         <span>Dashboard</span></a>
@@ -55,12 +55,12 @@
 
                 <!-- Nav Item - Appointment Menu -->
                 <li class="nav-item">
-                    <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                        aria-expanded="true" aria-controls="collapseTwo">
                         <i class="fas fa-calendar"></i>
                         <span>Appointment</span>
                     </a>
-                    <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
                             <a class="collapse-item" href="add-app.html">Add Follow Up</a>
                             <a class="collapse-item" href="upcoming-app.html">View Upcoming</a>
@@ -71,7 +71,7 @@
 
                 <!-- Divider -->
                 <hr class="sidebar-divider">
-
+                
                 <!-- Nav Item - View Patient -->
                 <li class="nav-item">
                     <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapsePatient"
@@ -79,13 +79,42 @@
                         <i class="fas fa-user"></i>
                         <span>Patient</span>
                     </a>
-                    <div id="collapsePatient" class="collapse" aria-labelledby="headingPatient" data-parent="#accordionSidebar">
+                    <div id="collapsePatient" class="collapse show" aria-labelledby="headingPatient" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
                             <a class="collapse-item" href="add-patient.html">Add Patient</a>
                             <a class="collapse-item" href="view-patient.html">View Patient</a>
                         </div>
                     </div>
                 </li>
+
+
+
+
+
+                <!-- Nav Item - Pages Collapse Menu -->
+                <!--            <li class="nav-item">
+                                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
+                                    aria-expanded="true" aria-controls="collapsePages">
+                                    <i class="fas fa-fw fa-folder"></i>
+                                    <span>Pages</span>
+                                </a>
+                                <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                                    <div class="bg-white py-2 collapse-inner rounded">
+                                        <h6 class="collapse-header">Login Screens:</h6>
+                                        <a class="collapse-item" href="login.html">Login</a>
+                                        <a class="collapse-item" href="register.html">Register</a>
+                                        <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
+                                        <div class="collapse-divider"></div>
+                                        <h6 class="collapse-header">Other Pages:</h6>
+                                        <a class="collapse-item" href="404.html">404 Page</a>
+                                        <a class="collapse-item" href="blank.html">Blank Page</a>
+                                    </div>
+                                </div>
+                            </li>-->
+
+
+
+
 
                 <!-- Divider -->
                 <hr class="sidebar-divider d-none d-md-block">
@@ -94,6 +123,8 @@
                 <div class="text-center d-none d-md-inline">
                     <button class="rounded-circle border-0" id="sidebarToggle"></button>
                 </div>
+
+
 
             </ul>
             <!-- End of Sidebar -->
@@ -119,6 +150,10 @@
 
 
 
+
+
+
+
                             <div class="topbar-divider d-none d-sm-block"></div>
 
                             <!-- Nav Item - User Information -->
@@ -136,6 +171,14 @@
                                         <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                         Edit Profile
                                     </a>
+<!--                                    <a class="dropdown-item" href="#">
+                                        <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        Settings
+                                    </a>
+                                    <a class="dropdown-item" href="#">
+                                        <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        Activity Log
+                                    </a>-->
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                                         <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -152,53 +195,32 @@
                     <div class="container-fluid">
 
                         <!-- Page Heading -->
-                        <h1 class="h3 mb-2 text-gray-800 ">Appointment (Follow Up)</h1>
+                        <h1 class="h3 mb-2 text-gray-800 ">Add Patient</h1>
 
                         <!-- DataTales Example -->
                         <div class="card shadow mb-4">
                             <div class="card-body">
                                 <form>
                                     <div class="form-group col-md-6">
-                                        <label for="input-appDate">Appointment Date</label>
-                                        <input type="date" class="form-control" id="input-appDate">
+                                        <label for="patient_name">Patient Name</label>
+                                        <input type="text" class="form-control" id="patient_name" name="name">
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="inputPatient">Patient</label>
-                                        <select id="inputPatient" class="form-control">
-                                            <option selected>Choose one</option>
-                                            <option value="1">Richard Nixon</option>
-                                            <option value="2">Betelguese Contee</option>
-                                            <option value="3">Regulus Corneas</option>
-                                        </select>
+                                        <label for="patient_ic">IC No</label>
+                                        <input type="text" class="form-control" id="patient_ic" name="ic" placeholder="000000-00-0000">
                                     </div>
                                     <div class="form-group col-md-4">
-                                        <label for="inputTimeSlot">Available time slot</label>
-                                        <select id="inputTimeSlot" class="form-control col-auto" required>
-                                            <option selected>None selected</option>
-                                            <option value="08:00 AM - 10:00 AM">08:00 AM - 10:00 AM</option>
-                                            <option value="10:00 AM - 12:00 PM">10:00 AM - 12:00 PM</option>
-                                            <option value="02:00 PM - 04:00 PM">02:00 PM - 04:00 PM</option>
-                                            <option value="04:00 PM - 06:00 PM">04:00 PM - 06:00 PM</option>
-                                        </select>
+                                        <label for="patient_email">Email</label>
+                                        <input type="email" class="form-control" id="patient_email" name="email">
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="inputRoom">Room</label>
-                                        <select id="inputRoom" class="form-control">
-                                            <option selected>Choose one</option>
-                                            <option value="1">A01</option>
-                                            <option value="2">A02</option>
-                                            <option value="3">A03</option>
-                                        </select>
+                                        <label for="patient_phone">Phone No</label>
+                                        <input type="text" class="form-control" id="patient_phone" name="phone" placeholder="010-100100">
                                     </div>
-                                    <div class="form-group col-md-6">
-                                        <label for="inputDesc">Description</label>
-                                        <textarea id="inputDesc" class="form-control" name="inputDesc" rows="4" cols="50">
-                                            
-                                        </textarea>
-                                    </div>
-                                    <input type="hidden" id="apmRoom" value="TBD">
+                                    
+                                    <input type="hidden" id="addpatient" value="TBD">
 
-                                    <button type="submit" class="btn btn-primary mt-5">Add Appointment</button>
+                                    <button type="submit" class="btn btn-primary mt-5">Add Patient</button>
                                 </form>
                             </div>
                         </div>
