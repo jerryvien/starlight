@@ -9,7 +9,7 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>Patient - Dashboard</title>
+        <title>Admin - Edit Profile</title>
 
         <!-- Custom fonts for this template-->
         <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -36,7 +36,7 @@
                     <div class="sidebar-brand-icon ">
                         <i class="fas fa-hospital-user"></i>
                     </div>
-                    <div class="sidebar-brand-text mx-3">Patient</div>
+                    <div class="sidebar-brand-text mx-3">Admin</div>
                 </a>
 
                 <!-- Divider -->
@@ -57,7 +57,7 @@
                 <!-- Nav Item - Appointment Menu -->
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                        aria-expanded="true" aria-controls="collapseTwo">
+                       aria-expanded="true" aria-controls="collapseTwo">
                         <i class="fas fa-calendar"></i>
                         <span>Appointment</span>
                     </a>
@@ -71,12 +71,44 @@
                 </li>
                 
                 <hr class="sidebar-divider d-none d-md-block">
+                
+                <!-- Nav Item - Manage Patient -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree"
+                       aria-expanded="true" aria-controls="collapseThree">
+                        <i class="fas fa-calendar"></i>
+                        <span>Patient</span>
+                    </a>
+                    <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <a class="collapse-item" href="manage_patient.html">Add Patient</a>
+                            <a class="collapse-item" href="manage_patient.html">View Patient</a>
+                        </div>
+                    </div>
+                </li>
+                
+                <hr class="sidebar-divider d-none d-md-block">
+                <!-- Nav Item - Manage Counselor -->
+               <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFour"
+                       aria-expanded="true" aria-controls="collapseFour">
+                        <i class="fas fa-calendar"></i>
+                        <span>Counselor</span>
+                    </a>
+                    <div id="collapseFour" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <a class="collapse-item" href="manage_counselor.html">Add Counselor</a>
+                            <a class="collapse-item" href="manage_counselor.html">View Counselor</a>
+                        </div>
+                    </div>
+                </li>
 
-                <!-- Nav Item - View Patient -->
+                <hr class="sidebar-divider d-none d-md-block">
+                <!-- Nav Item - Manage Payment -->
                 <li class="nav-item">
                     <a class="nav-link" href="view-payment.html">
-                        <i class="fas fa-money-check-alt"></i>
-                        <span>View Payment</span></a>
+                        <i class="fas fa-user"></i>
+                        <span>Payment</span></a>
                 </li>
                 
                 <!-- Divider -->
@@ -114,7 +146,7 @@
                             <li class="nav-item dropdown no-arrow">
                                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" 
                                                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">John Smith</span>
+                                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">Daus Toretto</span>
                                     <img class="img-profile rounded-circle" src="../img/undraw_profile.svg">
                                 </a>
                                 <!-- Dropdown - User Information -->
@@ -152,43 +184,42 @@
                                     <div class="form-row">
                                       <div class="form-group col-md-6">
                                         <label for="edit-firstName">First Name</label>
-                                        <input type="text" class="form-control" id="edit-firstName" placeholder="John" disabled>
+                                        <input type="text" class="form-control" id="edit-firstName" placeholder="Daus" disabled>
                                       </div>
                                       <div class="form-group col-md-6">
                                         <label for="edit-lastName">Last Name</label>
-                                        <input type="text" class="form-control" id="edit-lastName" placeholder="Smith" disabled>
+                                        <input type="text" class="form-control" id="edit-lastName" placeholder="Toretto" disabled>
                                       </div>
                                     </div>
                                     <div class="form-row">
                                       <div class="form-group col-auto">
                                         <label for="edit-ICNum">IC Number</label>
-                                        <input type="text" class="form-control" id="edit-ICNum" placeholder="011010-14-1848" disabled>
+                                        <input type="text" class="form-control" id="edit-ICNum" placeholder="012345-14-1848" disabled>
                                       </div>
                                       <div class="form-group col-auto">
                                         <label for="edit-DOB">Date of Birth</label>
-                                        <input type="text" class="form-control" id="edit-DOB" placeholder="10/10/2001" disabled>
+                                        <input type="text" class="form-control" id="edit-DOB" placeholder="10/11/2000" disabled>
                                       </div>
                                       <div class="form-group col-1">
                                         <label for="edit-age">Age</label>
-                                        <input type="text" class="form-control" id="edit-age" placeholder="23">
+                                        <input type="text" class="form-control" id="edit-age" placeholder="24">
                                       </div>
                                       <div class="form-group col-auto">
                                         <label class="mr-sm-2" for="edit-gender">Gender</label>
                                         <select class="custom-select mr-sm-2" id="edit-gender">
                                           <option selected>Male</option>
                                           <option value="1">Female</option>
-                                          <option value="2">Prefer not to say</option>
                                         </select>
                                       </div>
                                     </div>
                                     <div class="form-row">
                                       <div class="form-group col-md-6">
                                         <label for="edit-email">Email</label>
-                                        <input type="email" class="form-control" id="edit-email" placeholder="unknownworld24@gmail.com" disabled>
+                                        <input type="email" class="form-control" id="edit-email" placeholder="daustoretto@gmail.com" disabled>
                                       </div>
                                       <div class="form-group col-md-6">
                                         <label for="edit-contactNum">Contact Number</label>
-                                        <input type="text" class="form-control" id="edit-ContactNum" placeholder="016-2423323" >
+                                        <input type="text" class="form-control" id="edit-ContactNum" placeholder="013-245678905" >
                                       </div>
                                     </div>
                                     <div class="form-group">
