@@ -73,10 +73,18 @@
                 <hr class="sidebar-divider">
                 
                 <!-- Nav Item - View Patient -->
-                <li class="nav-item active">
-                    <a class="nav-link" href="view-patient.html">
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapsePatient"
+                       aria-expanded="true" aria-controls="collapsePatient">
                         <i class="fas fa-user"></i>
-                        <span>Patient</span></a>
+                        <span>Patient</span>
+                    </a>
+                    <div id="collapsePatient" class="collapse show" aria-labelledby="headingPatient" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <a class="collapse-item" href="add-patient.html">Add Patient</a>
+                            <a class="collapse-item" href="view-patient.html">View Patient</a>
+                        </div>
+                    </div>
                 </li>
 
 
@@ -206,6 +214,7 @@
                                                 <th>Email</th>
                                                 <th>Phone No</th>
                                                 <th>Medical History</th>
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
 
@@ -216,11 +225,60 @@
                                                 <td>010101-10-1010</td>
                                                 <td>example@gmail.com</td>
                                                 <td>011-1111111</td>
-                                                <th>
+                                                <td>
                                                     <a role="button" href="patient1-medic-history.html" class="btn btn-success">
                                                         <i class="fas fa-eye"></i>
                                                     </a>
-                                                </th>
+                                                </td>
+                                                <td>
+                                                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#edit">
+                                                        <i class="fas fa-pencil-alt"></i>
+                                                    </button>
+                                                    <!-- Modal -->
+                                                    <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="editTitle" aria-hidden="true">
+                                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="example2ModalLongTitle">Edit</h5>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <form action="#">
+                                                                        <table class="table">
+                                                                            <tr>
+                                                                                <td>Name: </td>
+                                                                                <td><input type="text" id="patient_name" name="patient_name"></td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>IC No: </td>
+                                                                                <td><input type="text" id="patient_ic" name="patient_ic"></td>
+                                                                                    
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>Email: </td>
+                                                                                <td>
+                                                                                    <input type="text" id="patient_email" name="patient_email">
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>Phone No: </td>
+                                                                                <td>
+                                                                                    <input type="text" id="patient_phone" name="patient_phone">
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </form>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                    <button type="button" class="btn btn-primary">Save changes</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td>02</td>
@@ -228,11 +286,60 @@
                                                 <td>020202-10-2020</td>
                                                 <td>example@gmail.com</td>
                                                 <td>022-2222222</td>
-                                                <th>
+                                                <td>
                                                     <a role="button" href="patient2-medic-history.html" class="btn btn-success">
                                                         <i class="fas fa-eye"></i>
                                                     </a>
-                                                </th>
+                                                </td>
+                                                <td>
+                                                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#edit">
+                                                        <i class="fas fa-pencil-alt"></i>
+                                                    </button>
+                                                    <!-- Modal -->
+                                                    <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="editTitle" aria-hidden="true">
+                                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="example2ModalLongTitle">Edit</h5>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <form action="#">
+                                                                        <table class="table">
+                                                                            <tr>
+                                                                                <td>Name: </td>
+                                                                                <td><input type="text" id="patient_name" name="patient_name"></td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>IC No: </td>
+                                                                                <td><input type="text" id="patient_ic" name="patient_ic"></td>
+                                                                                    
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>Email: </td>
+                                                                                <td>
+                                                                                    <input type="text" id="patient_email" name="patient_email">
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>Phone No: </td>
+                                                                                <td>
+                                                                                    <input type="text" id="patient_phone" name="patient_phone">
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </form>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                    <button type="button" class="btn btn-primary">Save changes</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td>03</td>
@@ -240,11 +347,60 @@
                                                 <td>030303-10-3300</td>
                                                 <td>example@gmail.com</td>
                                                 <td>033-3333333</td>
-                                                <th>
+                                                <td>
                                                     <a role="button" href="patient3-medic-history.html" class="btn btn-success">
                                                         <i class="fas fa-eye"></i>
                                                     </a>
-                                                </th>
+                                                </td>
+                                                <td>
+                                                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#edit">
+                                                        <i class="fas fa-pencil-alt"></i>
+                                                    </button>
+                                                    <!-- Modal -->
+                                                    <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="editTitle" aria-hidden="true">
+                                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="example2ModalLongTitle">Edit</h5>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <form action="#">
+                                                                        <table class="table">
+                                                                            <tr>
+                                                                                <td>Name: </td>
+                                                                                <td><input type="text" id="patient_name" name="patient_name"></td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>IC No: </td>
+                                                                                <td><input type="text" id="patient_ic" name="patient_ic"></td>
+                                                                                    
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>Email: </td>
+                                                                                <td>
+                                                                                    <input type="text" id="patient_email" name="patient_email">
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>Phone No: </td>
+                                                                                <td>
+                                                                                    <input type="text" id="patient_phone" name="patient_phone">
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </form>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                    <button type="button" class="btn btn-primary">Save changes</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
                                             </tr>
 
                                         </tbody>

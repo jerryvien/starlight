@@ -73,10 +73,18 @@
                 <hr class="sidebar-divider">
                 
                 <!-- Nav Item - View Patient -->
-                <li class="nav-item ">
-                    <a class="nav-link" href="view-patient.html">
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapsePatient"
+                       aria-expanded="true" aria-controls="collapsePatient">
                         <i class="fas fa-user"></i>
-                        <span>Patient</span></a>
+                        <span>Patient</span>
+                    </a>
+                    <div id="collapsePatient" class="collapse" aria-labelledby="headingPatient" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <a class="collapse-item" href="add-patient.html">Add Patient</a>
+                            <a class="collapse-item" href="view-patient.html">View Patient</a>
+                        </div>
+                    </div>
                 </li>
 
 
