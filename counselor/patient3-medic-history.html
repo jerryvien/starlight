@@ -9,7 +9,7 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>Counselor-Appointment</title>
+        <title>Counselor-Patient</title>
 
         <!-- Custom fonts for this template-->
         <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -54,13 +54,13 @@
 
 
                 <!-- Nav Item - Appointment Menu -->
-               <li class="nav-item">
-                    <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                        aria-expanded="true" aria-controls="collapseTwo">
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                       aria-expanded="true" aria-controls="collapseTwo">
                         <i class="fas fa-calendar"></i>
                         <span>Appointment</span>
                     </a>
-                    <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
                             <a class="collapse-item" href="add-app.html">Add Follow Up</a>
                             <a class="collapse-item" href="upcoming-app.html">View Upcoming</a>
@@ -73,7 +73,7 @@
                 <hr class="sidebar-divider">
                 
                 <!-- Nav Item - View Patient -->
-                <li class="nav-item ">
+                <li class="nav-item active">
                     <a class="nav-link" href="view-patient.html">
                         <i class="fas fa-user"></i>
                         <span>Patient</span></a>
@@ -187,113 +187,81 @@
                     <div class="container-fluid">
 
                         <!-- Page Heading -->
-                        <h1 class="h3 mb-2 text-gray-800">Appointment (Past)</h1>
-                        <input type="date" id="app_date" name="app_date">
-                        <!-- Create appointment -->
-                        <div class="row mx-1 justify-content-between mt-5 mb-2">
-<!--                            <h5 class="font-weight-bold my-2">List</h5>-->
-                            <!-- Button trigger modal -->
-
-<!--                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModalCenter">
-                                Create
-                            </button>-->
-                            <!-- Modal -->
-                            <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLongTitle">Create new appointment</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            ...
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                            <button type="button" class="btn btn-primary">Save changes</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
+                        <h1 class="h3  text-gray-800">Medical History</h1>
+                        
 
                         <!-- DataTales Example -->
-                        <div class="card shadow mb-4">
-                            <div class="card-header py-3">
-                                
-                            </div>
+                        <div class="card shadow mt-4 mb-4">
+                            
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <table class="table table-bordered" id="currentIllness" width="100%" cellspacing="0">
                                         <thead>
                                             <tr>
-                                                <th>No</th>
-                                                <th>Appointment ID</th>
-                                                <th>Date</th>
-                                                <th>Time Slot</th>
-                                                <th>Room</th>
-                                                <th>Patient Name</th>
-                                                <th>Description</th>
+                                                <th>Existing Illness</th>
+                                                <th>Duration</th>
+                                                <th>Medical Details</th>
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
 
                                         <tbody>
                                             <tr>
-                                                <td>01</td>
-                                                <td>A2024052501</td>
-                                                <td>25/05/2024</td>
-                                                <td>08:00 AM - 10:00 PM</td>
-                                                <td>A01</td>
-                                                <td>Alan Turing</td>
-                                                <td></td>
+                                                <td>Post Traumatic Stress Disorder (PTSD)</td>
+                                                <td>2 1/2 years</td>
+                                                <td>Paroxetine 10mg</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#edit">
+                                                        Edit
+                                                    </button>
+                                                    <!-- Modal -->
+                                                    <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="editTitle" aria-hidden="true">
+                                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="example2ModalLongTitle">Edit</h5>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <form action="#">
+                                                                        <table class="table">
+                                                                            <tr>
+                                                                                <td>Existing Illness: </td>
+                                                                                <td><input type="text" id="illness" name="illness"></td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>Duration: </td>
+                                                                                <td><input type="text" id="duration" name="duration"></td>
+                                                                                    
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>Medical Details: </td>
+                                                                                <td>
+                                                                                    <input type="text" id="med_detail" name="med_detail">
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </form>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                    <button type="button" class="btn btn-primary">Save changes</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
                                             </tr>
-                                            <tr>
-                                                <td>02</td>
-                                                <td>A2024052502</td>
-                                                <td>25/05/2024</td>
-                                                <td>08:00 AM - 10:00 PM</td>
-                                                <td>A02</td>
-                                                <td>Ada Lovelace</td>
-                                                <td></td>
-                                            </tr>
-                                            <tr>
-                                                <td>03</td>
-                                                <td>A2024052503</td>
-                                                <td>25/05/2024</td>
-                                                <td>08:00 AM - 10:00 PM</td>
-                                                <td>A03</td>
-                                                <td>Ken Thompson</td>
-                                                <td></td>
-                                            </tr>
+                                            
+
                                         </tbody>
                                     </table>
                                 </div>
-                                
-                                <!-- Modal -->
-                                <div class="modal fade" id="request" tabindex="-1" role="dialog" aria-labelledby="request" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLongTitle">Request new appointment</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                ...
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                <button type="button" class="btn btn-primary">Save changes</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
+                        
 
                     </div>
                     <!-- /.container-fluid -->
