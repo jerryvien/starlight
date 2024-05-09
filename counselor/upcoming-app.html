@@ -69,7 +69,9 @@
                     </div>
                 </li>
 
-
+                <!-- Divider -->
+                <hr class="sidebar-divider">
+                
                 <!-- Nav Item - View Patient -->
                 <li class="nav-item ">
                     <a class="nav-link" href="view-patient.html">
@@ -191,7 +193,7 @@
 
                         <!-- DataTales Example -->
                         <div class="card shadow mb-4 mt-5">
-                            
+
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -200,9 +202,10 @@
                                                 <th>No</th>
                                                 <th>Appointment ID</th>
                                                 <th>Date</th>
-                                                <th>Time</th>
+                                                <th>Time Slot</th>
                                                 <th>Room</th>
-                                                <th>Patient</th>
+                                                <th>Patient Name</th>
+                                                <th>Description</th>
                                                 <th>Action</th>
 
                                             </tr>
@@ -216,7 +219,7 @@
                                                 <td>08:00 AM - 10:00 PM</td>
                                                 <td>A01</td>
                                                 <td>Richard Nixon</td>
-
+                                                <td></td>
                                                 <td>
                                                     <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#edit">
                                                         <i class="fas fa-pencil-alt"></i>
@@ -239,7 +242,7 @@
                                                                                 <td><input type="date" id="app_date" name="app_date"></td>
                                                                             </tr>
                                                                             <tr>
-                                                                                <td>Time: </td>
+                                                                                <td>Time Slot: </td>
                                                                                 <td>
                                                                                     <select id="inputTimeSlot" class="form-control col-auto" required>
                                                                                         <option selected>None selected</option>
@@ -256,6 +259,23 @@
                                                                                         <option value="room1">A01</option>
                                                                                         <option value="room2">A02</option>
                                                                                         <option value="room3">A03</option>
+                                                                                    </select>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>Description: </td>
+                                                                                <td>
+                                                                                    <textarea id="desc" name="desc" rows="4">
+                                                                                        
+                                                                                    </textarea>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>Status: </td>
+                                                                                <td>
+                                                                                    <select name="status" id="status">
+                                                                                        <option value="upcoming">Upcoming</option>
+                                                                                        <option value="finish">Finish</option>
                                                                                     </select>
                                                                                 </td>
                                                                             </tr>
@@ -277,8 +297,8 @@
                                                 <td>25/05/2024</td>
                                                 <td>08:00 AM - 10:00 PM</td>
                                                 <td>A02</td>
-                                                <td>Betelguese Contee</td>
-
+                                                <td>Alan Dix</td>
+                                                <td></td>
 
                                                 <td>
                                                     <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#edit">
@@ -302,7 +322,7 @@
                                                                                 <td><input type="date" id="app_date" name="app_date"></td>
                                                                             </tr>
                                                                             <tr>
-                                                                                <td>Time: </td>
+                                                                                <td>Time Slot: </td>
                                                                                 <td><select id="inputTimeSlot" class="form-control col-auto" required>
                                                                                         <option selected>None selected</option>
                                                                                         <option value="08:00 AM - 10:00 AM">08:00 AM - 10:00 AM</option>
@@ -318,6 +338,23 @@
                                                                                         <option value="room1">A01</option>
                                                                                         <option value="room2">A02</option>
                                                                                         <option value="room3">A03</option>
+                                                                                    </select>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>Description: </td>
+                                                                                <td>
+                                                                                    <textarea id="desc" name="desc" rows="4">
+                                                                                        
+                                                                                    </textarea>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>Status: </td>
+                                                                                <td>
+                                                                                    <select name="status" id="status">
+                                                                                        <option value="upcoming">Upcoming</option>
+                                                                                        <option value="finish">Finish</option>
                                                                                     </select>
                                                                                 </td>
                                                                             </tr>
@@ -340,7 +377,7 @@
                                                 <td>08:00 AM - 10:00 PM</td>
                                                 <td>A03</td>
                                                 <td>Regulus Corneas</td>
-
+                                                <td></td>
 
                                                 <td>
                                                     <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#edit">
@@ -364,7 +401,7 @@
                                                                                 <td><input type="date" id="app_date" name="app_date"></td>
                                                                             </tr>
                                                                             <tr>
-                                                                                <td>Time: </td>
+                                                                                <td>Time Slot: </td>
                                                                                 <td><select id="inputTimeSlot" class="form-control col-auto" required>
                                                                                         <option selected>None selected</option>
                                                                                         <option value="08:00 AM - 10:00 AM">08:00 AM - 10:00 AM</option>
@@ -380,6 +417,23 @@
                                                                                         <option value="room1">A01</option>
                                                                                         <option value="room2">A02</option>
                                                                                         <option value="room3">A03</option>
+                                                                                    </select>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>Description: </td>
+                                                                                <td>
+                                                                                    <textarea id="desc" name="desc" rows="4">
+                                                                                        
+                                                                                    </textarea>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>Status: </td>
+                                                                                <td>
+                                                                                    <select name="status" id="status">
+                                                                                        <option value="upcoming">Upcoming</option>
+                                                                                        <option value="finish">Finish</option>
                                                                                     </select>
                                                                                 </td>
                                                                             </tr>

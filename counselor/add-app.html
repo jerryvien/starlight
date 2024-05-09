@@ -56,7 +56,7 @@
                 <!-- Nav Item - Appointment Menu -->
                 <li class="nav-item">
                     <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                        aria-expanded="true" aria-controls="collapseTwo">
+                       aria-expanded="true" aria-controls="collapseTwo">
                         <i class="fas fa-calendar"></i>
                         <span>Appointment</span>
                     </a>
@@ -68,8 +68,9 @@
                         </div>
                     </div>
                 </li>
-                
-                <hr class="sidebar-divider d-none d-md-block">
+
+                <!-- Divider -->
+                <hr class="sidebar-divider">
 
                 <!-- Nav Item - View Patient -->
                 <li class="nav-item">
@@ -77,7 +78,7 @@
                         <i class="fas fa-user"></i>
                         <span>Patient</span></a>
                 </li>
-                
+
                 <!-- Divider -->
                 <hr class="sidebar-divider d-none d-md-block">
 
@@ -143,38 +144,52 @@
                     <div class="container-fluid">
 
                         <!-- Page Heading -->
-                        <h1 class="h3 mb-2 text-gray-800 ">Add Follow Up Appointment</h1>
+                        <h1 class="h3 mb-2 text-gray-800 ">Appointment (Follow Up)</h1>
 
                         <!-- DataTales Example -->
                         <div class="card shadow mb-4">
                             <div class="card-body">
                                 <form>
                                     <div class="form-group col-md-6">
-                                      <label for="input-appDate">Appointment Date</label>
-                                      <input type="date" class="form-control" id="input-appDate">
+                                        <label for="input-appDate">Appointment Date</label>
+                                        <input type="date" class="form-control" id="input-appDate">
                                     </div>
                                     <div class="form-group col-md-6">
-                                      <label for="inputPatient">Patient</label>
-                                      <select id="inputPatient" class="form-control">
-                                        <option selected>Choose one</option>
-                                        <option value="1">Richard Nixon</option>
-                                        <option value="2">Betelguese Contee</option>
-                                        <option value="3">Regulus Corneas</option>
-                                      </select>
+                                        <label for="inputPatient">Patient</label>
+                                        <select id="inputPatient" class="form-control">
+                                            <option selected>Choose one</option>
+                                            <option value="1">Richard Nixon</option>
+                                            <option value="2">Betelguese Contee</option>
+                                            <option value="3">Regulus Corneas</option>
+                                        </select>
                                     </div>
                                     <div class="form-group col-md-4">
-                                      <label for="inputTimeSlot">Available time slot</label>
-                                      <select id="inputTimeSlot" class="form-control col-auto" required>
-                                        <option selected>None selected</option>
-                                        <option value="08:00 AM - 10:00 AM">08:00 AM - 10:00 AM</option>
-                                        <option value="10:00 AM - 12:00 PM">10:00 AM - 12:00 PM</option>
-                                        <option value="02:00 PM - 04:00 PM">02:00 PM - 04:00 PM</option>
-                                        <option value="04:00 PM - 06:00 PM">04:00 PM - 06:00 PM</option>
-                                      </select>
+                                        <label for="inputTimeSlot">Available time slot</label>
+                                        <select id="inputTimeSlot" class="form-control col-auto" required>
+                                            <option selected>None selected</option>
+                                            <option value="08:00 AM - 10:00 AM">08:00 AM - 10:00 AM</option>
+                                            <option value="10:00 AM - 12:00 PM">10:00 AM - 12:00 PM</option>
+                                            <option value="02:00 PM - 04:00 PM">02:00 PM - 04:00 PM</option>
+                                            <option value="04:00 PM - 06:00 PM">04:00 PM - 06:00 PM</option>
+                                        </select>
                                     </div>
-                                    
+                                    <div class="form-group col-md-6">
+                                        <label for="inputRoom">Room</label>
+                                        <select id="inputRoom" class="form-control">
+                                            <option selected>Choose one</option>
+                                            <option value="1">A01</option>
+                                            <option value="2">A02</option>
+                                            <option value="3">A03</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="inputDesc">Description</label>
+                                        <textarea id="inputDesc" class="form-control" name="inputDesc" rows="4" cols="50">
+                                            
+                                        </textarea>
+                                    </div>
                                     <input type="hidden" id="apmRoom" value="TBD">
-                                    
+
                                     <button type="submit" class="btn btn-primary mt-5">Add Appointment</button>
                                 </form>
                             </div>
