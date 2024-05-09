@@ -116,7 +116,7 @@
                             <li class="nav-item dropdown no-arrow">
                                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">John Smith</span>
+                                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">Patient Name</span>
                                     <img class="img-profile rounded-circle"
                                          src="../img/undraw_profile.svg">
                                 </a>
@@ -143,10 +143,26 @@
                     <div class="container-fluid">
 
                         <!-- Page Heading -->
-                        <h1 class="h3 mb-2 text-gray-800">View Past Appointment</h1>
+                        <h1 class="h3 mb-3 text-dark">Appointment (Past)</h1>
+
+                        <!--Calendar-->
+                        <form class="row row-cols-lg-auto g-3 align-items-center">
+                            <div class="col-3">
+                                <input type="date" class="form-control" id="input-appDate">
+                            </div>
+                        </form>
+
+
 
                         <!-- DataTales Example -->
-                        <div class="card shadow mb-4">
+                        <div class="card shadow mt-3 mb-3">
+                            <div class="card-header py-1">
+                                <!-- Create appointment -->
+                                <div class="row mx-1 justify-content-between mt-3 mb-2">
+                                    <h4 class="font-weight-bold my-2 text-dark">Chosen Date</h4>
+
+                                </div>
+                            </div>
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
