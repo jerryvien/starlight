@@ -201,7 +201,7 @@
                                                 <th>Existing Illness</th>
                                                 <th>Duration</th>
                                                 <th>Medical Details</th>
-                                                
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
 
@@ -210,7 +210,49 @@
                                                 <td>Post Traumatic Stress Disorder (PTSD)</td>
                                                 <td>2 1/2 years</td>
                                                 <td>Paroxetine 10mg</td>
-                                                
+                                                <td>
+                                                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#edit">
+                                                        Edit
+                                                    </button>
+                                                    <!-- Modal -->
+                                                    <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="editTitle" aria-hidden="true">
+                                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="example2ModalLongTitle">Edit</h5>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <form action="#">
+                                                                        <table class="table">
+                                                                            <tr>
+                                                                                <td>Existing Illness: </td>
+                                                                                <td><input type="text" id="illness" name="illness"></td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>Duration: </td>
+                                                                                <td><input type="text" id="duration" name="duration"></td>
+                                                                                    
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>Medical Details: </td>
+                                                                                <td>
+                                                                                    <input type="text" id="med_detail" name="med_detail">
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </form>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                    <button type="button" class="btn btn-primary">Save changes</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
                                             </tr>
                                             
 
@@ -220,34 +262,6 @@
                             </div>
                         </div>
                         
-                        <div class="card shadow mt-4 mb-4">
-                            
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered" id="pastIllness" width="100%" cellspacing="0">
-                                        <thead>
-                                            <tr>
-                                                <th>Past Illness</th>
-                                                <th>Duration</th>
-                                                <th>Medical Details</th>
-                                                
-                                            </tr>
-                                        </thead>
-
-                                        <tbody>
-                                            <tr>
-                                                <td>Post Traumatic Stress Disorder (PTSD)</td>
-                                                <td>2 1/2 years</td>
-                                                <td>Paroxetine 10mg</td>
-                                                
-                                            </tr>
-                                            
-
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
 
                     </div>
                     <!-- /.container-fluid -->
