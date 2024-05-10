@@ -71,7 +71,7 @@
 
                 <!-- Divider -->
                 <hr class="sidebar-divider">
-                
+
                 <!-- Nav Item - View Patient -->
                 <li class="nav-item">
                     <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapsePatient"
@@ -171,14 +171,14 @@
                                         <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                         Edit Profile
                                     </a>
-<!--                                    <a class="dropdown-item" href="#">
-                                        <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Settings
-                                    </a>
-                                    <a class="dropdown-item" href="#">
-                                        <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Activity Log
-                                    </a>-->
+                                    <!--                                    <a class="dropdown-item" href="#">
+                                                                            <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                                                            Settings
+                                                                        </a>
+                                                                        <a class="dropdown-item" href="#">
+                                                                            <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+                                                                            Activity Log
+                                                                        </a>-->
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                                         <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -194,13 +194,68 @@
 
                     <div class="container-fluid">
 
-                        <!-- Page Heading -->
-                        <h1 class="h3  text-gray-800">Medical History</h1>
-                        
+
+                        <div class="row">
+                            <div class="col-auto">
+                                <!-- Page Heading -->
+                                <h1 class="h3 mb-2 text-gray-800">Regulus Corneas - Medical History</h1>
+                            </div>
+                            <div class="col-auto">
+                                <!-- Button trigger add-app page -->
+                                <a class="btn btn-primary" href="view-patient.html" role="button">Go Back</a>
+                            </div>
+                            <div class="col-auto">
+                                <!-- Button trigger add-app page -->
+                                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#create">
+                                    Add Record
+                                </button>
+                            </div>
+                        </div>
+
+                        <!--Create Modal -->
+                        <div class="modal fade" id="create" tabindex="-1" role="dialog" aria-labelledby="createRecord" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="example2ModalLongTitle">Create New Record</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="#">
+                                            <table class="table">
+                                                <tr>
+                                                    <td>Existing Illness: </td>
+                                                    <td><input type="text" id="illness" name="illness"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Duration: </td>
+                                                    <td><input type="text" id="duration" name="duration"></td>
+
+                                                </tr>
+                                                <tr>
+                                                    <td>Medical Details: </td>
+                                                    <td>
+                                                        <input type="text" id="med_detail" name="med_detail">
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                                        <button type="button" class="btn btn-success" data-dismiss="modal">Save</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End of Create Modal-->
+
 
                         <!-- DataTales Example -->
                         <div class="card shadow mt-4 mb-4">
-                            
+
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table table-bordered" id="currentIllness" width="100%" cellspacing="0">
@@ -242,7 +297,7 @@
                                                                             <tr>
                                                                                 <td>Duration: </td>
                                                                                 <td><input type="text" id="duration" name="duration"></td>
-                                                                                    
+
                                                                             </tr>
                                                                             <tr>
                                                                                 <td>Medical Details: </td>
@@ -262,14 +317,14 @@
                                                     </div>
                                                 </td>
                                             </tr>
-                                            
+
 
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
                         </div>
-                        
+
 
                     </div>
                     <!-- /.container-fluid -->
