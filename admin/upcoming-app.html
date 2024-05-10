@@ -68,9 +68,9 @@
                         </div>
                     </div>
                 </li>
-                
+
                 <hr class="sidebar-divider d-none d-md-block">
-                
+
                 <!-- Nav Item - Manage Patient -->
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree"
@@ -85,10 +85,10 @@
                         </div>
                     </div>
                 </li>
-                
+
                 <hr class="sidebar-divider d-none d-md-block">
                 <!-- Nav Item - Manage Counselor -->
-               <li class="nav-item">
+                <li class="nav-item">
                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFour"
                        aria-expanded="true" aria-controls="collapseFour">
                         <i class="fas fa-user-md"></i>
@@ -190,7 +190,7 @@
                                         <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                         Edit Profile
                                     </a>
-                                   
+
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                                         <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -225,7 +225,7 @@
                                 <div class="row mx-1 justify-content-between mt-3 mb-2">
                                     <h4 class="font-weight-bold my-2 text-dark">Chosen Date</h4>
                                     <!-- Button trigger add-app page -->
-                                   <a class="btn btn-success pt-2" href="add-app.html" role="button">Add Appointment</a>
+                                    <a class="btn btn-success pt-2" href="add-app.html" role="button">Add Appointment</a>
                                 </div>
                             </div>
                             <div class="card-body">
@@ -240,6 +240,7 @@
                                                 <th>Room</th>
                                                 <th>Patient</th>
                                                 <th>Counselor</th>
+                                                <th>Description</th>
                                                 <th>Action</th>
 
                                             </tr>
@@ -248,86 +249,54 @@
                                         <tbody>
                                             <tr>
                                                 <td>01</td>
-                                                <td>A2024050201</td>
-                                                <td>25-05-2024</td>
-                                                <td>8.00 a.m. - 10.00 a.m.</td>
+                                                <td>AP2024052901</td>
+                                                <td>25/05/2024</td>
+                                                <td>08:00 AM - 10:00 PM</td>
                                                 <td>A01</td>
-                                                <td>Richard Nixon</td>
-
+                                                <td>Iman Encem</td>
+                                                <td>Iman Yang Lagi Encem</td>
+                                                <td>Follow up session</td>
                                                 <td>
-                                                    <button type="button" class="btn btn-warning mb-2" data-toggle="modal" data-target="#editAppModal" >
+                                                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#edit">
                                                         <i class="fas fa-pencil-alt"></i>
                                                     </button>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td>02</td>
-                                                <td>A2024050202</td>
-                                                <td>25-05-2024</td>
-                                                <td>8.00 a.m. - 10.00 a.m.</td>
+                                                <td>A2024052902</td>
+                                                <td>25/05/2024</td>
+                                                <td>08:00 AM - 10:00 PM</td>
                                                 <td>A02</td>
-                                                <td>Betelguese Contee</td>
-
-
+                                                <td>Cristiano Messi</td>
+                                                <td>Dominic Toretto</td>
+                                                <td>Fast & Family session 2</td>
                                                 <td>
-                                                    <button type="button" class="btn btn-warning mb-2" data-toggle="modal" data-target="#editAppModal" >
-                                                        <i class="fas fa-pencil-alt"></i>
+                                                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#edit">
+                                                        <i class="fas fa-pencil-alt"></i> 
                                                     </button>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td>03</td>
-                                                <td>A2024050203</td>
-                                                <td>25-05-2024</td>
-                                                <td>8.00 a.m.</td>
+                                                <td>A2024052903</td>
+                                                <td>25/05/2024</td>
+                                                <td>08:00 AM - 10:00 PM</td>
                                                 <td>A03</td>
-                                                <td>Regulus Corneas</td>
-
-
+                                                <td>Harry Potter</td>
+                                                <td>Albus Dumbledore</td>
+                                                <td>Patient want a counseling on his Hogward Academy application.</td>
                                                 <td>
-                                                    <button type="button" class="btn btn-warning mb-2" data-toggle="modal" data-target="#editAppModal" >
-                                                        <i class="fas fa-pencil-alt"></i>
+                                                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#edit">
+                                                        <i class="fas fa-pencil-alt"></i> 
                                                     </button>
                                                 </td>
                                             </tr>
-                                            <tr>
-                                                <td>04</td>
-                                                <td>TBD</td>
-                                                <td>29-05-2024</td>
-                                                <td>8.00 a.m.</td>
-                                                <td>A01</td>
-                                                <td>John Smith</td>
 
-                                                <td>
-                                                    <button type="button" class="btn btn-warning mb-2" data-toggle="modal" data-target="#editAppModal" >
-                                                        <i class="fas fa-pencil-alt"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
 
-                                <!-- Modal -->
-                                <div class="modal fade" id="request" tabindex="-1" role="dialog" aria-labelledby="request" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLongTitle">Request new appointment</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                ...
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                <button type="button" class="btn btn-primary">Save changes</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
 
@@ -349,60 +318,82 @@
         <a class="scroll-to-top rounded" href="#page-top">
             <i class="fas fa-angle-up"></i>
         </a>
-        
-         <!-- Edit Appointment-->
-            <div class="modal fade" id="editAppModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                 aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Edit Appointment</h5>
-                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">×</span>
-                            </button>
-                        </div> 
-                        <form>
-                            <div class="modal-body">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                        <tbody>
-                                            <tr>
-                                                <td>Date</td>
-                                                <td><input type="date" class="form-control"></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Counselor</td>
-                                                <td>
-                                                    <select id="inputCounselor" class="form-control">
-                                                        <option selected value="1">Adelia Marcius</option>
-                                                        <option value="2">Faezah Nor</option>
-                                                    </select>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Available Time Slot</td>
-                                                <td>
-                                                    <select id="inputTimeSlot" class="form-control col-auto" required>
-                                                        <option selected value="08:00 AM - 10:00 AM">08:00 AM - 10:00 AM</option>
-                                                        <option value="10:00 AM - 12:00 PM">10:00 AM - 12:00 PM</option>
-                                                        <option value="02:00 PM - 04:00 PM">02:00 PM - 04:00 PM</option>
-                                                        <option value="04:00 PM - 06:00 PM">04:00 PM - 06:00 PM</option>
-                                                     </select>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                                <button type="submit" class="btn btn-success" data-dismiss="modal">Save Changes</button>
-                            </div>
+
+        <!-- Edit Appointment-->
+        <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="editTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="example2ModalLongTitle">Edit</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="#">
+                            <table class="table">
+                                <tr>
+                                    <td>Date: </td>
+                                    <td><input type="date" id="app_date" name="app_date"></td>
+                                </tr>
+                                <tr>
+                                    <td>Time Slot: </td>
+                                    <td>
+                                        <select id="inputTimeSlot" class="form-control col-auto" required>
+                                            <option selected>None selected</option>
+                                            <option value="08:00 AM - 10:00 AM">08:00 AM - 10:00 AM</option>
+                                            <option value="10:00 AM - 12:00 PM">10:00 AM - 12:00 PM</option>
+                                            <option value="02:00 PM - 04:00 PM">02:00 PM - 04:00 PM</option>
+                                            <option value="04:00 PM - 06:00 PM">04:00 PM - 06:00 PM</option>
+                                        </select></td>
+                                </tr>
+                                <tr>
+                                    <td>Room: </td>
+                                    <td>
+                                        <select name="roomsPre" id="roomsPre">
+                                            <option selected>Room Prefix</option>
+                                            <option value="A">A</option>
+                                            <option value="B">B</option>
+                                            <option value="C">C</option>
+                                        </select>
+                                        <select name="roomsPost" id="roomsPost">
+                                            <option selected>Room Postfix</option>
+                                            <option value="01">01</option>
+                                            <option value="02">02</option>
+                                            <option value="03">03</option>
+                                        </select>
+                                    </td>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Description: </td>
+                                    <td>
+                                        <textarea id="desc" name="desc" rows="4">
+                                                                                        
+                                        </textarea>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Status: </td>
+                                    <td>
+                                        <select name="status" id="status">
+                                            <option value="upcoming">Upcoming</option>
+                                            <option value="finish">Finish</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            </table>
                         </form>
-                     </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
                 </div>
             </div>
-         
+        </div>
+
         <!-- Logout Modal-->
         <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
              aria-hidden="true">
