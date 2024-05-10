@@ -9,7 +9,7 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>Admin-Patient-Medical History</title>
+        <title>Admin-Patient 2-Medical History</title>
 
         <!-- Custom fonts for this template-->
         <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -33,9 +33,9 @@
                 <!-- Sidebar - Brand -->
                 <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
                     <div class="sidebar-brand-icon ">
-                        <i class="fas fa-user-md"></i>
+                        <i class="fas fa-user-cog"></i>
                     </div>
-                    <div class="sidebar-brand-text mx-3">Counselor</div>
+                    <div class="sidebar-brand-text mx-3">Admin</div>
                 </a>
 
                 <!-- Divider -->
@@ -51,8 +51,6 @@
                 <!-- Divider -->
                 <hr class="sidebar-divider">
 
-
-
                 <!-- Nav Item - Appointment Menu -->
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
@@ -62,59 +60,53 @@
                     </a>
                     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
-                            <a class="collapse-item" href="add-app.html">Add Follow Up</a>
+                            <a class="collapse-item" href="add-app.html">Add Appointment</a>
                             <a class="collapse-item" href="upcoming-app.html">View Upcoming</a>
                             <a class="collapse-item" href="past-app.html">View Past</a>
                         </div>
                     </div>
                 </li>
 
-                <!-- Divider -->
-                <hr class="sidebar-divider">
-                
-                <!-- Nav Item - View Patient -->
-                <li class="nav-item">
-                    <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapsePatient"
-                       aria-expanded="true" aria-controls="collapsePatient">
+                <hr class="sidebar-divider d-none d-md-block">
+
+                <!-- Nav Item - Manage Patient -->
+                <li class="nav-item active">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree"
+                       aria-expanded="true" aria-controls="collapseThree">
                         <i class="fas fa-user"></i>
                         <span>Patient</span>
                     </a>
-                    <div id="collapsePatient" class="collapse " aria-labelledby="headingPatient" data-parent="#accordionSidebar">
+                    <div id="collapseThree" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
                             <a class="collapse-item" href="add-patient.html">Add Patient</a>
-                            <a class="collapse-item" href="view-patient.html">View Patient</a>
+                            <a class="collapse-item active" href="manage_patient.html">View Patient</a>
                         </div>
                     </div>
                 </li>
 
+                <hr class="sidebar-divider d-none d-md-block">
+                <!-- Nav Item - Manage Counselor -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFour"
+                       aria-expanded="true" aria-controls="collapseFour">
+                        <i class="fas fa-user-md"></i>
+                        <span>Counselor</span>
+                    </a>
+                    <div id="collapseFour" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <a class="collapse-item" href="add-counselor.html">Add Counselor</a>
+                            <a class="collapse-item" href="manage_counselor.html">View Counselor</a>
+                        </div>
+                    </div>
+                </li>
 
-
-
-
-                <!-- Nav Item - Pages Collapse Menu -->
-                <!--            <li class="nav-item">
-                                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
-                                    aria-expanded="true" aria-controls="collapsePages">
-                                    <i class="fas fa-fw fa-folder"></i>
-                                    <span>Pages</span>
-                                </a>
-                                <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                                    <div class="bg-white py-2 collapse-inner rounded">
-                                        <h6 class="collapse-header">Login Screens:</h6>
-                                        <a class="collapse-item" href="login.html">Login</a>
-                                        <a class="collapse-item" href="register.html">Register</a>
-                                        <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
-                                        <div class="collapse-divider"></div>
-                                        <h6 class="collapse-header">Other Pages:</h6>
-                                        <a class="collapse-item" href="404.html">404 Page</a>
-                                        <a class="collapse-item" href="blank.html">Blank Page</a>
-                                    </div>
-                                </div>
-                            </li>-->
-
-
-
-
+                <hr class="sidebar-divider d-none d-md-block">
+                <!-- Nav Item - Manage Payment -->
+                <li class="nav-item">
+                    <a class="nav-link" href="view-payment.html">
+                        <i class="fas fa-money-check-alt"></i>
+                        <span>Payment</span></a>
+                </li>
 
                 <!-- Divider -->
                 <hr class="sidebar-divider d-none d-md-block">
@@ -143,24 +135,19 @@
                             <i class="fa fa-bars"></i>
                         </button>
 
-
+                        <h4 class="font-weight-bold text-dark">
+                            Counseling Management System
+                        </h4>
 
                         <!-- Topbar Navbar -->
                         <ul class="navbar-nav ml-auto">
-
-
-
-
-
-
-
                             <div class="topbar-divider d-none d-sm-block"></div>
 
                             <!-- Nav Item - User Information -->
                             <li class="nav-item dropdown no-arrow">
                                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">Dennis Ritchie</span>
+                                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">Daus Toretto</span>
                                     <img class="img-profile rounded-circle"
                                          src="../img/undraw_profile.svg">
                                 </a>
@@ -171,14 +158,6 @@
                                         <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                         Edit Profile
                                     </a>
-<!--                                    <a class="dropdown-item" href="#">
-                                        <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Settings
-                                    </a>
-                                    <a class="dropdown-item" href="#">
-                                        <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Activity Log
-                                    </a>-->
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                                         <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -194,13 +173,27 @@
 
                     <div class="container-fluid">
 
-                        <!-- Page Heading -->
-                        <h1 class="h3  text-gray-800">Medical History</h1>
-                        
+                        <div class="row">
+                            <div class="col-auto">
+                                <!-- Page Heading -->
+                                <h1 class="h3 mb-2 text-gray-800">Cristiano Messi - Medical History</h1>
+                            </div>
+                            <div class="col-auto">
+                                <!-- Button trigger add-app page -->
+                                <a class="btn btn-primary" href="manage_patient.html" role="button">Go Back</a>
+                            </div>
+                            <div class="col-auto">
+                                <!-- Button trigger add-app page -->
+                                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#create">
+                                    Add Record
+                                </button>
+                            </div>
+                        </div>
+
 
                         <!-- DataTales Example -->
                         <div class="card shadow mt-4 mb-4">
-                            
+
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table table-bordered" id="currentIllness" width="100%" cellspacing="0">
@@ -222,66 +215,19 @@
                                                     <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#edit">
                                                         Edit
                                                     </button>
-                                                    <!-- Modal -->
-                                                    <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="editTitle" aria-hidden="true">
-                                                        <div class="modal-dialog modal-dialog-centered" role="document">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h5 class="modal-title" id="example2ModalLongTitle">Edit</h5>
-                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                        <span aria-hidden="true">&times;</span>
-                                                                    </button>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    <form action="#">
-                                                                        <table class="table">
-                                                                            <tr>
-                                                                                <td>Existing Illness: </td>
-                                                                                <td><input type="text" id="illness" name="illness"></td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <td>Duration: </td>
-                                                                                <td><input type="text" id="duration" name="duration"></td>
-                                                                                    
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <td>Medical Details: </td>
-                                                                                <td>
-                                                                                    <input type="text" id="med_detail" name="med_detail">
-                                                                                </td>
-                                                                            </tr>
-                                                                        </table>
-                                                                    </form>
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                                    <button type="button" class="btn btn-primary">Save changes</button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
                                                 </td>
                                             </tr>
-                                            
-
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
                         </div>
-                        
-
                     </div>
                     <!-- /.container-fluid -->
-
                 </div>
                 <!-- End of Main Content -->
-
-
-
             </div>
             <!-- End of Content Wrapper -->
-
         </div>
         <!-- End of Page Wrapper -->
 
@@ -290,6 +236,85 @@
             <i class="fas fa-angle-up"></i>
         </a>
 
+        <!-- Create Modal -->
+        <div class="modal fade" id="create" tabindex="-1" role="dialog" aria-labelledby="createRecord" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="example2ModalLongTitle">Create New Record</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="#">
+                            <table class="table">
+                                <tr>
+                                    <td>Existing Illness: </td>
+                                    <td><input type="text" id="illness" name="illness"></td>
+                                </tr>
+                                <tr>
+                                    <td>Duration: </td>
+                                    <td><input type="text" id="duration" name="duration"></td>
+
+                                </tr>
+                                <tr>
+                                    <td>Medical Details: </td>
+                                    <td>
+                                        <input type="text" id="med_detail" name="med_detail">
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-success" data-dismiss="modal">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--End of Create Modal-->
+
+        <!-- Edit Modal -->
+        <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="editTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="example2ModalLongTitle">Edit Record</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="#">
+                            <table class="table">
+                                <tr>
+                                    <td>Existing Illness: </td>
+                                    <td><input type="text" id="illness" name="illness"></td>
+                                </tr>
+                                <tr>
+                                    <td>Duration: </td>
+                                    <td><input type="text" id="duration" name="duration"></td>
+
+                                </tr>
+                                <tr>
+                                    <td>Medical Details: </td>
+                                    <td>
+                                        <input type="text" id="med_detail" name="med_detail">
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-success" data-dismiss="modal">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--End of Edit Modal-->
         <!-- Logout Modal-->
         <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
              aria-hidden="true">
