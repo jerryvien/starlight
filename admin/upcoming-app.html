@@ -9,7 +9,7 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>Counselor-Appointment</title>
+        <title>Admin-Appointment</title>
 
         <!-- Custom fonts for this template-->
         <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -33,16 +33,16 @@
                 <!-- Sidebar - Brand -->
                 <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
                     <div class="sidebar-brand-icon ">
-                        <i class="fas fa-user-md"></i>
-                    </div>
-                    <div class="sidebar-brand-text mx-3">Counselor</div>
+                        <i class="fas fa-user-cog"></i>
+                    </div>  
+                    <div class="sidebar-brand-text mx-3">Admin</div>
                 </a>
 
                 <!-- Divider -->
                 <hr class="sidebar-divider my-0">
 
                 <!-- Nav Item - Dashboard -->
-                <li class="nav-item ">
+                <li class="nav-item">
                     <a class="nav-link" href="index.html">
                         <i class="fas fa-fw fa-tachometer-alt"></i>
                         <span>Dashboard</span></a>
@@ -54,68 +54,62 @@
 
 
                 <!-- Nav Item - Appointment Menu -->
-               <li class="nav-item">
-                    <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                        aria-expanded="true" aria-controls="collapseTwo">
+                <li class="nav-item active">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                       aria-expanded="true" aria-controls="collapseTwo">
                         <i class="fas fa-calendar"></i>
                         <span>Appointment</span>
                     </a>
                     <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
                             <a class="collapse-item" href="add-app.html">Add Appointment</a>
-                            <a class="collapse-item" href="upcoming-app.html">View Upcoming</a>
-                            <a class="collapse-item active" href="past-app.html">View Past</a>
+                            <a class="collapse-item active" href="upcoming-app.html">View Upcoming</a>
+                            <a class="collapse-item" href="past-app.html">View Past</a>
                         </div>
                     </div>
                 </li>
 
-                <!-- Divider -->
-                <hr class="sidebar-divider">
-                
-                <!-- Nav Item - View Patient -->
+                <hr class="sidebar-divider d-none d-md-block">
+
+                <!-- Nav Item - Manage Patient -->
                 <li class="nav-item">
-                    <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapsePatient"
-                       aria-expanded="true" aria-controls="collapsePatient">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree"
+                       aria-expanded="true" aria-controls="collapseThree">
                         <i class="fas fa-user"></i>
                         <span>Patient</span>
                     </a>
-                    <div id="collapsePatient" class="collapse" aria-labelledby="headingPatient" data-parent="#accordionSidebar">
+                    <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
                             <a class="collapse-item" href="add-patient.html">Add Patient</a>
-                            <a class="collapse-item" href="view-patient.html">View Patient</a>
+                            <a class="collapse-item" href="manage_patient.html">View Patient</a>
                         </div>
                     </div>
                 </li>
 
+                <hr class="sidebar-divider d-none d-md-block">
+                <!-- Nav Item - Manage Counselor -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFour"
+                       aria-expanded="true" aria-controls="collapseFour">
+                        <i class="fas fa-user-md"></i>
+                        <span>Counselor</span>
+                    </a>
+                    <div id="collapseFour" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <a class="collapse-item" href="add-counselor.html">Add Counselor</a>
+                            <a class="collapse-item" href="manage_counselor.html">View Counselor</a>
+                        </div>
+                    </div>
+                </li>
 
-
-
-
-                <!-- Nav Item - Pages Collapse Menu -->
-                <!--            <li class="nav-item">
-                                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
-                                    aria-expanded="true" aria-controls="collapsePages">
-                                    <i class="fas fa-fw fa-folder"></i>
-                                    <span>Pages</span>
-                                </a>
-                                <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                                    <div class="bg-white py-2 collapse-inner rounded">
-                                        <h6 class="collapse-header">Login Screens:</h6>
-                                        <a class="collapse-item" href="login.html">Login</a>
-                                        <a class="collapse-item" href="register.html">Register</a>
-                                        <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
-                                        <div class="collapse-divider"></div>
-                                        <h6 class="collapse-header">Other Pages:</h6>
-                                        <a class="collapse-item" href="404.html">404 Page</a>
-                                        <a class="collapse-item" href="blank.html">Blank Page</a>
-                                    </div>
-                                </div>
-                            </li>-->
-
-
-
-
-
+                <hr class="sidebar-divider d-none d-md-block">
+                <!-- Nav Item - Manage Payment -->
+                <li class="nav-item">
+                    <a class="nav-link" href="view-payment.html">
+                        <i class="fas fa-money-check-alt"></i>
+                        <span>Payment</span></a>
+                </li>
+                
                 <!-- Divider -->
                 <hr class="sidebar-divider d-none d-md-block">
 
@@ -123,9 +117,6 @@
                 <div class="text-center d-none d-md-inline">
                     <button class="rounded-circle border-0" id="sidebarToggle"></button>
                 </div>
-
-
-
             </ul>
             <!-- End of Sidebar -->
 
@@ -156,7 +147,7 @@
                             <li class="nav-item dropdown no-arrow">
                                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">Dennis Ritchie</span>
+                                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">Daus Toretto</span>
                                     <img class="img-profile rounded-circle"
                                          src="../img/undraw_profile.svg">
                                 </a>
@@ -167,14 +158,7 @@
                                         <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                         Edit Profile
                                     </a>
-<!--                                    <a class="dropdown-item" href="#">
-                                        <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Settings
-                                    </a>
-                                    <a class="dropdown-item" href="#">
-                                        <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Activity Log
-                                    </a>-->
+
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                                         <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -191,53 +175,25 @@
                     <div class="container-fluid">
 
                         <!-- Page Heading -->
-                        <h1 class="h3 mb-2 text-gray-800">Appointment (Past)</h1>
-                        
+                        <h1 class="h3 mb-3 text-dark">Appointment (Upcoming)</h1>
+
                         <!--Calendar-->
-                        <form class="row row-cols-lg-auto g-3 align-items-center mt-3">
+                        <form class="row row-cols-lg-auto g-3 align-items-center">
                             <div class="col-3">
                                 <input type="date" class="form-control" id="input-appDate">
                             </div>
                         </form>
-                        
-                        <!-- Create appointment -->
-                        <div class="row mx-1 justify-content-between mb-4 mt-3">
-<!--                            <h5 class="font-weight-bold my-2">List</h5>-->
-                            <!-- Button trigger modal -->
 
-<!--                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModalCenter">
-                                Create
-                            </button>-->
-                            <!-- Modal -->
-                            <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLongTitle">Create new appointment</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            ...
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                            <button type="button" class="btn btn-primary">Save changes</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
 
-                        </div>
 
                         <!-- DataTales Example -->
-                        <div class="card shadow mb-4">
+                        <div class="card shadow mt-3 mb-3">
                             <div class="card-header py-1">
                                 <!-- Create appointment -->
                                 <div class="row mx-1 justify-content-between mt-3 mb-2">
                                     <h4 class="font-weight-bold my-2 text-dark">Chosen Date</h4>
-
+                                    <!-- Button trigger add-app page -->
+                                    <a class="btn btn-success pt-2" href="add-app.html" role="button">Add Appointment</a>
                                 </div>
                             </div>
                             <div class="card-body">
@@ -245,76 +201,69 @@
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
                                             <tr>
-                                                <th>No</th>
+                                                <th>No.</th>
+                                                <th>Appointment ID</th>
                                                 <th>Date</th>
                                                 <th>Time Slot</th>
                                                 <th>Room</th>
-                                                <th>Patient Name</th>
+                                                <th>Patient</th>
+                                                <th>Counselor</th>
                                                 <th>Description</th>
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
 
                                         <tbody>
                                             <tr>
                                                 <td>01</td>
+                                                <td>AP2024052501</td>
                                                 <td>25/05/2024</td>
                                                 <td>08:00 AM - 10:00 PM</td>
                                                 <td>A01</td>
-                                                <td>Alan Turing</td>
+                                                <td>Iman Encem</td>
+                                                <td>Iman Yang Lagi Encem</td>
+                                                <td>Follow up session for PTSD</td>
                                                 <td>
-                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut congue aliquet ligula a 
-                                                    maximus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Praesent mollis 
-                                                    eleifend ullamcorper. Sed sit amet augue pretium, luctus augue at, malesuada ex.
+                                                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#edit">
+                                                        <i class="fas fa-pencil-alt"></i>
+                                                    </button>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td>02</td>
+                                                <td>A2024052502</td>
                                                 <td>25/05/2024</td>
                                                 <td>08:00 AM - 10:00 PM</td>
                                                 <td>A02</td>
-                                                <td>Ada Lovelace</td>
+                                                <td>Cristiano Messi</td>
+                                                <td>Dominic Toretto</td>
+                                                <td>Fast & Family session 2</td>
                                                 <td>
-                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut congue aliquet ligula a 
-                                                    maximus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Praesent mollis 
-                                                    eleifend ullamcorper. Sed sit amet augue pretium, luctus augue at, malesuada ex.>
+                                                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#edit">
+                                                        <i class="fas fa-pencil-alt"></i> 
+                                                    </button>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td>03</td>
+                                                <td>A2024052503</td>
                                                 <td>25/05/2024</td>
                                                 <td>08:00 AM - 10:00 PM</td>
                                                 <td>A03</td>
-                                                <td>Ken Thompson</td>
+                                                <td>Harry Potter</td>
+                                                <td>Albus Dumbledore</td>
+                                                <td>Patient want a counseling on his Hogward Academy application part 2.</td>
                                                 <td>
-                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut congue aliquet ligula a 
-                                                    maximus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Praesent mollis 
-                                                    eleifend ullamcorper. Sed sit amet augue pretium, luctus augue at, malesuada ex.
+                                                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#edit">
+                                                        <i class="fas fa-pencil-alt"></i> 
+                                                    </button>
                                                 </td>
                                             </tr>
+
                                         </tbody>
                                     </table>
                                 </div>
-                                
-                                <!-- Modal -->
-                                <div class="modal fade" id="request" tabindex="-1" role="dialog" aria-labelledby="request" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLongTitle">Request new appointment</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                ...
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                <button type="button" class="btn btn-primary">Save changes</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+
                             </div>
                         </div>
 
@@ -336,6 +285,81 @@
         <a class="scroll-to-top rounded" href="#page-top">
             <i class="fas fa-angle-up"></i>
         </a>
+
+        <!-- Edit Appointment-->
+        <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="editTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="example2ModalLongTitle">Edit</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="#">
+                            <table class="table">
+                                <tr>
+                                    <td>Date: </td>
+                                    <td><input type="date" id="app_date" name="app_date"></td>
+                                </tr>
+                                <tr>
+                                    <td>Time Slot: </td>
+                                    <td>
+                                        <select id="inputTimeSlot" class="form-control col-auto" required>
+                                            <option selected>None selected</option>
+                                            <option value="08:00 AM - 10:00 AM">08:00 AM - 10:00 AM</option>
+                                            <option value="10:00 AM - 12:00 PM">10:00 AM - 12:00 PM</option>
+                                            <option value="02:00 PM - 04:00 PM">02:00 PM - 04:00 PM</option>
+                                            <option value="04:00 PM - 06:00 PM">04:00 PM - 06:00 PM</option>
+                                        </select></td>
+                                </tr>
+                                <tr>
+                                    <td>Room: </td>
+                                    <td>
+                                        <select name="roomsPre" id="roomsPre">
+                                            <option selected>Room Prefix</option>
+                                            <option value="A">A</option>
+                                            <option value="B">B</option>
+                                            <option value="C">C</option>
+                                        </select>
+                                        <select name="roomsPost" id="roomsPost">
+                                            <option selected>Room Postfix</option>
+                                            <option value="01">01</option>
+                                            <option value="02">02</option>
+                                            <option value="03">03</option>
+                                        </select>
+                                    </td>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Description: </td>
+                                    <td>
+                                        <textarea id="desc" name="desc" rows="4">
+                                                                                        
+                                        </textarea>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Status: </td>
+                                    <td>
+                                        <select name="status" id="status">
+                                            <option value="upcoming">Upcoming</option>
+                                            <option value="finish">Finish</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-success" data-dismiss="modal">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- Logout Modal-->
         <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
