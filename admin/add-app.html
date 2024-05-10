@@ -68,9 +68,9 @@
                         </div>
                     </div>
                 </li>
-                
+
                 <hr class="sidebar-divider d-none d-md-block">
-                
+
                 <!-- Nav Item - Manage Patient -->
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree"
@@ -85,10 +85,10 @@
                         </div>
                     </div>
                 </li>
-                
+
                 <hr class="sidebar-divider d-none d-md-block">
                 <!-- Nav Item - Manage Counselor -->
-               <li class="nav-item">
+                <li class="nav-item">
                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFour"
                        aria-expanded="true" aria-controls="collapseFour">
                         <i class="fas fa-user-md"></i>
@@ -150,7 +150,7 @@
                             <li class="nav-item dropdown no-arrow">
                                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">Admin Name</span>
+                                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">Daus Toretto</span>
                                     <img class="img-profile rounded-circle"
                                          src="../img/undraw_profile.svg">
                                 </a>
@@ -206,13 +206,37 @@
                                         </select>
                                     </div>
 
-                                    <input type="hidden" id="apmRoom" value="TBD">
+                                    <label for="inputTimeSlot" class="col-auto">Room</label>
+                                    <div class="form-group row">
 
-                                    <button type="submit" class="btn btn-primary mt-5">Add Appointment</button>
-                                </form>
+
+                                        <select id="inputRoomPrefix" class="form-control ml-4 col-lg-2" required>
+                                            <option selected>Room Prefix</option>
+                                            <option value="A">A</option>
+                                            <option value="B">B</option>
+                                            <option value="C">C</option>
+                                        </select>
+
+                                        <select id="inputRoomPostfix" class="form-control ml-4 col-lg-2" required>
+                                            <option selected>Room Postfix</option>
+                                            <option value="01">01</option>
+                                            <option value="02">02</option>
+                                            <option value="03">03</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="form-group col-md-6">
+                                        <label for="inputDesc">Description</label>
+                                        <textarea id="inputDesc" class="form-control" name="inputDesc" rows="4" cols="50">
+                                            
+                                        </textarea>
+                                    </div>
                             </div>
-                        </div>
 
+                             <button type="submit" class="btn btn-primary mt-5">Add Appointment</button>
+                           
+                            </form>
+                        </div>
                     </div>
                     <!-- /.container-fluid -->
 
