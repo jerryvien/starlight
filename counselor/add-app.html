@@ -9,7 +9,7 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>Add Follow Up Appointment</title>
+        <title>Add Appointment</title>
 
         <!-- Custom fonts for this template-->
         <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -62,7 +62,7 @@
                     </a>
                     <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
-                            <a class="collapse-item" href="add-app.html">Add Follow Up</a>
+                            <a class="collapse-item active" href="add-app.html">Add Appointment</a>
                             <a class="collapse-item" href="upcoming-app.html">View Upcoming</a>
                             <a class="collapse-item" href="past-app.html">View Past</a>
                         </div>
@@ -112,7 +112,9 @@
                             <i class="fa fa-bars"></i>
                         </button>
 
-
+                        <h4 class="font-weight-bold text-dark">
+                            Counseling Management System
+                        </h4>
 
                         <!-- Topbar Navbar -->
                         <ul class="navbar-nav ml-auto">
@@ -152,12 +154,13 @@
                     <div class="container-fluid">
 
                         <!-- Page Heading -->
-                        <h1 class="h3 mb-2 text-gray-800 ">Appointment (Follow Up)</h1>
+                        <h1 class="h3 mb-2 text-gray-800 ">Add Appointment</h1>
 
                         <!-- DataTales Example -->
-                        <div class="card shadow mb-4">
-                            <div class="card-body">
-                                <form>
+                        <form>
+                            <div class="card shadow mb-4">
+
+                                <div class="card-body">
                                     <div class="form-group col-md-6">
                                         <label for="input-appDate">Appointment Date</label>
                                         <input type="date" class="form-control" id="input-appDate">
@@ -197,12 +200,11 @@
                                         </textarea>
                                     </div>
                                     <input type="hidden" id="apmRoom" value="TBD">
-
-                                    <button type="submit" class="btn btn-primary mt-5">Add Appointment</button>
-                                </form>
+                                </div>
+                                <button type="submit" class="btn btn-primary mt-5">Add Appointment</button>
                             </div>
-                        </div>
 
+                        </form>
                     </div>
                     <!-- /.container-fluid -->
 

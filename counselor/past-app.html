@@ -62,9 +62,9 @@
                     </a>
                     <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
-                            <a class="collapse-item" href="add-app.html">Add Follow Up</a>
+                            <a class="collapse-item" href="add-app.html">Add Appointment</a>
                             <a class="collapse-item" href="upcoming-app.html">View Upcoming</a>
-                            <a class="collapse-item" href="past-app.html">View Past</a>
+                            <a class="collapse-item active" href="past-app.html">View Past</a>
                         </div>
                     </div>
                 </li>
@@ -143,7 +143,9 @@
                             <i class="fa fa-bars"></i>
                         </button>
 
-
+                        <h4 class="font-weight-bold text-dark">
+                            Counseling Management System
+                        </h4>
 
                         <!-- Topbar Navbar -->
                         <ul class="navbar-nav ml-auto">
@@ -196,9 +198,16 @@
 
                         <!-- Page Heading -->
                         <h1 class="h3 mb-2 text-gray-800">Appointment (Past)</h1>
-                        <input type="date" id="app_date" name="app_date">
+                        
+                        <!--Calendar-->
+                        <form class="row row-cols-lg-auto g-3 align-items-center mt-3">
+                            <div class="col-3">
+                                <input type="date" class="form-control" id="input-appDate">
+                            </div>
+                        </form>
+                        
                         <!-- Create appointment -->
-                        <div class="row mx-1 justify-content-between mt-5 mb-2">
+                        <div class="row mx-1 justify-content-between mb-4 mt-3">
 <!--                            <h5 class="font-weight-bold my-2">List</h5>-->
                             <!-- Button trigger modal -->
 
@@ -239,7 +248,6 @@
                                         <thead>
                                             <tr>
                                                 <th>No</th>
-                                                <th>Appointment ID</th>
                                                 <th>Date</th>
                                                 <th>Time Slot</th>
                                                 <th>Room</th>
@@ -251,30 +259,39 @@
                                         <tbody>
                                             <tr>
                                                 <td>01</td>
-                                                <td>A2024052501</td>
                                                 <td>25/05/2024</td>
                                                 <td>08:00 AM - 10:00 PM</td>
                                                 <td>A01</td>
                                                 <td>Alan Turing</td>
-                                                <td></td>
+                                                <td>
+                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut congue aliquet ligula a 
+                                                    maximus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Praesent mollis 
+                                                    eleifend ullamcorper. Sed sit amet augue pretium, luctus augue at, malesuada ex.
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td>02</td>
-                                                <td>A2024052502</td>
                                                 <td>25/05/2024</td>
                                                 <td>08:00 AM - 10:00 PM</td>
                                                 <td>A02</td>
                                                 <td>Ada Lovelace</td>
-                                                <td></td>
+                                                <td>
+                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut congue aliquet ligula a 
+                                                    maximus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Praesent mollis 
+                                                    eleifend ullamcorper. Sed sit amet augue pretium, luctus augue at, malesuada ex.>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td>03</td>
-                                                <td>A2024052503</td>
                                                 <td>25/05/2024</td>
                                                 <td>08:00 AM - 10:00 PM</td>
                                                 <td>A03</td>
                                                 <td>Ken Thompson</td>
-                                                <td></td>
+                                                <td>
+                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut congue aliquet ligula a 
+                                                    maximus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Praesent mollis 
+                                                    eleifend ullamcorper. Sed sit amet augue pretium, luctus augue at, malesuada ex.
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>

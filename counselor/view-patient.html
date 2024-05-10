@@ -62,7 +62,7 @@
                     </a>
                     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
-                            <a class="collapse-item" href="add-app.html">Add Follow Up</a>
+                            <a class="collapse-item" href="add-app.html">Add Appointment</a>
                             <a class="collapse-item" href="upcoming-app.html">View Upcoming</a>
                             <a class="collapse-item" href="past-app.html">View Past</a>
                         </div>
@@ -82,7 +82,7 @@
                     <div id="collapsePatient" class="collapse show" aria-labelledby="headingPatient" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
                             <a class="collapse-item" href="add-patient.html">Add Patient</a>
-                            <a class="collapse-item" href="view-patient.html">View Patient</a>
+                            <a class="collapse-item active" href="view-patient.html">View Patient</a>
                         </div>
                     </div>
                 </li>
@@ -143,15 +143,12 @@
                             <i class="fa fa-bars"></i>
                         </button>
 
-
+                        <h4 class="font-weight-bold text-dark">
+                            Counseling Management System
+                        </h4>
 
                         <!-- Topbar Navbar -->
                         <ul class="navbar-nav ml-auto">
-
-
-
-
-
 
 
                             <div class="topbar-divider d-none d-sm-block"></div>
@@ -196,7 +193,13 @@
 
                         <!-- Page Heading -->
                         <h1 class="h3  text-gray-800">Patient List</h1>
-                        <input type="date" id="app_date" name="app_date">
+                        
+                        <!--Calendar-->
+                        <form class="row row-cols-lg-auto g-3 align-items-center">
+                            <div class="col-3">
+                                <input type="date" class="form-control" id="input-appDate">
+                            </div>
+                        </form>
 
                         <!-- DataTales Example -->
                         <div class="card shadow mt-4 mb-4">
@@ -212,6 +215,10 @@
                                                 <th>Name</th>
                                                 <th>IC No</th>
                                                 <th>Email</th>
+                                                <th>Gender</th>
+                                                <th>Birth Date</th>
+                                                <th>Age</th>
+                                                <th>Address</th>
                                                 <th>Phone No</th>
                                                 <th>Medical History</th>
                                                 <th>Action</th>
@@ -224,6 +231,10 @@
                                                 <td>Richard Nixon</td>
                                                 <td>010101-10-1010</td>
                                                 <td>example@gmail.com</td>
+                                                <td>Male</td>
+                                                <td>20/03/1998</td>
+                                                <td>26</td>
+                                                <td>KC45, Jln Sertendah, Kampung Pertam, Selangor</td>
                                                 <td>011-1111111</td>
                                                 <td>
                                                     <a role="button" href="patient1-medic-history.html" class="btn btn-success">
@@ -285,6 +296,10 @@
                                                 <td>Alan Dix</td>
                                                 <td>020202-10-2020</td>
                                                 <td>example@gmail.com</td>
+                                                <td>Male</td>
+                                                <td>20/03/1998</td>
+                                                <td>26</td>
+                                                <td>KC45, Jln Sertendah, Kampung Pertam, Selangor</td>
                                                 <td>022-2222222</td>
                                                 <td>
                                                     <a role="button" href="patient2-medic-history.html" class="btn btn-success">
@@ -346,6 +361,10 @@
                                                 <td>Regulus Corneas</td>
                                                 <td>030303-10-3300</td>
                                                 <td>example@gmail.com</td>
+                                                <td>Male</td>
+                                                <td>20/03/1998</td>
+                                                <td>26</td>
+                                                <td>KC45, Jln Sertendah, Kampung Pertam, Selangor</td>
                                                 <td>033-3333333</td>
                                                 <td>
                                                     <a role="button" href="patient3-medic-history.html" class="btn btn-success">

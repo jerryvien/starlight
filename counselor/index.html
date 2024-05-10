@@ -63,7 +63,7 @@
                     </a>
                     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
-                            <a class="collapse-item" href="add-app.html">Add Follow Up</a>
+                            <a class="collapse-item" href="add-app.html">Add Appointment</a>
                             <a class="collapse-item" href="upcoming-app.html">View Upcoming</a>
                             <a class="collapse-item" href="past-app.html">View Past</a>
                         </div>
@@ -208,7 +208,7 @@
                         <!-- Content Row -->
                             <div class="row">
 
-                                <!-- Appointment Card -->
+                                <!-- Appointment (Upcoming) Card -->
                                 <div class="col-xl-3 col-md-6 mb-4">
                                     <div class="card bg-white shadow h-100 py-2">
                                         <div class="card-body">
@@ -218,9 +218,10 @@
                                                         Appointment (Upcoming)</div>
                                                     <hr class="mt-1">
 
-                                                    <div class="h6 mb-0 font-weight-bold text-primary">29 May 2024</div>
-                                                    <div class="h6 mb-0 font-weight-bold text-primary">
-                                                        (8.00 a.m. - 10 a.m.)</div>
+                                                    <div class="h6 mb-0 font-weight-bold text-primary">11 May 2024(and onwards)</div>
+                                                    <div class="h6 mb-0 font-weight-bold text-primary mt-3">
+                                                        3 Appointments
+                                                    </div>
                                                 </div>
                                                 <div class="col-auto">
                                                     <i class="fas fa-calendar fa-2x text-primary"></i>
@@ -230,6 +231,28 @@
                                     </div>
                                 </div>
 
+                                <!-- Appointment (Past) Card -->
+                                <div class="col-xl-3 col-md-6 mb-4">
+                                    <div class="card bg-white shadow h-100 py-2">
+                                        <div class="card-body">
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col mr-2">
+                                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                        Appointment (Past)</div>
+                                                    <hr class="mt-1">
+
+                                                    <div class="h6 mb-0 font-weight-bold text-primary">10 May 2024(and before)</div>
+                                                    <div class="h6 mb-0 font-weight-bold text-primary mt-3">
+                                                        3 Appointments
+                                                    </div>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <i class="fas fa-calendar fa-2x text-primary"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <!-- View patient Card -->
                                 <div class="col-xl-3 col-md-6 mb-4">
@@ -242,7 +265,7 @@
                                                     <hr class="mt-1">
 
                                                     <div class="h6 mb-0 font-weight-bold text-primary">
-                                                        John Smith
+                                                        3 total patients
                                                     </div>
 
                                                 </div>
@@ -276,60 +299,7 @@
                                     <!-- Profile -->
                                     <div class="row mx-1 justify-content-between">
                                         <h5 class="font-weight-bold my-2">Profile</h5>
-                                        <!-- Button trigger modal -->
-<!--                                        <button type="button" class="btn btn-success mb-2" data-toggle="modal" data-target="#exampleModalCenter">
-                                            <i class="fas fa-pencil-alt"></i>
-                                        </button>
-                                         Modal 
-                                        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                                            <div class="modal-dialog modal-dialog-centered" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLongTitle">Edit Profile</h5>
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <form action="">
-                                                            <table class="table">
-                                                                <tr>
-                                                                    <td>Name: </td>
-                                                                    <td><input type="text" name="name"></td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>IC No </td>
-                                                                    <td><input type="text" name="icNo"></td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>Address: </td>
-                                                                    <td><textarea id="message" name="message" rows="4" ></textarea></td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>Gender: </td>
-                                                                    <td>
-                                                                        <input type="radio" id="male" name="gender" value="Male"><label for="male">Male</label> <br/>
-                                                                        <input type="radio" id="female" name="gender" value="Female"><label for="female">Female</label>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>Email: </td>
-                                                                    <td><input type="email" name="email"></td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>Contact No: </td>
-                                                                    <td><input type="text" name="contact"></td>
-                                                                </tr>
-                                                            </table>
-                                                        </form>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                        <button type="button" class="btn btn-primary" data-dismiss="modal">Save changes</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>-->
+                                        
                                     </div>
                                     <div class="card shadow mb-4">
                                         <div class="card-body ">
@@ -338,24 +308,24 @@
                                                     <tbody>
                                                         <tr>
                                                             <td>Counselor ID</td>
-                                                            <td>2024000111</td>
+                                                            <td>A20240520001</td>
                                                         </tr>
                                                         <tr>
                                                             <td>Name</td>
                                                             <td>Dennis Ritchie</td>
                                                         </tr>
-<!--                                                        <tr>
+                                                        <tr>
                                                             <td>IC No</td>
                                                             <td>010101-10-0101</td>
-                                                        </tr>-->
-<!--                                                        <tr>
+                                                        </tr>
+                                                        <tr>
                                                             <td>Address</td>
                                                             <td>No 66 Jalan Kesuma 7/20, 43700 Beranang, Selangor, Malaysia</td>
-                                                        </tr>-->
-<!--                                                        <tr>
+                                                        </tr>
+                                                        <tr>
                                                             <td>Gender</td>
                                                             <td>Male</td>
-                                                        </tr>-->
+                                                        </tr>
                                                         <tr>
                                                             <td>Email</td>
                                                             <td>unknownworld24@gmail.com</td>
