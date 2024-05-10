@@ -66,9 +66,9 @@
                         </div>
                     </div>
                 </li>
-                
+
                 <hr class="sidebar-divider d-none d-md-block">
-                
+
                 <!-- Nav Item - Manage Patient -->
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree"
@@ -83,10 +83,10 @@
                         </div>
                     </div>
                 </li>
-                
+
                 <hr class="sidebar-divider d-none d-md-block">
                 <!-- Nav Item - Manage Counselor -->
-               <li class="nav-item">
+                <li class="nav-item">
                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFour"
                        aria-expanded="true" aria-controls="collapseFour">
                         <i class="fas fa-user-md"></i>
@@ -176,7 +176,7 @@
                         <h1 class="h3 mb-2 text-gray-800">View Payment Bill</h1>
 
                         <!-- DataTales Example -->
-                        <div class="card shadow mb-4">
+                        <div class="card shadow mb-4 mt-4   ">
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -188,6 +188,7 @@
                                                 <th>Date Issued</th>
                                                 <th>Date Paid</th>
                                                 <th>Payment Status</th>
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -198,6 +199,10 @@
                                                 <td>13/02/2024</td>
                                                 <td>13/02/2024</td>
                                                 <td class="text-success">Paid</td>
+                                                <td> <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#edit">
+                                                        <i class="fas fa-pencil-alt"></i>
+                                                    </button>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td>B2024002</td>
@@ -206,6 +211,10 @@
                                                 <td>13/03/2024</td>
                                                 <td>13/03/2024</td>
                                                 <td class="text-success">Paid</td>
+                                                <td> <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#edit">
+                                                        <i class="fas fa-pencil-alt"></i>
+                                                    </button>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td>B2024003</td>
@@ -214,6 +223,10 @@
                                                 <td>25/04/2024</td>
                                                 <td>-</td>
                                                 <td class="text-warning">In Process</td>
+                                                <td> <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#edit">
+                                                        <i class="fas fa-pencil-alt"></i>
+                                                    </button>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td>B2024004</td>
@@ -222,6 +235,10 @@
                                                 <td>04/05/2024</td>
                                                 <td>-</td>
                                                 <td class="text-danger">Unpaid</td>
+                                                <td> <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#edit">
+                                                        <i class="fas fa-pencil-alt"></i>
+                                                    </button>
+                                                </td>
                                             </tr>
 
                                         </tbody>
@@ -249,6 +266,41 @@
             <i class="fas fa-angle-up"></i>
         </a>
 
+        <!-- Edit Status-->
+        <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="editStatus" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="example2ModalLongTitle">Edit Status</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="#">
+                            <table class="table">
+                                <tr>    
+                                    <td><label for="inputStatus" class="mt-2">Status</label></td>
+                                    <td>
+                                        <select id="inputStatus" class="form-control col-auto">
+                                            <option selected>Status</option>
+                                            <option value="Unpaid">Unpaid</option>
+                                            <option value="In Process">In Process</option>
+                                            <option value="Paid">Paid</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-success" data-dismiss="modal">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End of Edit Modal-->
         <!-- Logout Modal-->
         <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
              aria-hidden="true">
