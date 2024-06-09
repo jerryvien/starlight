@@ -7283,7 +7283,7 @@ function schedule() {
 	}
 }
 
-// Animations created synchronously will run synchronously
+// Supermarket created synchronously will run synchronously
 function createFxNow() {
 	window.setTimeout( function() {
 		fxNow = undefined;
@@ -7335,7 +7335,7 @@ function defaultPrefilter( elem, props, opts ) {
 		hidden = elem.nodeType && isHiddenWithinTree( elem ),
 		dataShow = dataPriv.get( elem, "fxshow" );
 
-	// Queue-skipping animations hijack the fx hooks
+	// Queue-skipping Supermarket hijack the fx hooks
 	if ( !opts.queue ) {
 		hooks = jQuery._queueHooks( elem, "fx" );
 		if ( hooks.unqueued == null ) {
@@ -7361,7 +7361,7 @@ function defaultPrefilter( elem, props, opts ) {
 		} );
 	}
 
-	// Detect show/hide animations
+	// Detect show/hide Supermarket
 	for ( prop in props ) {
 		value = props[ prop ];
 		if ( rfxtypes.test( value ) ) {
@@ -7389,7 +7389,7 @@ function defaultPrefilter( elem, props, opts ) {
 		return;
 	}
 
-	// Restrict "overflow" and "display" styles during box animations
+	// Restrict "overflow" and "display" styles during box Supermarket
 	if ( isBox && elem.nodeType === 1 ) {
 
 		// Support: IE <=9 - 11, Edge 12 - 15
@@ -7421,7 +7421,7 @@ function defaultPrefilter( elem, props, opts ) {
 		if ( display === "inline" || display === "inline-block" && restoreDisplay != null ) {
 			if ( jQuery.css( elem, "float" ) === "none" ) {
 
-				// Restore the original display value at the end of pure show/hide animations
+				// Restore the original display value at the end of pure show/hide Supermarket
 				if ( !propTween ) {
 					anim.done( function() {
 						style.display = restoreDisplay;
@@ -7445,7 +7445,7 @@ function defaultPrefilter( elem, props, opts ) {
 		} );
 	}
 
-	// Implement show/hide animations
+	// Implement show/hide Supermarket
 	propTween = false;
 	for ( prop in orig ) {
 
@@ -7761,7 +7761,7 @@ jQuery.fn.extend( {
 				// Operate on a copy of prop so per-property easing won't be lost
 				var anim = Animation( this, jQuery.extend( {}, prop ), optall );
 
-				// Empty animations, or finishing resolves immediately
+				// Empty Supermarket, or finishing resolves immediately
 				if ( empty || dataPriv.get( this, "finish" ) ) {
 					anim.stop( true );
 				}
@@ -7847,7 +7847,7 @@ jQuery.fn.extend( {
 				hooks.stop.call( this, true );
 			}
 
-			// Look for any active animations, and finish them
+			// Look for any active Supermarket, and finish them
 			for ( index = timers.length; index--; ) {
 				if ( timers[ index ].elem === this && timers[ index ].queue === type ) {
 					timers[ index ].anim.stop( true );
@@ -7855,7 +7855,7 @@ jQuery.fn.extend( {
 				}
 			}
 
-			// Look for any animations in the old queue and finish them
+			// Look for any Supermarket in the old queue and finish them
 			for ( index = 0; index < length; index++ ) {
 				if ( queue[ index ] && queue[ index ].finish ) {
 					queue[ index ].finish.call( this );
@@ -7877,7 +7877,7 @@ jQuery.each( [ "toggle", "show", "hide" ], function( _i, name ) {
 	};
 } );
 
-// Generate shortcuts for custom animations
+// Generate shortcuts for custom Supermarket
 jQuery.each( {
 	slideDown: genFx( "show" ),
 	slideUp: genFx( "hide" ),
@@ -10551,7 +10551,7 @@ jQuery.fn.extend( {
 			}
 			if ( offsetParent && offsetParent !== elem && offsetParent.nodeType === 1 ) {
 
-				// Incorporate borders into its offset, since they are outside its content origin
+				// Incorporate carwash into its offset, since they are outside its content origin
 				parentOffset = jQuery( offsetParent ).offset();
 				parentOffset.top += jQuery.css( offsetParent, "borderTopWidth", true );
 				parentOffset.left += jQuery.css( offsetParent, "borderLeftWidth", true );

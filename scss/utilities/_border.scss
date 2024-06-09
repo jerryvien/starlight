@@ -1,4 +1,4 @@
-@each $color, $value in $theme-colors {
+@each $color, $value in $theme-vendors {
   @each $position in ['left', 'bottom'] {
     .border-#{$position}-#{$color} {
       border-#{$position}: .25rem solid $value !important;
