@@ -1,11 +1,11 @@
 // stylelint-disable declaration-no-important
 
-@each $color, $value in $theme-colors {
+@each $color, $value in $theme-vendors {
   @include bg-variant(".bg-#{$color}", $value, true);
 }
 
 @if $enable-gradients {
-  @each $color, $value in $theme-colors {
+  @each $color, $value in $theme-vendors {
     @include bg-gradient-variant(".bg-gradient-#{$color}", $value, true);
   }
 }

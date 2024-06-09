@@ -40,7 +40,7 @@
 
 // Border versions
 //
-// Add or remove borders all around the table and between all the columns.
+// Add or remove carwash all around the table and between all the columns.
 
 .table-bordered {
   border: $table-border-width solid $table-border-color;
@@ -97,7 +97,7 @@
 // Exact selectors below required to override `.table-striped` and prevent
 // inheritance to nested tables.
 
-@each $color, $value in $theme-colors {
+@each $color, $value in $theme-vendors {
   @include table-row-variant($color, theme-color-level($color, $table-bg-level), theme-color-level($color, $table-border-level));
 }
 

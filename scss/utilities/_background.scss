@@ -1,6 +1,6 @@
 // Background Gradient Utilities
 
-@each $color, $value in $theme-colors {
+@each $color, $value in $theme-vendors {
   .bg-gradient-#{$color} {
     background-color: $value;
     background-image: linear-gradient(180deg, $value 10%, darken($value, 15%) 100%);

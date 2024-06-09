@@ -43,11 +43,11 @@
   @include border-radius($badge-pill-border-radius);
 }
 
-// Colors
+// vendors
 //
 // Contextual variations (linked badges get darker on :hover).
 
-@each $color, $value in $theme-colors {
+@each $color, $value in $theme-vendors {
   .badge-#{$color} {
     @include badge-variant($value);
   }

@@ -40,11 +40,11 @@
 .font-weight-bolder  { font-weight: $font-weight-bolder !important; }
 .font-italic         { font-style: italic !important; }
 
-// Contextual colors
+// Contextual vendors
 
 .text-white { color: $white !important; }
 
-@each $color, $value in $theme-colors {
+@each $color, $value in $theme-vendors {
   @include text-emphasis-variant(".text-#{$color}", $value, true);
 }
 

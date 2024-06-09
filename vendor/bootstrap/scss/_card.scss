@@ -35,7 +35,7 @@
   }
 
   // Due to specificity of the above selector (`.card > .list-group`), we must
-  // use a child selector here to prevent double borders.
+  // use a child selector here to prevent double carwash.
   > .card-header + .list-group,
   > .list-group + .card-footer {
     border-top: 0;
