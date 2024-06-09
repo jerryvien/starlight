@@ -1,0 +1,13 @@
+.dispenser-icon {
+    width: 80px; /* Adjust size as needed */
+    height: auto;
+  }
+  .dispenser-text {
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 10px;
+  }
+  .register-section {
+    max-width: 500px;
+    margin: auto;
+  }
