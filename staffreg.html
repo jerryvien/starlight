@@ -142,9 +142,9 @@
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Current Utilities:</h6>
-                        <a class="collapse-item" href="vendors.html">Vendors</a>
-                        <a class="collapse-item" href="arrivalorder.html">Arrival Orders</a>
-                        <a class="collapse-item" href="fuelmarketprices.html">Fuel Market Prices</a>
+                        <a class="collapse-item" href="utilities-vendor.html">Vendors</a>
+                        <a class="collapse-item" href="utilities-carwash.html">Car wash</a>
+                        <a class="collapse-item" href="utilities-Supermarket.html">Supermarket</a>
                         <a class="collapse-item" href="employeesheet.html">Employees Sheet</a>
                     </div>
                 </div>
@@ -428,6 +428,86 @@
 
                 <!-- MAIN CONTENT HERE -->
 
+<div class="container">
+  <h2>REGISTERED STAFFS</h2>
+  <p>Type something to search the table for first names, last names or emails:</p>  
+  <input class="form-control" id="myInput" type="text" placeholder="Search..">
+  <br>
+  <table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th>Firstname</th>
+        <th>Lastname</th>
+        <th>Email</th>
+        <th>Remove the staff</th>
+
+      </tr>
+    </thead>
+    <tbody id="myTable">
+      <tr>
+        <td>Ayoub</td>
+        <td>Danny</td>
+        <td>Ayoub345@gmail.com</td>
+        <td><button type="button" class="btn btn-primary btn-sm">Remove</button></td>
+      </tr>
+      <tr>
+        <td>Mary</td>
+        <td>Chuma</td>
+        <td>mary45@hotmail.com</td>
+        <td><button type="button" class="btn btn-primary btn-sm">Remove</button></td>
+      </tr>
+      <tr>
+        <td>Janet</td>
+        <td>Tillya</td>
+        <td>july@gmail.com</td>
+        <td><button type="button" class="btn btn-primary btn-sm">Remove</button></td>
+      </tr>
+      <tr>
+        <td>Anjela</td>
+        <td>Mwakipepeso</td>
+        <td>a_r@gmail.com</td>
+        <td><button type="button" class="btn btn-primary btn-sm">Remove</button></td>
+      </tr>
+      <tr>
+        <td>Abdulsalam</td>
+        <td>Mwakipeje</td>
+        <td>a_s@gmail.com</td>
+        <td><button type="button" class="btn btn-primary btn-sm">Remove</button></td>
+      </tr>
+      <tr>
+        <td>Anjela</td>
+        <td>Method</td>
+        <td>a_m@gmail.com</td>
+        <td><button type="button" class="btn btn-primary btn-sm">Remove</button></td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="container">
+    <h2>ADD STAFFS MANUALLY (FOR STAFFS WITH NO SMART DEVICE)</h2> 
+    
+    <br>
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>Firstname</th>
+          <th>Lastname</th>
+          <th>Email(If any)</th>
+          <th>Add the staff</th>
+  
+        </tr>
+      </thead>
+      <tbody id="myTable">
+        <tr>
+          <td><input class="form-control" id="myInput" type="text" placeholder="Firstname.."></td>
+          <td><input class="form-control" id="myInput" type="text" placeholder="Lastname.."></td>
+          <td><input class="form-control" id="myInput" type="text" placeholder="Email.."></td>
+          <td><button type="button" class="btn btn-primary btn-sm">ADD</button></td>
+        </tr>
+        </tbody>
+    </table>
+  
+  <p></p>
+</div>
 
 
                  <!-- Footer -->
@@ -487,7 +567,16 @@
     <!-- Page level custom scripts -->
     <script src="js/demo/chart-area-demo.js"></script>
     <script src="js/demo/chart-pie-demo.js"></script>
-
+    <script>
+        $(document).ready(function(){
+          $("#myInput").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("#myTable tr").filter(function() {
+              $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+          });
+        });
+        </script>
 </body>
 
 </html>

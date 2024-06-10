@@ -9,10 +9,10 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>FSMS - VENDORS</title>
+    <title>FSMS - Vendors</title>
 
     <!-- favicon for this website-->
-    <link rel="icon" type="image/x-icon" href="/img/favicon_io/favicon-16x16.png">
+    <link rel="icon" type="image/x-icon" href="/startbootstrap-sb-admin2/img/favicon_io/favicon-16x16.png">
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -35,17 +35,22 @@
 
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-                <div class="sidebar-brand-icon rotate-n-0">
+                <!-- <div class="sidebar-brand-icon rotate-n-0">
                     <img src="/img/Logo3.png" alt="Calendar Icon">
+                </div> -->
+
+                <div class="sidebar-brand-icon rotate-n-0">
+                    <img src="/startbootstrap-sb-admin2/img/logo3.png" alt="Calendar Icon">
                 </div>
-                <div class="sidebar-brand-text mx-3">FSMS </div>
+                
+                <div class="sidebar-brand-text mx-3">FSMS</div>
             </a>
 
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
 
             <!-- Nav Item - Dashboard -->
-            <li class="nav-item">
+            <li class="nav-item active">
                 <a class="nav-link" href="index.html">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
@@ -59,83 +64,139 @@
                 Interface
             </div>
 
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                    aria-expanded="true" aria-controls="collapseTwo">
+             <!-- Nav Item - Sales -->
+             <li class="nav-item">
+                <a class="nav-link" href="sales.html">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Sales</span></a>
+            </li>
+
+             <!-- Nav Item - Dispensers -->
+             <li class="nav-item">
+                <a class="nav-link" href="dispenser.html">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Dispensers</span></a>
+            </li>
+
+             <!-- Nav Item - Tanks -->
+             <li class="nav-item">
+                <a class="nav-link" href="tanks.html">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Tanks</span></a>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider d-none d-md-block">
+
+            <!-- Divider -->
+            <hr class="sidebar-divider d-none d-md-block">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Updates
+            </div>
+            
+             <!-- Nav Item - Users -->
+             <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUser"
+                    aria-expanded="true" aria-controls="collapseUser">
                     <i class="fas fa-fw fa-cog"></i>
-                    <span>Components</span>
+                    <span>Users</span>
                 </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div id="collapseUser" class="collapse" aria-labelledby="headingUser" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Components:</h6>
-                        <a class="collapse-item" href="buttons.html">Buttons</a>
-                        <a class="collapse-item" href="cards.html">Cards</a>
+                        <h6 class="collapse-header">Registration:</h6>
+                        <a class="collapse-item" href="staffreg.html">Register Staff</a>
+                        <a class="collapse-item" href="department.html">Department</a>
+                        <a class="collapse-item" href="rolesduties.html">Roles & Duties</a>
                     </div>
                 </div>
             </li>
 
-            <!-- Nav Item - Utilities Collapse Menu -->
-            <li class="nav-item active">
-                <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-                    aria-expanded="true" aria-controls="collapseUtilities">
+            <!-- Nav Item - Information -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseInformation"
+                    aria-expanded="true" aria-controls="collapseInformation">
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>Information</span>
+                </a>
+                <div id="collapseInformation" class="collapse" aria-labelledby="headingInformation" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Day-to-Day Activities:</h6>
+                        <a class="collapse-item" href="employreport.html">Employees Report</a>
+                        <a class="collapse-item" href="salesreport.html">Sales Report</a>
+                        <a class="collapse-item" href="newsevents.html">News & Events</a>
+                        <a class="collapse-item" href="promotionads.html">Promotion & Ads</a>
+                    </div>
+                </div>
+            </li>
+
+             <!-- Nav Item - Utilities Collapse Menu -->
+             <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilitiesnew"
+                    aria-expanded="true" aria-controls="collapseUtilitiesnew">
                     <i class="fas fa-fw fa-wrench"></i>
                     <span>Utilities</span>
                 </a>
-                <div id="collapseUtilities" class="collapse show" aria-labelledby="headingUtilities"
+                <div id="collapseUtilitiesnew" class="collapse" aria-labelledby="headingUtilitiesnew"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Utilities:</h6>
-                        <a class="collapse-item active" href="utilities-vendor.html">vendors</a>
-                        <a class="collapse-item" href="utilities-carwash.html">carwash</a>
+                        <h6 class="collapse-header">Current Utilities:</h6>
+                        <a class="collapse-item" href="vendors.html">Vendors</a>
+                        <a class="collapse-item" href="utilities-carwash.html">Car wash</a>
                         <a class="collapse-item" href="utilities-Supermarket.html">Supermarket</a>
-                        <a class="collapse-item" href="utilities-other.html">Other</a>
+                        <a class="collapse-item" href="employeesheet.html">Employees Sheet</a>
                     </div>
                 </div>
             </li>
 
             <!-- Divider -->
+            <hr class="sidebar-divider d-none d-md-block">
+
+
+            
+            <!-- Divider -->
             <hr class="sidebar-divider">
 
             <!-- Heading -->
             <div class="sidebar-heading">
-                Addons
+                Other Sites
             </div>
 
-            <!-- Nav Item - Pages Collapse Menu -->
+            <!-- Nav Item - Other Sites -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
-                    aria-expanded="true" aria-controls="collapsePages">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSites"
+                    aria-expanded="true" aria-controls="collapseSites">
                     <i class="fas fa-fw fa-folder"></i>
-                    <span>Pages</span>
+                    <span>Sites</span>
                 </a>
-                <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                <div id="collapseSites" class="collapse" aria-labelledby="headingSites" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Login Screens:</h6>
-                        <a class="collapse-item" href="login.html">Login</a>
-                        <a class="collapse-item" href="register.html">Register</a>
-                        <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
-                        <div class="collapse-divider"></div>
-                        <h6 class="collapse-header">Other Pages:</h6>
-                        <a class="collapse-item" href="404.html">404 Page</a>
-                        <a class="collapse-item" href="blank.html">Blank Page</a>
+                        <h6 class="collapse-header">Also Visit:</h6>
+                        <a class="collapse-item" href="www.ewura.com">Ewura</a>
+                        <a class="collapse-item" href="www.tpdc.com">TPDC</a>
+                        <a class="collapse-item" href="www.tra.com">TRA</a>
+                        <a class="collapse-item" href="www.tpa.com">TPA</a>
                     </div>
                 </div>
             </li>
 
-            <!-- Nav Item - Charts -->
+            <!-- Nav Item - Location -->
             <li class="nav-item">
-                <a class="nav-link" href="charts.html">
+                <a class="nav-link" href="www.googlemaps.com">
                     <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Charts</span></a>
+                    <span>Our Location</span></a>
             </li>
 
-            <!-- Nav Item - Tables -->
+            <!-- Nav Item - Charts -->
             <li class="nav-item">
-                <a class="nav-link" href="tables.html">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Tables</span></a>
+                <a class="nav-link" href="contactus.html">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>Contact Us</span></a>
             </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider d-none d-md-block">
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -143,6 +204,13 @@
             <!-- Sidebar Toggler (Sidebar) -->
             <div class="text-center d-none d-md-inline">
                 <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>
+
+            <!-- Sidebar Message -->
+            <div class="sidebar-card d-none d-lg-flex">
+                <img class="sidebar-card-illustration mb-2" src="img/undraw_rocket.svg" alt="...">
+                <p class="text-center mb-2"><strong>FSMS Pro</strong> is packed with premium features, components, and more!</p>
+                <a class="btn btn-success btn-sm" href="https://startbootstrap.com/theme/sb-admin-pro">Upgrade to Pro!</a>
             </div>
 
         </ul>
@@ -209,7 +277,7 @@
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-bell fa-fw"></i>
                                 <!-- Counter - Alerts -->
-                                <span class="badge badge-danger badge-counter">3+</span>
+                                <span class="badge badge-danger badge-counter">2+</span>
                             </a>
                             <!-- Dropdown - Alerts -->
                             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -224,7 +292,7 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <div class="small text-gray-500">December 12, 2019</div>
+                                        <div class="small text-gray-500">December 12, 2024</div>
                                         <span class="font-weight-bold">A new monthly report is ready to download!</span>
                                     </div>
                                 </a>
@@ -235,8 +303,8 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <div class="small text-gray-500">December 7, 2019</div>
-                                        $290.29 has been deposited into your account!
+                                        <div class="small text-gray-500">December 7, 2024</div>
+                                        50,000,000TSH has been deposited into your account!
                                     </div>
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
@@ -246,8 +314,8 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <div class="small text-gray-500">December 2, 2019</div>
-                                        Spending Alert: We've noticed unusually high spending for your account.
+                                        <div class="small text-gray-500">December 2, 2024</div>
+                                        Fuel Level Alert: Fuel level has dropped to 1000L! .
                                     </div>
                                 </a>
                                 <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
@@ -260,7 +328,7 @@
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-envelope fa-fw"></i>
                                 <!-- Counter - Messages -->
-                                <span class="badge badge-danger badge-counter">7</span>
+                                <span class="badge badge-danger badge-counter">5</span>
                             </a>
                             <!-- Dropdown - Messages -->
                             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -277,7 +345,7 @@
                                     <div class="font-weight-bold">
                                         <div class="text-truncate">Hi there! I am wondering if you can help me with a
                                             problem I've been having.</div>
-                                        <div class="small text-gray-500">Emily Fowler · 58m</div>
+                                        <div class="small text-gray-500">Mwajuma Ally · 58m</div>
                                     </div>
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
@@ -287,9 +355,9 @@
                                         <div class="status-indicator"></div>
                                     </div>
                                     <div>
-                                        <div class="text-truncate">I have the photos that you ordered last month, how
+                                        <div class="text-truncate">I have the CV letters that you ordered last month, how
                                             would you like them sent to you?</div>
-                                        <div class="small text-gray-500">Jae Chun · 1d</div>
+                                        <div class="small text-gray-500">Enock Chami · 1d</div>
                                     </div>
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
@@ -301,7 +369,7 @@
                                     <div>
                                         <div class="text-truncate">Last month's report looks great, I am very happy with
                                             the progress so far, keep up the good work!</div>
-                                        <div class="small text-gray-500">Morgan Alvarez · 2d</div>
+                                        <div class="small text-gray-500">Total EAfrica CEO · 2d</div>
                                     </div>
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
@@ -311,9 +379,8 @@
                                         <div class="status-indicator bg-success"></div>
                                     </div>
                                     <div>
-                                        <div class="text-truncate">Am I a good boy? The reason I ask is because someone
-                                            told me that people say this to all dogs, even if they aren't good...</div>
-                                        <div class="small text-gray-500">Chicken the Dog · 2w</div>
+                                        <div class="text-truncate">How would you like your employees to have as dinner and breakfast?In order to customize our delivery services to the maximum efficient...</div>
+                                        <div class="small text-gray-500">PIKI TZ · 2w</div>
                                     </div>
                                 </a>
                                 <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
@@ -358,113 +425,132 @@
                 </nav>
                 <!-- End of Topbar -->
 
-                <!-- Begin Page Content -->
-                <div class="container-fluid">
 
-                    <!-- Page Heading -->
-                    <h1 class="h3 mb-1 text-gray-800">Vendors</h1>
-                    <p class="mb-4">Review the arrival orders' contracts <a
-                            href="https://getbootstrap.com/docs">Vendors partnership</a>
-                            Our trusted fuel delivery vendors ensure timely and efficient supply to our stations, maintaining seamless operations round the clock. Each vendor is meticulously vetted to guarantee safety, reliability, and adherence to industry standards. By partnering with the best in the business, we ensure our customers always have access to the highest quality fuel.</p>
+                <!-- MAIN CONTENT HERE -->
+                     <!-- Begin Page Content -->
+                     <div class="container-fluid">
 
-                    <!-- Content Row -->
-                    <div class="row">
-
-                        <!-- First Column -->
-                        <div class="col-lg-4">
-
-                            <!-- Custom Text Color Utilities -->
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Vendors and their strength</h6>
+                        <!-- Page Heading -->
+                        <h1 class="h3 mb-1 text-gray-800">Vendors</h1>
+                        <p class="mb-4">Review the Car wash' contracts <a
+                                href="https://getbootstrap.com/docs">Vendors partnership</a>
+                                Our trusted fuel delivery vendors ensure timely and efficient supply to our stations, maintaining seamless operations round the clock. Each vendor is meticulously vetted to guarantee safety, reliability, and adherence to industry standards. By partnering with the best in the business, we ensure our customers always have access to the highest quality fuel.</p>
+    
+                        <!-- Content Row -->
+                        <div class="row">
+    
+                            <!-- First Column -->
+                            <div class="col-lg-4">
+    
+                                <!-- Custom Text Color Utilities -->
+                                <div class="card shadow mb-4">
+                                    <div class="card-header py-3">
+                                        <h6 class="m-0 font-weight-bold text-primary">Vendors and their strength</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="text-gray-100 p-3 bg-dark m-0">Simba Oil's dependable service in high-demand areas, sibedltd's excellence in timely deliveries, Mowara's impactful sustainability initiatives, and PetroFuel's outstanding customer service and reliability. These real-world examples underline the exceptional performance and collaboration we experience with our valued vendor</p>
+                                        
+                                    </div>
                                 </div>
-                                <div class="card-body">
-                                    <p class="text-gray-100 p-3 bg-dark m-0">Simba Oil's dependable service in high-demand areas, sibedltd's excellence in timely deliveries, Mowara's impactful sustainability initiatives, and PetroFuel's outstanding customer service and reliability. These real-world examples underline the exceptional performance and collaboration we experience with our valued vendor</p>
-                                    
+    
+                                <!-- Custom Font Size Utilities -->
+                                <div class="card shadow mb-4">
+                                    <div class="card-header py-3">
+                                        <h6 class="m-0 font-weight-bold text-primary">Visit their sites</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <a
+                                href="https://simbaoil.co.tz">SIMBA OIL LTD</a>
+                                <a
+                                href="https://www.sibedltd.com">SIBEDI LTD</a>
+                                <a
+                                href="https://mowara.co.tz">MOWARA LTD</a>
+    
+                                <a
+                                href="https://petrofuel.co.tz">PETRO FUEL LTD</a>
+                                    </div>
+                        
                                 </div>
+    
                             </div>
-
-                            <!-- Custom Font Size Utilities -->
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Visit their sites</h6>
-                                </div>
-                                <div class="card-body">
-                                    <a
-                            href="https://simbaoil.co.tz">SIMBA OIL LTD</a>
-                            <a
-                            href="https://www.sibedltd.com">SIBEDI LTD</a>
-                            <a
-                            href="https://mowara.co.tz">MOWARA LTD</a>
-
-                            <a
-                            href="https://petrofuel.co.tz">PETRO FUEL LTD</a>
-                                </div>
-                    
-                            </div>
-
-                        </div>
-
-                        <!-- Second Column -->
-                        <div class="col-lg-4">
-
-                            <div class="container">
-                                <select class="form-control" id="sel1">
-                                    <option>PLACE THE CURRENT VENDOR TO DELIVER THE FUEL(REMINDER)</option>
-                                    <option>SIMBA OIL</option>
-                                    <option>MOWARA</option>
-                                    <option>SIBED</option>
-                                    <option>PETRO FUEL</option>
-                                </select>
-                            </div>
-                        <br> <br>
-                            
-                            <div class="container">
-                                <select class="form-control" id="sel1">
-                                    <option>ARRIVAL DATE</option>
-                                    
-                                </select>
-                            </div>
-<br> <br>
-                            
-                            <div class="container">
-                                <select class="form-control" id="sel1">
-                                    <option>TRUCKS NO</option>
-                                    <option>2 trucks</option>
-                                    <option>3 trucks</option>
-                                    <option>4 And above trucks</option>
-                                </select>
-                            </div>
-                            <br> <br>
-
-                            <form class="container" >
-                                <div class="form-group">
-                    
-                                  <div class="col-sm-15">
-                                    <input type="email" class="form-control" id="amount" placeholder="Enter Fuel amount in TSh">
-                                  </div>
-                                </div>
-
+    
+                            <!-- Second Column -->
+                            <div class="col-lg-4">
+    
                                 <div class="container">
                                     <select class="form-control" id="sel1">
-                                        <option>Save as</option>
-                                        <option>This PC</option>
-                                        <option>Browse</option>
-                                        <option>add a place</option>
+                                        <option>PLACE THE CURRENT VENDOR TO DELIVER THE FUEL(REMINDER)</option>
+                                        <option>SIMBA OIL</option>
+                                        <option>MOWARA</option>
+                                        <option>SIBED</option>
+                                        <option>PETRO FUEL</option>
                                     </select>
                                 </div>
-                               
-                                <br> <br> <br> <br> 
-                                <div class="form-group">
-                                  <div class="col-sm-offset-2 col-sm-10">
-                                    <button type="submit" class="btn btn-default">Save</button>
-                                  </div>
+                            <br> <br>
+                                
+                                <div class="container">
+                                    <select class="form-control" id="sel1">
+                                        <option>ARRIVAL DATE</option>
+                                        
+                                    </select>
                                 </div>
-                              </form>
-            <!-- End of Main Content -->
+    <br> <br>
+                                
+                                <div class="container">
+                                    <select class="form-control" id="sel1">
+                                        <option>TRUCKS NO</option>
+                                        <option>2 trucks</option>
+                                        <option>3 trucks</option>
+                                        <option>4 And above trucks</option>
+                                    </select>
+                                </div>
+                                <br> <br>
+    
+                                <form class="container" >
+                                    <div class="form-group">
+                        
+                                      <div class="col-sm-15">
+                                        <input type="email" class="form-control" id="amount" placeholder="Enter Fuel amount in TSh">
+                                      </div>
+                                    </div>
+    
+                                    <div class="container">
+                                        <select class="form-control" id="sel1">
+                                            <option>Save as</option>
+                                            <option>This PC</option>
+                                            <option>Browse</option>
+                                            <option>add a place</option>
+                                        </select>
+                                    </div>
+                                   
+                                    <br> <br> <br> <br> 
+                                    <div class="form-group">
+                                      <div class="col-sm-offset-2 col-sm-10">
+                                        <button type="submit" class="btn btn-default">Save</button>
+                                      </div>
+                                    </div>
+                                  </form>
+                <!-- End of Main Content -->
+    
+    
 
 
 
+                 <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; FSMS 2024</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
 
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
@@ -500,6 +586,13 @@
 
     <!-- Custom scripts for all pages-->
     <script src="js/sb-admin-2.min.js"></script>
+
+    <!-- Page level plugins -->
+    <script src="vendor/chart.js/Chart.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="js/demo/chart-area-demo.js"></script>
+    <script src="js/demo/chart-pie-demo.js"></script>
 
 </body>
 
