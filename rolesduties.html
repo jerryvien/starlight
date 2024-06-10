@@ -427,6 +427,111 @@
 
 
                 <!-- MAIN CONTENT HERE -->
+                <div class="container">
+                    <h2>ASSIGN DUTIES TO THE LEADERS OF DEPARTMENT</h2>
+                    <p>Type something to department:</p>  
+                    <input class="form-control" id="myInput" type="text" placeholder="Search..">
+                    <br>
+                    <table class="table table-bordered table-striped">
+                      <thead>
+                        <tr>
+                          <th>Dept No</th>
+                          <th>Deptname</th>
+                          <th>Leader Email</th>
+                          <th>Weekly Obligations</th>
+                          <th>Add Instructions</th>
+                  
+                        </tr>
+                      </thead>
+                      <tbody id="myTable">
+                        <tr>
+                          <td>#1</td>
+                          <td>Accounts</td>
+                          <td>Ayoub345@gmail.com</td>
+                          <td><input class="form-control" id="myInput" type="text" placeholder="Duty.."></td>
+                          <td><div class="container">
+                            <!-- Trigger the modal with a button -->
+                            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Add Instructions</button>
+                          
+                            <!-- Modal -->
+                            <div class="modal fade" id="myModal" role="dialog">
+                              <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">IMPORTANT SUBMISSION OF YOUR REPORTS DUE TO MONDAY</h4>
+                                  </div>
+                                  <div class="modal-body">
+                                    <input class="form-control" id="myInput" type="text" placeholder="add Emphasis on the Duty">
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">SEND</button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div></td>
+                        </tr>
+                        <tr>
+                            <td>#2</td>
+                            <td>Marketing</td>
+                            <td>Ayo45@gmail.com</td>
+                            <td><input class="form-control" id="myInput" type="text" placeholder="Duty.."></td>
+                            <td><div class="container">
+                                <!-- Trigger the modal with a button -->
+                                <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Add Instructions</button>
+                              
+                                <!-- Modal -->
+                                <div class="modal fade" id="myModal" role="dialog">
+                                  <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h4 class="modal-title">IMPORTANT SUBMISSION OF YOUR REPORTS DUE TO MONDAY</h4>
+                                      </div>
+                                      <div class="modal-body">
+                                        <input class="form-control" id="myInput" type="text" placeholder="add Emphasis on the Duty">
+                                      </div>
+                                      <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">SEND</button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div></td>
+                          </tr>
+                       
+                          <tr>
+                            <td>#3</td>
+                            <td>Procurement</td>
+                            <td>A-r@gmail.com</td>
+                            <td><input class="form-control" id="myInput" type="text" placeholder="Duty.."></td>
+                            <td><div class="container">
+                                <!-- Trigger the modal with a button -->
+                                <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Add Instructions</button>
+                              
+                                <!-- Modal -->
+                                <div class="modal fade" id="myModal" role="dialog">
+                                  <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h4 class="modal-title">IMPORTANT SUBMISSION OF YOUR REPORTS DUE TO MONDAY</h4>
+                                      </div>
+                                      <div class="modal-body">
+                                        <input class="form-control" id="myInput" type="text" placeholder="add Emphasis on the Duty">
+                                      </div>
+                                      <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">SEND</button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div></td>
+                              
+                          </tr>
+                      </tbody>
+                    </table>
 
 
 
@@ -487,6 +592,16 @@
     <!-- Page level custom scripts -->
     <script src="js/demo/chart-area-demo.js"></script>
     <script src="js/demo/chart-pie-demo.js"></script>
+    <script>
+        $(document).ready(function(){
+          $("#myInput").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("#myTable tr").filter(function() {
+              $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+          });
+        });
+        </script>
 
 </body>
 
