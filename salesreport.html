@@ -427,6 +427,96 @@
 
 
                 <!-- MAIN CONTENT HERE -->
+                 <!-- Sales Section -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">FSMS SALES RECORDS</h1>
+    <!-- Trigger the modal with a button -->
+    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">GENERATE SALE REPORT</button>
+                              
+
+
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title">FUEL STATION SALES REPORT</h4>
+            </div>
+            <div class="modal-body">
+                <label for="date">DATE RANGE</label>
+              <input class="form-control" id="myInput" type="text" placeholder="Enter Date">
+            </div>
+            <div class="modal-body">
+                <label for="sale">Total Sales</label>
+              <input class="form-control" id="myInput" type="text" placeholder="Enter amount">
+            </div>
+            <div class="modal-body">
+                <label for="L">Total litres Sold</label>
+              <input class="form-control" id="myInput" type="text" placeholder="Enter amount">
+            </div>
+            <div class="modal-body">
+                <label for="AV">Average Price/Unit</label>
+              <input class="form-control" id="myInput" type="text" placeholder="Enter Average">
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">SAVE</button>
+              </div>
+            
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal"> SAVE AND SEND</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+<section class="container mt-5">
+    <h2>Sales</h2>
+    <!-- Responsive Table -->
+    <div class="table-responsive">
+        <table id="salesTable" class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Price per unit (Tsh/L)</th>
+                    <th scope="col">Litres</th>
+                    <th scope="col">Fuel Type</th>
+                    <th scope="col">Amount (in Tsh)</th> <!-- New column for amount -->
+                    <th scope="col">Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Sample Data -->
+                <tr>
+                    <th scope="row">1</th>
+                    <td>1.50</td>
+                    <td>20</td>
+                    <td>Petrol</td>
+                    <td>30.00</td> <!-- New column for amount -->
+                    <td>2024-05-28 10:00 AM</td>
+                </tr>
+                <tr>
+                    <th scope="row">2</th>
+                    <td>1.70</td>
+                    <td>15</td>
+                    <td>Diesel</td>
+                    <td>25.50</td> <!-- New column for amount -->
+                    <td>2024-05-28 10:15 AM</td>
+                </tr>
+                <tr>
+                    <th scope="row">3</th>
+                    <td>2.00</td>
+                    <td>25</td>
+                    <td>Kerosene</td>
+                    <td>50.00</td> <!-- New column for amount -->
+                    <td>2024-05-28 10:30 AM</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
 
 
 
