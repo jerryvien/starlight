@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>FSMS - Dispenser</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            background-color: #f2f2f2;
+            padding-top: 20px;
+        }
+        .panel {
+            margin-bottom: 20px;
+        }
+        .panel-heading {
+            background-color: #3f51b5;
+            color: white;
+        }
+        .panel-body {
+            background-color: #ffffff;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .list-group-item {
+            background-color: #f5f5f5;
+            border: none;
+        }
+        .dashboard-icons {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        .dashboard-text {
+            font-size: 18px;
+        }
+        .fuel-icon {
+            color: #ff5722;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center">FSMS - Fuel Dispenser Management System TESTING 1</h1>
+        
+        <!-- Dashboard -->
+        <div class="row">
+            <div class="col-md-4">
+                <div class="panel panel-primary">
+                    <div class="panel-heading"><i class="icon fas fa-plus-circle"></i>  Add New Dispenser</div>
+                    <div class="panel-body">
+                        <form id="add-dispenser-form">
+                            <div class="form-group">
+                                <label for="dispenser-id">Dispenser ID:</label>
+                                <input type="text" class="form-control" id="dispenser-id" placeholder="Enter Dispenser ID" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add Dispenser</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="panel panel-success">
+                    <div class="panel-heading"><i class="icon fas fa-user"></i>  Allocate Employees to Dispensers</div>
+                    <div class="panel-body">
+                        <form id="allocate-employee-form">
+                            <div class="form-group">
+                                <label for="employee-name">Employee Name:</label>
+                                <input type="text" class="form-control" id="employee-name" placeholder="Enter Employee Name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="dispenser-select">Select Dispenser:</label>
+                                <select class="form-control" id="dispenser-select">
+                                    <!-- Dispensers will be dynamically added here -->
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-success">Allocate Employee</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="panel panel-info">
+                    <div class="panel-heading"><i class="icon fas fa-chart-line"></i>  Fuel Sales Tracking</div>
+                    <div class="panel-body">
+                        <div class="dashboard-icons">
+                            <i class="fas fa-gas-pump fuel-icon"></i>
+                        </div>
+                        <p class="dashboard-text"><strong>Last Sale:</strong> <span id="last-sale">No sales recorded yet.</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Purchase and Dispense Fuel -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-danger">
+                    <div class="panel-heading"><i class="icon fas fa-money-bill-wave"></i>  Purchase Fuel</div>
+                    <div class="panel-body">
+                        <form id="purchase-fuel-form">
+                            <div class="form-group">
+                                <label for="purchase-amount">Amount of Fuel to Purchase (in Tsh):</label>
+                                <input type="number" class="form-control" id="purchase-amount" placeholder="Enter Amount" required>
+                            </div>
+                            <button type="submit" class="btn btn-danger">Purchase Fuel</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-warning">
+                    <div class="panel-heading"><i class="icon fas fa-gas-pump"></i>  Dispense Fuel</div>
+                    <div class="panel-body">
+                        <form id="dispense-fuel-form">
+                            <div class="form-group">
+                                <label for="dispense-amount">Amount of Fuel to Dispense (in Tsh):</label>
+                                <input type="number" class="form-control" id="dispense-amount" placeholder="Enter Amount" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="dispenser-dispense">Select Dispenser:</label>
+                                <select class="form-control" id="dispenser-dispense">
+                                    <!-- Dispensers will be dynamically added here -->
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-warning">Dispense Fuel</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dispensers List -->
+        <div class="panel panel-default">
+            <div class="panel-heading"><i class="icon fas fa-gas-pump"></i>  Dispensers</div>
+            <div class="panel-body">
+                <ul id="dispensers-list" class="list-group">
+                    <!-- Dispensers will be dynamically added here -->
+                </ul>
+            </div>
+        </div>
+
+        <!-- Employees List -->
+        <div class="panel panel-default">
+            <div class="panel-heading"><i class="icon fas fa-user"></i>  Employees</div>
+            <div class="panel-body">
+                <ul id="employees-list" class="list-group">
+                    <!-- Employees will be dynamically added here -->
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            // Example arrays to hold dispensers and employees
+            var dispensers = [];
+            var employees = [];
+
+            // Add Dispenser
+            $('#add-dispenser-form').submit(function(e){
+                e.preventDefault();
+                var dispenserId = $('#dispenser-id').val();
+                dispensers.push(dispenserId);
+                $('#dispenser-select').append('<option value="' + dispenserId + '">' + dispenserId + '</option>');
+                $('#dispenser-dispense').append('<option value="' + dispenserId + '">' + dispenserId + '</option>');
+                $('#dispensers-list').append('<li class="list-group-item">' + dispenserId + '</li>');
+                $('#dispenser-id').val('');
+            });
+
+            // Allocate Employee
+            $('#allocate-employee-form').submit(function(e){
+                e.preventDefault();
+                var employeeName = $('#employee-name').val();
+                var dispenser = $('#dispenser-select').val();
+                employees.push({name: employeeName, dispenser: dispenser});
+                $('#employee-name').val('');
+                $('#dispenser-select').val('');
+                displayEmployees(); // Display updated list of employees
+            });
+
+            // Display Employees
+            function displayEmployees() {
+                $('#employees-list').empty(); // Clear existing list
+                employees.forEach(function(employee) {
+                    $('#employees-list').append('<li class="list-group-item">' + employee.name + ' - Dispenser: ' + employee.dispenser + '</li>');
+                });
+            }
+
+            // Simulate Fuel Sales Tracking (Automatic capture from sensors)
+            setInterval(function(){
+                var lastSale = Math.floor(Math.random() * 100) + 1; // Random fuel sale amount
+                $('#last-sale').text(lastSale + ' litres sold recently');
+            }, 5000); // Update every 5 seconds
+
+            // Purchase Fuel
+            $('#purchase-fuel-form').submit(function(e){
+                e.preventDefault();
+                var purchaseAmount = $('#purchase-amount').val();
+                alert('Purchased ' + purchaseAmount + ' TSH worth of fuel');
+                $('#purchase-amount').val('');
+            });
+
+            // Dispense Fuel
+            $('#dispense-fuel-form').submit(function(e){
+                e.preventDefault();
+                var dispenseAmount = $('#dispense-amount').val();
+                var dispenser = $('#dispenser-dispense').val();
+                alert('Dispensed ' + dispenseAmount + ' litres from ' + dispenser);
+                $('#dispense-amount').val('');
+            });
+
+            // Initial update of dispenser options
+            updateDispenseDispenserOptions();
+
+            // Update Dispense Dispenser Options
+            function updateDispenseDispenserOptions() {
+                $('#dispenser-dispense').empty(); // Clear existing options
+                dispensers.forEach(function(dispenser) {
+                    $('#dispenser-dispense').append('<option value="' + dispenser + '">' + dispenser + '</option>');
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fuel Station Management System - Tanks</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Fuel Station Management System</h1>
+            <nav>
+                <ul class="nav nav-pills">
+                    <li role="presentation"><a href="#">Home</a></li>
+                    <li role="presentation" class="active"><a href="#">Tanks</a></li>
+                    <!-- Add more navigation links as needed -->
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <div class="container">
+            <section id="tank-details">
+                <!-- Tank details will be dynamically populated here using JavaScript -->
+            </section>
+            <section id="add-tank-form">
+                <h2>Add New Tank</h2>
+                <form id="tank-form" class="form-horizontal">
+                    <div class="form-group">
+                        <label for="tank-id" class="col-sm-2 control-label">Tank ID:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="tank-id" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="tank-capacity" class="col-sm-2 control-label">Tank Capacity:</label>
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control" id="tank-capacity" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="fuel-type" class="col-sm-2 control-label">Fuel Type:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="fuel-type" required>
+                        </div>
+                    </div>
+                    <!-- Add more input fields for capturing other tank details -->
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" class="btn btn-primary">Add Tank</button>
+                        </div>
+                    </div>
+                </form>
+            </section>
+        </div>
+    </main>
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Fuel Station Management System</p>
+        </div>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>
