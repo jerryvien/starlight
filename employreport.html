@@ -427,7 +427,136 @@
 
 
                 <!-- MAIN CONTENT HERE -->
+                 <!-- Trigger the modal with a button -->
+                 <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">GENERATE EMPLOYEE REPORT</button>
+                              
 
+
+                <div class="modal fade" id="myModal" role="dialog">
+                    <div class="modal-dialog modal-lg">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                          <h4 class="modal-title">WEEKLY EMPLOYEE PERFORMANCE</h4>
+                        </div>
+                        <div class="modal-body">
+                            <label for="name">Name</label>
+                          <input class="form-control" id="myInput" type="text" placeholder="Enter Name">
+                        </div>
+                        <div class="modal-body">
+                            <label for="department">Department</label>
+                          <input class="form-control" id="myInput" type="text" placeholder="Enter Department">
+                        </div>
+                        <div class="modal-body">
+                            <label for="Week No">Week</label>
+                          <input class="form-control" id="myInput" type="text" placeholder="Enter weeek duration">
+                        </div>
+                        <div class="modal-body">
+                            <label for="punctuality">Shift Adherence</label>
+                          <input class="form-control" id="myInput" type="text" placeholder="Grade from A to E">
+                        </div>
+                        <div class="modal-body">
+                            <label for="Task">Task completion</label>
+                          <input class="form-control" id="myInput" type="text" placeholder="Grade from A to E">
+                        </div>
+                        <div class="modal-body">
+                            <label for="CS">Customer Services</label>
+                          <input class="form-control" id="myInput" type="text" placeholder="Grade from A to E">
+                        </div>
+                        <div class="modal-body">
+                            <label for="Team">Team Collaboration</label>
+                          <input class="form-control" id="myInput" type="text" placeholder="Grade from A to E">
+                        </div>
+                        <div class="modal-body">
+                            <label for="accuracy">Efficiency and Productivity</label>
+                          <input class="form-control" id="myInput" type="text" placeholder="Grade from A to E">
+                        </div>
+                        <div class="modal-body">
+                            <label for="solver">Innovation</label>
+                          <input class="form-control" id="myInput" type="text" placeholder="Grade from A to E">
+                        </div>
+                        
+                        <div class="modal-body">
+                            <label for="eagerness">Skills improvement</label>
+                          <input class="form-control" id="myInput" type="text" placeholder="Grade from A to E">
+                        </div>
+                        <div class="modal-body">
+                            <label for="email">Email</label>
+                          <input class="form-control" id="myInput" type="text" placeholder="enter employee email">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">SAVE</button>
+                          </div>
+                        
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-default" data-dismiss="modal"> SAVE AND SEND</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="container">
+                    <h2>REGISTERED EMPLOYEES</h2>
+                    <p>Type something to search the table for first names, last names or emails:</p>  
+                    <input class="form-control" id="myInput" type="text" placeholder="Search..">
+                    <br>
+                    <table class="table table-bordered table-striped">
+                      <thead>
+                        <tr>
+                          <th>Firstname</th>
+                          <th>Lastname</th>
+                          <th>Email</th>
+                          <th>Department</th>
+                          <th>Remove the staff</th>
+                  
+                        </tr>
+                      </thead>
+                      <tbody id="myTable">
+                        <tr>
+                          <td>Ayoub</td>
+                          <td>Danny</td>
+                          <td>Ayoub345@gmail.com</td>
+                          <td>Marketing</td>
+                          <td><button type="button" class="btn btn-primary btn-sm">Remove</button></td>
+                        </tr>
+                        <tr>
+                          <td>Mary</td>
+                          <td>Chuma</td>
+                          <td>mary45@hotmail.com</td>
+                          <td>Human Resource</td>
+                          <td><button type="button" class="btn btn-primary btn-sm">Remove</button></td>
+                        </tr>
+                        <tr>
+                          <td>Janet</td>
+                          <td>Tillya</td>
+                          <td>july@gmail.com</td>
+                          <td>Accounts</td>
+                          <td><button type="button" class="btn btn-primary btn-sm">Remove</button></td>
+                        </tr>
+                        <tr>
+                          <td>Anjela</td>
+                          <td>Mwakipepeso</td>
+                          <td>a_r@gmail.com</td>
+                          <td>Procurement and mainteance</td>
+                          <td><button type="button" class="btn btn-primary btn-sm">Remove</button></td>
+                        </tr>
+                        <tr>
+                          <td>Abdulsalam</td>
+                          <td>Mwakipeje</td>
+                          <td>a_s@gmail.com</td>
+                          <td>Dispenser Sales</td>
+                          <td><button type="button" class="btn btn-primary btn-sm">Remove</button></td>
+                        </tr>
+                        <tr>
+                          <td>Anjela</td>
+                          <td>Method</td>
+                          <td>a_m@gmail.com</td>
+                          <td>Dispenser Sales</td>
+                          <td><button type="button" class="btn btn-primary btn-sm">Remove</button></td>
+                        </tr>
+                      </tbody>
+                    </table>
 
 
                  <!-- Footer -->
@@ -487,6 +616,16 @@
     <!-- Page level custom scripts -->
     <script src="js/demo/chart-area-demo.js"></script>
     <script src="js/demo/chart-pie-demo.js"></script>
+    <script>
+        $(document).ready(function(){
+          $("#myInput").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("#myTable tr").filter(function() {
+              $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+          });
+        });
+        </script>
 
 </body>
 
