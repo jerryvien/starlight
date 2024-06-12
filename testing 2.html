@@ -2,65 +2,151 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fuel Station Management System - Tanks</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Fuel Station Sales Dashboard</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        .dashboard-card {
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .card-header {
+            font-weight: bold;
+        }
+        .sales-data-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .sales-data-heading h2 {
+            margin: 0;
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <h1>Fuel Station Management System</h1>
-            <nav>
-                <ul class="nav nav-pills">
-                    <li role="presentation"><a href="#">Home</a></li>
-                    <li role="presentation" class="active"><a href="#">Tanks</a></li>
-                    <!-- Add more navigation links as needed -->
-                </ul>
-            </nav>
+
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">Fuel Station Dashboard</a>
         </div>
-    </header>
-    <main>
-        <div class="container">
-            <section id="tank-details">
-                <!-- Tank details will be dynamically populated here using JavaScript -->
-            </section>
-            <section id="add-tank-form">
-                <h2>Add New Tank</h2>
-                <form id="tank-form" class="form-horizontal">
+        <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="#">Sales Data</a></li>
+            <li><a href="#">Inventory</a></li>
+            <li><a href="#">Reports</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container">
+    <!-- Fuel Price Update and Display Section -->
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="dashboard-card bg-light">
+                <div class="card-header">Set Fuel Prices</div>
+                <form id="priceForm">
                     <div class="form-group">
-                        <label for="tank-id" class="col-sm-2 control-label">Tank ID:</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" id="tank-id" required>
-                        </div>
+                        <label for="dieselPrice">Diesel Price (Tsh/L):</label>
+                        <input type="number" class="form-control" id="dieselPrice" step="0.01" required>
                     </div>
                     <div class="form-group">
-                        <label for="tank-capacity" class="col-sm-2 control-label">Tank Capacity:</label>
-                        <div class="col-sm-10">
-                            <input type="number" class="form-control" id="tank-capacity" required>
-                        </div>
+                        <label for="petrolPrice">Petrol Price (Tsh/L):</label>
+                        <input type="number" class="form-control" id="petrolPrice" step="0.01" required>
                     </div>
-                    <div class="form-group">
-                        <label for="fuel-type" class="col-sm-2 control-label">Fuel Type:</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" id="fuel-type" required>
-                        </div>
-                    </div>
-                    <!-- Add more input fields for capturing other tank details -->
-                    <div class="form-group">
-                        <div class="col-sm-offset-2 col-sm-10">
-                            <button type="submit" class="btn btn-primary">Add Tank</button>
-                        </div>
-                    </div>
+                    <button type="button" class="btn btn-primary" onclick="updatePrices()">Update</button>
+                    <button type="reset" class="btn btn-default">Cancel</button>
                 </form>
-            </section>
+            </div>
         </div>
-    </main>
-    <footer>
-        <div class="container">
-            <p>&copy; 2024 Fuel Station Management System</p>
+        <div class="col-sm-6">
+            <div class="dashboard-card bg-info text-white">
+                <div class="card-header">Updated Prices</div>
+                <p id="updatedDieselPrice">Diesel Price: Tsh 0.00/L</p>
+                <p id="updatedPetrolPrice">Petrol Price: Tsh 0.00/L</p>
+            </div>
         </div>
-    </footer>
-    <script src="script.js"></script>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="dashboard-card bg-primary text-white">
+                <h3>Total Sales</h3>
+                <h2>Tsh 123,456</h2>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="dashboard-card bg-success text-white">
+                <h3>Total Volume</h3>
+                <h2>12,345 L</h2>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="dashboard-card bg-info text-white">
+                <h3>Average Price/L</h3>
+                <h2>Tsh 1,234</h2>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sales Data Table -->
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="dashboard-card">
+                <div class="sales-data-heading">
+                    <h2>Sales Data</h2>
+                    <button class="btn btn-primary" onclick="generateReport()"><i class="fas fa-download"></i> Download</button>
+                </div>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Product</th>
+                            <th>Volume (L)</th>
+                            <th>Total Sales (Tsh)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>2024-06-10</td>
+                            <td>Diesel</td>
+                            <td>500</td>
+                            <td>Tsh 600,000</td>
+                        </tr>
+                        <tr>
+                            <td>2024-06-10</td>
+                            <td>Petrol</td>
+                            <td>800</td>
+                            <td>Tsh 960,000</td>
+                        </tr>
+                        <!-- Add more rows as needed -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Update Prices Function
+    function updatePrices() {
+        var dieselPrice = document.getElementById('dieselPrice').value;
+        var petrolPrice = document.getElementById('petrolPrice').value;
+
+        document.getElementById('updatedDieselPrice').innerText = 'Diesel Price: Tsh ' + parseFloat(dieselPrice).toFixed(2) + '/L';
+        document.getElementById('updatedPetrolPrice').innerText = 'Petrol Price: Tsh ' + parseFloat(petrolPrice).toFixed(2) + '/L';
+    }
+
+    // Generate Report Function
+    function generateReport() {
+        // Placeholder function for report generation
+        alert('Generating report...');
+    }
+</script>
+
 </body>
 </html>

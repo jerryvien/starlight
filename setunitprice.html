@@ -439,49 +439,40 @@
 
                 <!-- MAIN CONTENT HERE -->
 
-                <!-- Unit Price Setup Section -->
-<section class="container mt-5">
-    <div class="row">
-        <div class="col">
-            <h2>Price per litre (Tsh/L)</h2>
-            <form id="priceForm">
-                <!-- Form fields for setting up unit price -->
-            </form>
-        </div>
-        <div class="col">
-            <!-- Card for displaying updated price -->
-            <div class="card text-end">
-                <div class="card-body">
-                    <h5 class="card-title">Updated Price</h5>
-                    <p class="card-text" id="updatedPrice">Tsh 3,000.00</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-
-<!-- Unit Price Setup Section -->
-<section class="container mt-5">
-    <h2>Set Up Unit Price</h2>
-    <form>
-        <div class="mb-3">
-            <label for="fuelType" class="form-label">Fuel Type</label>
-            <select class="form-select" id="fuelType" required>
-                <option selected disabled>Select Fuel Type</option>
-                <option value="petrol">Petrol</option>
-                <option value="diesel">Diesel</option>
-                <option value="kerosene">Kerosene</option>
-            </select>
-        </div>
-        <div class="mb-3">
-            <label for="price" class="form-label">Price (per unit)</label>
-            <input type="number" class="form-control" id="price" required>
-        </div>
-        <button type="submit" class="btn btn-primary">Update Price</button>
-        <button type="button" class="btn btn-secondary">Cancel</button>
-    </form>
-</section>
+                <!-- Fuel Price Update and Display Section -->
+                <section class="container mt-5">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="dashboard-card bg-light">
+                                <div class="card-header">Set Fuel Prices</div>
+                                <form id="priceForm">
+                                    <div class="form-group">
+                                        <label for="dieselPrice">Diesel Price (Tsh/L):</label>
+                                        <input type="number" class="form-control" id="dieselPrice" step="0.01" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="petrolPrice">Petrol Price (Tsh/L):</label>
+                                        <input type="number" class="form-control" id="petrolPrice" step="0.01" required>
+                                    </div>
+                                    <button type="button" class="btn btn-primary" onclick="updatePrices()">Update</button>
+                                    <button type="reset" class="btn btn-default">Cancel</button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="col">
+                                <!-- Card for displaying updated price -->
+                                <div class="card text-end">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Updated Prices</h5>
+                                        <p id="updatedDieselPrice">Diesel Price: Tsh 0.00/L</p>
+                                        <p id="updatedPetrolPrice">Petrol Price: Tsh 0.00/L</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </section>
 
 
 <!-- Divider -->
@@ -530,6 +521,17 @@ aria-hidden="true">
 </div>
 </div>
 </div>
+
+<script>
+    // Update Prices Function
+    function updatePrices() {
+        var dieselPrice = document.getElementById('dieselPrice').value;
+        var petrolPrice = document.getElementById('petrolPrice').value;
+
+        document.getElementById('updatedDieselPrice').innerText = 'Diesel Price: Tsh ' + parseFloat(dieselPrice).toFixed(2) + '/L';
+        document.getElementById('updatedPetrolPrice').innerText = 'Petrol Price: Tsh ' + parseFloat(petrolPrice).toFixed(2) + '/L';
+    }
+</script>    
 
 <!-- Bootstrap core JavaScript-->
 <script src="vendor/jquery/jquery.min.js"></script>
