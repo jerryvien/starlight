@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>FSMS Dispensers</title>
+    <title>FSMS - Dispensers</title>
 
     <!-- favicon for this website-->
     <link rel="icon" type="image/x-icon" href="/img/favicon_io/favicon-16x16.png">
@@ -22,7 +22,6 @@
 
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="dispenser.css">
 
 </head>
 
@@ -436,140 +435,145 @@
 
                 </nav>
                 <!-- End of Topbar -->
+                 
 
+                <!-- Main Content Area -->
+                <div class="container-fluid">
 
-                <!-- MAIN CONTENT HERE -->
+                    <!-- Page Heading -->
+                    <h1 class="h3 mb-4 text-gray-800">Fuel Dispensers</h1>
 
-                <!-- Dispenser Header -->
-    <div class="text-center mt-4">
-        <img class="dispenser-icon" src="/img/dispenserimage.jpg" alt="Dispenser image">
-        <h1 class="dispenser-text">FSMS Dispensers</h1>
-      </div>
-
-
-    <div class="container">
-        
-        <!-- Dashboard -->
-        <div class="row">
-            <div class="col-md-4">
-                <div class="panel panel-primary">
-                    <div class="panel-heading"><i class="icon fas fa-plus-circle"></i>  Add New Dispenser</div>
-                    <div class="panel-body">
-                        <form id="add-dispenser-form">
-                            <div class="form-group">
-                                <label for="dispenser-id">Dispenser ID:</label>
-                                <input type="text" class="form-control" id="dispenser-id" placeholder="Enter Dispenser ID" required>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Add Dispenser</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="panel panel-success">
-                    <div class="panel-heading"><i class="icon fas fa-user"></i>  Allocate Employees to Dispensers</div>
-                    <div class="panel-body">
-                        <form id="allocate-employee-form">
-                            <div class="form-group">
-                                <label for="employee-name">Employee Name:</label>
-                                <input type="text" class="form-control" id="employee-name" placeholder="Enter Employee Name" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="dispenser-select">Select Dispenser:</label>
-                                <select class="form-control" id="dispenser-select">
-                                    <!-- Dispensers will be dynamically added here -->
-                                </select>
-                            </div>
-                            <button type="submit" class="btn btn-success">Allocate Employee</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="panel panel-info">
-                    <div class="panel-heading"><i class="icon fas fa-chart-line"></i>  Fuel Sales Tracking</div>
-                    <div class="panel-body">
-                        <div class="dashboard-icons">
-                            <i class="fas fa-gas-pump fuel-icon"></i>
+                    <!-- Add Dispenser Card -->
+                    <div class="card mb-4" id="addDispenserCard">
+                        <div class="card-header">
+                            <i class="fas fa-plus mr-1"></i>
+                            Add New Dispenser
                         </div>
-                        <p class="dashboard-text"><strong>Last Sale:</strong> <span id="last-sale">No sales recorded yet.</span></p>
+                        <div class="card-body">
+                            <form id="addDispenserForm">
+                                <div class="form-group">
+                                    <label for="dispenserNumber">Dispenser Number</label>
+                                    <input type="text" class="form-control" id="dispenserNumber" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Add Dispenser</button>
+                            </form>
+                        </div>
                     </div>
-                </div>
-            </div>
-        </div>
 
-        <!-- Purchase and Dispense Fuel -->
-        <div class="row">
-            <div class="col-md-6">
-                <div class="panel panel-danger">
-                    <div class="panel-heading"><i class="icon fas fa-money-bill-wave"></i>  Purchase Fuel</div>
-                    <div class="panel-body">
-                        <form id="purchase-fuel-form">
-                            <div class="form-group">
-                                <label for="purchase-amount">Amount of Fuel to Purchase (in Tsh):</label>
-                                <input type="number" class="form-control" id="purchase-amount" placeholder="Enter Amount" required>
-                            </div>
-                            <button type="submit" class="btn btn-danger">Purchase Fuel</button>
-                        </form>
+                    <!-- Allocate Employee Card -->
+                    <div class="card mb-4" id="allocateEmployeeCard">
+                        <div class="card-header">
+                            <i class="fas fa-user-plus mr-1"></i>
+                            Allocate Employee to Dispenser
+                        </div>
+                        <div class="card-body">
+                            <form id="allocateEmployeeForm">
+                                <div class="form-group">
+                                    <label for="employeeName">Employee Name</label>
+                                    <input type="text" class="form-control" id="employeeName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="dispenserToAllocate">Select Dispenser</label>
+                                    <select class="form-control" id="dispenserToAllocate" required>
+                                        <!-- Populate with existing dispensers dynamically -->
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Allocate Employee</button>
+                            </form>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="panel panel-warning">
-                    <div class="panel-heading"><i class="icon fas fa-gas-pump"></i>  Dispense Fuel</div>
-                    <div class="panel-body">
-                        <form id="dispense-fuel-form">
-                            <div class="form-group">
-                                <label for="dispense-amount">Amount of Fuel to Dispense (in Tsh):</label>
-                                <input type="number" class="form-control" id="dispense-amount" placeholder="Enter Amount" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="dispenser-dispense">Select Dispenser:</label>
-                                <select class="form-control" id="dispenser-dispense">
-                                    <!-- Dispensers will be dynamically added here -->
-                                </select>
-                            </div>
-                            <button type="submit" class="btn btn-warning">Dispense Fuel</button>
-                        </form>
+
+                    <!-- Purchase Fuel Card -->
+                    <div class="card mb-4" id="purchaseFuelCard">
+                        <div class="card-header">
+                            <i class="fas fa-shopping-cart mr-1"></i>
+                            Purchase Fuel
+                        </div>
+                        <div class="card-body">
+                            <form id="purchaseFuelForm">
+                                <div class="form-group">
+                                    <label for="fuelAmount">Amount of Fuel (in Tsh)</label>
+                                    <input type="number" class="form-control" id="fuelAmount" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="dispenserToPurchase">Select Dispenser</label>
+                                    <select class="form-control" id="dispenserToPurchase" required>
+                                        <!-- Populate with existing dispensers dynamically -->
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Purchase Fuel</button>
+                            </form>
+                        </div>
                     </div>
+
+                    <!-- Monitor Fuel Card -->
+                    <div class="card mb-4" id="monitorFuelCard">
+                        <div class="card-header">
+                            <i class="fas fa-tachometer-alt mr-1"></i>
+                            Monitor Fuel Dispensing
+                        </div>
+                        <div class="card-body">
+                            <!-- Display incoming messages and control options -->
+                        </div>
+                    </div>
+
+                    <!-- All Dispensers Card -->
+                    <div class="card mb-4" id="fuelDispensersCard">
+                        <div class="card-header">
+                            <i class="fas fa-gas-pump mr-1"></i>
+                            All Dispensers
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Dispenser Number</th>
+                                            <th>Fuel Type</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Populated dynamically with dispensers added by manager -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Employees Allocated to Dispensers Card -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <i class="fas fa-users mr-1"></i>
+                            Employees Allocated to Dispensers
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="employeeTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Employee Name</th>
+                                            <th>Dispenser Allocated</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Populated dynamically with employees allocated to dispensers -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
-            </div>
-        </div>
+                <!-- /.container-fluid -->
 
-        <!-- Dispensers List -->
-        <div class="panel panel-default">
-            <div class="panel-heading"><i class="icon fas fa-gas-pump"></i>  Dispensers</div>
-            <div class="panel-body">
-                <ul id="dispensers-list" class="list-group">
-                    <!-- Dispensers will be dynamically added here -->
-                </ul>
             </div>
-        </div>
+            <!-- End of Main Content -->
 
-        <!-- Employees List -->
-        <div class="panel panel-default">
-            <div class="panel-heading"><i class="icon fas fa-user"></i>  Employees</div>
-            <div class="panel-body">
-                <ul id="employees-list" class="list-group">
-                    <!-- Employees will be dynamically added here -->
-                </ul>
-            </div>
-        </div>
-    </div>
-  
-      <br><br><br>
-      <!-- Divider -->
-      <hr class="sidebar-divider d-none d-md-block">
-      <!-- Divider -->
-      <hr class="sidebar-divider d-none d-md-block">
-  
-     
-
-                 <!-- Footer -->
+            <!-- Footer -->
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; FSMS 2024. All Rights Reserved</span>
+                    <div class="text-center">
+                        <span>FSMS - Fuel Dispensers Management System &copy; 2024</span>
                     </div>
                 </div>
             </footer>
@@ -606,78 +610,6 @@
         </div>
     </div>
 
-    <script>
-        $(document).ready(function(){
-            // Example arrays to hold dispensers and employees
-            var dispensers = [];
-            var employees = [];
-
-            // Add Dispenser
-            $('#add-dispenser-form').submit(function(e){
-                e.preventDefault();
-                var dispenserId = $('#dispenser-id').val();
-                dispensers.push(dispenserId);
-                $('#dispenser-select').append('<option value="' + dispenserId + '">' + dispenserId + '</option>');
-                $('#dispenser-dispense').append('<option value="' + dispenserId + '">' + dispenserId + '</option>');
-                $('#dispensers-list').append('<li class="list-group-item">' + dispenserId + '</li>');
-                $('#dispenser-id').val('');
-            });
-
-            // Allocate Employee
-            $('#allocate-employee-form').submit(function(e){
-                e.preventDefault();
-                var employeeName = $('#employee-name').val();
-                var dispenser = $('#dispenser-select').val();
-                employees.push({name: employeeName, dispenser: dispenser});
-                $('#employee-name').val('');
-                $('#dispenser-select').val('');
-                displayEmployees(); // Display updated list of employees
-            });
-
-            // Display Employees
-            function displayEmployees() {
-                $('#employees-list').empty(); // Clear existing list
-                employees.forEach(function(employee) {
-                    $('#employees-list').append('<li class="list-group-item">' + employee.name + ' - Dispenser: ' + employee.dispenser + '</li>');
-                });
-            }
-
-            // Simulate Fuel Sales Tracking (Automatic capture from sensors)
-            setInterval(function(){
-                var lastSale = Math.floor(Math.random() * 100) + 1; // Random fuel sale amount
-                $('#last-sale').text(lastSale + ' litres sold recently');
-            }, 5000); // Update every 5 seconds
-
-            // Purchase Fuel
-            $('#purchase-fuel-form').submit(function(e){
-                e.preventDefault();
-                var purchaseAmount = $('#purchase-amount').val();
-                alert('Purchased ' + purchaseAmount + ' TSH worth of fuel');
-                $('#purchase-amount').val('');
-            });
-
-            // Dispense Fuel
-            $('#dispense-fuel-form').submit(function(e){
-                e.preventDefault();
-                var dispenseAmount = $('#dispense-amount').val();
-                var dispenser = $('#dispenser-dispense').val();
-                alert('Dispensed ' + dispenseAmount + ' litres from ' + dispenser);
-                $('#dispense-amount').val('');
-            });
-
-            // Initial update of dispenser options
-            updateDispenseDispenserOptions();
-
-            // Update Dispense Dispenser Options
-            function updateDispenseDispenserOptions() {
-                $('#dispenser-dispense').empty(); // Clear existing options
-                dispensers.forEach(function(dispenser) {
-                    $('#dispenser-dispense').append('<option value="' + dispenser + '">' + dispenser + '</option>');
-                });
-            }
-        });
-    </script>
-
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -688,12 +620,114 @@
     <!-- Custom scripts for all pages-->
     <script src="js/sb-admin-2.min.js"></script>
 
-    <!-- Page level plugins -->
-    <script src="vendor/chart.js/Chart.min.js"></script>
+    <!-- Custom scripts for this page -->
+    <script>
+        // Function to handle form submission for adding a new dispenser
+        document.getElementById('addDispenserForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            var dispenserNumber = document.getElementById('dispenserNumber').value;
 
-    <!-- Page level custom scripts -->
-    <script src="js/demo/chart-area-demo.js"></script>
-    <script src="js/demo/chart-pie-demo.js"></script>
+            // Add a new row to the All Dispensers table
+            var tableRef = document.getElementById('dataTable').getElementsByTagName('tbody')[0];
+            var newRow = tableRef.insertRow();
+            var newCell1 = newRow.insertCell(0);
+            var newCell2 = newRow.insertCell(1);
+            newCell1.textContent = dispenserNumber;
+            newCell2.textContent = "Fuel Type"; // Replace with actual data
+
+            // Clear the input field
+            document.getElementById('dispenserNumber').value = '';
+        });
+
+        // Function to handle form submission for allocating an employee
+        document.getElementById('allocateEmployeeForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            var employeeName = document.getElementById('employeeName').value;
+            var selectedDispenser = document.getElementById('dispenserToAllocate').value;
+
+            // Add a new row to the Employees Allocated to Dispensers table
+            var tableRef = document.getElementById('employeeTable').getElementsByTagName('tbody')[0];
+            var newRow = tableRef.insertRow();
+            var newCell1 = newRow.insertCell(0);
+            var newCell2 = newRow.insertCell(1);
+            newCell1.textContent = employeeName;
+            newCell2.textContent = "Dispenser " + selectedDispenser; // Replace with actual data
+
+            // Clear the input fields
+            document.getElementById('employeeName').value = '';
+            document.getElementById('dispenserToAllocate').value = '';
+        });
+
+        // Function to handle form submission for purchasing fuel
+        document.getElementById('purchaseFuelForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            var fuelAmount = document.getElementById('fuelAmount').value;
+            var selectedDispenser = document.getElementById('dispenserToPurchase').value;
+
+            // Placeholder for actual purchase functionality (backend integration)
+            alert('Fuel Purchase: ' + fuelAmount + ' Tsh from Dispenser ' + selectedDispenser);
+
+            // Clear the input fields
+            document.getElementById('fuelAmount').value = '';
+            document.getElementById('dispenserToPurchase').value = '';
+        });
+
+        // Placeholder for keeping track of added dispensers
+var addedDispensers = [];
+
+// Function to populate the dropdown dynamically
+function populateDispenserDropdown() {
+    var dropdown = document.getElementById('dispenserToAllocate');
+    dropdown.innerHTML = ''; // Clear existing options
+
+    // Add default option
+    var defaultOption = document.createElement('option');
+    defaultOption.text = 'Select Dispenser';
+    dropdown.add(defaultOption);
+
+    // Add options from addedDispensers array
+    for (var i = 0; i < addedDispensers.length; i++) {
+        var dispenserNumber = addedDispensers[i];
+        var option = document.createElement('option');
+        option.value = dispenserNumber;
+        option.text = 'Dispenser ' + dispenserNumber;
+        dropdown.add(option);
+    }
+}
+
+// Event listener for form submission to allocate an employee
+document.getElementById('allocateEmployeeForm').addEventListener('submit', function (event) {
+    event.preventDefault();
+    var employeeName = document.getElementById('employeeName').value;
+    var selectedDispenser = document.getElementById('dispenserToAllocate').value;
+
+    if (!selectedDispenser || selectedDispenser === 'Select Dispenser') {
+        alert('Please select a valid dispenser.');
+        return;
+    }
+
+    // Add a new row to the Employees Allocated to Dispensers table
+    var tableRef = document.getElementById('employeeTable').getElementsByTagName('tbody')[0];
+    var newRow = tableRef.insertRow();
+    var newCell1 = newRow.insertCell(0);
+    var newCell2 = newRow.insertCell(1);
+    newCell1.textContent = employeeName;
+    newCell2.textContent = "Dispenser " + selectedDispenser;
+
+    // Clear the input fields
+    document.getElementById('employeeName').value = '';
+
+    // You may choose to keep or remove the following line based on your UI/UX needs
+    document.getElementById('dispenserToAllocate').selectedIndex = 0; // Reset dropdown to default option
+
+    // Refresh dropdown options
+    populateDispenserDropdown();
+});
+
+// Initial population of the dropdown
+populateDispenserDropdown();
+
+    </script>
 
 </body>
 

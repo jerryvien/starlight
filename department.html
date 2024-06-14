@@ -439,107 +439,81 @@
 
 
                 <!-- MAIN CONTENT HERE -->
-                <div class="container">
-                    <h2>CURRENT DEPARTMENTS (MEMBERS)</h2>
-                    <button type="button" class="btn btn-primary">Accounts <span class="badge">1</span></button>
-                    <button type="button" class="btn btn-primary">Marketing <span class="badge">1</span></button>    
-                    <button type="button" class="btn btn-primary">Procurement <span class="badge">1</span></button> 
-                    <span>Add new department</span>
-                 <a href="#section42"><input class="form-control" id="myInput" type="text" placeholder="Dept..">ADD DEPT</a>     
-                  </div>  
-                  
-                  <div id="section1" class="container-fluid">
-                    <h1>ACCOUNTS</h1>
-                    <table class="table table-bordered table-striped">
-                        <thead>
-                          <tr>
-                            <th>Firstname</th>
-                            <th>Lastname</th>
-                            <th>Email</th>
-                            <th>Department</th>
-                            <th>Remove/add the staff</th>
-                    
-                          </tr>
-                        </thead>
-                        <tbody id="myTable">
-                    <tr>
-                        <td>Janet</td>
-                        <td>Tillya</td>
-                        <td>july@gmail.com</td>
-                        <td>Accounts</td>
-                        <td><button type="button" class="btn btn-primary btn-sm">Remove</button></td>
-                      </tr>
-                      <tr>
-                        <td><input class="form-control" id="myInput" type="text" placeholder="Firstname.."></td>
-                        <td><input class="form-control" id="myInput" type="text" placeholder="Lastname.."></td>
-                        <td><input class="form-control" id="myInput" type="text" placeholder="Email.."></td>
-                        <td><button type="button" class="btn btn-primary btn-sm">ADD</button></td>
-                      </tr>
-                        </tbody>
-                    </table>
 
-                  <div id="section2" class="container-fluid">
-                    <h1>PROCUMERENT</h1>
-                    <table class="table table-bordered table-striped">
-                        <thead>
-                          <tr>
-                            <th>Firstname</th>
-                            <th>Lastname</th>
-                            <th>Email</th>
-                            <th>Department</th>
-                            <th>Remove/add the staff</th>
+                <!-- Page Heading -->
+                <div class="container">
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">FSMS Departments</h1>
+                    </div>
                     
-                          </tr>
-                        </thead>
-                        <tbody id="myTable">
-                    <tr>
-                        <td>Anjela</td>
-                        <td>Mwakipepeso</td>
-                        <td>a-r@gmail.com</td>
-                        <td>Procurement and mainteance</td>
-                        <td><button type="button" class="btn btn-primary btn-sm">Remove</button></td>
-                      </tr>
-                      <tr>
-                        <td><input class="form-control" id="myInput" type="text" placeholder="Firstname.."></td>
-                        <td><input class="form-control" id="myInput" type="text" placeholder="Lastname.."></td>
-                        <td><input class="form-control" id="myInput" type="text" placeholder="Email.."></td>
-                        <td><button type="button" class="btn btn-primary btn-sm">ADD</button></td>
-                      </tr>
-                        </tbody>
-                    </table>
-                    
-                  </div>
-                  <div id="section3" class="container-fluid">
-                    <h1>MARKETING</h1>
-                    <table class="table table-bordered table-striped">
-                        <thead>
-                          <tr>
-                            <th>Firstname</th>
-                            <th>Lastname</th>
-                            <th>Email</th>
-                            <th>Department</th>
-                            <th>Remove/add the staff</th>
-                    
-                          </tr>
-                        </thead>
-                        <tbody id="myTable">
-                    <tr>
-                        <td>Ayoub/td>
-                        <td>Danny</td>
-                        <td>ayoub245@gmail.com</td>
-                        <td>Marketing</td>
-                        <td><button type="button" class="btn btn-primary btn-sm">Remove</button></td>
-                      </tr>
-                      <tr>
-                        <td><input class="form-control" id="myInput" type="text" placeholder="Firstname.."></td>
-                        <td><input class="form-control" id="myInput" type="text" placeholder="Lastname.."></td>
-                        <td><input class="form-control" id="myInput" type="text" placeholder="Email.."></td>
-                        <td><button type="button" class="btn btn-primary btn-sm">ADD</button></td>
-                      </tr>
-                        </tbody>
-                    </table>
-                    
-                  </div>
+                    <!-- Add Department Section -->
+    <div class="row">
+        <div class="col-md-12">
+          <div class="add-department-card">
+            <h3>New Department Details</h3>
+            <form id="addDepartmentForm" class="form-horizontal">
+              <div class="form-group">
+                <label for="deptName" class="col-sm-3 control-label">Department Name</label>
+                <div class="col-sm-9">
+                  <input type="text" class="form-control" id="deptName" name="deptName" placeholder="Enter department name" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="numEmployees" class="col-sm-3 control-label">Number of Employees</label>
+                <div class="col-sm-9">
+                  <input type="number" class="form-control" id="numEmployees" name="numEmployees" placeholder="Enter number of employees" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="deptRoles" class="col-sm-3 control-label">Department Roles</label>
+                <div class="col-sm-9">
+                  <textarea class="form-control" id="deptRoles" name="deptRoles" rows="3" placeholder="Enter department roles" required></textarea>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-sm-offset-3 col-sm-9">
+                  <button type="submit" class="btn btn-primary">Add Department</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider d-none d-md-block">
+      <br><br>
+      <!-- Divider -->
+      <hr class="sidebar-divider d-none d-md-block">
+
+      <!-- Current Departments Table -->
+    <div class="row departments-table">
+        <div class="col-md-12">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">FSMS Current Departments</h3>
+            </div>
+            <div class="panel-body">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>Dept Id</th>
+                    <th>Department Name</th>
+                    <th>No. of Employees</th>
+                    <th>Dept Roles</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="departmentsTableBody">
+                  <!-- Departments will be dynamically added here -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
                   
 
 
@@ -587,6 +561,69 @@
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- JavaScript for handling form submission and dynamic table population -->
+  <script>
+    $(document).ready(function() {
+      var editMode = false;
+      var editDeptId = 0;
+
+      $('#addDepartmentForm').submit(function(event) {
+        event.preventDefault();
+
+        if (editMode) {
+          // Update existing department
+          var deptId = editDeptId;
+          $('#deptRow' + deptId + ' td:nth-child(2)').text($('#deptName').val());
+          $('#deptRow' + deptId + ' td:nth-child(3)').text($('#numEmployees').val());
+          $('#deptRow' + deptId + ' td:nth-child(4)').text($('#deptRoles').val());
+
+          // Reset form and exit edit mode
+          $('#addDepartmentForm')[0].reset();
+          editMode = false;
+          editDeptId = 0;
+          $('#addDepartmentForm button[type="submit"]').text('Add Department');
+        } else {
+          // Add new department
+          var deptId = Date.now();
+          var newRow = '<tr id="deptRow' + deptId + '">'
+            + '<td>' + deptId + '</td>'
+            + '<td>' + $('#deptName').val() + '</td>'
+            + '<td>' + $('#numEmployees').val() + '</td>'
+            + '<td>' + $('#deptRoles').val() + '</td>'
+            + '<td>'
+            + '<button type="button" class="btn btn-primary btn-xs" onclick="editDepartment(' + deptId + ')">Edit</button> '
+            + '<button type="button" class="btn btn-danger btn-xs" onclick="deleteDepartment(' + deptId + ')">Delete</button>'
+            + '</td>'
+            + '</tr>';
+
+          $('#departmentsTableBody').append(newRow);
+          $('#addDepartmentForm')[0].reset();
+        }
+      });
+
+      window.editDepartment = function(deptId) {
+        editMode = true;
+        editDeptId = deptId;
+
+        // Fill form with current department details
+        $('#deptName').val($('#deptRow' + deptId + ' td:nth-child(2)').text());
+        $('#numEmployees').val($('#deptRow' + deptId + ' td:nth-child(3)').text());
+        $('#deptRoles').val($('#deptRow' + deptId + ' td:nth-child(4)').text());
+
+        // Change submit button text to indicate editing mode
+        $('#addDepartmentForm button[type="submit"]').text('Save Changes');
+      };
+
+      window.deleteDepartment = function(deptId) {
+        $('#deptRow' + deptId).remove();
+      };
+    });
+
+    
+  </script>
+
+  
 
     <!-- Core plugin JavaScript-->
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>

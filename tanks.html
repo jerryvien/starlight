@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>FSMS - Tanks</title>
+    <title>FSMS - Set Unit Price</title>
 
     <!-- favicon for this website-->
     <link rel="icon" type="image/x-icon" href="/img/favicon_io/favicon-16x16.png">
@@ -22,7 +22,6 @@
 
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
-    <link href="tanks.css" rel="stylesheet">
 
 </head>
 
@@ -437,89 +436,118 @@
                 </nav>
                 <!-- End of Topbar -->
 
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
 
-                <!-- MAIN CONTENT HERE -->
+                    <!-- Page Heading -->
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">Fuel Tanks</h1>
+                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#addTankModal"><i
+                                class="fas fa-drum-steelpan fa-sm text-white-50"></i> Add New Tank</a>
+                    </div>
 
-
-                <div class="container mt-5">
-                    <h1 class="mb-4">Fuel Tanks</h1>
-                    <!-- Display Fuel Tanks -->
-                    <div id="fuelTankContainer" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-                        <!-- Fuel Tank Card -->
-                        <div class="col">
-                            <div class="card">
+                    <!-- Content Row -->
+                    <div class="row">
+                        <!-- Fuel Tanks Information -->
+                        <div class="col-xl-12 col-lg-12">
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Current Fuel Tanks</h6>
+                                </div>
                                 <div class="card-body">
-                                    <canvas id="tank1-chart"></canvas>
-                                    <h5 class="card-title">Tank 1</h5>
-                                    <p class="card-text">ID: 1</p>
-                                    <p class="card-text">Capacity: 1000 liters</p>
-                                    <p class="card-text">Fuel Type: Diesel</p>
-                                    <p class="card-text">Fuel Available: 800 liters</p>
-                                    <p class="card-text">Humidity: 60%</p>
-                                    <p class="card-text">Temperature: 25°C</p>
+                                    <!-- Tank Details Table -->
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Tank ID</th>
+                                                    <th>Tank Name</th>
+                                                    <th>Capacity</th>
+                                                    <th>Current Level</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tfoot>
+                                                <tr>
+                                                    <th>Tank ID</th>
+                                                    <th>Tank Name</th>
+                                                    <th>Capacity</th>
+                                                    <th>Current Level</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </tfoot>
+                                            <tbody>
+                                                <!-- Example tank rows -->
+                                                <tr>
+                                                    <td>1</td>
+                                                    <td>Tank A</td>
+                                                    <td>1000 Liters</td>
+                                                    <td>700 Liters</td>
+                                                    <td>Active</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>2</td>
+                                                    <td>Tank B</td>
+                                                    <td>1500 Liters</td>
+                                                    <td>1200 Liters</td>
+                                                    <td>Active</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>3</td>
+                                                    <td>Tank C</td>
+                                                    <td>2000 Liters</td>
+                                                    <td>500 Liters</td>
+                                                    <td>Low</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <!-- Add New Tank Button -->
-                        <div class="col">
-                            <div class="card h-100">
-                                <div class="card-body d-flex justify-content-center align-items-center">
-                                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addTankModal">Add New
-                                        Tank
+                    </div>
+
+                    <!-- Add Tank Modal -->
+                    <div class="modal fade" id="addTankModal" tabindex="-1" role="dialog" aria-labelledby="addTankModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="addTankModalLabel">Add New Fuel Tank</h5>
+                                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
                                     </button>
                                 </div>
+                                <div class="modal-body">
+                                    <form id="addTankForm">
+                                        <div class="form-group">
+                                            <label for="tankName">Tank Name</label>
+                                            <input type="text" class="form-control" id="tankName" placeholder="Enter tank name">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="tankCapacity">Capacity (Liters)</label>
+                                            <input type="number" class="form-control" id="tankCapacity" placeholder="Enter tank capacity">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="tankLevel">Current Level (Liters)</label>
+                                            <input type="number" class="form-control" id="tankLevel" placeholder="Enter current fuel level">
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                                    <button class="btn btn-primary" type="button" id="saveTankBtn">Save Tank</button>
+                                </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
-                
-                <!-- Add Tank Modal -->
-                <div class="modal fade" id="addTankModal" tabindex="-1" aria-labelledby="addTankModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="addTankModalLabel">Add New Tank</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <!-- Tank Form -->
-                                <form>
-                                    <div class="mb-3">
-                                        <label for="tankID" class="form-label">ID</label>
-                                        <input type="text" class="form-control" id="tankID" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="tankCapacity" class="form-label">Tank Capacity (liters)</label>
-                                        <input type="number" class="form-control" id="tankCapacity" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="fuelType" class="form-label">Fuel Type</label>
-                                        <select class="form-select" id="fuelType" required>
-                                            <option selected disabled>Select Fuel Type</option>
-                                            <option value="petrol">Petrol</option>
-                                            <option value="diesel">Diesel</option>
-                                            <option value="kerosene">Kerosene</option>
-                                        </select>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="humidity" class="form-label">Humidity</label>
-                                        <input type="text" class="form-control" id="humidity" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="temperature" class="form-label">Temperature (°C)</label>
-                                        <input type="number" class="form-control" id="temperature" required>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary">Add Tank</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
+                <!-- /.container-fluid -->
 
+            </div>
+            <!-- End of Main Content -->
 
-
-                 <!-- Footer -->
+            <!-- Footer -->
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
@@ -576,6 +604,39 @@
     <!-- Page level custom scripts -->
     <script src="js/demo/chart-area-demo.js"></script>
     <script src="js/demo/chart-pie-demo.js"></script>
+
+    <!-- Custom scripts for handling modal form submission -->
+    <script>
+        $(document).ready(function () {
+            $('#saveTankBtn').click(function () {
+                // Retrieve form values
+                const tankName = $('#tankName').val();
+                const tankCapacity = $('#tankCapacity').val();
+                const tankLevel = $('#tankLevel').val();
+
+                // Validate form values (simple validation)
+                if (tankName && tankCapacity && tankLevel) {
+                    // Add new row to the table
+                    const newRow = `<tr>
+                        <td>4</td>
+                        <td>${tankName}</td>
+                        <td>${tankCapacity} Liters</td>
+                        <td>${tankLevel} Liters</td>
+                        <td>${tankLevel < (0.2 * tankCapacity) ? 'Low' : 'Active'}</td>
+                    </tr>`;
+                    $('#dataTable tbody').append(newRow);
+
+                    // Close modal
+                    $('#addTankModal').modal('toggle');
+
+                    // Reset form values
+                    $('#addTankForm')[0].reset();
+                } else {
+                    alert('Please fill in all fields.');
+                }
+            });
+        });
+    </script>
 
 </body>
 

@@ -23,6 +23,9 @@
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
 
+    <!-- Custom css i.e., location.css-->
+     <link href="location.css" rel="stylesheet">
+
 </head>
 
 <body id="page-top">
@@ -201,13 +204,14 @@
 <div class="card mt-3">
     <div class="card-body">
         <!-- Embed Google Maps iframe -->
-        <iframe src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d3425.798878106095!2d39.23990865169944!3d-6.7721390575470695!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2stz!4v1718138276856!5m2!1sen!2stz" 
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3961.9871055176263!2d39.23738477413929!3d-6.771422766216409!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x185c4e9e55555555%3A0x31c34ce3703cc9eb!2sFuel%20of%20Station%20and%20Management%20System%20(FSMS)%20-%20University%20of%20Dar%20es%20salaam!5e0!3m2!1sen!2stz!4v1716295574441!5m2!1sen!2stz" 
                 width="100%" 
                 height="90" 
                 style="border:0;"    
                 allowfullscreen="" 
                 loading="lazy">
-        </iframe>    
+        </iframe>  
+        
     </div>
 </div>
 </div>
@@ -441,26 +445,24 @@
                 <!-- MAIN CONTENT HERE -->
 
                 <!-- Page Heading -->
-                <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                    <h1 class="h3 mb-0 text-gray-800"> Our Location</h1>
+                <!-- Page Heading -->
+                <div class="container mt-5">
+                    <h1 class="h3 mb-0 text-gray-800">Our Location</h1>
                 </div>    
 
                 <!-- Card for displaying location -->
 <div class="card mt-3">
     <div class="card-body">
         <!-- Embed Google Maps iframe -->
-        <iframe src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d3425.798878106095!2d39.23990865169944!3d-6.7721390575470695!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2stz!4v1718138276856!5m2!1sen!2stz" 
-                width="100%" 
-                height="500" 
-                style="border:0;"    
-                allowfullscreen="" 
-                loading="lazy">
-        </iframe>    
+        <section class="mapbox" data-mapbox>
+            <figure>
+              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3961.9871055176263!2d39.23738477413929!3d-6.771422766216409!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x185c4e9e55555555%3A0x31c34ce3703cc9eb!2sFuel%20of%20Station%20and%20Management%20System%20(FSMS)%20-%20University%20of%20Dar%20es%20salaam!5e0!3m2!1sen!2stz!4v1716295574441!5m2!1sen!2stz" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </figure>
+          </section>
     </div>
 </div>
 
-
-                 <!-- Footer -->
+        <!-- Footer -->
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
