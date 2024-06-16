@@ -621,377 +621,338 @@
           <!-- End of Topbar -->
 
           <!-- Main Content Area -->
-          <div class="container-fluid">
-            <!-- Page Heading -->
-            <h1 class="h3 mb-4 text-gray-800">Fuel Dispensers</h1>
-
-            <!-- Add Dispenser Card -->
-            <div class="card mb-4" id="addDispenserCard">
-              <div class="card-header">
-                <i class="fas fa-plus mr-1"></i>
-                Add New Dispenser
-              </div>
-              <div class="card-body">
-                <form id="addDispenserForm">
-                  <div class="form-group">
-                    <label for="dispenserNumber">Dispenser Number</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="dispenserNumber"
-                      required
-                    />
-                  </div>
-                  <button type="submit" class="btn btn-primary">
-                    Add Dispenser
-                  </button>
-                </form>
-              </div>
-            </div>
-
-            <!-- Allocate Employee Card -->
-            <div class="card mb-4" id="allocateEmployeeCard">
-              <div class="card-header">
-                <i class="fas fa-user-plus mr-1"></i>
-                Allocate Employee to Dispenser
-              </div>
-              <div class="card-body">
-                <form id="allocateEmployeeForm">
-                  <div class="form-group">
-                    <label for="employeeName">Employee Name</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="employeeName"
-                      required
-                    />
-                  </div>
-                  <div class="form-group">
-                    <label for="dispenserToAllocate">Select Dispenser</label>
-                    <select
-                      class="form-control"
-                      id="dispenserToAllocate"
-                      required
-                    >
-                      
-                    </select>
-                  </div>
-                  <button type="submit" class="btn btn-primary">
-                    Allocate Employee
-                  </button>
-                </form>
-              </div>
-            </div>
-
-            <!-- Purchase Fuel Card -->
-            <div class="card mb-4" id="purchaseFuelCard">
-              <div class="card-header">
-                <i class="fas fa-shopping-cart mr-1"></i>
-                Purchase Fuel
-              </div>
-              <div class="card-body">
-                <form id="purchaseFuelForm">
-                  <div class="form-group">
-                    <label for="fuelAmount">Amount of Fuel (in Tsh)</label>
-                    <input
-                      type="number"
-                      class="form-control"
-                      id="fuelAmount"
-                      required
-                    />
-                  </div>
-                  <div class="form-group">
-                    <label for="dispenserToPurchase">Select Dispenser</label>
-                    <select
-                      class="form-control"
-                      id="dispenserToPurchase"
-                      required
-                    >
-                      <!-- Populate with existing dispensers dynamically -->
-                    </select>
-                  </div>
-                  <button type="submit" class="btn btn-primary">
-                    Purchase Fuel
-                  </button>
-                </form>
-              </div>
-            </div>
-
-            <!-- Monitor Fuel Card -->
-            <div class="card mb-4" id="monitorFuelCard">
-              <div class="card-header">
-                <i class="fas fa-tachometer-alt mr-1"></i>
-                Monitor Fuel Dispensing
-              </div>
-              <div class="card-body">
-                <!-- Display incoming messages and control options -->
-              </div>
-            </div>
-
-            <!-- All Dispensers Card -->
-            <div class="card mb-4" id="fuelDispensersCard">
-              <div class="card-header">
-                <i class="fas fa-gas-pump mr-1"></i>
-                All Dispensers
-              </div>
-              <div class="card-body">
-                <div class="table-responsive">
-                  <table
-                    class="table table-bordered"
-                    id="dataTable"
-                    width="100%"
-                    cellspacing="0"
-                  >
-                    <thead>
-                      <tr>
-                        <th>Dispenser Number</th>
-                        <th>Fuel Type</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <!-- Populated dynamically with dispensers added by manager -->
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-
-            <!-- Employees Allocated to Dispensers Card -->
-            <div class="card mb-4">
-              <div class="card-header">
-                <i class="fas fa-users mr-1"></i>
-                Employees Allocated to Dispensers
-              </div>
-              <div class="card-body">
-                <div class="table-responsive">
-                  <table
-                    class="table table-bordered"
-                    id="employeeTable"
-                    width="100%"
-                    cellspacing="0"
-                  >
-                    <thead>
-                      <tr>
-                        <th>Employee Name</th>
-                        <th>Dispenser Allocated</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <!-- Populated dynamically with employees allocated to dispensers -->
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- /.container-fluid -->
-        </div>
-        <!-- End of Main Content -->
-
-        <!-- Footer -->
-        <footer class="sticky-footer bg-white">
-          <div class="container my-auto">
-            <div class="text-center">
-              <span>FSMS - Fuel Dispensers Management System &copy; 2024</span>
-            </div>
-          </div>
-        </footer>
-        <!-- End of Footer -->
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <h1 class="h3 mb-4 text-gray-800">Fuel Dispensers</h1>
+  
+    <!-- Add Dispenser Card -->
+    <div class="card mb-4" id="addDispenserCard">
+      <div class="card-header">
+        <i class="fas fa-plus mr-1"></i>
+        Add New Dispenser
       </div>
-      <!-- End of Content Wrapper -->
+      <div class="card-body">
+        <form id="addDispenserForm">
+          <div class="form-group">
+            <label for="dispenserNumber">Dispenser Number</label>
+            <input
+              type="text"
+              class="form-control"
+              id="dispenserNumber"
+              required
+            />
+          </div>
+          <button type="submit" class="btn btn-primary">
+            Add Dispenser
+          </button>
+        </form>
+      </div>
     </div>
-    <!-- End of Page Wrapper -->
-
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-      <i class="fas fa-angle-up"></i>
-    </a>
-
-    <!-- Logout Modal-->
-    <div
-      class="modal fade"
-      id="logoutModal"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-            <button
-              class="close"
-              type="button"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">×</span>
-            </button>
+  
+    <!-- Allocate Employee Card -->
+    <div class="card mb-4" id="allocateEmployeeCard">
+      <div class="card-header">
+        <i class="fas fa-user-plus mr-1"></i>
+        Allocate Employee to Dispenser
+      </div>
+      <div class="card-body">
+        <form id="allocateEmployeeForm">
+          <div class="form-group">
+            <label for="employeeName">Employee Name</label>
+            <input
+              type="text"
+              class="form-control"
+              id="employeeName"
+              required
+            />
           </div>
-          <div class="modal-body">
-            Select "Logout" below if you are ready to end your current session.
+          <div class="form-group">
+            <label for="dispenserToAllocate">Select Dispenser</label>
+            <select
+              class="form-control dispenserDropdown"
+              id="dispenserToAllocate"
+              required
+            ></select>
           </div>
-          <div class="modal-footer">
-            <button
-              class="btn btn-secondary"
-              type="button"
-              data-dismiss="modal"
-            >
-              Cancel
-            </button>
-            <a class="btn btn-primary" href="login.html">Logout</a>
+          <button type="submit" class="btn btn-primary">
+            Allocate Employee
+          </button>
+        </form>
+      </div>
+    </div>
+  
+    <!-- Purchase Fuel Card -->
+    <div class="card mb-4" id="purchaseFuelCard">
+      <div class="card-header">
+        <i class="fas fa-shopping-cart mr-1"></i>
+        Purchase Fuel
+      </div>
+      <div class="card-body">
+        <form id="purchaseFuelForm">
+          <div class="form-group">
+            <label for="fuelAmount">Amount of Fuel (in Tsh)</label>
+            <input
+              type="number"
+              class="form-control"
+              id="fuelAmount"
+              required
+            />
           </div>
+          <div class="form-group">
+            <label for="dispenserToPurchase">Select Dispenser</label>
+            <select
+              class="form-control dispenserDropdown"
+              id="dispenserToPurchase"
+              required
+            ></select>
+          </div>
+          <button type="submit" class="btn btn-primary">
+            Purchase Fuel
+          </button>
+        </form>
+      </div>
+    </div>
+  
+    <!-- Monitor Fuel Card -->
+    <div class="card mb-4" id="monitorFuelCard">
+      <div class="card-header">
+        <i class="fas fa-tachometer-alt mr-1"></i>
+        Monitor Fuel Dispensing
+      </div>
+      <div class="card-body">
+        <!-- Display incoming messages and control options -->
+      </div>
+    </div>
+  
+    <!-- All Dispensers Card -->
+    <div class="card mb-4" id="fuelDispensersCard">
+      <div class="card-header">
+        <i class="fas fa-gas-pump mr-1"></i>
+        All Dispensers
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table
+            class="table table-bordered"
+            id="dataTable"
+            width="100%"
+            cellspacing="0"
+          >
+            <thead>
+              <tr>
+                <th>Dispenser Number</th>
+                <th>Fuel Type</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Populated dynamically with dispensers added by manager -->
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
-
-    <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-
-    <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
-
-    <!-- Custom scripts for this page -->
-    <script>
-      // Function to handle form submission for adding a new dispenser
-      document
-        .getElementById("addDispenserForm")
-        .addEventListener("submit", function (event) {
-          event.preventDefault();
-          var dispenserNumber =
-            document.getElementById("dispenserNumber").value;
-
-          // Add a new row to the All Dispensers table
-          var tableRef = document
-            .getElementById("dataTable")
-            .getElementsByTagName("tbody")[0];
-          var newRow = tableRef.insertRow();
-          var newCell1 = newRow.insertCell(0);
-          var newCell2 = newRow.insertCell(1);
-          newCell1.textContent = dispenserNumber;
-          newCell2.textContent = "Fuel Type"; // Replace with actual data
-
-          // Clear the input field
-          document.getElementById("dispenserNumber").value = "";
-        });
-
-      // Function to handle form submission for allocating an employee
-      document
-        .getElementById("allocateEmployeeForm")
-        .addEventListener("submit", function (event) {
-          event.preventDefault();
-          var employeeName = document.getElementById("employeeName").value;
-          var selectedDispenser = document.getElementById(
-            "dispenserToAllocate"
-          ).value;
-
-          // Add a new row to the Employees Allocated to Dispensers table
-          var tableRef = document
-            .getElementById("employeeTable")
-            .getElementsByTagName("tbody")[0];
-          var newRow = tableRef.insertRow();
-          var newCell1 = newRow.insertCell(0);
-          var newCell2 = newRow.insertCell(1);
-          newCell1.textContent = employeeName;
-          newCell2.textContent = "Dispenser " + selectedDispenser; // Replace with actual data
-
-          // Clear the input fields
-          document.getElementById("employeeName").value = "";
-          document.getElementById("dispenserToAllocate").value = "";
-        });
-
-      // Function to handle form submission for purchasing fuel
-      document
-        .getElementById("purchaseFuelForm")
-        .addEventListener("submit", function (event) {
-          event.preventDefault();
-          var fuelAmount = document.getElementById("fuelAmount").value;
-          var selectedDispenser = document.getElementById(
-            "dispenserToPurchase"
-          ).value;
-
-          // Placeholder for actual purchase functionality (backend integration)
-          alert(
-            "Fuel Purchase: " +
-              fuelAmount +
-              " Tsh from Dispenser " +
-              selectedDispenser
-          );
-
-          // Clear the input fields
-          document.getElementById("fuelAmount").value = "";
-          document.getElementById("dispenserToPurchase").value = "";
-        });
-
-      // Placeholder for keeping track of added dispensers
-      var addedDispensers = [];
-
-      // Function to populate the dropdown dynamically
-      function populateDispenserDropdown() {
-        var dropdown = document.getElementById("dispenserToAllocate");
+  
+    <!-- Employees Allocated to Dispensers Card -->
+    <div class="card mb-4">
+      <div class="card-header">
+        <i class="fas fa-users mr-1"></i>
+        Employees Allocated to Dispensers
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table
+            class="table table-bordered"
+            id="employeeTable"
+            width="100%"
+            cellspacing="0"
+          >
+            <thead>
+              <tr>
+                <th>Employee Name</th>
+                <th>Dispenser Allocated</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Populated dynamically with employees allocated to dispensers -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /.container-fluid -->
+  </div>
+  <!-- End of Main Content -->
+  
+  <!-- Footer -->
+  <footer class="sticky-footer bg-white">
+    <div class="container my-auto">
+      <div class="text-center">
+        <span>FSMS - Fuel Dispensers Management System &copy; 2024</span>
+      </div>
+    </div>
+  </footer>
+  <!-- End of Footer -->
+  </div>
+  <!-- End of Content Wrapper -->
+  </div>
+  <!-- End of Page Wrapper -->
+  
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
+  
+  <!-- Logout Modal-->
+  <div
+    class="modal fade"
+    id="logoutModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+          <button
+            class="close"
+            type="button"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Select "Logout" below if you are ready to end your current session.
+        </div>
+        <div class="modal-footer">
+          <button
+            class="btn btn-secondary"
+            type="button"
+            data-dismiss="modal"
+          >
+            Cancel
+          </button>
+          <a class="btn btn-primary" href="login.html">Logout</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Bootstrap core JavaScript-->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- Core plugin JavaScript-->
+  <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+  
+  <!-- Custom scripts for all pages-->
+  <script src="js/sb-admin-2.min.js"></script>
+  
+  <!-- Custom scripts for this page -->
+  <script>
+    // Placeholder for keeping track of added dispensers
+    var addedDispensers = [];
+  
+    // Function to handle form submission for adding a new dispenser
+    document
+      .getElementById("addDispenserForm")
+      .addEventListener("submit", function (event) {
+        event.preventDefault();
+        var dispenserNumber = document.getElementById("dispenserNumber").value;
+  
+        // Add a new row to the All Dispensers table
+        var tableRef = document
+          .getElementById("dataTable")
+          .getElementsByTagName("tbody")[0];
+        var newRow = tableRef.insertRow();
+        var newCell1 = newRow.insertCell(0);
+        var newCell2 = newRow.insertCell(1);
+        newCell1.textContent = dispenserNumber;
+        newCell2.textContent = "Petrol,Diesel"; // Replace with actual data
+  
+        // Add to addedDispensers array and update dropdowns
+        addedDispensers.push(dispenserNumber);
+        populateDispenserDropdown();
+  
+        // Clear the input field
+        document.getElementById("dispenserNumber").value = "";
+      });
+  
+    // Function to populate the dropdown dynamically
+    function populateDispenserDropdown() {
+      var dropdowns = document.querySelectorAll(".dispenserDropdown");
+      dropdowns.forEach(function (dropdown) {
         dropdown.innerHTML = ""; // Clear existing options
-
-        // Add default option
-        var defaultOption = document.createElement("option");
-        defaultOption.text = "Select Dispenser";
-        dropdown.add(defaultOption);
-
         // Add options from addedDispensers array
-        for (var i = 0; i < addedDispensers.length; i++) {
-          var dispenserNumber = addedDispensers[i];
+        addedDispensers.forEach(function (dispenserNumber) {
           var option = document.createElement("option");
           option.value = dispenserNumber;
           option.text = "Dispenser " + dispenserNumber;
           dropdown.add(option);
-        }
-      }
-
-      // Event listener for form submission to allocate an employee
-      document
-        .getElementById("allocateEmployeeForm")
-        .addEventListener("submit", function (event) {
-          event.preventDefault();
-          var employeeName = document.getElementById("employeeName").value;
-          var selectedDispenser = document.getElementById(
-            "dispenserToAllocate"
-          ).value;
-
-          if (!selectedDispenser || selectedDispenser === "Select Dispenser") {
-            alert("Please select a valid dispenser.");
-            return;
-          }
-
-          // Add a new row to the Employees Allocated to Dispensers table
-          var tableRef = document
-            .getElementById("employeeTable")
-            .getElementsByTagName("tbody")[0];
-          var newRow = tableRef.insertRow();
-          var newCell1 = newRow.insertCell(0);
-          var newCell2 = newRow.insertCell(1);
-          newCell1.textContent = employeeName;
-          newCell2.textContent = "Dispenser " + selectedDispenser;
-
-          // Clear the input fields
-          document.getElementById("employeeName").value = "";
-
-          // You may choose to keep or remove the following line based on your UI/UX needs
-          document.getElementById("dispenserToAllocate").selectedIndex = 0; // Reset dropdown to default option
-
-          // Refresh dropdown options
-          populateDispenserDropdown();
         });
-
-      // Initial population of the dropdown
-      populateDispenserDropdown();
-
+      });
+    }
   
-
+    // Function to handle form submission for allocating an employee
+    document
+      .getElementById("allocateEmployeeForm")
+      .addEventListener("submit", function (event) {
+        event.preventDefault();
+        var employeeName = document.getElementById("employeeName").value;
+        var selectedDispenser = document.getElementById(
+          "dispenserToAllocate"
+        ).value;
   
-    </script>
+        if (!selectedDispenser) {
+          alert("Please select a valid dispenser.");
+          return;
+        }
+  
+        // Add a new row to the Employees Allocated to Dispensers table
+        var tableRef = document
+          .getElementById("employeeTable")
+          .getElementsByTagName("tbody")[0];
+        var newRow = tableRef.insertRow();
+        var newCell1 = newRow.insertCell(0);
+        var newCell2 = newRow.insertCell(1);
+        newCell1.textContent = employeeName;
+        newCell2.textContent = "Dispenser " + selectedDispenser;
+  
+        // Clear the input fields
+        document.getElementById("employeeName").value = "";
+        document.getElementById("dispenserToAllocate").value = "";
+      });
+  
+    // Function to handle form submission for purchasing fuel
+    document
+      .getElementById("purchaseFuelForm")
+      .addEventListener("submit", function (event) {
+        event.preventDefault();
+        var fuelAmount = document.getElementById("fuelAmount").value;
+        var selectedDispenser = document.getElementById(
+          "dispenserToPurchase"
+        ).value;
+  
+        // Placeholder for actual purchase functionality (backend integration)
+        alert(
+          "Fuel Purchase: " +
+            fuelAmount +
+            " Tsh from Dispenser " +
+            selectedDispenser
+        );
+  
+        // Clear the input fields
+        document.getElementById("fuelAmount").value = "";
+        document.getElementById("dispenserToPurchase").value = "";
+      });
+  
+    // Initial population of the dropdown
+    populateDispenserDropdown();
+  </script>
   </body>
-</html>
+  </html>
+  

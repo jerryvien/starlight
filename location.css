@@ -18,4 +18,4 @@
   }
 
   /*for black and white filter*/
-  filter: grayscale(1) invert(1);
+  /* filter: grayscale(1) invert(1); */
