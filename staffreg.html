@@ -509,28 +509,42 @@
 
   
     <h2>Add Staffs Manually (For Staffs without smart devices)</h2> 
+
+    <form action="" method="post">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Firstname</th>
+                    <th>Lastname</th>
+                    <th>Email (If any)</th>
+                    <th>Phone Number</th>
+
+                    <th>Department</th>
+                    <th>Add the staff</th>
+                </tr>
+            </thead>
+            <tbody id="myTable">
+                <tr>
+                    <td><input class="form-control" type="text" placeholder="Firstname.." id="firstname"></td>
+                    <td><input class="form-control" type="text" placeholder="Lastname.." id="lastname"></td>
+                    <td><input class="form-control" type="text" placeholder="Email.." id="email"></td>
+                    <td><input class="form-control" type="text" placeholder="PhoneNO." id="phone"></td>
+                    <td><div class="container">
+                        <select class="form-control" id="department">
+                            <option>Select Department</option>
+                            <option value="9356f685-bda0-473a-81d0-842b5ab37758">Dispenser Sales</option>
+                            <option value="0df0fb60-21a5-4d43-b5d9-967fc87c5ea7">Human Resource</option>
+                            <option value="5c4b5e38-af4d-4d5a-8297-bae5b14c8da9">Marketing</option>
+                            <option value="a2eae900-5c39-4027-884a-d9b48c2155f6">Accounts</option>
+                            <option value="5866cb5e-3ab0-49c0-8b92-518e331c9459">Maintaneance and Procurement</option>
+                        </select>
+                    </div></td>
+                    <td><button type="button" class="btn btn-primary btn-sm" id="addButton">Add</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
     
-    <table class="table table-bordered table-striped">
-      <thead>
-        <tr>
-          <th>Firstname</th>
-          <th>Lastname</th>
-          <th>Email(If any)</th>
-          <th>Department</th>
-          <th>Add the staff</th>
-  
-        </tr>
-      </thead>
-      <tbody id="myTable">
-        <tr>
-          <td><input class="form-control" id="myInput" type="text" placeholder="Firstname.."></td>
-          <td><input class="form-control" id="myInput" type="text" placeholder="Lastname.."></td>
-          <td><input class="form-control" id="myInput" type="text" placeholder="Email.."></td>
-          <td><input class="form-control" id="myInput" type="text" placeholder="Dept.."></td>
-          <td><button type="button" class="btn btn-primary btn-sm">Add</button></td>
-        </tr>
-        </tbody>
-    </table>
   
   <p></p>
 </div>
@@ -602,6 +616,45 @@
             });
           });
         });
+
+
+
+
+        document.getElementById('addButton').addEventListener('click', function() {
+    // Get the values from the input fields
+    const firstname = document.getElementById('firstname').value;
+    const lastname = document.getElementById('lastname').value;
+    const email = document.getElementById('email').value;
+    const phoneNumber = document.getElementById('phone').value
+    const department = document.getElementById('department').value;
+
+    // Create an object to hold the data
+    const staffData = {
+        firstname: firstname,
+        lastname: lastname,
+        email: email,
+        phoneNumber: phoneNumber,
+        departmentId: department
+    };
+
+    // Send the data using the Fetch API
+    fetch('https://fsys-api.azurewebsites.net/api/employee', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(staffData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Success:', data);
+        alert('Staff added successfully!');
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+        alert('There was an error adding the staff.');
+    });
+});
         </script>
 </body>
 
