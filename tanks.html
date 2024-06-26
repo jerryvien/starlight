@@ -22,6 +22,74 @@
 
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .header {
+            background-color: #f4f4f4;
+            padding: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            display: flex;
+        }
+        .row {
+            display: flex;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .cell {
+            flex: 1;
+            text-align: center;
+            padding: 5px;
+        }
+        .header .cell {
+            flex: 1;
+            font-weight: bold;
+        }
+        .row:last-child {
+            border-bottom: none;
+        }
+        .status-active {
+            color: green;
+            font-weight: bold;
+        }
+        .status-low {
+            color: red;
+            font-weight: bold;
+        }
+        .button-container {
+            text-align: right;
+            padding: 10px;
+            background-color: #fff;
+        }
+        .add-button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        .add-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 
 </head>
 
@@ -256,8 +324,7 @@
                     </form>
 
                     <!-- Topbar Navbar -->
-                    <ul class="navbar-nav ml-auto">
-
+                    <ul class="navbar-nav ml-auto"
                         <!-- Nav Item - Search Dropdown (Visible Only XS) -->
                         <li class="nav-item dropdown no-arrow d-sm-none">
                             <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
@@ -435,7 +502,6 @@
 
                 </nav>
                 <!-- End of Topbar -->
-
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
@@ -447,63 +513,17 @@
                     </div>
 
                     <!-- Content Row -->
-                    <div class="row">
-                        <!-- Fuel Tanks Information -->
-                        <div class="col-xl-12 col-lg-12">
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Current Fuel Tanks</h6>
-                                </div>
-                                <div class="card-body">
-                                    <!-- Tank Details Table -->
-                                    <div class="table-responsive">
-                                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                            <thead>
-                                                <tr>
-                                                    <th>Tank ID</th>
-                                                    <th>Tank Name</th>
-                                                    <th>Capacity</th>
-                                                    <th>Current Level</th>
-                                                    <th>Status</th>
-                                                    <th>Temperature</th>
-                                                    <th>Humidity</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <!-- Example tank rows -->
-                                                <tr>
-                                                    <td>1</td>
-                                                    <td>Tank A</td>
-                                                    <td>1000 Liters</td>
-                                                    <td>700 Liters</td>
-                                                    <td>Active</td>
-                                                    <td>32 C</td>
-                                                    <td>500mmHg</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>2</td>
-                                                    <td>Tank B</td>
-                                                    <td>1500 Liters</td>
-                                                    <td>1200 Liters</td>
-                                                    <td>Active</td>
-                                                    <td>30 C</td>
-                                                    <td>600mmHg</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>3</td>
-                                                    <td>Tank C</td>
-                                                    <td>2000 Liters</td>
-                                                    <td>500 Liters</td>
-                                                    <td>Low</td>
-                                                    <td>33 C</td>
-                                                    <td>400mmHg</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="container">
+                        <div class="header">
+                            <div class="cell">Tank ID</div>
+                            <div class="cell">Tank Name</div>
+                            <div class="cell">Capacity</div>
+                            <div class="cell">Current Level</div>
+                            <div class="cell">Status</div>
+                            <div class="cell">Temperature</div>
+                            <div class="cell">Humidity</div>
                         </div>
+                        <div id="table-content"></div>
                     </div>
 
                     <!-- Add Tank Modal -->
@@ -586,7 +606,7 @@
             </div>
         </div>
     </div>
-
+    
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -605,7 +625,7 @@
     <script src="js/demo/chart-pie-demo.js"></script>
 
     <!-- Custom scripts for handling modal form submission -->
-    <script>
+     <script>
         $(document).ready(function () {
             $('#saveTankBtn').click(function () {
                 // Retrieve form values
@@ -635,7 +655,100 @@
                 }
             });
         });
-    </script>
+    </script> 
+    <script>
+    var firebaseConfig = {
+    apiKey: "AIzaSyB8smbF627Xh_zZiagvIPqrKaoSlDumTJ4",
+    authDomain: "fsms-48cb1.firebaseapp.com",
+    databaseURL: "https://fsms-48cb1-default-rtdb.firebaseio.com",
+    projectId: "fsms-48cb1",
+    storageBucket: "fsms-48cb1.appspot.com",
+    messagingSenderId: "693339377786",
+    appId: "1:693339377786:web:a363ef6c5edc94e3a86bc3",
+    measurementId: "G-VYE6B01M2N"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    var database = firebase.database();
+
+    var ref = database.ref('Humidity');
+    var tempRef = database.ref('Temperature');
+    var currentVolumeRef = database.ref('Volume');
+
+
+  function getTempData() {
+  return new Promise((resolve, reject) => {
+    tempRef.on('value', (snapshot) => {
+      const tempData = snapshot.val();
+      resolve(JSON.stringify(tempData));
+    }, (error) => {
+      reject(error);
+    });
+  });
+  }
+
+  function getVolumeData(){
+    return new Promise((resolve, reject) => {
+      currentVolumeRef.on('value', (snapshot)=>{
+        const volumeData = snapshot.val();
+        resolve(JSON.stringify(volumeData));
+      }, (error) => {
+        reject(error);
+      });
+    });
+  }
+
+  function gethumidityData(){
+    return new Promise((resolve, reject) =>{
+      ref.on('value', (snapshot)=>{
+        const humData = snapshot.val();
+        resolve(JSON.stringify(humData));
+      }, (error) => {
+        reject(error);
+      });
+    });
+  }
+
+async function callTemperatureHumidityVolume() {
+  console.log('calling');
+  const temp = await getTempData();
+  const humid = await gethumidityData();
+  const volume = await getVolumeData();
+
+  const temperatures = temp.split(",").map(item => item.split(":"));
+  const humidities = humid.split(",").map(item => item.split(":"));
+  const volumes = volume.split(",").map(item => item.split(":"));
+
+  
+  console.log(temperatures[1]);
+  console.log(humidities[1]);
+  console.log(volumes[1]);
+
+  console.log(temp.length);
+  console.log(humid.length);
+  console.log(volume.length);
+
+  let tableContent = '';
+  for (let i = 10; i < 21; i++) {
+    tableContent += `
+      <div class="row">
+        <div class="cell">${i}</div>
+        <div class="cell">TANK A</div>
+        <div class="cell">10000</div>
+        <div class="cell">${volumes[i+4]}</div>
+        <div class="cell">HIGH</div>
+        <div class="cell">${temperatures[i+4]}°C</div>
+        <div class="cell">${humidities[i+4]}</div>
+      </div>`;
+  }
+  document.getElementById('table-content').innerHTML = tableContent;
+}
+
+
+callTemperatureHumidityVolume();
+
+  </script>
 
 </body>
 

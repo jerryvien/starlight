@@ -465,7 +465,7 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                                 Petrol Sales</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">4250L</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="Sales" >4250L</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-gas-pump fa-3x"></i>
@@ -484,7 +484,7 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                                 Diesel Sales</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">3000L</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="" >3000L</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-gas-pump fa-3x"></i>
@@ -504,7 +504,7 @@
                                             </div>
                                             <div class="row no-gutters align-items-center">
                                                 <div class="col-auto">
-                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800 total-sales">7250L</div>
+                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800 total-sales" id="saledata"></div>
                                                 </div>
                                                 <div class="col">
                                                     
@@ -537,7 +537,7 @@
                             </div>
                         </div>
                     </div>
-
+                
                     <!-- Content Row -->
 
                     <div class="row">
@@ -910,6 +910,38 @@
     <script src="js/demo/chart-bar-demo.js"></script>
     <script src="js/demo/chart-area-demo.js"></script>
     <script src="js/demo/chart-pie-demo.js"></script>
+    <script>
+        var firebaseConfig = {
+        apiKey: "AIzaSyB8smbF627Xh_zZiagvIPqrKaoSlDumTJ4",
+        authDomain: "fsms-48cb1.firebaseapp.com",
+        databaseURL: "https://fsms-48cb1-default-rtdb.firebaseio.com",
+        projectId: "fsms-48cb1",
+        storageBucket: "fsms-48cb1.appspot.com",
+        messagingSenderId: "693339377786",
+        appId: "1:693339377786:web:a363ef6c5edc94e3a86bc3",
+        measurementId: "G-VYE6B01M2N"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+    
+        var database = firebase.database();
+    
+        // Reference to your data
+        var refSales = database.ref('Sales');
+       
+        refSales.on('value', (snapshot) => {
+          const salesData = snapshot.val();
+          document.getElementById('saledata').innerText = JSON.stringify(salesData, null, 2);
+        });
+
+       
+        
+      </script>
+
+	 
+
+
+
 
 </body>
 

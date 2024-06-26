@@ -464,13 +464,19 @@
         </div>
         <div class="form-group">
           <label>Weekly Assignments</label>
-          <p>1. Review and update project documentation<br>
-             2. Team meeting at 10 AM<br>
-             3. Client follow-up calls</p>
+          <textarea class="form-control" id="myInput" type="text" cols="4" rows="8" readonly autofocus></textarea>
         </div>
       </div>
     </div>
   </div>
+  <script>   // Retrieve the role from the URL parameters and set it in the input field
+    window.onload = function() {
+        const params = new URLSearchParams(window.location.search);
+        const role = params.get('role');
+        if (role) {
+            document.getElementById('myInput').value = role;
+        }
+    };</script>
 </body>
 </html>
 

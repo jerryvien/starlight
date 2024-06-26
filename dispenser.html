@@ -690,6 +690,8 @@
       <div class="card-body">
         <form id="purchaseFuelForm">
           <div class="form-group">
+            <textarea class="form-control" id="myInput" type="text" cols="" rows="3" readonly autofocus
+            style="width: 40vw;"></textarea>
             <label for="fuelAmount">Amount of Fuel (in Tsh)</label>
             <input
               type="number"
@@ -698,14 +700,7 @@
               required
             />
           </div>
-          <div class="form-group">
-            <label for="dispenserToPurchase">Select Dispenser</label>
-            <select
-              class="form-control dispenserDropdown"
-              id="dispenserToPurchase"
-              required
-            ></select>
-          </div>
+        
           <button type="submit" class="btn btn-primary">
             Purchase Fuel
           </button>
@@ -953,6 +948,52 @@
     // Initial population of the dropdown
     populateDispenserDropdown();
   </script>
+    <script>
+      var firebaseConfig = {
+      apiKey: "AIzaSyB8smbF627Xh_zZiagvIPqrKaoSlDumTJ4",
+      authDomain: "fsms-48cb1.firebaseapp.com",
+      databaseURL: "https://fsms-48cb1-default-rtdb.firebaseio.com",
+      projectId: "fsms-48cb1",
+      storageBucket: "fsms-48cb1.appspot.com",
+      messagingSenderId: "693339377786",
+      appId: "1:693339377786:web:a363ef6c5edc94e3a86bc3",
+      measurementId: "G-VYE6B01M2N"
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+  
+      var database = firebase.database();
+  
+      // Reference to your data
+      var refPrice = database.ref('Price');
+     
+  
+      refprice.on('value', (snapshot) => {
+        const data = snapshot.val();
+        document.getElementById('fuelAmount').innerText = JSON.stringify(data, null, 2);
+      });
+
+          
+   
+
+      // Update the price in Firebase when form is submitted
+      document.getElementById('purchaseFuelForm').addEventListener('submit', function (e) {
+        e.preventDefault(); // Prevent form from submitting the default way
+        const newPrice = document.getElementById('fuelAmount').value;
+        if (newPrice) {
+          refPrice.set(newPrice)
+            .then(() => {
+              alert('Price updated successfully!');
+            })
+            .catch((error) => {
+              console.error('Error updating price:', error);
+            });
+        } else {
+          alert('Please enter a valid price.');
+        }
+      });
+  </script>
+
   </body>
   </html>
   

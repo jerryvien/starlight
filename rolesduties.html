@@ -466,55 +466,18 @@
                           <td>#1</td>
                           <td>Accounts</td>
                           <td>Ayoub345@gmail.com</td>
-                          <td><input class="form-control" id="myInput" type="text" placeholder="Duty.."></td>
+                          <td><input class="form-control" id="accounts" type="text" placeholder="Duty.."></td>
                           <td><div class="container">
-                           <!-- Trigger the modal with a button -->
-                           <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">Add Instructions</button>
-                            <!-- Modal -->
-                            <div class="modal fade" id="myModal" role="dialog">
-                              <div class="modal-dialog modal-lg">
-                                <div class="modal-content">
-                                  <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    <h4 class="modal-title">SUBMISSION OF DEPARTMENT REPORTS DUE DATE SOON !!!</h4>
-                                  </div>
-                                  <div class="modal-body">
-                                    <input class="form-control" id="myInput" type="text" placeholder="add Emphasis on the Duty">
-                                  </div>
-                                  <div class="modal-footer">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">SEND</button>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
+                           <button type="button" onclick="sendRoles()" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">Add Instructions</button>
                           </div></td>
                         </tr>
                         <tr>
                             <td>#2</td>
                             <td>Marketing</td>
                             <td>Ayo45@gmail.com</td>
-                            <td><input class="form-control" id="myInput" type="text" placeholder="Duty.."></td>
+                            <td><input class="form-control" id="marketing" type="text" placeholder="Duty.."></td>
                             <td><div class="container">
-                                <!-- Trigger the modal with a button -->
-                            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">Add Instructions</button>
-                              
-                                <!-- Modal -->
-                                <div class="modal fade" id="myModal" role="dialog">
-                                  <div class="modal-dialog modal-lg">
-                                    <div class="modal-content">
-                                      <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                        <h4 class="modal-title">SUBMISSION OF DEPARTMENT REPORTS DUE DATE SOON !!!</h4>
-                                      </div>
-                                      <div class="modal-body">
-                                        <input class="form-control" id="myInput" type="text" placeholder="add Emphasis on the Duty">
-                                      </div>
-                                      <div class="modal-footer">
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">SEND</button>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
+                            <button type="button" onclick="sendRoles()" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">Add Instructions</button>
                               </div></td>
                           </tr>
                        
@@ -522,37 +485,13 @@
                             <td>#3</td>
                             <td>Procurement</td>
                             <td>A-r@gmail.com</td>
-                            <td><input class="form-control" id="myInput" type="text" placeholder="Duty.."></td>
+                            <td><input class="form-control" id="procurement" type="text" placeholder="Duty.."></td>
                             <td><div class="container">
-                                <!-- Trigger the modal with a button -->
-                            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">Add Instructions</button>
-                              
-                                <!-- Modal -->
-                                <div class="modal fade" id="myModal" role="dialog">
-                                  <div class="modal-dialog modal-lg">
-                                    <div class="modal-content">
-                                      <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                        <h4 class="modal-title">SUBMISSION OF DEPARTMENT REPORTS DUE DATE SOON !!!</h4>
-                                      </div>
-                                      <div class="modal-body">
-                                        <input class="form-control" id="myInput" type="text" placeholder="add Emphasis on the Duty">
-                                      </div>
-                                      <div class="modal-footer">
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">SEND</button>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
+                            <button type="button" onclick="sendRoles()" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">Add Instructions</button>
                               </div></td>
-                              
                           </tr>
                       </tbody>
                     </table>
-
-
-
-                 <!-- Footer -->
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
@@ -560,15 +499,8 @@
                     </div>
                 </div>
             </footer>
-            <!-- End of Footer -->
-
         </div>
-        <!-- End of Content Wrapper -->
-
     </div>
-    <!-- End of Page Wrapper -->
-
-    <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
@@ -592,6 +524,41 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function sendRoles(){
+                const accountingRoles = document.getElementById("accounts");                
+                const marketingRoles = document.getElementById("marketing");
+                const procurementRoles = document.getElementById("procurement");
+
+            if(accountingRoles.value !== ""){
+                fetch(`https://fsys-api.azurewebsites.net/api/roles`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ 
+                            employeeId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                            roles: ["accountingRoles.value"]
+                         })
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        console.log(`Assigned a role to the accounting department!`);
+                        document.window.reload();
+                    })
+                    .catch(error => {
+                        console.error('Error sending employee roles:', error);
+                    });
+            }else if(marketingRoles.value !== ""){
+                    console.log(marketingRoles.value);
+            }else if(procurementRoles.value !== ""){
+                    console.log(procurementRoles.value);
+            }
+        }
+    </script>
 
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
@@ -619,7 +586,45 @@
           });
         });
         </script>
+        <script>
+            document.getElementById('sendButton').addEventListener('click', function() {
+    // Capture the input value
+    const roleInput = document.getElementById('myInput').value;
 
+    // Prepare the payload
+    const payload = {
+        employeeId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        roles: [roleInput]
+    };
+
+    // Send data to the API endpoint
+    fetch('https://fsys-api.azurewebsites.net/api/roles', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify(payload)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Success:', data);
+        // Redirect to another page and pass the input value
+        window.location.href = `indexemployee.html?role=${encodeURIComponent(roleInput)}`;
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+        alert('Failed to submit data.');
+    });
+});
+
+        </script>
 </body>
+
 
 </html>
