@@ -10,6 +10,8 @@
     <meta name="author" content="">
 
     <title>FUEL STATION MANAGEMENT SYSTEM - Dashboard</title>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
 
     <!-- favicon for this website-->
     <link rel="icon" type="image/x-icon" href="/img/favicon_io/favicon-16x16.png">
@@ -504,7 +506,8 @@
                                             </div>
                                             <div class="row no-gutters align-items-center">
                                                 <div class="col-auto">
-                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800 total-sales" id="saledata"></div>
+                                                    <div id="total-sum"></div>
+                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800 total-sales" id="salesData"></div>
                                                 </div>
                                                 <div class="col">
                                                     
@@ -882,14 +885,14 @@
     </div>
 
     <!-- JavaScript Initialization -->
-<script>
-    $(document).ready(function(){
+<!-- <script>
+    document.ready(function(){
         $('.carousel').carousel({
             interval: 5000, // Interval between slides in milliseconds (5 seconds)
             wrap: true,
         });
     });
-</script>
+</script> -->
 
     <script src="js/script.js"></script>
 
@@ -910,6 +913,7 @@
     <script src="js/demo/chart-bar-demo.js"></script>
     <script src="js/demo/chart-area-demo.js"></script>
     <script src="js/demo/chart-pie-demo.js"></script>
+   >
     <script>
         var firebaseConfig = {
         apiKey: "AIzaSyB8smbF627Xh_zZiagvIPqrKaoSlDumTJ4",
@@ -928,13 +932,50 @@
     
         // Reference to your data
         var refSales = database.ref('Sales');
-       
-        refSales.on('value', (snapshot) => {
-          const salesData = snapshot.val();
-          document.getElementById('saledata').innerText = JSON.stringify(salesData, null, 2);
-        });
 
+        function getSalesData() {
+        return new Promise((resolve, reject) => {
+            refSales.on('value', (snapshot) => {
+            const salesData = snapshot.val();
+            resolve(JSON.stringify(salesData));
+            }, (error) => {
+            reject(error);
+            });
+        });
+        }
        
+    async function callSalesData() {
+      console.log('calling');
+      const sal = await getSalesData();
+    
+      var sales = sal.split(",").map(item => item.split(":"));
+    
+    const salesi = sal;
+      console.log(salesi[1]);
+      console.log(sal.length);
+      const salesData = {
+      "2024_06_16": {"17:10:58": 50, "17:24:35": 700},
+      "2024_06_26": {"21:30:26": 1000, "21:32:28": 100, "21:33:07": 1000, "21:33:42": 100, "21:38:23": 10, "21:41:14": 10, "21:41:43": 1000, "21:51:48": 100, "21:52:23": 100, "21:54:40": 100, "21:55:47": 1000, "21:57:05": 1000, "21:58:54": 1000, "22:37:28": 100, "22:38:41": 100, "22:39:07": 1000, "22:45:18": 1500, "22:50:27": 100, "22:52:14": 100, "22:52:50": 1500, "22:53:57": 500, "22:55:05": 2000}
+    };
+
+    let totalSum = 0;
+    
+
+      for (const date in salesData) {
+        for (const timestamp in salesData[date]) {
+          totalSum += salesData[date][timestamp];
+        }
+      }
+
+      document.getElementById('total-sum').innerText = totalSum;
+    }
+    callSalesData();  
+   
+
+    
+     
+    
+
         
       </script>
 
