@@ -9,7 +9,10 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Color Utilities</title>
+    <title>FUEL STATION MANAGEMENT SYSTEM - Dashboard</title>
+
+    <!-- favicon for this website-->
+    <link rel="icon" type="image/x-icon" href="/img/favicon_io/favicon-16x16.png">
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -19,8 +22,10 @@
 
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="indexemployee.css" rel="stylesheet">
 
 </head>
+
 
 <body id="page-top">
 
@@ -31,19 +36,24 @@
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-                <div class="sidebar-brand-icon rotate-n-15">
-                    <i class="fas fa-laugh-wink"></i>
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="indexemployee.html">
+                <!-- <div class="sidebar-brand-icon rotate-n-0">
+                    <img src="/img/Logo3.png" alt="Calendar Icon">
+                </div> -->
+
+                <div class="sidebar-brand-icon rotate-n-0">
+                    <img src="/img/logo3.png" alt="FSMS LOGO">
                 </div>
-                <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
+                
+                <div class="sidebar-brand-text mx-3">FSMS</div>
             </a>
 
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
 
             <!-- Nav Item - Dashboard -->
-            <li class="nav-item">
-                <a class="nav-link" href="index.html">
+            <li class="nav-item active">
+                <a class="nav-link" href="indexemployee.html">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
@@ -51,88 +61,109 @@
             <!-- Divider -->
             <hr class="sidebar-divider">
 
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Interface
-            </div>
+           
 
-            <!-- Nav Item - Pages Collapse Menu -->
+            <!-- Nav Item - Information -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Components</span>
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseInformation"
+                    aria-expanded="true" aria-controls="collapseInformation">
+                    <i class="fas fa-fw fa-list-alt"></i>
+                    <span>Information</span>
                 </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div id="collapseInformation" class="collapse" aria-labelledby="headingInformation" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Components:</h6>
-                        <a class="collapse-item" href="buttons.html">Buttons</a>
-                        <a class="collapse-item" href="cards.html">Cards</a>
+                        <h6 class="collapse-header">Day-to-Day Activities:</h6>
+                        <a class="collapse-item" href="newsevents.html">News & Events</a>
+                        <a class="collapse-item" href="promotionads.html">Promotion & Ads</a>
                     </div>
                 </div>
             </li>
 
-            <!-- Nav Item - Utilities Collapse Menu -->
-            <li class="nav-item active">
-                <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-                    aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-fw fa-wrench"></i>
+             <!-- Nav Item - Utilities Collapse Menu -->
+             <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilitiesnew"
+                    aria-expanded="true" aria-controls="collapseUtilitiesnew">
+                    <i class="fas fa-fw fa-toolbox"></i>
                     <span>Utilities</span>
                 </a>
-                <div id="collapseUtilities" class="collapse show" aria-labelledby="headingUtilities"
+                <div id="collapseUtilitiesnew" class="collapse" aria-labelledby="headingUtilitiesnew"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Utilities:</h6>
-                        <a class="collapse-item active" href="utilities-color.html">Colors</a>
-                        <a class="collapse-item" href="utilities-border.html">Borders</a>
-                        <a class="collapse-item" href="utilities-animation.html">Animations</a>
-                        <a class="collapse-item" href="utilities-other.html">Other</a>
+                        <h6 class="collapse-header">Current Utilities:</h6>
+                        
+                        <a class="collapse-item" href="utilities-carwash.html">Car wash</a>
+                        <a class="collapse-item" href="utilities-Supermarket.html">Supermarket</a>
+                       
                     </div>
                 </div>
             </li>
 
             <!-- Divider -->
+            <hr class="sidebar-divider d-none d-md-block">
+
+
+            
+            <!-- Divider -->
             <hr class="sidebar-divider">
 
             <!-- Heading -->
             <div class="sidebar-heading">
-                Addons
+                Other Sites
             </div>
 
-            <!-- Nav Item - Pages Collapse Menu -->
+            <!-- Nav Item - Other Sites -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
-                    aria-expanded="true" aria-controls="collapsePages">
-                    <i class="fas fa-fw fa-folder"></i>
-                    <span>Pages</span>
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSites"
+                    aria-expanded="true" aria-controls="collapseSites">
+                    <i class="fas fa-fw fa-globe"></i>
+                    <span>Sites</span>
                 </a>
-                <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                <div id="collapseSites" class="collapse" aria-labelledby="headingSites" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Login Screens:</h6>
-                        <a class="collapse-item" href="login.html">Login</a>
-                        <a class="collapse-item" href="register.html">Register</a>
-                        <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
-                        <div class="collapse-divider"></div>
-                        <h6 class="collapse-header">Other Pages:</h6>
-                        <a class="collapse-item" href="404.html">404 Page</a>
-                        <a class="collapse-item" href="blank.html">Blank Page</a>
+                        <h6 class="collapse-header">Also Visit:</h6>
+                        <a class="collapse-item" href="https://www.ewura.go.tz/"><img src="/img/ewura logo.jpeg" height="20px" width="20px" alt="Ewura Logo"> Ewura</a>
+                        <a class="collapse-item" href="https://tpdc.co.tz/"><img src="/img/tpdclogo.png" height="20px" width="20px" alt="TPDC Logo"> TPDC</a>
+                        <a class="collapse-item" href="https://www.tra.go.tz/"><img src="/img/tralogo.png" height="20px" width="20px" alt="TRA Logo"> TRA</a>
+                        <a class="collapse-item" href="https://www.ports.go.tz/index.php/en/"><img src="/img/tpalogo.png" height="20px" width="20px" alt="TPA Logo"> TPA</a>
                     </div>
                 </div>
             </li>
-
+            
             <!-- Nav Item - Charts -->
             <li class="nav-item">
-                <a class="nav-link" href="charts.html">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Charts</span></a>
+                <a class="nav-link" href="contactus.html">
+                    <i class="fas fa-fw fa-envelope"></i>
+                    <span>Contact Us</span></a>
             </li>
 
-            <!-- Nav Item - Tables -->
-            <li class="nav-item">
-                <a class="nav-link" href="tables.html">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Tables</span></a>
-            </li>
+            <!-- Nav Item - Location -->
+<li class="nav-item">
+    <a class="nav-link" href="location.html">
+        <i class="fas fa-fw fa-map-pin"></i>
+        <span>Our Location</span>
+    </a>
+</li>
+
+<div class="sidebar-card d-none d-lg-flex">
+<!-- Card for displaying location -->
+<div class="card mt-3">
+    <div class="card-body">
+        <!-- Embed Google Maps iframe -->
+        <iframe src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d3425.798878106095!2d39.23990865169944!3d-6.7721390575470695!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2stz!4v1718138276856!5m2!1sen!2stz" 
+                width="100%" 
+                height="90" 
+                style="border:0;"    
+                allowfullscreen="" 
+                loading="lazy">
+        </iframe>    
+    </div>
+</div>
+</div>
+
+            
+
+            <!-- Divider -->
+            <hr class="sidebar-divider d-none d-md-block">
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -141,6 +172,8 @@
             <div class="text-center d-none d-md-inline">
                 <button class="rounded-circle border-0" id="sidebarToggle"></button>
             </div>
+
+            
 
         </ul>
         <!-- End of Sidebar -->
@@ -221,8 +254,8 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <div class="small text-gray-500">December 12, 2019</div>
-                                        <span class="font-weight-bold">A new monthly report is ready to download!</span>
+                                        <div class="small text-gray-500">Important 🚨 : December 12, 2024</div>
+                                        <span class="font-weight-bold">Annual Target deadline is due soon.</span>
                                     </div>
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
@@ -232,8 +265,8 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <div class="small text-gray-500">December 7, 2019</div>
-                                        $290.29 has been deposited into your account!
+                                        <div class="small text-gray-500">Salary ✔ : December 7, 2024</div>
+                                        5,000,000TSH has been deposited into your account! 
                                     </div>
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
@@ -243,8 +276,8 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <div class="small text-gray-500">December 2, 2019</div>
-                                        Spending Alert: We've noticed unusually high spending for your account.
+                                        <div class="small text-gray-500">Reminder ⏰ : December 2, 2024</div>
+                                        Department meeting in 2 hours (3:00pm EAT)
                                     </div>
                                 </a>
                                 <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
@@ -257,7 +290,7 @@
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-envelope fa-fw"></i>
                                 <!-- Counter - Messages -->
-                                <span class="badge badge-danger badge-counter">7</span>
+                                <span class="badge badge-danger badge-counter">1</span>
                             </a>
                             <!-- Dropdown - Messages -->
                             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -265,52 +298,48 @@
                                 <h6 class="dropdown-header">
                                     Message Center
                                 </h6>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                <a class="dropdown-item d-flex align-items-center" href="employreport.html">
                                     <div class="dropdown-list-image mr-3">
                                         <img class="rounded-circle" src="img/undraw_profile_1.svg"
                                             alt="...">
                                         <div class="status-indicator bg-success"></div>
                                     </div>
                                     <div class="font-weight-bold">
-                                        <div class="text-truncate">Hi there! I am wondering if you can help me with a
-                                            problem I've been having.</div>
-                                        <div class="small text-gray-500">Emily Fowler · 58m</div>
+                                        <div class="text-truncate">Hi there! Any challenges so far?</div>
+                                        <div class="small text-gray-500">Glory Leonard · 58m</div>
                                     </div>
                                 </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                <a class="dropdown-item d-flex align-items-center" href="employreport.html">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_2.svg"
+                                        <img class="rounded-circle" src="img/undraw_profile_3.svg"
                                             alt="...">
                                         <div class="status-indicator"></div>
                                     </div>
                                     <div>
-                                        <div class="text-truncate">I have the photos that you ordered last month, how
-                                            would you like them sent to you?</div>
-                                        <div class="small text-gray-500">Jae Chun · 1d</div>
+                                        <div class="text-truncate">Can you brief me about the meeting?</div>
+                                        <div class="small text-gray-500">John Innocent · 1d</div>
                                     </div>
                                 </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                <a class="dropdown-item d-flex align-items-center" href="employreport.html">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_3.svg"
+                                        <img class="rounded-circle" src="img/undraw_profile_2.svg"
                                             alt="...">
                                         <div class="status-indicator bg-warning"></div>
                                     </div>
                                     <div>
-                                        <div class="text-truncate">Last month's report looks great, I am very happy with
-                                            the progress so far, keep up the good work!</div>
-                                        <div class="small text-gray-500">Morgan Alvarez · 2d</div>
+                                        <div class="text-truncate">Great progress, keep up the good work!</div>
+                                        <div class="small text-gray-500">Manager · 2d</div>
                                     </div>
                                 </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                <a class="dropdown-item d-flex align-items-center" href="employreport.html">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="https://source.unsplash.com/Mv9hjnEUHR4/60x60"
+                                        <img class="rounded-circle" src="img/bolt logo.png"
                                             alt="...">
                                         <div class="status-indicator bg-success"></div>
                                     </div>
                                     <div>
-                                        <div class="text-truncate">Am I a good boy? The reason I ask is because someone
-                                            told me that people say this to all dogs, even if they aren't good...</div>
-                                        <div class="small text-gray-500">Chicken the Dog · 2w</div>
+                                        <div class="text-truncate">Your trip on Sunday. Thanks for choosing Bolt ...</div>
+                                        <div class="small text-gray-500">BOLT TZ · 2w</div>
                                     </div>
                                 </a>
                                 <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
@@ -323,14 +352,14 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small" id="msg">Petro Abdulqadir</span>
                                 <img class="img-profile rounded-circle"
                                     src="img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="profile.html">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
                                 </a>
@@ -355,112 +384,110 @@
                 </nav>
                 <!-- End of Topbar -->
 
-                <!-- Begin Page Content -->
+                <!-- Main Content Here -->
                 <div class="container-fluid">
 
-                    <!-- Page Heading -->
-                    <h1 class="h3 mb-1 text-gray-800">Color Utilities</h1>
-                    <p class="mb-4">Bootstrap's default utility classes can be found on the official <a
-                            href="https://getbootstrap.com/docs">Bootstrap Documentation</a> page. The custom utilities
-                        below were created to extend this theme past the default utility classes built into Bootstrap's
-                        framework.</p>
-
-                    <!-- Content Row -->
-                    <div class="row">
-
-                        <!-- First Column -->
-                        <div class="col-lg-4">
-
-                            <!-- Custom Text Color Utilities -->
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Custom Text Color Utilities</h6>
-                                </div>
-                                <div class="card-body">
-                                    <p class="text-gray-100 p-3 bg-dark m-0">.text-gray-100</p>
-                                    <p class="text-gray-200 p-3 bg-dark m-0">.text-gray-200</p>
-                                    <p class="text-gray-300 p-3 bg-dark m-0">.text-gray-300</p>
-                                    <p class="text-gray-400 p-3 bg-dark m-0">.text-gray-400</p>
-                                    <p class="text-gray-500 p-3 m-0">.text-gray-500</p>
-                                    <p class="text-gray-600 p-3 m-0">.text-gray-600</p>
-                                    <p class="text-gray-700 p-3 m-0">.text-gray-700</p>
-                                    <p class="text-gray-800 p-3 m-0">.text-gray-800</p>
-                                    <p class="text-gray-900 p-3 m-0">.text-gray-900</p>
-                                </div>
-                            </div>
-
-                            <!-- Custom Font Size Utilities -->
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Custom Font Size Utilities</h6>
-                                </div>
-                                <div class="card-body">
-                                    <p class="text-xs">.text-xs</p>
-                                    <p class="text-lg mb-0">.text-lg</p>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <!-- Second Column -->
-                        <div class="col-lg-4">
-
-                            <!-- Background Gradient Utilities -->
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Custom Background Gradient Utilities
-                                    </h6>
-                                </div>
-                                <div class="card-body">
-                                    <div class="px-3 py-5 bg-gradient-primary text-white">.bg-gradient-primary</div>
-                                    <div class="px-3 py-5 bg-gradient-secondary text-white">.bg-gradient-secondary</div>
-                                    <div class="px-3 py-5 bg-gradient-success text-white">.bg-gradient-success</div>
-                                    <div class="px-3 py-5 bg-gradient-info text-white">.bg-gradient-info</div>
-                                    <div class="px-3 py-5 bg-gradient-warning text-white">.bg-gradient-warning</div>
-                                    <div class="px-3 py-5 bg-gradient-danger text-white">.bg-gradient-danger</div>
-                                    <div class="px-3 py-5 bg-gradient-light text-white">.bg-gradient-light</div>
-                                    <div class="px-3 py-5 bg-gradient-dark text-white">.bg-gradient-dark</div>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <!-- Third Column -->
-                        <div class="col-lg-4">
-
-                            <!-- Grayscale Utilities -->
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Custom Grayscale Background Utilities
-                                    </h6>
-                                </div>
-                                <div class="card-body">
-                                    <div class="p-3 bg-gray-100">.bg-gray-100</div>
-                                    <div class="p-3 bg-gray-200">.bg-gray-200</div>
-                                    <div class="p-3 bg-gray-300">.bg-gray-300</div>
-                                    <div class="p-3 bg-gray-400">.bg-gray-400</div>
-                                    <div class="p-3 bg-gray-500 text-white">.bg-gray-500</div>
-                                    <div class="p-3 bg-gray-600 text-white">.bg-gray-600</div>
-                                    <div class="p-3 bg-gray-700 text-white">.bg-gray-700</div>
-                                    <div class="p-3 bg-gray-800 text-white">.bg-gray-800</div>
-                                    <div class="p-3 bg-gray-900 text-white">.bg-gray-900</div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
+                <!-- Page Heading -->
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <h1 class="h3 mb-0 text-gray-800">Employee's Dashboard</h1>
                 </div>
-                <!-- /.container-fluid -->
 
-            </div>
-            <!-- End of Main Content -->
+                <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Employee Page</title>
+  
+</head>
+<body>
+  <div class="container">
+    <!-- Welcome Poster -->
+    <div class="welcome-poster">
+      <h1 id="welcome">Welcome, David!</h1>
+      <p>We are excited to have you on our team...</p>
+    </div>
 
-            <!-- Footer -->
+    <!-- User Credentials -->
+    <div class="card">
+      <div class="card-header">
+        Employee's Profile
+      </div>
+      <div class="card-body">
+        <div class="form-group">
+          <label>Full Name</label>
+          <p id="fullname">Davi</p>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <p id="email">daveee</p>
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <p>+255 674 373 436</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Long Term Targets -->
+    <div class="card">
+      <div class="card-header">
+        Targets
+      </div>
+      <div class="card-body">
+        <div class="form-group">
+          <label>Yearly Targets</label>
+          <p>1. Complete project XYZ<br>
+             2. Reach out to 50 potential clients<br>
+             3. Attend at least 3 industry webinars</p>
+        </div>
+        <div class="form-group">
+          <label>Monthly Targets</label>
+          <p>1. Complete project XYZ<br>
+             2. Reach out to 50 potential clients<br>
+             3. Attend at least 3 industry webinars</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Daily Assignments -->
+    <div class="card">
+      <div class="card-header">
+        Task Assigned
+      </div>
+      <div class="card-body">
+        <div class="form-group">
+          <label>Daily Assignments</label>
+          <p>1. Review and update project documentation<br>
+             2. Team meeting at 10 AM<br>
+             3. Client follow-up calls</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>   // Retrieve the role from the URL parameters and set it in the input field
+    window.onload = function() {
+        const params = new URLSearchParams(window.location.search);
+        const role = params.get('role');
+        if (role) {
+            document.getElementById('myInput').value = role;
+        }
+    };</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+                <!-- Footer -->
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2020</span>
+                        <span>Copyright &copy; FSMS 2024. All Rights Reserved</span>
                     </div>
                 </div>
             </footer>
@@ -477,6 +504,8 @@
         <i class="fas fa-angle-up"></i>
     </a>
 
+    
+
     <!-- Logout Modal-->
     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
@@ -491,11 +520,48 @@
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+                    <a class="btn btn-primary" href="login.html" id="signoutbutton">Logout</a>
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+
+        let UserCreds = JSON.parse(sessionStorage.getItem("user-creds"));
+        let UserInfo = JSON.parse(sessionStorage.getItem("user-info"));
+
+        let Welcome = document.getElementById('welcome');
+        let Fullname = document.getElementById('fullname');
+        let MsgHead = document.getElementById('msg');
+        let GreetHead = document.getElementById('email');
+        let SignoutBtn = document.getElementById('signoutbutton');
+
+        let Signout = () => {
+            sessionStorage.removeItem("user-creds");
+            sessionStorage.removeItem("user-info");
+            window.location.href = 'login.html';
+        }
+
+        let CheckCred = () => {
+            // Check if the user is NOT logged in and redirect to login page
+            if (!sessionStorage.getItem("user-creds")) {
+                window.location.href = 'login.html';
+            } else {
+                MsgHead.innerText =  `${UserInfo.firstname} ${UserInfo.lastname}`;
+                Fullname.innerText =  `${UserInfo.firstname} ${UserInfo.lastname}`;
+                Welcome.innerText =  `Welcome ${UserInfo.firstname}`;
+                GreetHead.innerText =  `${UserCreds.email}`;
+            }
+        }
+
+        // Call the CheckCred function to verify credentials and update the DOM
+        CheckCred();
+
+        // Add the event listener for the signout button
+        SignoutBtn.addEventListener('click', Signout);
+
+    </script>
 
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
@@ -506,6 +572,9 @@
 
     <!-- Custom scripts for all pages-->
     <script src="js/sb-admin-2.min.js"></script>
+
+    <!-- Page level plugins -->
+    <script src="vendor/chart.js/Chart.min.js"></script>
 
 </body>
 

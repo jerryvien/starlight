@@ -1,0 +1,27 @@
+  #content {
+        padding-top: 50px; /* Add some space from the top */
+    }
+    
+    .contact-form {
+        background-color: #f9f9f9;
+        padding: 30px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .contact-form h3 {
+        margin-bottom: 20px;
+    }
+    
+    /* Contact Information */
+    .contact-info {
+        background-color: #f9f9f9;
+        padding: 30px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .contact-info h3 {
+        margin-bottom: 20px;
+    }
+

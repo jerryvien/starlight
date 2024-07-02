@@ -1865,16 +1865,16 @@
   }
 
   /*
-   * Helper to detect borders of a given element
+   * Helper to detect carwash of a given element
    * @method
    * @memberof Popper.Utils
    * @param {CSSStyleDeclaration} styles
    * Result of `getStyleComputedProperty` on the given element
    * @param {String} axis - `x` or `y`
-   * @return {number} borders - The borders size of the given axis
+   * @return {number} carwash - The carwash size of the given axis
    */
 
-  function getBordersSize(styles, axis) {
+  function getcarwashSize(styles, axis) {
     var sideA = axis === 'x' ? 'Left' : 'Top';
     var sideB = sideA === 'Left' ? 'Right' : 'Bottom';
 
@@ -2013,8 +2013,8 @@
     // we make this check conditional for performance reasons
     if (horizScrollbar || vertScrollbar) {
       var styles = getStyleComputedProperty(element);
-      horizScrollbar -= getBordersSize(styles, 'x');
-      vertScrollbar -= getBordersSize(styles, 'y');
+      horizScrollbar -= getcarwashSize(styles, 'x');
+      vertScrollbar -= getcarwashSize(styles, 'y');
 
       result.width -= horizScrollbar;
       result.height -= vertScrollbar;
@@ -2996,8 +2996,8 @@
     // take popper margin in account because we don't have this info available
     var css = getStyleComputedProperty(data.instance.popper);
     var popperMarginSide = parseFloat(css['margin' + sideCapitalized]);
-    var popperBorderSide = parseFloat(css['border' + sideCapitalized + 'Width']);
-    var sideValue = center - data.offsets.popper[side] - popperMarginSide - popperBorderSide;
+    var poppercarwashide = parseFloat(css['border' + sideCapitalized + 'Width']);
+    var sideValue = center - data.offsets.popper[side] - popperMarginSide - poppercarwashide;
 
     // prevent arrowElement from being placed not contiguously to its popper
     sideValue = Math.max(Math.min(popper[len] - arrowElementSize, sideValue), 0);
