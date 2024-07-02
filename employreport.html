@@ -13,6 +13,8 @@
 
     <!-- favicon for this website-->
     <link rel="icon" type="image/x-icon" href="/img/favicon_io/favicon-16x16.png">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -42,7 +44,7 @@
                 <div class="sidebar-brand-icon rotate-n-0">
                     <img src="/img/logo3.png" alt="FSMS LOGO">
                 </div>
-                
+
                 <div class="sidebar-brand-text mx-3">FSMS</div>
             </a>
 
@@ -64,22 +66,22 @@
                 Interface
             </div>
 
-             <!-- Nav Item - Sales -->
-             <li class="nav-item">
+            <!-- Nav Item - Sales -->
+            <li class="nav-item">
                 <a class="nav-link" href="sales.html">
                     <i class="fas fa-fw fa-credit-card"></i>
                     <span>Sales</span></a>
             </li>
 
-             <!-- Nav Item - Dispensers -->
-             <li class="nav-item">
+            <!-- Nav Item - Dispensers -->
+            <li class="nav-item">
                 <a class="nav-link" href="dispenser.html">
                     <i class="fas fa-fw fa-gas-pump"></i>
                     <span>Dispensers</span></a>
             </li>
 
-             <!-- Nav Item - Tanks -->
-             <li class="nav-item">
+            <!-- Nav Item - Tanks -->
+            <li class="nav-item">
                 <a class="nav-link" href="tanks.html">
                     <i class="fas fa-fw fa-drum-steelpan"></i>
                     <span>Tanks</span></a>
@@ -95,9 +97,9 @@
             <div class="sidebar-heading">
                 Updates
             </div>
-            
-             <!-- Nav Item - Users -->
-             <li class="nav-item">
+
+            <!-- Nav Item - Users -->
+            <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUser"
                     aria-expanded="true" aria-controls="collapseUser">
                     <i class="fas fa-fw fa-users"></i>
@@ -120,7 +122,8 @@
                     <i class="fas fa-fw fa-list-alt"></i>
                     <span>Information</span>
                 </a>
-                <div id="collapseInformation" class="collapse" aria-labelledby="headingInformation" data-parent="#accordionSidebar">
+                <div id="collapseInformation" class="collapse" aria-labelledby="headingInformation"
+                    data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Day-to-Day Activities:</h6>
                         <a class="collapse-item" href="employreport.html">Employees Report</a>
@@ -131,8 +134,8 @@
                 </div>
             </li>
 
-             <!-- Nav Item - Utilities Collapse Menu -->
-             <li class="nav-item">
+            <!-- Nav Item - Utilities Collapse Menu -->
+            <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilitiesnew"
                     aria-expanded="true" aria-controls="collapseUtilitiesnew">
                     <i class="fas fa-fw fa-toolbox"></i>
@@ -154,7 +157,7 @@
             <hr class="sidebar-divider d-none d-md-block">
 
 
-            
+
             <!-- Divider -->
             <hr class="sidebar-divider">
 
@@ -173,10 +176,14 @@
                 <div id="collapseSites" class="collapse" aria-labelledby="headingSites" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Also Visit:</h6>
-                        <a class="collapse-item" href="https://www.ewura.go.tz/"><img src="/img/ewura logo.jpeg" height="20px" width="20px" alt="Ewura Logo"> Ewura</a>
-                        <a class="collapse-item" href="https://tpdc.co.tz/"><img src="/img/tpdclogo.png" height="20px" width="20px" alt="TPDC Logo"> TPDC</a>
-                        <a class="collapse-item" href="https://www.tra.go.tz/"><img src="/img/tralogo.png" height="20px" width="20px" alt="TRA Logo"> TRA</a>
-                        <a class="collapse-item" href="https://www.ports.go.tz/index.php/en/"><img src="/img/tpalogo.png" height="20px" width="20px" alt="TPA Logo"> TPA</a>
+                        <a class="collapse-item" href="https://www.ewura.go.tz/"><img src="/img/ewura logo.jpeg"
+                                height="20px" width="20px" alt="Ewura Logo"> Ewura</a>
+                        <a class="collapse-item" href="https://tpdc.co.tz/"><img src="/img/tpdclogo.png" height="20px"
+                                width="20px" alt="TPDC Logo"> TPDC</a>
+                        <a class="collapse-item" href="https://www.tra.go.tz/"><img src="/img/tralogo.png" height="20px"
+                                width="20px" alt="TRA Logo"> TRA</a>
+                        <a class="collapse-item" href="https://www.ports.go.tz/index.php/en/"><img
+                                src="/img/tpalogo.png" height="20px" width="20px" alt="TPA Logo"> TPA</a>
                     </div>
                 </div>
             </li>
@@ -189,30 +196,27 @@
             </li>
 
             <!-- Nav Item - Location -->
-<li class="nav-item">
-    <a class="nav-link" href="location.html">
-        <i class="fas fa-fw fa-map-pin"></i>
-        <span>Our Location</span>
-    </a>
-</li>
+            <li class="nav-item">
+                <a class="nav-link" href="location.html">
+                    <i class="fas fa-fw fa-map-pin"></i>
+                    <span>Our Location</span>
+                </a>
+            </li>
 
-<div class="sidebar-card d-none d-lg-flex">
-<!-- Card for displaying location -->
-<div class="card mt-3">
-    <div class="card-body">
-        <!-- Embed Google Maps iframe -->
-        <iframe src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d3425.798878106095!2d39.23990865169944!3d-6.7721390575470695!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2stz!4v1718138276856!5m2!1sen!2stz" 
-                width="100%" 
-                height="90" 
-                style="border:0;"    
-                allowfullscreen="" 
-                loading="lazy">
-        </iframe>    
-    </div>
-</div>
-</div>
+            <div class="sidebar-card d-none d-lg-flex">
+                <!-- Card for displaying location -->
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <!-- Embed Google Maps iframe -->
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d3425.798878106095!2d39.23990865169944!3d-6.7721390575470695!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2stz!4v1718138276856!5m2!1sen!2stz"
+                            width="100%" height="90" style="border:0;" allowfullscreen="" loading="lazy">
+                        </iframe>
+                    </div>
+                </div>
+            </div>
 
-            
+
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -349,8 +353,7 @@
                                 </h6>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_1.svg"
-                                            alt="...">
+                                        <img class="rounded-circle" src="img/undraw_profile_1.svg" alt="...">
                                         <div class="status-indicator bg-success"></div>
                                     </div>
                                     <div class="font-weight-bold">
@@ -361,20 +364,19 @@
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_2.svg"
-                                            alt="...">
+                                        <img class="rounded-circle" src="img/undraw_profile_2.svg" alt="...">
                                         <div class="status-indicator"></div>
                                     </div>
                                     <div>
-                                        <div class="text-truncate">I have the CV letters that you ordered last month, how
+                                        <div class="text-truncate">I have the CV letters that you ordered last month,
+                                            how
                                             would you like them sent to you?</div>
                                         <div class="small text-gray-500">Enock Chami · 1d</div>
                                     </div>
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_3.svg"
-                                            alt="...">
+                                        <img class="rounded-circle" src="img/undraw_profile_3.svg" alt="...">
                                         <div class="status-indicator bg-warning"></div>
                                     </div>
                                     <div>
@@ -385,12 +387,13 @@
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="employreport.html">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/piki logo.png"
-                                            alt="...">
+                                        <img class="rounded-circle" src="img/piki logo.png" alt="...">
                                         <div class="status-indicator bg-success"></div>
                                     </div>
                                     <div>
-                                        <div class="text-truncate">How would you like your employees to have as dinner and breakfast?In order to customize our delivery services to the maximum efficient...</div>
+                                        <div class="text-truncate">How would you like your employees to have as dinner
+                                            and breakfast?In order to customize our delivery services to the maximum
+                                            efficient...</div>
                                         <div class="small text-gray-500">PIKI TZ · 2w</div>
                                     </div>
                                 </a>
@@ -405,8 +408,7 @@
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">David Shuma</span>
-                                <img class="img-profile rounded-circle"
-                                    src="img/undraw_profile.svg">
+                                <img class="img-profile rounded-circle" src="img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -443,210 +445,263 @@
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">FSMS Employees Records</h1>
-                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#myModal" onclick="generateReport()"><i
-                            class="fas fa-download fa-sm text-white-50 ms-5" ></i> Generate Employee Report</a>
-                    
-
-                 <!-- Trigger the modal with a button -->
-                 <!--<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">GENERATE EMPLOYEE REPORT</button>-->
-                 
-                                 
+                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
+                            data-toggle="modal" data-target="#myModal" onclick="generateReport()"><i
+                                class="fas fa-download fa-sm text-white-50 ms-5"></i> Generate Employee Report</a>
 
 
-                <div class="modal fade" id="myModal" role="dialog">
-                    <div class="modal-dialog modal-lg">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <button type="button" class="close" data-dismiss="modal">&times;</button>
-                          <h4 class="modal-title">WEEKLY EMPLOYEE PERFORMANCE</h4>
-                        </div>
-                        <div class="modal-body">
-                            <label for="name">Name</label>
-                          <input class="form-control" id="myInput" type="text" placeholder="Enter Name">
-                        </div>
-                        <div class="modal-body">
-                            <label for="department">Department</label>
-                          <input class="form-control" id="myInput" type="text" placeholder="Enter Department">
-                        </div>
-                        <div class="modal-body">
-                            <label for="Week No">Week</label>
-                          <input class="form-control" id="myInput" type="text" placeholder="Enter weeek duration">
-                        </div>
-                        <div class="modal-body">
-                            <label for="punctuality">Shift Adherence</label>
-                          <input class="form-control" id="myInput" type="text" placeholder="Grade from A to E">
-                        </div>
-                        <div class="modal-body">
-                            <label for="Task">Task completion</label>
-                          <input class="form-control" id="myInput" type="text" placeholder="Grade from A to E">
-                        </div>
-                        <div class="modal-body">
-                            <label for="CS">Customer Services</label>
-                          <input class="form-control" id="myInput" type="text" placeholder="Grade from A to E">
-                        </div>
-                        <div class="modal-body">
-                            <label for="Team">Team Collaboration</label>
-                          <input class="form-control" id="myInput" type="text" placeholder="Grade from A to E">
-                        </div>
-                        <div class="modal-body">
-                            <label for="accuracy">Efficiency and Productivity</label>
-                          <input class="form-control" id="myInput" type="text" placeholder="Grade from A to E">
-                        </div>
-                        <div class="modal-body">
-                            <label for="solver">Innovation</label>
-                          <input class="form-control" id="myInput" type="text" placeholder="Grade from A to E">
-                        </div>
-                        
-                        <div class="modal-body">
-                            <label for="eagerness">Skills improvement</label>
-                          <input class="form-control" id="myInput" type="text" placeholder="Grade from A to E">
-                        </div>
-                        <div class="modal-body">
-                            <label for="email">Email</label>
-                          <input class="form-control" id="myInput" type="text" placeholder="enter employee email">
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Save</button>
+                        <!-- Trigger the modal with a button -->
+                        <!--<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">GENERATE EMPLOYEE REPORT</button>-->
+
+
+
+
+                        <div class="modal fade" id="myModal" role="dialog">
+                            <div class="modal-dialog modal-lg">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                  <h4 class="modal-title">WEEKLY EMPLOYEE PERFORMANCE</h4>
+                                </div>
+                                <div class="modal-body">
+                                  <label for="name">Name</label>
+                                  <input class="form-control" id="name" type="text" placeholder="Enter Name">
+                                </div>
+                                <div class="modal-body">
+                                  <label for="department">Department</label>
+                                  <input class="form-control" id="department" type="text" placeholder="Enter Department">
+                                </div>
+                                <div class="modal-body">
+                                  <label for="week">Week</label>
+                                  <input class="form-control" id="week" type="text" placeholder="Enter week duration">
+                                </div>
+                                <div class="modal-body">
+                                  <label for="shiftAdherence">Shift Adherence</label>
+                                  <input class="form-control" id="shiftAdherence" type="text" placeholder="Grade from A to E">
+                                </div>
+                                <div class="modal-body">
+                                  <label for="taskCompletion">Task Completion</label>
+                                  <input class="form-control" id="taskCompletion" type="text" placeholder="Grade from A to E">
+                                </div>
+                                <div class="modal-body">
+                                  <label for="customerService">Customer Services</label>
+                                  <input class="form-control" id="customerService" type="text" placeholder="Grade from A to E">
+                                </div>
+                                <div class="modal-body">
+                                  <label for="teamCollaboration">Team Collaboration</label>
+                                  <input class="form-control" id="teamCollaboration" type="text" placeholder="Grade from A to E">
+                                </div>
+                                <div class="modal-body">
+                                  <label for="efficiencyProductivity">Efficiency and Productivity</label>
+                                  <input class="form-control" id="efficiencyProductivity" type="text" placeholder="Grade from A to E">
+                                </div>
+                                <div class="modal-body">
+                                  <label for="innovation">Innovation</label>
+                                  <input class="form-control" id="innovation" type="text" placeholder="Grade from A to E">
+                                </div>
+                                <div class="modal-body">
+                                  <label for="skillsImprovement">Skills Improvement</label>
+                                  <input class="form-control" id="skillsImprovement" type="text" placeholder="Grade from A to E">
+                                </div>
+                                <div class="modal-body">
+                                  <label for="email">Email</label>
+                                  <input class="form-control" id="email" type="text" placeholder="Enter employee email">
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-default" data-dismiss="modal">Save</button>
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-default" id="saveAndDownloadButton">Save and Download</button>
+                                </div>
+                              </div>
+                            </div>
                           </div>
-                        
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-default" data-dismiss="modal"> Save and Download</button>
-                        </div>
-                      </div>
+                          
                     </div>
-                  </div>
-                </div>
 
-                
-                    
-                    <p>Type something to search the table for first names, last names or emails:</p>  
+
+
+                    <p>Type something to search the table for first names, last names or emails:</p>
                     <input class="form-control" id="myInput" type="text" placeholder="Search..">
                     <br>
                     <table class="table table-bordered table-striped">
-                      <thead>
-                        <tr>
-                          <th>Firstname</th>
-                          <th>Lastname</th>
-                          <th>Email</th>
-                          <th>Department</th>
-                          <th>Remove the staff</th>
-                  
-                        </tr>
-                      </thead>
-                      <tbody id="myTable">
-                        <tr>
-                          <td>Ayoub</td>
-                          <td>Danny</td>
-                          <td>Ayoub345@gmail.com</td>
-                          <td>Marketing</td>
-                          <td><button type="button" class="btn btn-primary btn-sm">Remove</button></td>
-                        </tr>
-                        <tr>
-                          <td>Mary</td>
-                          <td>Chuma</td>
-                          <td>mary45@hotmail.com</td>
-                          <td>Human Resource</td>
-                          <td><button type="button" class="btn btn-primary btn-sm">Remove</button></td>
-                        </tr>
-                        <tr>
-                          <td>Janet</td>
-                          <td>Tillya</td>
-                          <td>july@gmail.com</td>
-                          <td>Accounts</td>
-                          <td><button type="button" class="btn btn-primary btn-sm">Remove</button></td>
-                        </tr>
-                        <tr>
-                          <td>Anjela</td>
-                          <td>Mwakipepeso</td>
-                          <td>a_r@gmail.com</td>
-                          <td>Procurement and mainteance</td>
-                          <td><button type="button" class="btn btn-primary btn-sm">Remove</button></td>
-                        </tr>
-                        <tr>
-                          <td>Abdulsalam</td>
-                          <td>Mwakipeje</td>
-                          <td>a_s@gmail.com</td>
-                          <td>Dispenser Sales</td>
-                          <td><button type="button" class="btn btn-primary btn-sm">Remove</button></td>
-                        </tr>
-                        <tr>
-                          <td>Anjela</td>
-                          <td>Method</td>
-                          <td>a_m@gmail.com</td>
-                          <td>Dispenser Sales</td>
-                          <td><button type="button" class="btn btn-primary btn-sm">Remove</button></td>
-                        </tr>
-                      </tbody>
+                        <thead>
+                            <tr>
+                                <th>Firstname</th>
+                                <th>Lastname</th>
+                                <th>Email</th>
+                                <th>Department</th>
+                                <th>Remove the staff</th>
+
+                            </tr>
+                        </thead>
+                        <tbody id="myTable">
+                            <script>
+                                fetch('https://fsys-api.azurewebsites.net/api/employees', {
+                                    method: 'GET',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                })
+                                    .then(response => {
+                                        if (!response.ok) {
+                                            throw new Error('Network response was not ok');
+                                        }
+                                        return response.json();  // Parse response JSON once
+                                    })
+                                    .then(data => {
+                                        console.log("Fetched employees: ", data);
+                                        const employees = data.value;
+                                        employees.forEach(employee => {
+                                            const newRow = `<tr id="row-${employee.id}">`
+                                                + `<td>${employee.firstName}</td>`
+                                                + ` <td>${employee.lastName}</td>`
+                                                + ` <td>${employee.email}</td> `
+                                                + ` <td>${employee.department}</td>`
+                                                + ` <td><button onclick="deleteStaff('${employee.id}')" type="button" class="btn btn-primary btn-sm">Remove</button></td>
+                                        </tr>`;
+                                            $('#myTable').append(newRow);
+                                        });
+                                    })
+
+                                function deleteStaff(id) {
+                                    fetch(`https://fsys-api.azurewebsites.net/api/employee/${id}`, {
+                                        method: 'DELETE',
+                                        headers: {
+                                            'Content-Type': 'application/json'
+                                        },
+                                    })
+                                        .then(response => {
+                                            if (!response.ok) {
+                                                throw new Error('Network response was not ok');
+                                            }
+                                            console.log(`Deleted employee with ID: ${id}`);
+                                            // Remove the row from the table
+                                            document.getElementById(`row-${id}`).remove();
+                                            document.window.reload();
+                                        })
+                                        .catch(error => {
+                                            console.error('Error deleting employee:', error);
+                                        });
+                                }
+                            </script>
+                        </tbody>
                     </table>
 
 
-                 <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; FSMS 2024. All Rights Reserved</span>
+                    <!-- Footer -->
+                    <footer class="sticky-footer bg-white">
+                        <div class="container my-auto">
+                            <div class="copyright text-center my-auto">
+                                <span>Copyright &copy; FSMS 2024. All Rights Reserved</span>
+                            </div>
+                        </div>
+                    </footer>
+                    <!-- End of Footer -->
+
+                </div>
+                <!-- End of Content Wrapper -->
+
+            </div>
+            <!-- End of Page Wrapper -->
+
+            <!-- Scroll to Top Button-->
+            <a class="scroll-to-top rounded" href="#page-top">
+                <i class="fas fa-angle-up"></i>
+            </a>
+
+            <!-- Logout Modal-->
+            <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">Select "Logout" below if you are ready to end your current session.
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                            <a class="btn btn-primary" href="login.html">Logout</a>
+                        </div>
                     </div>
                 </div>
-            </footer>
-            <!-- End of Footer -->
-
-        </div>
-        <!-- End of Content Wrapper -->
-
-    </div>
-    <!-- End of Page Wrapper -->
-
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
-
-    <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
-                </div>
             </div>
-        </div>
-    </div>
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    const saveAndDownloadButton = document.getElementById("saveAndDownloadButton");
+                    saveAndDownloadButton.addEventListener("click", saveAndDownload);
 
-    <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+                    function saveAndDownload() {
+                        const { jsPDF } = window.jspdf;
 
-    <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+                        // Capture input values
+                        const name = document.getElementById("name").value;
+                        const department = document.getElementById("department").value;
+                        const week = document.getElementById("week").value;
+                        const shiftAdherence = document.getElementById("shiftAdherence").value;
+                        const taskCompletion = document.getElementById("taskCompletion").value;
+                        const customerService = document.getElementById("customerService").value;
+                        const teamCollaboration = document.getElementById("teamCollaboration").value;
+                        const efficiencyProductivity = document.getElementById("efficiencyProductivity").value;
+                        const innovation = document.getElementById("innovation").value;
+                        const skillsImprovement = document.getElementById("skillsImprovement").value;
+                        const email = document.getElementById("email").value;
 
-    <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
+                        // Create a new PDF document
+                        const doc = new jsPDF();
 
-    <!-- Page level plugins -->
-    <script src="vendor/chart.js/Chart.min.js"></script>
+                        // Add text to the PDF document
+                        doc.text("WEEKLY EMPLOYEE PERFORMANCE", 10, 10);
+                        doc.text(`Name: ${name}`, 10, 20);
+                        doc.text(`Department: ${department}`, 10, 30);
+                        doc.text(`Week: ${week}`, 10, 40);
+                        doc.text(`Shift Adherence: ${shiftAdherence}`, 10, 50);
+                        doc.text(`Task Completion: ${taskCompletion}`, 10, 60);
+                        doc.text(`Customer Service: ${customerService}`, 10, 70);
+                        doc.text(`Team Collaboration: ${teamCollaboration}`, 10, 80);
+                        doc.text(`Efficiency and Productivity: ${efficiencyProductivity}`, 10, 90);
+                        doc.text(`Innovation: ${innovation}`, 10, 100);
+                        doc.text(`Skills Improvement: ${skillsImprovement}`, 10, 110);
+                        doc.text(`Email: ${email}`, 10, 120);
 
-    <!-- Page level custom scripts -->
-    <script src="js/demo/chart-area-demo.js"></script>
-    <script src="js/demo/chart-pie-demo.js"></script>
-    <script>
-        $(document).ready(function(){
-          $("#myInput").on("keyup", function() {
-            var value = $(this).val().toLowerCase();
-            $("#myTable tr").filter(function() {
-              $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-            });
-          });
-        });
-        </script>
+                        // Save the PDF
+                        doc.save("WeeklyEmployeePerformance.pdf");
+                    }
+                });
+            </script>
+
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+
+            <!-- Bootstrap core JavaScript-->
+            <script src="vendor/jquery/jquery.min.js"></script>
+            <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+            <!-- Core plugin JavaScript-->
+            <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+            <!-- Custom scripts for all pages-->
+            <script src="js/sb-admin-2.min.js"></script>
+
+            <!-- Page level plugins -->
+            <script src="vendor/chart.js/Chart.min.js"></script>
+
+            <!-- Page level custom scripts -->
+            <script src="js/demo/chart-area-demo.js"></script>
+            <script src="js/demo/chart-pie-demo.js"></script>
+            <script>
+                $(document).ready(function () {
+                    $("#myInput").on("keyup", function () {
+                        var value = $(this).val().toLowerCase();
+                        $("#myTable tr").filter(function () {
+                            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                        });
+                    });
+                });
+            </script>
 
 </body>
 

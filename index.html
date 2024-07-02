@@ -12,9 +12,13 @@
     <title>FUEL STATION MANAGEMENT SYSTEM - Dashboard</title>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js" integrity="sha512-L0Shl7nXXzIlBSUUPpxrokqq4ojqgZFQczTYlGjzONGTDAcLremjwaWv5A+EDLnxhQzY5xUZPWLOLqYRkY0Cbw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
 
     <!-- favicon for this website-->
     <link rel="icon" type="image/x-icon" href="/img/favicon_io/favicon-16x16.png">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -45,7 +49,7 @@
                 <div class="sidebar-brand-icon rotate-n-0">
                     <img src="/img/logo3.png" alt="FSMS LOGO">
                 </div>
-                
+
                 <div class="sidebar-brand-text mx-3">FSMS</div>
             </a>
 
@@ -67,22 +71,22 @@
                 Interface
             </div>
 
-             <!-- Nav Item - Sales -->
-             <li class="nav-item">
+            <!-- Nav Item - Sales -->
+            <li class="nav-item">
                 <a class="nav-link" href="sales.html">
                     <i class="fas fa-fw fa-credit-card"></i>
                     <span>Sales</span></a>
             </li>
 
-             <!-- Nav Item - Dispensers -->
-             <li class="nav-item">
+            <!-- Nav Item - Dispensers -->
+            <li class="nav-item">
                 <a class="nav-link" href="dispenser.html">
                     <i class="fas fa-fw fa-gas-pump"></i>
                     <span>Dispensers</span></a>
             </li>
 
-             <!-- Nav Item - Tanks -->
-             <li class="nav-item">
+            <!-- Nav Item - Tanks -->
+            <li class="nav-item">
                 <a class="nav-link" href="tanks.html">
                     <i class="fas fa-fw fa-drum-steelpan"></i>
                     <span>Tanks</span></a>
@@ -98,9 +102,9 @@
             <div class="sidebar-heading">
                 Updates
             </div>
-            
-             <!-- Nav Item - Users -->
-             <li class="nav-item">
+
+            <!-- Nav Item - Users -->
+            <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUser"
                     aria-expanded="true" aria-controls="collapseUser">
                     <i class="fas fa-fw fa-users"></i>
@@ -123,7 +127,8 @@
                     <i class="fas fa-fw fa-list-alt"></i>
                     <span>Information</span>
                 </a>
-                <div id="collapseInformation" class="collapse" aria-labelledby="headingInformation" data-parent="#accordionSidebar">
+                <div id="collapseInformation" class="collapse" aria-labelledby="headingInformation"
+                    data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Day-to-Day Activities:</h6>
                         <a class="collapse-item" href="employreport.html">Employees Report</a>
@@ -134,8 +139,8 @@
                 </div>
             </li>
 
-             <!-- Nav Item - Utilities Collapse Menu -->
-             <li class="nav-item">
+            <!-- Nav Item - Utilities Collapse Menu -->
+            <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilitiesnew"
                     aria-expanded="true" aria-controls="collapseUtilitiesnew">
                     <i class="fas fa-fw fa-toolbox"></i>
@@ -157,7 +162,7 @@
             <hr class="sidebar-divider d-none d-md-block">
 
 
-            
+
             <!-- Divider -->
             <hr class="sidebar-divider">
 
@@ -176,14 +181,18 @@
                 <div id="collapseSites" class="collapse" aria-labelledby="headingSites" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Also Visit:</h6>
-                        <a class="collapse-item" href="https://www.ewura.go.tz/"><img src="/img/ewura logo.jpeg" height="20px" width="20px" alt="Ewura Logo"> Ewura</a>
-                        <a class="collapse-item" href="https://tpdc.co.tz/"><img src="/img/tpdclogo.png" height="20px" width="20px" alt="TPDC Logo"> TPDC</a>
-                        <a class="collapse-item" href="https://www.tra.go.tz/"><img src="/img/tralogo.png" height="20px" width="20px" alt="TRA Logo"> TRA</a>
-                        <a class="collapse-item" href="https://www.ports.go.tz/index.php/en/"><img src="/img/tpalogo.png" height="20px" width="20px" alt="TPA Logo"> TPA</a>
+                        <a class="collapse-item" href="https://www.ewura.go.tz/"><img src="/img/ewura logo.jpeg"
+                                height="20px" width="20px" alt="Ewura Logo"> Ewura</a>
+                        <a class="collapse-item" href="https://tpdc.co.tz/"><img src="/img/tpdclogo.png" height="20px"
+                                width="20px" alt="TPDC Logo"> TPDC</a>
+                        <a class="collapse-item" href="https://www.tra.go.tz/"><img src="/img/tralogo.png" height="20px"
+                                width="20px" alt="TRA Logo"> TRA</a>
+                        <a class="collapse-item" href="https://www.ports.go.tz/index.php/en/"><img
+                                src="/img/tpalogo.png" height="20px" width="20px" alt="TPA Logo"> TPA</a>
                     </div>
                 </div>
             </li>
-            
+
             <!-- Nav Item - Charts -->
             <li class="nav-item">
                 <a class="nav-link" href="contactus.html">
@@ -192,30 +201,27 @@
             </li>
 
             <!-- Nav Item - Location -->
-<li class="nav-item">
-    <a class="nav-link" href="location.html">
-        <i class="fas fa-fw fa-map-pin"></i>
-        <span>Our Location</span>
-    </a>
-</li>
+            <li class="nav-item">
+                <a class="nav-link" href="location.html">
+                    <i class="fas fa-fw fa-map-pin"></i>
+                    <span>Our Location</span>
+                </a>
+            </li>
 
-<div class="sidebar-card d-none d-lg-flex">
-<!-- Card for displaying location -->
-<div class="card mt-3">
-    <div class="card-body">
-        <!-- Embed Google Maps iframe -->
-        <iframe src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d3425.798878106095!2d39.23990865169944!3d-6.7721390575470695!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2stz!4v1718138276856!5m2!1sen!2stz" 
-                width="100%" 
-                height="90" 
-                style="border:0;"    
-                allowfullscreen="" 
-                loading="lazy">
-        </iframe>    
-    </div>
-</div>
-</div>
+            <div class="sidebar-card d-none d-lg-flex">
+                <!-- Card for displaying location -->
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <!-- Embed Google Maps iframe -->
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d3425.798878106095!2d39.23990865169944!3d-6.7721390575470695!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2stz!4v1718138276856!5m2!1sen!2stz"
+                            width="100%" height="90" style="border:0;" allowfullscreen="" loading="lazy">
+                        </iframe>
+                    </div>
+                </div>
+            </div>
 
-            
+
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -228,7 +234,7 @@
                 <button class="rounded-circle border-0" id="sidebarToggle"></button>
             </div>
 
-            
+
 
         </ul>
         <!-- End of Sidebar -->
@@ -355,8 +361,7 @@
                                 </h6>
                                 <a class="dropdown-item d-flex align-items-center" href="employreport.html">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_1.svg"
-                                            alt="...">
+                                        <img class="rounded-circle" src="img/undraw_profile_1.svg" alt="...">
                                         <div class="status-indicator bg-success"></div>
                                     </div>
                                     <div class="font-weight-bold">
@@ -367,20 +372,19 @@
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="employreport.html">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_2.svg"
-                                            alt="...">
+                                        <img class="rounded-circle" src="img/undraw_profile_2.svg" alt="...">
                                         <div class="status-indicator"></div>
                                     </div>
                                     <div>
-                                        <div class="text-truncate">I have the CV letters that you ordered last month, how
+                                        <div class="text-truncate">I have the CV letters that you ordered last month,
+                                            how
                                             would you like them sent to you?</div>
                                         <div class="small text-gray-500">Enock Chami · 1d</div>
                                     </div>
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="employreport.html">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_3.svg"
-                                            alt="...">
+                                        <img class="rounded-circle" src="img/undraw_profile_3.svg" alt="...">
                                         <div class="status-indicator bg-warning"></div>
                                     </div>
                                     <div>
@@ -391,12 +395,13 @@
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="employreport.html">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/piki logo.png"
-                                            alt="...">
+                                        <img class="rounded-circle" src="img/piki logo.png" alt="...">
                                         <div class="status-indicator bg-success"></div>
                                     </div>
                                     <div>
-                                        <div class="text-truncate">How would you like your employees to have as dinner and breakfast?In order to customize our delivery services to the maximum efficient...</div>
+                                        <div class="text-truncate">How would you like your employees to have as dinner
+                                            and breakfast?In order to customize our delivery services to the maximum
+                                            efficient...</div>
                                         <div class="small text-gray-500">PIKI TZ · 2w</div>
                                     </div>
                                 </a>
@@ -410,9 +415,8 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">David Shuma</span>
-                                <img class="img-profile rounded-circle"
-                                    src="img/undraw_profile.svg">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small" id="greet" ><h2 id="msg"></h2></span>
+                                <img class="img-profile rounded-circle" src="img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -430,10 +434,10 @@
                                     Activity Log
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                <button class="dropdown-item" id="signoutbutton" href="#" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
-                                </a>
+                                </button>
                             </div>
                         </li>
 
@@ -444,7 +448,7 @@
 
 
                 <!-- MAIN CONTENT HERE -->
-               
+
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
@@ -452,7 +456,8 @@
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-                        <a href="/setunitprice.html" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                        <a href="/setunitprice.html"
+                            class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
                                 class="fas fa-money-bill fa-sm text-white-50"></i> Set Unit Price</a>
                     </div>
 
@@ -467,7 +472,7 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                                 Petrol Sales</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="Sales" >4250L</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id=""></div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-gas-pump fa-3x"></i>
@@ -486,7 +491,7 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                                 Diesel Sales</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="" >3000L</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="">3000L</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-gas-pump fa-3x"></i>
@@ -502,15 +507,18 @@
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Total sales
-                                            </div>
+                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Total
+                                                sales</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="total-sales"></div>
+
                                             <div class="row no-gutters align-items-center">
                                                 <div class="col-auto">
                                                     <div id="total-sum"></div>
-                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800 total-sales" id="salesData"></div>
+                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800 total-sales"
+                                                        id="salesData"></div>
                                                 </div>
                                                 <div class="col">
-                                                    
+
                                                 </div>
                                             </div>
                                         </div>
@@ -530,7 +538,8 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                                 Total Revenue</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">20,000,000</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="total-revenue">
+                                            </div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-coins fa-3x"></i>
@@ -540,7 +549,7 @@
                             </div>
                         </div>
                     </div>
-                
+
                     <!-- Content Row -->
 
                     <div class="row">
@@ -619,8 +628,8 @@
 
                     <!-- New Row for no. of tanks, dispensers & Employees-->
 
-                     <!-- Content Row -->
-                     <div class="row">
+                    <!-- Content Row -->
+                    <div class="row">
 
                         <!-- No. of Dispensers Card -->
                         <div class="col-xl-4 col-md-6 mb-4">
@@ -629,8 +638,10 @@
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                <a href="dispenser.html"> Number of Dispensers</div></a>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800 dispenser">4</div>
+                                                <a href="dispenser.html"> Number of Dispensers
+                                            </div></a>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800 dispenser"
+                                                id="dispenserCount">0</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-gas-pump fa-5x"></i>
@@ -649,8 +660,9 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                                 <a href="tanks.html">
-                                                Number of Tanks</div></a>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">1</div>
+                                                    Number of Tanks
+                                            </div></a>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="tankCount">0</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-drum-steelpan fa-5x"></i>
@@ -669,8 +681,10 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                                 <a href="employreport.html">
-                                                Number of Employees</div></a>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">20</div>
+                                                    Number of Employees
+                                            </div></a>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="employeeCount">0
+                                            </div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-user-tie fa-5x"></i>
@@ -680,212 +694,263 @@
                             </div>
                         </div>
 
-                    <!-- Content Row -->
-                    <div class="row">
+                        <!-- Content Row -->
+                        <div class="row">
 
-                        <!-- Content Column -->
-                        <div class="col-lg-12 mb-4">
+                            <!-- Content Column -->
+                            <div class="col-lg-12 mb-4">
 
-                            <!-- Project Card Example -->
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">To Do List</h6>
-                                </div>
-                                <div class="card-body">
-                                    <h4 class="small font-weight-bold">Employees Payroll Check <span
-                                            class="float-right">20%</span></h4>
-                                    <div class="progress mb-4">
-                                        <div class="progress-bar bg-danger" role="progressbar" style="width: 20%"
-                                            aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+                                <!-- Project Card Example -->
+                                <div class="card shadow mb-4">
+                                    <div class="card-header py-3">
+                                        <h6 class="m-0 font-weight-bold text-primary">To Do List</h6>
                                     </div>
-                                    <h4 class="small font-weight-bold">Sales Tracking <span
-                                            class="float-right">40%</span></h4>
-                                    <div class="progress mb-4">
-                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 40%"
-                                            aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    <h4 class="small font-weight-bold">Customers Feedback Box Reading <span
-                                            class="float-right">60%</span></h4>
-                                    <div class="progress mb-4">
-                                        <div class="progress-bar" role="progressbar" style="width: 60%"
-                                            aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    <h4 class="small font-weight-bold">Checking Fuel Details (Per December 6th 2024) <span
-                                            class="float-right">80%</span></h4>
-                                    <div class="progress mb-4">
-                                        <div class="progress-bar bg-info" role="progressbar" style="width: 80%"
-                                            aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    <h4 class="small font-weight-bold">Depositing Money To CEO Account <span
-                                            class="float-right">Complete!</span></h4>
-                                    <div class="progress">
-                                        <div class="progress-bar bg-success" role="progressbar" style="width: 100%"
-                                            aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            
-
-                        </div>
-
-                        <div class="col-lg-12 mb-0">
-
-                            <!-- Illustrations -->
-                            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-                                <ol class="carousel-indicators">
-                                    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-                                    <!-- Add more li elements here for additional slides -->
-                                    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-                                </ol>
-                                <div class="carousel-inner">
-                                    <div class="carousel-item active">
-                                        <div class="card shadow mb-4">
-                                            <div class="card-header py-3">
-                                                <h6 class="m-0 font-weight-bold text-primary">Top Headlines</h6>
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="text-center">
-                                                    <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 10rem;"
-                                                        src="/img/ewura logo.jpeg" alt="...">
-                                                </div>
-                                                <p>Get updated by massive headlines as a Fuel station Manager at <a target="_blank" rel="nofollow" href="https://www.ewura.go.tz/">EWURA</a>, EWURA prepares and publishes cap prices of the petroleum products (petrol, diesel and kerosene) on wholesale and retail basis that are consumed locally. The local pump prices or petroleum retail prices for all regions are computed based on the cost of discharge at Dar es Salaam, Tanga and Mtwara ports.</p>
-                                                <a target="_blank" rel="nofollow" href="https://www.ewura.go.tz/">Browse More Headlines on
-                                                    EWURA &rarr;</a>
-                                            </div>
+                                    <div class="card-body">
+                                        <h4 class="small font-weight-bold">Employees Payroll Check <span
+                                                class="float-right">20%</span></h4>
+                                        <div class="progress mb-4">
+                                            <div class="progress-bar bg-danger" role="progressbar" style="width: 20%"
+                                                aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        <h4 class="small font-weight-bold">Sales Tracking <span
+                                                class="float-right">40%</span></h4>
+                                        <div class="progress mb-4">
+                                            <div class="progress-bar bg-warning" role="progressbar" style="width: 40%"
+                                                aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        <h4 class="small font-weight-bold">Customers Feedback Box Reading <span
+                                                class="float-right">60%</span></h4>
+                                        <div class="progress mb-4">
+                                            <div class="progress-bar" role="progressbar" style="width: 60%"
+                                                aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        <h4 class="small font-weight-bold">Checking Fuel Details (Per December 6th 2024)
+                                            <span class="float-right">80%</span>
+                                        </h4>
+                                        <div class="progress mb-4">
+                                            <div class="progress-bar bg-info" role="progressbar" style="width: 80%"
+                                                aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        <h4 class="small font-weight-bold">Depositing Money To CEO Account <span
+                                                class="float-right">Complete!</span></h4>
+                                        <div class="progress">
+                                            <div class="progress-bar bg-success" role="progressbar" style="width: 100%"
+                                                aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                                         </div>
                                     </div>
-                                    <!-- Add more carousel items here for additional slides -->
+                                </div>
+
+
+
+                            </div>
+
+                            <div class="col-lg-12 mb-0">
+
+                                <!-- Illustrations -->
+                                <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                                    <ol class="carousel-indicators">
+                                        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active">
+                                        </li>
+                                        <!-- Add more li elements here for additional slides -->
+                                        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                                    </ol>
                                     <div class="carousel-inner">
-                                        <div class="carousel-item ">
+                                        <div class="carousel-item active">
                                             <div class="card shadow mb-4">
                                                 <div class="card-header py-3">
                                                     <h6 class="m-0 font-weight-bold text-primary">Top Headlines</h6>
                                                 </div>
                                                 <div class="card-body">
                                                     <div class="text-center">
-                                                        <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 10rem;"
-                                                            src="/img/tralogo.png" alt="...">
+                                                        <img class="img-fluid px-3 px-sm-4 mt-3 mb-4"
+                                                            style="width: 10rem;" src="/img/ewura logo.jpeg" alt="...">
                                                     </div>
-                                                    <p>Get updated by massive headlines as a Fuel station Manager at <a target="_blank" rel="nofollow" href="https://www.tra.go.tz/">TRA</a>, TRA prepares and publishes cap prices of the petroleum products (petrol, diesel and kerosene) on wholesale and retail basis that are consumed locally. The local pump prices or petroleum retail prices for all regions are computed based on the cost of discharge at Dar es Salaam, Tanga and Mtwara ports.</p>
-                                                    <a target="_blank" rel="nofollow" href="https://www.tra.go.tz/">Browse More Headlines on
-                                                        TRA &rarr;</a>
+                                                    <p>Get updated by massive headlines as a Fuel station Manager at <a
+                                                            target="_blank" rel="nofollow"
+                                                            href="https://www.ewura.go.tz/">EWURA</a>, EWURA prepares
+                                                        and publishes cap prices of the petroleum products (petrol,
+                                                        diesel and kerosene) on wholesale and retail basis that are
+                                                        consumed locally. The local pump prices or petroleum retail
+                                                        prices for all regions are computed based on the cost of
+                                                        discharge at Dar es Salaam, Tanga and Mtwara ports.</p>
+                                                    <a target="_blank" rel="nofollow"
+                                                        href="https://www.ewura.go.tz/">Browse More Headlines on
+                                                        EWURA &rarr;</a>
                                                 </div>
                                             </div>
                                         </div>
-
-                                        <div class="carousel-item">
-                                            <div class="card shadow mb-4">
-                                                <div class="card-header py-3">
-                                                    <h6 class="m-0 font-weight-bold text-primary">Top Headlines</h6>
-                                                </div>
-                                                <div class="card-body">
-                                                    <div class="text-center">
-                                                        <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 10rem;"
-                                                            src="/img/tpdclogo.png" alt="...">
+                                        <!-- Add more carousel items here for additional slides -->
+                                        <div class="carousel-inner">
+                                            <div class="carousel-item ">
+                                                <div class="card shadow mb-4">
+                                                    <div class="card-header py-3">
+                                                        <h6 class="m-0 font-weight-bold text-primary">Top Headlines</h6>
                                                     </div>
-                                                    <p>Get updated by massive headlines as a Fuel station Manager at <a target="_blank" rel="nofollow" href="https://tpdc.co.tz/">TPDC</a>, TPDC prepares and publishes cap prices of the petroleum products (petrol, diesel and kerosene) on wholesale and retail basis that are consumed locally. The local pump prices or petroleum retail prices for all regions are computed based on the cost of discharge at Dar es Salaam, Tanga and Mtwara ports.</p>
-                                                    <a target="_blank" rel="nofollow" href="https://tpdc.co.tz/">Browse More Headlines on
-                                                        TPDC &rarr;</a>
+                                                    <div class="card-body">
+                                                        <div class="text-center">
+                                                            <img class="img-fluid px-3 px-sm-4 mt-3 mb-4"
+                                                                style="width: 10rem;" src="/img/tralogo.png" alt="...">
+                                                        </div>
+                                                        <p>Get updated by massive headlines as a Fuel station Manager at
+                                                            <a target="_blank" rel="nofollow"
+                                                                href="https://www.tra.go.tz/">TRA</a>, TRA prepares and
+                                                            publishes cap prices of the petroleum products (petrol,
+                                                            diesel and kerosene) on wholesale and retail basis that are
+                                                            consumed locally. The local pump prices or petroleum retail
+                                                            prices for all regions are computed based on the cost of
+                                                            discharge at Dar es Salaam, Tanga and Mtwara ports.
+                                                        </p>
+                                                        <a target="_blank" rel="nofollow"
+                                                            href="https://www.tra.go.tz/">Browse More Headlines on
+                                                            TRA &rarr;</a>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        <div class="carousel-item">
-                                            <div class="card shadow mb-4">
-                                                <div class="card-header py-3">
-                                                    <h6 class="m-0 font-weight-bold text-primary">Top Headlines</h6>
-                                                </div>
-                                                <div class="card-body">
-                                                    <div class="text-center">
-                                                        <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 10rem;"
-                                                            src="/img/tpalogo.png" alt="...">
+                                            <div class="carousel-item">
+                                                <div class="card shadow mb-4">
+                                                    <div class="card-header py-3">
+                                                        <h6 class="m-0 font-weight-bold text-primary">Top Headlines</h6>
                                                     </div>
-                                                    <p>Get updated by massive headlines as a Fuel station Manager at <a target="_blank" rel="nofollow" href="https://ports.go.tz/">TPA</a>, TPA prepares and publishes cap prices of the petroleum products (petrol, diesel and kerosene) on wholesale and retail basis that are consumed locally. The local pump prices or petroleum retail prices for all regions are computed based on the cost of discharge at Dar es Salaam, Tanga and Mtwara ports.</p>
-                                                    <a target="_blank" rel="nofollow" href="https://ports.go.tz/">Browse More Headlines on
-                                                        TPA &rarr;</a>
+                                                    <div class="card-body">
+                                                        <div class="text-center">
+                                                            <img class="img-fluid px-3 px-sm-4 mt-3 mb-4"
+                                                                style="width: 10rem;" src="/img/tpdclogo.png" alt="...">
+                                                        </div>
+                                                        <p>Get updated by massive headlines as a Fuel station Manager at
+                                                            <a target="_blank" rel="nofollow"
+                                                                href="https://tpdc.co.tz/">TPDC</a>, TPDC prepares and
+                                                            publishes cap prices of the petroleum products (petrol,
+                                                            diesel and kerosene) on wholesale and retail basis that are
+                                                            consumed locally. The local pump prices or petroleum retail
+                                                            prices for all regions are computed based on the cost of
+                                                            discharge at Dar es Salaam, Tanga and Mtwara ports.
+                                                        </p>
+                                                        <a target="_blank" rel="nofollow"
+                                                            href="https://tpdc.co.tz/">Browse More Headlines on
+                                                            TPDC &rarr;</a>
+                                                    </div>
                                                 </div>
                                             </div>
+
+                                            <div class="carousel-item">
+                                                <div class="card shadow mb-4">
+                                                    <div class="card-header py-3">
+                                                        <h6 class="m-0 font-weight-bold text-primary">Top Headlines</h6>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <div class="text-center">
+                                                            <img class="img-fluid px-3 px-sm-4 mt-3 mb-4"
+                                                                style="width: 10rem;" src="/img/tpalogo.png" alt="...">
+                                                        </div>
+                                                        <p>Get updated by massive headlines as a Fuel station Manager at
+                                                            <a target="_blank" rel="nofollow"
+                                                                href="https://ports.go.tz/">TPA</a>, TPA prepares and
+                                                            publishes cap prices of the petroleum products (petrol,
+                                                            diesel and kerosene) on wholesale and retail basis that are
+                                                            consumed locally. The local pump prices or petroleum retail
+                                                            prices for all regions are computed based on the cost of
+                                                            discharge at Dar es Salaam, Tanga and Mtwara ports.
+                                                        </p>
+                                                        <a target="_blank" rel="nofollow"
+                                                            href="https://ports.go.tz/">Browse More Headlines on
+                                                            TPA &rarr;</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                         </div>
+                                        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button"
+                                            data-slide="prev">
+                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                            <span class="sr-only">Previous</span>
+                                        </a>
+                                        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button"
+                                            data-slide="next">
+                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                            <span class="sr-only">Next</span>
+                                        </a>
+                                    </div>
 
-                                </div>
-                                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                    <span class="sr-only">Previous</span>
-                                </a>
-                                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                    <span class="sr-only">Next</span>
-                                </a>
-                            </div>
-                            
 
-                            <!-- Approach -->
-                            <div class="card shadow mb-3">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Review the Bulk Procurement System (BPS)</h6>
-                                </div>
-                                <div class="card-body">
-                                    <p>Pursuant to Section 168 of the Petroleum Act, 2015, Cap 392  importation of petroleum products in the country has to be conducted through an efficient procurement mechanism, so specified by the Minister responsible for Petroleum affairs. Through this section, The Petroleum (Bulk Procurement) Regulations were made by the Minister responsible for Petroleum Affairs in June 2011 and revised versions in 2013 and 2015. </p>
-                                    <p class="mb-0">These regulations provide for establishment of a Petroleum Bulk Procurement Agency (PBPA) formerly known as Petroleum Importation Coordinator (PIC) to manage and coordinate importation of petroleum products. Currently petroleum products that are imported through Bulk Procurement System (BPS) are petrol, diesel, Jet- A1 and Kerosene.</p>
+                                    <!-- Approach -->
+                                    <div class="card shadow mb-3">
+                                        <div class="card-header py-3">
+                                            <h6 class="m-0 font-weight-bold text-primary">Review the Bulk Procurement
+                                                System (BPS)</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <p>Pursuant to Section 168 of the Petroleum Act, 2015, Cap 392 importation
+                                                of petroleum products in the country has to be conducted through an
+                                                efficient procurement mechanism, so specified by the Minister
+                                                responsible for Petroleum affairs. Through this section, The Petroleum
+                                                (Bulk Procurement) Regulations were made by the Minister responsible for
+                                                Petroleum Affairs in June 2011 and revised versions in 2013 and 2015.
+                                            </p>
+                                            <p class="mb-0">These regulations provide for establishment of a Petroleum
+                                                Bulk Procurement Agency (PBPA) formerly known as Petroleum Importation
+                                                Coordinator (PIC) to manage and coordinate importation of petroleum
+                                                products. Currently petroleum products that are imported through Bulk
+                                                Procurement System (BPS) are petrol, diesel, Jet- A1 and Kerosene.</p>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
 
                         </div>
+                        <!-- /.container-fluid -->
+
                     </div>
+                    <!-- End of Main Content -->
+
+
+
+
+                    <!-- Footer -->
+                    <footer class="sticky-footer bg-white">
+                        <div class="container my-auto">
+                            <div class="copyright text-center my-auto">
+                                <span>Copyright &copy; FSMS 2024. All Rights Reserved</span>
+                            </div>
+                        </div>
+                    </footer>
+                    <!-- End of Footer -->
 
                 </div>
-                <!-- /.container-fluid -->
+                <!-- End of Content Wrapper -->
 
             </div>
-            <!-- End of Main Content -->
+            <!-- End of Page Wrapper -->
 
+            <!-- Scroll to Top Button-->
+            <a class="scroll-to-top rounded" href="#page-top">
+                <i class="fas fa-angle-up"></i>
+            </a>
 
-
-
-                 <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; FSMS 2024. All Rights Reserved</span>
+            <!-- Logout Modal-->
+            <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">Select "Logout" below if you are ready to end your current session.
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                            <a class="btn btn-primary" href="login.html">Logout</a>
+                        </div>
                     </div>
                 </div>
-            </footer>
-            <!-- End of Footer -->
-
-        </div>
-        <!-- End of Content Wrapper -->
-
-    </div>
-    <!-- End of Page Wrapper -->
-
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
-
-    <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
-                </div>
             </div>
-        </div>
-    </div>
 
-    <!-- JavaScript Initialization -->
-<!-- <script>
+            <!-- JavaScript Initialization -->
+            <!-- <script>
     document.ready(function(){
         $('.carousel').carousel({
             interval: 5000, // Interval between slides in milliseconds (5 seconds)
@@ -893,95 +958,39 @@
         });
     });
 </script> -->
+<!-- <script type="module" src="/setunitprice_api.js"></script> -->
 
-    <script src="js/script.js"></script>
+            <script src="js/script.js"></script>
 
-    <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+            <!-- Bootstrap core JavaScript-->
+            <script src="vendor/jquery/jquery.min.js"></script>
+            <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+            <!-- Core plugin JavaScript-->
+            <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 
-    <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
+            <!-- Custom scripts for all pages-->
+            <script src="js/sb-admin-2.min.js"></script>
 
-    <!-- Page level plugins -->
-    <script src="vendor/chart.js/Chart.min.js"></script>
+            <!-- Page level plugins -->
+            <script src="vendor/chart.js/Chart.min.js"></script>
 
-    <!-- Page level custom scripts -->
-    <script src="js/demo/chart-bar-demo.js"></script>
-    <script src="js/demo/chart-area-demo.js"></script>
-    <script src="js/demo/chart-pie-demo.js"></script>
-   >
-    <script>
-        var firebaseConfig = {
-        apiKey: "AIzaSyB8smbF627Xh_zZiagvIPqrKaoSlDumTJ4",
-        authDomain: "fsms-48cb1.firebaseapp.com",
-        databaseURL: "https://fsms-48cb1-default-rtdb.firebaseio.com",
-        projectId: "fsms-48cb1",
-        storageBucket: "fsms-48cb1.appspot.com",
-        messagingSenderId: "693339377786",
-        appId: "1:693339377786:web:a363ef6c5edc94e3a86bc3",
-        measurementId: "G-VYE6B01M2N"
-        };
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-    
-        var database = firebase.database();
-    
-        // Reference to your data
-        var refSales = database.ref('Sales');
+            <!-- Page level custom scripts -->
+            <script src="js/demo/chart-area-demo.js"></script>
+            <script src="js/demo/chart-pie-demo.js"></script>
 
-        function getSalesData() {
-        return new Promise((resolve, reject) => {
-            refSales.on('value', (snapshot) => {
-            const salesData = snapshot.val();
-            resolve(JSON.stringify(salesData));
-            }, (error) => {
-            reject(error);
-            });
-        });
-        }
-       
-    async function callSalesData() {
-      console.log('calling');
-      const sal = await getSalesData();
-    
-      var sales = sal.split(",").map(item => item.split(":"));
-    
-    const salesi = sal;
-      console.log(salesi[1]);
-      console.log(sal.length);
-      const salesData = {
-      "2024_06_16": {"17:10:58": 50, "17:24:35": 700},
-      "2024_06_26": {"21:30:26": 1000, "21:32:28": 100, "21:33:07": 1000, "21:33:42": 100, "21:38:23": 10, "21:41:14": 10, "21:41:43": 1000, "21:51:48": 100, "21:52:23": 100, "21:54:40": 100, "21:55:47": 1000, "21:57:05": 1000, "21:58:54": 1000, "22:37:28": 100, "22:38:41": 100, "22:39:07": 1000, "22:45:18": 1500, "22:50:27": 100, "22:52:14": 100, "22:52:50": 1500, "22:53:57": 500, "22:55:05": 2000}
-    };
+            <script type="module" src="index_api.js"></script>
+            <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js" type="module"></script>
+            <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js" type="module"></script>
+            <!-- <script src="js/demo/chart-bar-demo-tsh.js" type="module"></script> -->
+            <script src="js/demo/chart-bar-demo.js" type="module"></script>
+            <!-- <script src="js/demo/chart.js" type="module"></script> -->
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js"
+                integrity="sha512-L0Shl7nXXzIlBSUUPpxrokqq4ojqgZFQczTYlGjzONGTDAcLremjwaWv5A+EDLnxhQzY5xUZPWLOLqYRkY0Cbw=="
+                crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+                <script type="module" src="/authcheck.js"></script>
 
-    let totalSum = 0;
-    
-
-      for (const date in salesData) {
-        for (const timestamp in salesData[date]) {
-          totalSum += salesData[date][timestamp];
-        }
-      }
-
-      document.getElementById('total-sum').innerText = totalSum;
-    }
-    callSalesData();  
-   
-
-    
-     
-    
-
-        
-      </script>
-
-	 
-
-
+              
 
 
 </body>

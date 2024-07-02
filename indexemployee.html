@@ -352,7 +352,7 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Petro Abdulqadir</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small" id="msg">Petro Abdulqadir</span>
                                 <img class="img-profile rounded-circle"
                                     src="img/undraw_profile.svg">
                             </a>
@@ -404,7 +404,7 @@
   <div class="container">
     <!-- Welcome Poster -->
     <div class="welcome-poster">
-      <h1>Welcome, David!</h1>
+      <h1 id="welcome">Welcome, David!</h1>
       <p>We are excited to have you on our team...</p>
     </div>
 
@@ -415,16 +415,16 @@
       </div>
       <div class="card-body">
         <div class="form-group">
-          <label>Email</label>
-          <p>dave@example.com</p>
+          <label>Full Name</label>
+          <p id="fullname">Davi</p>
         </div>
         <div class="form-group">
-          <label>Name</label>
-          <p>daveee</p>
+          <label>Email</label>
+          <p id="email">daveee</p>
         </div>
         <div class="form-group">
           <label>Phone Number</label>
-          <p>+1234567890</p>
+          <p>+255 674 373 436</p>
         </div>
       </div>
     </div>
@@ -461,10 +461,6 @@
           <p>1. Review and update project documentation<br>
              2. Team meeting at 10 AM<br>
              3. Client follow-up calls</p>
-        </div>
-        <div class="form-group">
-          <label>Weekly Assignments</label>
-          <textarea class="form-control" id="myInput" type="text" cols="4" rows="8" readonly autofocus></textarea>
         </div>
       </div>
     </div>
@@ -524,13 +520,48 @@
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+                    <a class="btn btn-primary" href="login.html" id="signoutbutton">Logout</a>
                 </div>
             </div>
         </div>
     </div>
 
+    <script>
 
+        let UserCreds = JSON.parse(sessionStorage.getItem("user-creds"));
+        let UserInfo = JSON.parse(sessionStorage.getItem("user-info"));
+
+        let Welcome = document.getElementById('welcome');
+        let Fullname = document.getElementById('fullname');
+        let MsgHead = document.getElementById('msg');
+        let GreetHead = document.getElementById('email');
+        let SignoutBtn = document.getElementById('signoutbutton');
+
+        let Signout = () => {
+            sessionStorage.removeItem("user-creds");
+            sessionStorage.removeItem("user-info");
+            window.location.href = 'login.html';
+        }
+
+        let CheckCred = () => {
+            // Check if the user is NOT logged in and redirect to login page
+            if (!sessionStorage.getItem("user-creds")) {
+                window.location.href = 'login.html';
+            } else {
+                MsgHead.innerText =  `${UserInfo.firstname} ${UserInfo.lastname}`;
+                Fullname.innerText =  `${UserInfo.firstname} ${UserInfo.lastname}`;
+                Welcome.innerText =  `Welcome ${UserInfo.firstname}`;
+                GreetHead.innerText =  `${UserCreds.email}`;
+            }
+        }
+
+        // Call the CheckCred function to verify credentials and update the DOM
+        CheckCred();
+
+        // Add the event listener for the signout button
+        SignoutBtn.addEventListener('click', Signout);
+
+    </script>
 
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>

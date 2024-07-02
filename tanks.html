@@ -26,8 +26,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
 
     <style>
-      
-                .container {
+        .container {
             width: 80%;
             margin: auto;
             background-color: #fff;
@@ -35,6 +34,7 @@
             border-radius: 8px;
             overflow: hidden;
         }
+
         .header {
             background-color: #f4f4f4;
             padding: 10px;
@@ -42,36 +42,44 @@
             font-weight: bold;
             display: flex;
         }
+
         .row {
             display: flex;
             padding: 10px;
             border-bottom: 1px solid #ddd;
         }
+
         .cell {
             flex: 1;
             text-align: center;
             padding: 5px;
         }
+
         .header .cell {
             flex: 1;
             font-weight: bold;
         }
+
         .row:last-child {
             border-bottom: none;
         }
+
         .status-active {
             color: green;
             font-weight: bold;
         }
+
         .status-low {
             color: red;
             font-weight: bold;
         }
+
         .button-container {
             text-align: right;
             padding: 10px;
             background-color: #fff;
         }
+
         .add-button {
             padding: 10px 20px;
             background-color: #007bff;
@@ -81,6 +89,7 @@
             cursor: pointer;
             font-size: 1em;
         }
+
         .add-button:hover {
             background-color: #0056b3;
         }
@@ -105,7 +114,7 @@
                 <div class="sidebar-brand-icon rotate-n-0">
                     <img src="/img/logo3.png" alt="FSMS LOGO">
                 </div>
-                
+
                 <div class="sidebar-brand-text mx-3">FSMS</div>
             </a>
 
@@ -127,22 +136,22 @@
                 Interface
             </div>
 
-             <!-- Nav Item - Sales -->
-             <li class="nav-item">
+            <!-- Nav Item - Sales -->
+            <li class="nav-item">
                 <a class="nav-link" href="sales.html">
                     <i class="fas fa-fw fa-credit-card"></i>
                     <span>Sales</span></a>
             </li>
 
-             <!-- Nav Item - Dispensers -->
-             <li class="nav-item">
+            <!-- Nav Item - Dispensers -->
+            <li class="nav-item">
                 <a class="nav-link" href="dispenser.html">
                     <i class="fas fa-fw fa-gas-pump"></i>
                     <span>Dispensers</span></a>
             </li>
 
-             <!-- Nav Item - Tanks -->
-             <li class="nav-item">
+            <!-- Nav Item - Tanks -->
+            <li class="nav-item">
                 <a class="nav-link" href="tanks.html">
                     <i class="fas fa-fw fa-drum-steelpan"></i>
                     <span>Tanks</span></a>
@@ -158,9 +167,9 @@
             <div class="sidebar-heading">
                 Updates
             </div>
-            
-             <!-- Nav Item - Users -->
-             <li class="nav-item">
+
+            <!-- Nav Item - Users -->
+            <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUser"
                     aria-expanded="true" aria-controls="collapseUser">
                     <i class="fas fa-fw fa-users"></i>
@@ -183,7 +192,8 @@
                     <i class="fas fa-fw fa-list-alt"></i>
                     <span>Information</span>
                 </a>
-                <div id="collapseInformation" class="collapse" aria-labelledby="headingInformation" data-parent="#accordionSidebar">
+                <div id="collapseInformation" class="collapse" aria-labelledby="headingInformation"
+                    data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Day-to-Day Activities:</h6>
                         <a class="collapse-item" href="employreport.html">Employees Report</a>
@@ -194,8 +204,8 @@
                 </div>
             </li>
 
-             <!-- Nav Item - Utilities Collapse Menu -->
-             <li class="nav-item">
+            <!-- Nav Item - Utilities Collapse Menu -->
+            <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilitiesnew"
                     aria-expanded="true" aria-controls="collapseUtilitiesnew">
                     <i class="fas fa-fw fa-toolbox"></i>
@@ -217,7 +227,7 @@
             <hr class="sidebar-divider d-none d-md-block">
 
 
-            
+
             <!-- Divider -->
             <hr class="sidebar-divider">
 
@@ -236,10 +246,14 @@
                 <div id="collapseSites" class="collapse" aria-labelledby="headingSites" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Also Visit:</h6>
-                        <a class="collapse-item" href="https://www.ewura.go.tz/"><img src="/img/ewura logo.jpeg" height="20px" width="20px" alt="Ewura Logo"> Ewura</a>
-                        <a class="collapse-item" href="https://tpdc.co.tz/"><img src="/img/tpdclogo.png" height="20px" width="20px" alt="TPDC Logo"> TPDC</a>
-                        <a class="collapse-item" href="https://www.tra.go.tz/"><img src="/img/tralogo.png" height="20px" width="20px" alt="TRA Logo"> TRA</a>
-                        <a class="collapse-item" href="https://www.ports.go.tz/index.php/en/"><img src="/img/tpalogo.png" height="20px" width="20px" alt="TPA Logo"> TPA</a>
+                        <a class="collapse-item" href="https://www.ewura.go.tz/"><img src="/img/ewura logo.jpeg"
+                                height="20px" width="20px" alt="Ewura Logo"> Ewura</a>
+                        <a class="collapse-item" href="https://tpdc.co.tz/"><img src="/img/tpdclogo.png" height="20px"
+                                width="20px" alt="TPDC Logo"> TPDC</a>
+                        <a class="collapse-item" href="https://www.tra.go.tz/"><img src="/img/tralogo.png" height="20px"
+                                width="20px" alt="TRA Logo"> TRA</a>
+                        <a class="collapse-item" href="https://www.ports.go.tz/index.php/en/"><img
+                                src="/img/tpalogo.png" height="20px" width="20px" alt="TPA Logo"> TPA</a>
                     </div>
                 </div>
             </li>
@@ -252,30 +266,27 @@
             </li>
 
             <!-- Nav Item - Location -->
-<li class="nav-item">
-    <a class="nav-link" href="location.html">
-        <i class="fas fa-fw fa-map-pin"></i>
-        <span>Our Location</span>
-    </a>
-</li>
+            <li class="nav-item">
+                <a class="nav-link" href="location.html">
+                    <i class="fas fa-fw fa-map-pin"></i>
+                    <span>Our Location</span>
+                </a>
+            </li>
 
-<div class="sidebar-card d-none d-lg-flex">
-<!-- Card for displaying location -->
-<div class="card mt-3">
-    <div class="card-body">
-        <!-- Embed Google Maps iframe -->
-        <iframe src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d3425.798878106095!2d39.23990865169944!3d-6.7721390575470695!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2stz!4v1718138276856!5m2!1sen!2stz" 
-                width="100%" 
-                height="90" 
-                style="border:0;"    
-                allowfullscreen="" 
-                loading="lazy">
-        </iframe>    
-    </div>
-</div>
-</div>
+            <div class="sidebar-card d-none d-lg-flex">
+                <!-- Card for displaying location -->
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <!-- Embed Google Maps iframe -->
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d3425.798878106095!2d39.23990865169944!3d-6.7721390575470695!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2stz!4v1718138276856!5m2!1sen!2stz"
+                            width="100%" height="90" style="border:0;" allowfullscreen="" loading="lazy">
+                        </iframe>
+                    </div>
+                </div>
+            </div>
 
-            
+
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -319,8 +330,7 @@
                     </form>
 
                     <!-- Topbar Navbar -->
-                    <ul class="navbar-nav ml-auto"
-                        <!-- Nav Item - Search Dropdown (Visible Only XS) -->
+                    <ul class="navbar-nav ml-auto" <!-- Nav Item - Search Dropdown (Visible Only XS) -->
                         <li class="nav-item dropdown no-arrow d-sm-none">
                             <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -411,8 +421,7 @@
                                 </h6>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_1.svg"
-                                            alt="...">
+                                        <img class="rounded-circle" src="img/undraw_profile_1.svg" alt="...">
                                         <div class="status-indicator bg-success"></div>
                                     </div>
                                     <div class="font-weight-bold">
@@ -423,20 +432,19 @@
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_2.svg"
-                                            alt="...">
+                                        <img class="rounded-circle" src="img/undraw_profile_2.svg" alt="...">
                                         <div class="status-indicator"></div>
                                     </div>
                                     <div>
-                                        <div class="text-truncate">I have the CV letters that you ordered last month, how
+                                        <div class="text-truncate">I have the CV letters that you ordered last month,
+                                            how
                                             would you like them sent to you?</div>
                                         <div class="small text-gray-500">Enock Chami · 1d</div>
                                     </div>
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_3.svg"
-                                            alt="...">
+                                        <img class="rounded-circle" src="img/undraw_profile_3.svg" alt="...">
                                         <div class="status-indicator bg-warning"></div>
                                     </div>
                                     <div>
@@ -447,12 +455,13 @@
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="employreport.html">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/piki logo.png"
-                                            alt="...">
+                                        <img class="rounded-circle" src="img/piki logo.png" alt="...">
                                         <div class="status-indicator bg-success"></div>
                                     </div>
                                     <div>
-                                        <div class="text-truncate">How would you like your employees to have as dinner and breakfast?In order to customize our delivery services to the maximum efficient...</div>
+                                        <div class="text-truncate">How would you like your employees to have as dinner
+                                            and breakfast?In order to customize our delivery services to the maximum
+                                            efficient...</div>
                                         <div class="small text-gray-500">PIKI TZ · 2w</div>
                                     </div>
                                 </a>
@@ -466,9 +475,8 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">David Shuma</span>
-                                <img class="img-profile rounded-circle"
-                                    src="img/undraw_profile.svg">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small" id="msg" ></span>
+                                <img class="img-profile rounded-circle" src="img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -503,7 +511,8 @@
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">Fuel Tanks</h1>
-                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#addTankModal"><i
+                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
+                            data-toggle="modal" data-target="#addTankModal"><i
                                 class="fas fa-drum-steelpan fa-sm text-white-50"></i> Add New Tank</a>
                     </div>
 
@@ -518,70 +527,87 @@
                             <div class="cell">Temperature</div>
                             <div class="cell">Humidity</div>
                         </div>
-                        <div id="table-content"></div>
-                        <div>
+
+                         <div id="table-content">
+                            <div class="row">
+                                <div class="cell" id="cell-id">1</div>
+                                <div class="cell" id="">TANK A</div>
+                                <div class="cell" id="cell">10,000</div>
+                                <div class="cell" id="cell-volume">N/A</div>
+                                <div class="cell" id="cell">HIGH</div>
+                                <div class="cell" id="cell-temperature">N/A</div>
+                                <div class="cell" id="cell-humidity">N/A</div>
+                            </div> 
+
+                        </div>
+                        <!-- <div>
                             <button id="backbutton">Back</button>
                             <button id="nextbutton">Next</button>
-                        </div>
-                    </div>
-                
-                    
-                  </div>
-              </div>
-        
 
-                    <!-- Add Tank Modal -->
-                    <div class="modal fade" id="addTankModal" tabindex="-1" role="dialog" aria-labelledby="addTankModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="addTankModalLabel">Add New Fuel Tank</h5>
-                                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">×</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <form id="addTankForm">
-                                        <div class="form-group">
-                                            <label for="tankName">Tank Name</label>
-                                            <input type="text" class="form-control" id="tankName" placeholder="Enter tank name">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="tankCapacity">Capacity (Liters)</label>
-                                            <input type="number" class="form-control" id="tankCapacity" placeholder="Enter tank capacity">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="tankLevel">Current Level (Liters)</label>
-                                            <input type="number" class="form-control" id="tankLevel" placeholder="Enter current fuel level">
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="modal-footer">
-                                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                                    <button class="btn btn-primary" type="button" id="saveTankBtn">Save Tank</button>
-                                </div>
-                            </div>
-                        </div>
+                        </div> -->
                     </div>
+
 
                 </div>
-                <!-- /.container-fluid -->
-
             </div>
-            <!-- End of Main Content -->
 
-            <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; FSMS 2024. All Rights Reserved</span>
+
+            <!-- Add Tank Modal -->
+            <div class="modal fade" id="addTankModal" tabindex="-1" role="dialog" aria-labelledby="addTankModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addTankModalLabel">Add New Tank</h5>
+
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="addTankForm">
+                                <div class="form-group">
+                                    <label for="tankName">Tank Name</label>
+                                    <input type="text" class="form-control" id="tankName" placeholder="Enter tank name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="tankCapacity">Capacity (Liters)</label>
+                                    <input type="number" class="form-control" id="tankCapacity"
+                                        placeholder="Enter tank capacity">
+                                </div>
+                                <div class="form-group">
+                                    <label for="tankLevel">Current Level (Liters)</label>
+                                    <input type="number" class="form-control" id="tankLevel"
+                                        placeholder="Enter current fuel level">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                            <button class="btn btn-primary" type="button" id="saveTankBtn">Save Tank</button>
+                        </div>
                     </div>
                 </div>
-            </footer>
-            <!-- End of Footer -->
+            </div>
 
         </div>
-        <!-- End of Content Wrapper -->
+        <!-- /.container-fluid -->
+
+    </div>
+    <!-- End of Main Content -->
+
+    <!-- Footer -->
+    <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+            <div class="copyright text-center my-auto">
+                <span>Copyright &copy; FSMS 2024. All Rights Reserved</span>
+            </div>
+        </div>
+    </footer>
+    <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
 
     </div>
     <!-- End of Page Wrapper -->
@@ -610,7 +636,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -629,7 +655,7 @@
     <script src="js/demo/chart-pie-demo.js"></script>
 
     <!-- Custom scripts for handling modal form submission -->
-     <script>
+    <script>
         $(document).ready(function () {
             $('#saveTankBtn').click(function () {
                 // Retrieve form values
@@ -659,115 +685,155 @@
                 }
             });
         });
-    </script> 
-     <script>
+    </script>
+    <script>
         var firebaseConfig = {
-        apiKey: "AIzaSyB8smbF627Xh_zZiagvIPqrKaoSlDumTJ4",
-        authDomain: "fsms-48cb1.firebaseapp.com",
-        databaseURL: "https://fsms-48cb1-default-rtdb.firebaseio.com",
-        projectId: "fsms-48cb1",
-        storageBucket: "fsms-48cb1.appspot.com",
-        messagingSenderId: "693339377786",
-        appId: "1:693339377786:web:a363ef6c5edc94e3a86bc3",
-        measurementId: "G-VYE6B01M2N"
+            apiKey: "AIzaSyB8smbF627Xh_zZiagvIPqrKaoSlDumTJ4",
+            authDomain: "fsms-48cb1.firebaseapp.com",
+            databaseURL: "https://fsms-48cb1-default-rtdb.firebaseio.com",
+            projectId: "fsms-48cb1",
+            storageBucket: "fsms-48cb1.appspot.com",
+            messagingSenderId: "693339377786",
+            appId: "1:693339377786:web:a363ef6c5edc94e3a86bc3",
+            measurementId: "G-VYE6B01M2N"
         };
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
-    
+
         var database = firebase.database();
-    
+
         var ref = database.ref('Humidity');
         var tempRef = database.ref('Temperature');
         var currentVolumeRef = database.ref('Volume');
-    
-    
-      function getTempData() {
-      return new Promise((resolve, reject) => {
-        tempRef.on('value', (snapshot) => {
-          const tempData = snapshot.val();
-          resolve(JSON.stringify(tempData));
-        }, (error) => {
-          reject(error);
+
+
+        function getTempData() {
+            return new Promise((resolve, reject) => {
+                tempRef.on('value', (snapshot) => {
+                    const tempData = snapshot.val();
+                    resolve(JSON.stringify(tempData));
+                }, (error) => {
+                    reject(error);
+                });
+            });
+        }
+
+        function getVolumeData() {
+            return new Promise((resolve, reject) => {
+                currentVolumeRef.on('value', (snapshot) => {
+                    const volumeData = snapshot.val();
+                    resolve(JSON.stringify(volumeData));
+                }, (error) => {
+                    reject(error);
+                });
+            });
+        }
+
+        function gethumidityData() {
+            return new Promise((resolve, reject) => {
+                ref.on('value', (snapshot) => {
+                    const humData = snapshot.val();
+                    resolve(JSON.stringify(humData));
+                }, (error) => {
+                    reject(error);
+                });
+            });
+        }
+
+        let i = 1;
+
+        const nextbutton = document.getElementById("nextbutton");
+        const backbutton = document.getElementById("backbutton");
+        nextbutton.addEventListener("click", () => {
+            i += 10;
+            callTemperatureHumidityVolume();
         });
-      });
-      }
-    
-      function getVolumeData(){
-        return new Promise((resolve, reject) => {
-          currentVolumeRef.on('value', (snapshot)=>{
-            const volumeData = snapshot.val();
-            resolve(JSON.stringify(volumeData));
-          }, (error) => {
-            reject(error);
-          });
+
+        backbutton.addEventListener("click", () => {
+            i = Math.max(i - 10, 1);
+            callTemperatureHumidityVolume();
         });
-      }
-    
-      function gethumidityData(){
-        return new Promise((resolve, reject) =>{
-          ref.on('value', (snapshot)=>{
-            const humData = snapshot.val();
-            resolve(JSON.stringify(humData));
-          }, (error) => {
-            reject(error);
-          });
-        });
-      }
-    
-    let i = 1; 
-    
-    const nextbutton = document.getElementById("nextbutton");
-    const backbutton = document.getElementById("backbutton");
-    nextbutton.addEventListener("click", () => {
-      i += 10;
-     callTemperatureHumidityVolume();
-    });
-    
-    backbutton.addEventListener("click", () => {
-      i = Math.max(i - 10, 1);
-      callTemperatureHumidityVolume();
-    });
-    
-    async function callTemperatureHumidityVolume() {
-      console.log('calling');
-      const temp = await getTempData();
-      const humid = await gethumidityData();
-      const volume = await getVolumeData();
-    
-      const temperatures = temp.split(",").map(item => item.split(":"));
-      const humidities = humid.split(",").map(item => item.split(":"));
-      const volumes = volume.split(",").map(item => item.split(":"));
-    
-      
-      console.log(temperatures[1]);
-      console.log(humidities[1]);
-      console.log(volumes[1]);
-    
-      console.log(temp.length);
-      console.log(humid.length);
-      console.log(volume.length);
-    
-      let tableContent = '';
-      for (let j=i; j < i+10; j++) {
-        tableContent += `
+        async function callTemperatureHumidityVolume() {
+            console.log('calling');
+            const temp = await getTempData();
+            const humid = await gethumidityData();
+            const volume = await getVolumeData();
+
+            const temperatures = temp.split(",").map(item => item.split(":"));
+            const humidities = humid.split(",").map(item => item.split(":"));
+            const volumes = volume.split(",").map(item => item.split(":"));
+
+
+            console.log(temperatures[1]);
+            console.log(humidities[1]);
+            console.log(volumes[1]);
+
+            console.log(temp.length);
+            console.log(humid.length);
+            console.log(volume.length);
+
+            let tableContent = '';
+            for (let j = i; j < i + 10; j++) {
+                tableContent += `
           <div class="row">
             <div class="cell">${j}</div>
             <div class="cell">TANK A</div>
             <div class="cell">10000</div>
-            <div class="cell">${volumes[i+4]}</div>
+            <div class="cell">${volumes[i + 4]}</div>
             <div class="cell">HIGH</div>
-            <div class="cell">${temperatures[i+4]}°C</div>
-            <div class="cell">${humidities[i+4]}</div>
+            <div class="cell">${temperatures[i + 4]}°C</div>
+            <div class="cell">${humidities[i + 4]}</div>
           </div>`;
-      }
-      document.getElementById('table-content').innerHTML = tableContent;
+            }
+            document.getElementById('table-content').innerHTML = tableContent;
+
+
+
+        }
+
+        //callTemperatureHumidityVolume(); 
+
+    </script>
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+    <script>
+      (function(){
+        emailjs.init("service_9dnlgab "); // Replace with your EmailJS user ID
+      })();
+    </script>
     
-    }
-    
-    
-    callTemperatureHumidityVolume();
-    
-      </script>
+    <script>
+        let UserCreds = JSON.parse(sessionStorage.getItem("user-creds"));
+        let UserInfo = JSON.parse(sessionStorage.getItem("user-info"));
+
+        let MsgHead = document.getElementById('msg');
+        let GreetHead = document.getElementById('greet');
+        let SignoutBtn = document.getElementById('signoutbutton');
+
+        let Signout = () => {
+            sessionStorage.removeItem("user-creds");
+            sessionStorage.removeItem("user-info");
+            window.location.href = 'login.html';
+        }
+
+        let CheckCred = () => {
+            // Check if the user is NOT logged in and redirect to login page
+            if (!sessionStorage.getItem("user-creds")) {
+                window.location.href = 'login.html';
+            } else {
+                MsgHead.innerText = `Welcome ${UserInfo.firstname} ${UserInfo.lastname}!`;
+            }
+        }
+
+        // Call the CheckCred function to verify credentials and update the DOM
+        CheckCred();
+
+        // Add the event listener for the signout button
+        SignoutBtn.addEventListener('click', Signout);
+    </script>
+
+
+    <script type="module" src="tank_api.js"></script>
+    <!-- <script type="module" src="/authcheck.js"></script> -->
 </body>
 
 </html>
