@@ -63,7 +63,7 @@ if (!isset($_SESSION['admin'])) {
 
             <!-- Heading -->
             <div class="sidebar-heading">
-                Interface
+                Number Entry
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
@@ -99,6 +99,13 @@ if (!isset($_SESSION['admin'])) {
                         <a class="collapse-item" href="utilities-other.html">Other</a>
                     </div>
                 </div>
+            </li>
+
+            <!-- Nav Item - Purchase Entries -->
+            <li class="nav-item">
+                <a class="nav-link" href="add_purchase.php">
+                    <i class="fas fa-fw fa-shopping-cart"></i>
+                    <span>Purchase Entries</span></a>
             </li>
 
             <!-- Divider -->
