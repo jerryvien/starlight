@@ -1,6 +1,11 @@
 <?php
 session_start();
-session_destroy(); // Destroy the session
-header("Location: index.php"); // Redirect back to the login page
+include('config/database.php'); // Optional: Include DB connection if necessary
+
+// Destroy the session to log the user out
+session_destroy();
+
+// Redirect back to the login page
+header("Location: index.php");
 exit;
 ?>
