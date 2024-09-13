@@ -1,8 +1,34 @@
+<!-- login.php -->
+
+<?php
+session_start();
+include('config/database.php'); // Include your database connection
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $login_id = $_POST['login_id']; // Fetching the login ID
+    $password = $_POST['password']; // Fetching the password
+
+    // Query the database to get the user with the provided login ID
+    $stmt = $conn->prepare("SELECT * FROM admin_access WHERE agent_login_id = :login_id LIMIT 1");
+    $stmt->bindParam(':login_id', $login_id);
+    $stmt->execute();
+    $admin = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($admin && password_verify($password, $admin['agent_password'])) {
+        $_SESSION['admin'] = $admin['agent_name'];
+        $_SESSION['agent_id'] = $admin['agent_id'];
+        header("Location: dashboard.php"); // Redirect to dashboard
+        exit;
+    } else {
+        $error = "Invalid login ID or password!";
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -19,7 +45,6 @@
 
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
-
 </head>
 
 <body class="bg-gradient-primary">
@@ -41,34 +66,32 @@
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
                                     </div>
-                                    <form class="user">
+                                    <!-- Proper form submission -->
+                                    <form class="user" method="POST" action="login.php">
                                         <div class="form-group">
-                                            <input type="email" class="form-control form-control-user"
-                                                id="exampleInputEmail" aria-describedby="emailHelp"
-                                                placeholder="Enter Email Address...">
+                                            <input type="text" name="login_id" class="form-control form-control-user"
+                                                id="login_id" aria-describedby="loginIDHelp"
+                                                placeholder="Enter Login ID" required>
                                         </div>
                                         <div class="form-group">
-                                            <input type="password" class="form-control form-control-user"
-                                                id="exampleInputPassword" placeholder="Password">
+                                            <input type="password" name="password" class="form-control form-control-user"
+                                                id="password" placeholder="Password" required>
                                         </div>
                                         <div class="form-group">
                                             <div class="custom-control custom-checkbox small">
                                                 <input type="checkbox" class="custom-control-input" id="customCheck">
-                                                <label class="custom-control-label" for="customCheck">Remember
-                                                    Me</label>
+                                                <label class="custom-control-label" for="customCheck">Remember Me</label>
                                             </div>
                                         </div>
-                                        <a href="index.html" class="btn btn-primary btn-user btn-block">
+                                        <!-- Replaced the link with a submit button -->
+                                        <button type="submit" class="btn btn-primary btn-user btn-block">
                                             Login
-                                        </a>
-                                        <hr>
-                                        <a href="index.html" class="btn btn-google btn-user btn-block">
-                                            <i class="fab fa-google fa-fw"></i> Login with Google
-                                        </a>
-                                        <a href="index.html" class="btn btn-facebook btn-user btn-block">
-                                            <i class="fab fa-facebook-f fa-fw"></i> Login with Facebook
-                                        </a>
+                                        </button>
                                     </form>
+                                    
+                                    <!-- Display error message if login fails -->
+                                    <?php if (isset($error)) { echo "<p class='text-danger'>$error</p>"; } ?>
+
                                     <hr>
                                     <div class="text-center">
                                         <a class="small" href="forgot-password.html">Forgot Password?</a>
