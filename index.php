@@ -88,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
                                     </div>
                                     <!-- The login form -->
-                                    <form class="user" method="POST" action="login.php">
+                                    <form class="user" method="POST" action="index.php">
                                         <div class="form-group">
                                             <input type="text" name="login_id" class="form-control form-control-user"
                                                 id="login_id" aria-describedby="loginIDHelp"
