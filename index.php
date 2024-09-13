@@ -1,11 +1,11 @@
 <?php
 session_start();
 
-// Check if the admin session exists, if not redirect to the login page
+/* Check if the admin session exists, if not redirect to the login page
 if (!isset($_SESSION['admin'])) {
     header("Location: login.php");
     exit;
-}
+}*/
 
 // If the user is logged in, proceed to the dashboard content
 ?>
