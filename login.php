@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($admin && password_verify($password, $admin['agent_password'])) {
         $_SESSION['admin'] = $admin['agent_name'];
         $_SESSION['agent_id'] = $admin['agent_id'];
-        header("Location: dashboard.php"); // Redirect to dashboard
+        header("Location: index.php"); // Redirect to dashboard
         exit;
     } else {
         $error = "Invalid login ID or password!";
