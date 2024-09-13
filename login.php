@@ -1,39 +1,73 @@
 <?php
-session_start();
-include('config/database.php'); // Include the database connection
+// Enable error reporting for debugging
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-// Temporarily comment out the authentication logic to bypass login
-/*
+session_start();
+include('config/database.php'); // Include your database connection
+
+// Check if the form is submitted via POST
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Fetch the login ID and password from the form
     $login_id = $_POST['login_id'];
     $password = $_POST['password'];
 
-    $stmt = $conn->prepare("SELECT * FROM admin_access WHERE agent_login_id = :login_id LIMIT 1");
-    $stmt->bindParam(':login_id', $login_id);
-    $stmt->execute();
-    $admin = $stmt->fetch(PDO::FETCH_ASSOC);
+    try {
+        // Prepare the SQL query to find the user with the provided login ID
+        $stmt = $conn->prepare("SELECT * FROM admin_access WHERE agent_login_id = :login_id LIMIT 1");
+        $stmt->bindParam(':login_id', $login_id);
+        $stmt->execute();
 
-    if ($admin && password_verify($password, $admin['agent_password'])) {
-        $_SESSION['admin'] = $admin['agent_name'];
-        $_SESSION['agent_id'] = $admin['agent_id'];
-        header("Location: dashboard.php");
-        exit;
-    } else {
-        $error = "Invalid login ID or password!";
+        // Fetch the user data from the database
+        $admin = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($admin) {
+            // Verify the password using password_verify()
+            if (password_verify($password, $admin['agent_password'])) {
+                // Set session variables for the logged-in user
+                $_SESSION['admin'] = $admin['agent_name'];
+                $_SESSION['agent_id'] = $admin['agent_id'];
+                $_SESSION['agent_market'] = $admin['agent_market'];
+                $_SESSION['agent_credit_limit'] = $admin['agent_credit_limit'];
+                $_SESSION['agent_leader'] = $admin['agent_leader'];
+                $_SESSION['agent_login_id'] = $admin['agent_login_id'];
+
+                // Redirect to the dashboard
+                header("Location: dashboard.php");
+                exit;
+            } else {
+                // Password does not match
+                $error = "Invalid password!";
+            }
+        } else {
+            // No user found with that login ID
+            $error = "Invalid login ID!";
+        }
+    } catch (PDOException $e) {
+        // Log any database errors
+        $error = "Database error: " . $e->getMessage();
     }
 }
-*/
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
     <title>SB Admin 2 - Login</title>
-    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template-->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+    <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
 </head>
 
@@ -53,21 +87,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
                                     </div>
-                                    <!-- Bypass the form submission -->
-                                    <form method="POST" action="index.php">
+                                    <!-- The login form -->
+                                    <form class="user" method="POST" action="login.php">
                                         <div class="form-group">
-                                            <input type="text" class="form-control form-control-user"
-                                                id="login_id" name="login_id" placeholder="Enter Login ID" required>
+                                            <input type="text" name="login_id" class="form-control form-control-user"
+                                                id="login_id" aria-describedby="loginIDHelp"
+                                                placeholder="Enter Login ID" required>
                                         </div>
                                         <div class="form-group">
-                                            <input type="password" class="form-control form-control-user"
-                                                id="password" name="password" placeholder="Password" required>
+                                            <input type="password" name="password" class="form-control form-control-user"
+                                                id="password" placeholder="Password" required>
                                         </div>
-                                        <!-- Direct button to redirect -->
+                                        <div class="form-group">
+                                            <div class="custom-control custom-checkbox small">
+                                                <input type="checkbox" class="custom-control-input" id="customCheck">
+                                                <label class="custom-control-label" for="customCheck">Remember Me</label>
+                                            </div>
+                                        </div>
                                         <button type="submit" class="btn btn-primary btn-user btn-block">
-                                            Redirect to Dashboard (Testing)
+                                            Login
                                         </button>
                                     </form>
+
+                                    <!-- Display error message if login fails -->
+                                    <?php if (isset($error)) { echo "<p class='text-danger mt-3'>$error</p>"; } ?>
 
                                     <hr>
                                     <div class="text-center">
@@ -81,6 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
 
@@ -89,10 +133,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
     <!-- Core plugin JavaScript-->
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-
     <!-- Custom scripts for all pages-->
     <script src="js/sb-admin-2.min.js"></script>
 
