@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
                                     </div>
                                     <!-- Bypass the form submission -->
-                                    <form method="POST" action="dashboard.php">
+                                    <form method="POST" action="index.php">
                                         <div class="form-group">
                                             <input type="text" class="form-control form-control-user"
                                                 id="login_id" name="login_id" placeholder="Enter Login ID" required>
