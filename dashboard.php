@@ -120,7 +120,7 @@ if (!isset($_SESSION['admin'])) {
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePurchase"
                     aria-expanded="true" aria-controls="collapsePurchase">
                     <i class="fas fa-shopping-cart"></i> <!-- Updated to shopping cart icon -->
-                    <span>PMS</span>
+                    <span>Purchase</span>
                 </a>
                 <div id="collapsePurchase" class="collapse" aria-labelledby="headingPurchase"
                     data-parent="#accordionSidebar">
