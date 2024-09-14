@@ -15,8 +15,8 @@ $agent_id = $_SESSION['agent_id'];
 $customers = [];
 
 try {
-    // Fetch all customers if access_level is 'Admin', or customers related to the agent if access_level is 'Agent'
-    if ($access_level === 'Admin') {
+    // Fetch all customers if access_level is 'super_admin', or customers related to the agent if access_level is 'Agent'
+    if ($access_level === 'super_admin') {
         $query = "SELECT * FROM customer_details ORDER BY created_at DESC";
         $stmt = $conn->prepare($query);
     } else {
