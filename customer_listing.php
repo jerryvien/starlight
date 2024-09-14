@@ -13,6 +13,8 @@ $access_level = $_SESSION['access_level']; // Assuming 'access_level' is stored 
 $agent_id = $_SESSION['agent_id'];
 
 $customers = [];
+$success_message = ''; // Initialize the success message variable
+$error_message = ''; // Initialize the error message variable
 
 try {
     // Fetch all customers if access_level is 'super_admin', or customers related to the agent if access_level is 'Agent'
@@ -29,7 +31,7 @@ try {
     $stmt->execute();
     $customers = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
-    echo "Error fetching customers: " . $e->getMessage();
+    $error_message = "Error fetching customers: " . $e->getMessage();
 }
 
 // Handle update submission (when edit button is clicked)
@@ -48,12 +50,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_customer'])) {
         $stmt->bindParam(':customer_id', $customer_id);
         
         if ($stmt->execute()) {
-            echo "<div class='alert alert-success'>Customer details updated successfully.</div>";
+            $success_message = "Customer details updated successfully.";
         } else {
-            echo "<div class='alert alert-danger'>Failed to update customer details.</div>";
+            $error_message = "Failed to update customer details.";
         }
     } catch (PDOException $e) {
-        echo "Error updating customer: " . $e->getMessage();
+        $error_message = "Error updating customer: " . $e->getMessage();
     }
 }
 ?>
@@ -86,6 +88,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_customer'])) {
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                     <h1 class="h3 mb-4 text-gray-800">Customer Listing</h1>
+
+                    <!-- Display success message -->
+                    <?php if ($success_message): ?>
+                        <div class="alert alert-success"><?php echo $success_message; ?></div>
+                    <?php endif; ?>
+
+                    <!-- Display error message -->
+                    <?php if ($error_message): ?>
+                        <div class="alert alert-danger"><?php echo $error_message; ?></div>
+                    <?php endif; ?>
 
                     <!-- Customer Listing Table -->
                     <div class="table-responsive">
@@ -143,4 +155,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_customer'])) {
     <script src="js/sb-admin-2.min.js"></script>
 
 </body>
+
 </html>
