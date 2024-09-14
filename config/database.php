@@ -1,8 +1,8 @@
 <?php
 // Database connection settings
 $host = 'localhost'; // Host (usually localhost)
-$db   = 'u737908269_lucky2024'; // Database name
-$user = 'u737908269_root'; // Database username
+$db   = 'u821069140_kengroup_2024'; // Database name
+$user = 'u821069140_root'; // Database username
 $pass = '$1Rv1r@dmInS'; // Database password
 
 try {
