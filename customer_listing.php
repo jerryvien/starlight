@@ -17,13 +17,24 @@ $success_message = ''; // Initialize the success message variable
 $error_message = ''; // Initialize the error message variable
 
 try {
-    // Fetch all customers if access_level is 'super_admin', or customers related to the agent if access_level is 'Agent'
+    // Fetch all customers with their agent names if access_level is 'super_admin', or customers related to the agent if access_level is 'Agent'
     if ($access_level === 'super_admin') {
-        $query = "SELECT * FROM customer_details ORDER BY created_at DESC";
+        $query = "
+            SELECT c.*, a.agent_name 
+            FROM customer_details c 
+            LEFT JOIN admin_access a ON c.agent_id = a.agent_id
+            ORDER BY c.created_at DESC
+        ";
         $stmt = $conn->prepare($query);
     } else {
         // For agent-level users, filter by agent_id
-        $query = "SELECT * FROM customer_details WHERE agent_id = :agent_id ORDER BY created_at DESC";
+        $query = "
+            SELECT c.*, a.agent_name 
+            FROM customer_details c 
+            LEFT JOIN admin_access a ON c.agent_id = a.agent_id
+            WHERE c.agent_id = :agent_id 
+            ORDER BY c.created_at DESC
+        ";
         $stmt = $conn->prepare($query);
         $stmt->bindParam(':agent_id', $agent_id);
     }
@@ -108,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_customer'])) {
                                 <tr>
                                     <th>Customer ID</th>
                                     <th>Customer Name</th>
-                                    <th>Agent ID</th>
+                                    <th>Agent Name</th> <!-- Changed from Agent ID to Agent Name -->
                                     <th>Credit Limit (RM)</th>
                                     <th>VIP Status</th>
                                     <th>Actions</th>
@@ -121,7 +132,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_customer'])) {
                                             <input type="hidden" name="customer_id" value="<?php echo $customer['customer_id']; ?>">
                                             <td><?php echo $customer['customer_id']; ?></td>
                                             <td><input type="text" name="customer_name" value="<?php echo $customer['customer_name']; ?>" class="form-control" <?php if ($access_level !== 'Admin') echo 'readonly'; ?>></td>
-                                            <td><?php echo $customer['agent_id']; ?></td>
+                                            <td><?php echo $customer['agent_name']; ?></td> <!-- Display Agent Name -->
                                             <td><input type="number" name="credit_limit" value="<?php echo $customer['credit_limit']; ?>" class="form-control"></td>
                                             <td>
                                                 <select name="vip_status" class="form-control">
