@@ -2,7 +2,7 @@
 // Database connection settings
 $host = 'localhost'; // Host (usually localhost)
 $db   = 'u821069140_kengroup_2024'; // Database name
-$user = 'u821069140_root'; // Database username
+$user = 'u821069140_root'; // Database username updated
 $pass = '$1Rv1r@dmInS'; // Database password
 
 try {
