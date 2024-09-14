@@ -50,7 +50,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_customer'])) {
         $stmt->bindParam(':customer_id', $customer_id);
         
         if ($stmt->execute()) {
-            $success_message = "Customer details updated successfully.";
+            // After successfully updating the customer, redirect back to customer listing
+            header("Location: customer_listing.php?success=1");
+            exit; // Exit after redirect to prevent further code execution
         } else {
             $error_message = "Failed to update customer details.";
         }
@@ -89,9 +91,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_customer'])) {
                 <div class="container-fluid">
                     <h1 class="h3 mb-4 text-gray-800">Customer Listing</h1>
 
-                    <!-- Display success message -->
-                    <?php if ($success_message): ?>
-                        <div class="alert alert-success"><?php echo $success_message; ?></div>
+                    <!-- Display success message if redirected with ?success=1 in URL -->
+                    <?php if (isset($_GET['success'])): ?>
+                        <div class="alert alert-success">Customer details updated successfully.</div>
                     <?php endif; ?>
 
                     <!-- Display error message -->
