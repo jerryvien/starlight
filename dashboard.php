@@ -111,12 +111,12 @@ if (!isset($_SESSION['admin'])) {
 
              <!-- Nav Item - Purchase Management System Collapse Menu -->
              <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-                    aria-expanded="true" aria-controls="collapseUtilities">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePurchase"
+                    aria-expanded="true" aria-controls="collapsePurchase">
                     <i class="fas fa-fw fa-wrench"></i>
                     <span>Purchase Record Management</span>
                 </a>
-                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
+                <div id="collapsePurchase" class="collapse" aria-labelledby="headingPurchase"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Purchase Utilities:</h6>
