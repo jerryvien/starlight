@@ -1,9 +1,4 @@
 <?php
-// Enable error reporting for debugging
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
 session_start();
 include('config/database.php'); // Include your database connection
 
@@ -12,6 +7,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Fetch the login ID and password from the form
     $login_id = $_POST['login_id'];
     $password = $_POST['password'];
+
+    // Default error message to display for both wrong username and password
+    $error_message = "Invalid login ID or password!";
 
     try {
         // Prepare the SQL query to find the user with the provided login ID
@@ -22,31 +20,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Fetch the user data from the database
         $admin = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($admin) {
-            // Verify the password using password_verify()
-            if (password_verify($password, $admin['agent_password'])) {
-                // Set session variables for the logged-in user
-                $_SESSION['admin'] = $admin['agent_name'];
-                $_SESSION['agent_id'] = $admin['agent_id'];
-                $_SESSION['agent_market'] = $admin['agent_market'];
-                $_SESSION['agent_credit_limit'] = $admin['agent_credit_limit'];
-                $_SESSION['agent_leader'] = $admin['agent_leader'];
-                $_SESSION['agent_login_id'] = $admin['agent_login_id'];
+        if ($admin && password_verify($password, $admin['agent_password'])) {
+            // Set session variables for the logged-in user
+            $_SESSION['admin'] = $admin['agent_name'];
+            $_SESSION['agent_id'] = $admin['agent_id'];
+            $_SESSION['access_level'] = $admin['access_level'];
+            $_SESSION['agent_market'] = $admin['agent_market'];
+            $_SESSION['agent_credit_limit'] = $admin['agent_credit_limit'];
+            $_SESSION['agent_leader'] = $admin['agent_leader'];
+            $_SESSION['agent_login_id'] = $admin['agent_login_id'];
 
-                // Redirect to the dashboard
-                header("Location: dashboard.php");
-                exit;
-            } else {
-                // Password does not match
-                $error = "Invalid password!";
-            }
+            // Redirect to the dashboard
+            header("Location: dashboard.php");
+            exit;
         } else {
-            // No user found with that login ID
-            $error = "Invalid login ID!";
+            // Display the same error message for invalid login ID or password
+            $error = $error_message;
         }
     } catch (PDOException $e) {
-        // Log any database errors
-        $error = "Database error: " . $e->getMessage();
+        // Catch any database errors, but still display the generic error message
+        $error = $error_message;
     }
 }
 ?>
@@ -61,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Login</title>
+    <title>Ken Group Admin - Login</title>
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
