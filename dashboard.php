@@ -66,18 +66,24 @@ if (!isset($_SESSION['admin'])) {
                 Customer Management System
             </div>
 
-            <!-- Nav Item - Customer Management Collapse Menu -->
+           <!-- Nav Item - Customer Management Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCustomer"
+                    aria-expanded="true" aria-controls="collapseCustomer">
+                    <i class="fas fa-users"></i> <!-- Changed to fa-users for customer management -->
                     <span>Customer</span>
                 </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div id="collapseCustomer" class="collapse" aria-labelledby="headingCustomer" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Customer:</h6>
-                        <a class="collapse-item" href="customer_register.php">Create Customer</a>
-                        <a class="collapse-item" href="customer_listing.php">Customer Listing</a>
+                        <a class="collapse-item" href="customer_register.php">
+                            <i class="fas fa-user-plus"></i> <!-- fa-user-plus for customer registration -->
+                            Create Customer
+                        </a>
+                        <a class="collapse-item" href="customer_listing.php">
+                            <i class="fas fa-address-book"></i> <!-- fa-address-book for customer listing -->
+                            Customer Listing
+                        </a>
                     </div>
                 </div>
             </li>
@@ -110,23 +116,36 @@ if (!isset($_SESSION['admin'])) {
             </div>
 
              <!-- Nav Item - Purchase Management System Collapse Menu -->
-             <li class="nav-item">
+            <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePurchase"
                     aria-expanded="true" aria-controls="collapsePurchase">
-                    <i class="fas fa-fw fa-wrench"></i>
+                    <i class="fas fa-shopping-cart"></i> <!-- Updated to shopping cart icon -->
                     <span>PMS</span>
                 </a>
                 <div id="collapsePurchase" class="collapse" aria-labelledby="headingPurchase"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Purchase Utilities:</h6>
-                        <a class="collapse-item" href="utilities-color.html">New Purchase</a>
-                        <a class="collapse-item" href="utilities-border.html">Purchase Listing</a>
-                        <a class="collapse-item" href="utilities-animation.html">Report</a>
-                        <a class="collapse-item" href="utilities-other.html">Other</a>
+                        <a class="collapse-item" href="new_purchase.php">
+                            <i class="fas fa-shopping-cart"></i> <!-- New Purchase icon -->
+                            New Purchase
+                        </a>
+                        <a class="collapse-item" href="purchase_listing.php">
+                            <i class="fas fa-list-alt"></i> <!-- Purchase Listing icon -->
+                            Purchase Listing
+                        </a>
+                        <a class="collapse-item" href="purchase_report.php">
+                            <i class="fas fa-chart-line"></i> <!-- Report icon -->
+                            Report
+                        </a>
+                        <a class="collapse-item" href="utilities-other.html">
+                            <i class="fas fa-cogs"></i> <!-- Other utilities icon -->
+                            Other
+                        </a>
                     </div>
                 </div>
             </li>
+
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item active">
