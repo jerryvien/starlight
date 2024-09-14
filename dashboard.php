@@ -114,7 +114,7 @@ if (!isset($_SESSION['admin'])) {
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePurchase"
                     aria-expanded="true" aria-controls="collapsePurchase">
                     <i class="fas fa-fw fa-wrench"></i>
-                    <span>Purchase Record Management</span>
+                    <span>PMS</span>
                 </a>
                 <div id="collapsePurchase" class="collapse" aria-labelledby="headingPurchase"
                     data-parent="#accordionSidebar">
