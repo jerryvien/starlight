@@ -24,7 +24,7 @@ $error = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $customer_name = $_POST['customer_name'];
     $credit_limit = isset($_POST['credit_limit']) ? $_POST['credit_limit'] : 500;
-    $vip_status = 'Normal'; // Default VIP status
+    $vip_status = $_POST['vip_status']; // Editable field
     $created_at = date('Y-m-d H:i:s');
 
     if (!empty($customer_name)) {
@@ -106,8 +106,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </div>
 
                         <div class="form-group">
-                            <label for="vip_status">VIP Status (Default: Normal)</label>
-                            <input type="text" class="form-control" id="vip_status" name="vip_status" value="Normal" readonly>
+                            <label for="vip_status">VIP Status</label>
+                            <select class="form-control" id="vip_status" name="vip_status" required>
+                                <option value="Normal" selected>Normal</option>
+                                <option value="VIP">VIP</option>
+                                <option value="Premium">Premium</option> <!-- Add more options if needed -->
+                            </select>
                         </div>
 
                         <button type="submit" class="btn btn-primary">Create Customer</button>
