@@ -8,9 +8,9 @@ if (!isset($_SESSION['admin'])) {
     exit;
 }
 
-// Generate a unique serial number based on a secret key, random function, and current datetime
-include('utilities.php'); // Include the utilities for serial number generation
-$serial_number = generate_serial_number(); 
+// Generate a unique serial number based on computer ID and current datetime
+$computer_id = gethostname(); // Example computer ID
+$serial_number = $computer_id . '_' . date('YmdHis');
 
 // Fetch customer data for search filter
 $query = ($_SESSION['access_level'] === 'super_admin') ? 
@@ -172,7 +172,68 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </div>
 
-    <script src="js/purchase_entry.js"></script> <!-- Custom JavaScript file -->
+    <script>
+        const customers = <?php echo json_encode($customers); ?>;
 
+        // Filter and display customer list
+        function filterCustomers() {
+            const searchValue = document.getElementById('customer_search').value.toLowerCase();
+            const customerList = document.getElementById('customer_list');
+            customerList.innerHTML = ''; // Clear previous list
+
+            customers.forEach(function(customer) {
+                if (customer.customer_name.toLowerCase().includes(searchValue)) {
+                    const li = document.createElement('li');
+                    li.classList.add('list-group-item');
+                    li.textContent = customer.customer_name;
+                    li.onclick = function() {
+                        selectCustomer(customer.customer_id, customer.customer_name);
+                    };
+                    customerList.appendChild(li);
+                }
+            });
+        }
+
+        // Select customer and hide list
+        function selectCustomer(customerId, customerName) {
+            document.getElementById('customer_search').value = customerName;
+            document.getElementById('customer_list').innerHTML = '';
+            const customerField = `<input type="hidden" name="customer_id" value="${customerId}">`;
+            document.getElementById('purchase_entries_wrapper').insertAdjacentHTML('beforebegin', customerField);
+        }
+
+        // Populate dynamic purchase entry rows based on the selected number of purchases
+        function populatePurchaseEntries() {
+            const count = parseInt(document.getElementById('purchase_count').value);
+            const wrapper = document.getElementById('purchase_entries_wrapper');
+            wrapper.innerHTML = ''; // Clear existing entries
+
+            for (let i = 0; i < count; i++) {
+                wrapper.innerHTML += `
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <label for="purchase_no_${i}">Purchase Number</label>
+                            <input type="text" class="form-control" name="purchase_no[]" required>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="purchase_category_${i}">Category</label>
+                            <select class="form-control" name="purchase_category[]">
+                                <option value="Box">Box</option>
+                                <option value="Straight">Straight</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="purchase_amount_${i}">Amount</label>
+                            <input type="number" class="form-control" name="purchase_amount[]" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="purchase_date_${i}">Purchase Date</label>
+                            <input type="date" class="form-control" name="purchase_date[]" required>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+    </script>
 </body>
 </html>
