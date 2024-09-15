@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('config/database.php'); // Include database connection
+include('config/database.php'); // Include your database connection
 
 // Redirect to login page if the user is not logged in
 if (!isset($_SESSION['admin'])) {
@@ -8,93 +8,58 @@ if (!isset($_SESSION['admin'])) {
     exit;
 }
 
-// Fetch the logged-in agent ID
+// Fetch user details and access level
+$access_level = $_SESSION['access_level'];
 $agent_id = $_SESSION['agent_id'];
 
-// Initialize variables
-$customer_name = '';
-$purchase_entries = [];
-$error_message = '';
-$success_message = '';
-$purchase_rows = isset($_POST['num_purchases']) ? $_POST['num_purchases'] : 1;
-
-// Fetch default customer list for the agent
-$customers = [];
-try {
-    $stmt = $conn->prepare("SELECT * FROM customer_details WHERE agent_id = :agent_id");
+// Fetch all customers if access_level is 'super_admin', or fetch customers by agent_id for agents
+if ($access_level === 'super_admin') {
+    $query = "SELECT * FROM customer_details ORDER BY created_at DESC";
+} else {
+    $query = "SELECT * FROM customer_details WHERE agent_id = :agent_id ORDER BY created_at DESC";
+}
+$stmt = $conn->prepare($query);
+if ($access_level !== 'super_admin') {
     $stmt->bindParam(':agent_id', $agent_id);
-    $stmt->execute();
-    $customers = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (PDOException $e) {
-    $error_message = "Error fetching customers: " . $e->getMessage();
 }
+$stmt->execute();
+$customers = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Handle customer selection and show customer info
-$selected_customer = null;
-if (isset($_POST['select_customer'])) {
+// Handle form submission
+$success = '';
+$error = '';
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $customer_id = $_POST['customer_id'];
+    $entries = $_POST['purchase_entries']; // Dynamic purchase entries
+
     try {
-        $stmt = $conn->prepare("SELECT * FROM customer_details WHERE customer_id = :customer_id AND agent_id = :agent_id");
-        $stmt->bindParam(':customer_id', $customer_id);
-        $stmt->bindParam(':agent_id', $agent_id);
-        $stmt->execute();
-        $selected_customer = $stmt->fetch(PDO::FETCH_ASSOC);
-    } catch (PDOException $e) {
-        $error_message = "Error fetching customer details: " . $e->getMessage();
-    }
-}
-
-// Handle purchase entry submission
-if (isset($_POST['confirm_purchase'])) {
-    $customer_id = $_POST['customer_id'];
-    $total_purchase_amount = 0;
-    $purchase_entries = [];
-
-    for ($i = 0; $i < $purchase_rows; $i++) {
-        $purchase_number = $_POST['purchase_number'][$i];
-        $purchase_category = $_POST['purchase_category'][$i];
-        $purchase_amount = $_POST['purchase_amount'][$i];
-        $purchase_date = $_POST['purchase_date'][$i];
-
-        // Serial number generation (combination of computer ID and date-time)
-        $serial_number = substr(gethostname(), -8) . '-' . date('YmdHis');
-
-        // Calculate total amount based on purchase category
-        $total_purchase_amount += $purchase_amount;
-
-        $purchase_entries[] = [
-            'purchase_number' => $purchase_number,
-            'purchase_category' => $purchase_category,
-            'purchase_amount' => $purchase_amount,
-            'purchase_date' => $purchase_date,
-            'serial_number' => $serial_number
-        ];
-    }
-
-    // Insert purchase entries into the database
-    try {
-        foreach ($purchase_entries as $entry) {
-            $stmt = $conn->prepare("INSERT INTO purchase_entries (customer_id, agent_id, purchase_number, purchase_category, purchase_amount, purchase_date, serial_number, created_at) 
-                                    VALUES (:customer_id, :agent_id, :purchase_number, :purchase_category, :purchase_amount, :purchase_date, :serial_number, NOW())");
-            $stmt->bindParam(':customer_id', $customer_id);
-            $stmt->bindParam(':agent_id', $agent_id);
-            $stmt->bindParam(':purchase_number', $entry['purchase_number']);
-            $stmt->bindParam(':purchase_category', $entry['purchase_category']);
-            $stmt->bindParam(':purchase_amount', $entry['purchase_amount']);
-            $stmt->bindParam(':purchase_date', $entry['purchase_date']);
-            $stmt->bindParam(':serial_number', $entry['serial_number']);
-            $stmt->execute();
+        foreach ($entries as $entry) {
+            $serial_number = generate_serial_number(); // Generate serial number
+            $stmt = $conn->prepare("INSERT INTO purchase_records (customer_id, agent_id, purchase_no, purchase_category, purchase_amount, purchase_date, serial_number) VALUES (?, ?, ?, ?, ?, ?, ?)");
+            $stmt->execute([
+                $customer_id,
+                $agent_id,
+                $entry['purchase_no'],
+                $entry['purchase_category'],
+                $entry['purchase_amount'],
+                $entry['purchase_date'],  // Purchase date is now part of dynamic fields
+                $serial_number
+            ]);
         }
-        $success_message = "Purchase entries saved successfully.";
+        $success = "Purchases added successfully!";
     } catch (PDOException $e) {
-        $error_message = "Error saving purchase entries: " . $e->getMessage();
+        $error = "Error adding purchase: " . $e->getMessage();
     }
+}
+
+// Function to generate a unique serial number based on machine ID and current datetime
+function generate_serial_number() {
+    return substr(gethostname(), -8) . date('YmdHis');
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -102,17 +67,15 @@ if (isset($_POST['confirm_purchase'])) {
     <title>Purchase Entry</title>
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
-    <link href="vendor/jquery-ui/jquery-ui.min.css" rel="stylesheet"> <!-- For Datepicker -->
 </head>
 
 <body id="page-top">
-    <!-- Page Wrapper -->
     <div id="wrapper">
         <!-- Sidebar -->
         <?php include('sidebar.php'); ?>
+
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
-            <!-- Main Content -->
             <div id="content">
                 <!-- Topbar -->
                 <?php include('topbar.php'); ?>
@@ -121,82 +84,54 @@ if (isset($_POST['confirm_purchase'])) {
                 <div class="container-fluid">
                     <h1 class="h3 mb-4 text-gray-800">Purchase Entry</h1>
 
-                    <!-- Error and Success Messages -->
-                    <?php if ($error_message): ?>
-                        <div class="alert alert-danger"><?php echo $error_message; ?></div>
-                    <?php endif; ?>
-                    <?php if ($success_message): ?>
-                        <div class="alert alert-success"><?php echo $success_message; ?></div>
+                    <?php if ($success): ?>
+                        <div class="alert alert-success"><?php echo $success; ?></div>
+                    <?php elseif ($error): ?>
+                        <div class="alert alert-danger"><?php echo $error; ?></div>
                     <?php endif; ?>
 
                     <!-- Customer Selection -->
-                    <form method="POST">
-                        <div class="form-group">
-                            <label for="customer_id">Select Customer</label>
-                            <select name="customer_id" id="customer_id" class="form-control" required>
-                                <option value="">Choose a customer</option>
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <label for="customer_search">Search Customer:</label>
+                            <input type="text" id="customer_search" class="form-control" placeholder="Search by name..." onkeyup="filterCustomers()">
+
+                            <label for="customer_select">Select Customer:</label>
+                            <select id="customer_select" class="form-control" onchange="displayCustomerDetails()">
+                                <option value="">-- Select Customer --</option>
                                 <?php foreach ($customers as $customer): ?>
-                                    <option value="<?php echo $customer['customer_id']; ?>" <?php echo (isset($selected_customer) && $selected_customer['customer_id'] == $customer['customer_id']) ? 'selected' : ''; ?>>
-                                        <?php echo $customer['customer_name']; ?>
-                                    </option>
+                                    <option value="<?php echo $customer['customer_id']; ?>"><?php echo $customer['customer_name']; ?></option>
                                 <?php endforeach; ?>
                             </select>
-                            <button type="submit" name="select_customer" class="btn btn-primary mt-2">Select Customer</button>
+
+                            <div id="customer_details" style="margin-top: 20px;">
+                                <!-- Customer details will be displayed here after selection -->
+                            </div>
                         </div>
-                    </form>
+                    </div>
 
-                    <!-- Display selected customer information -->
-                    <?php if ($selected_customer): ?>
-                        <div class="form-group">
-                            <h5>Customer Information:</h5>
-                            <p><strong>Name:</strong> <?php echo $selected_customer['customer_name']; ?></p>
-                            <p><strong>Credit Limit:</strong> RM<?php echo $selected_customer['credit_limit']; ?></p>
-                            <p><strong>VIP Status:</strong> <?php echo $selected_customer['vip_status']; ?></p>
+                    <!-- Purchase Entry Section -->
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <form method="POST" id="purchase_form">
+                                <input type="hidden" name="customer_id" id="selected_customer_id">
+                                
+                                <label for="purchase_entries_count">Number of Purchases:</label>
+                                <select id="purchase_entries_count" class="form-control mb-3" onchange="generatePurchaseFields()">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+
+                                <div id="purchase_entries_container"></div> <!-- Purchase entry fields will be generated here -->
+
+                                <button type="submit" class="btn btn-primary mt-4">Submit Purchases</button>
+                            </form>
                         </div>
-                    <?php endif; ?>
+                    </div>
 
-                    <!-- Purchase Entry Form -->
-                    <form method="POST" id="purchase_form">
-                        <input type="hidden" name="customer_id" value="<?php echo isset($selected_customer) ? $selected_customer['customer_id'] : ''; ?>" required>
-
-                        <div class="form-group">
-                            <label for="num_purchases">Number of Purchase Entries</label>
-                            <select id="num_purchases" name="num_purchases" class="form-control">
-                                <?php for ($i = 1; $i <= 10; $i++): ?>
-                                    <option value="<?php echo $i; ?>" <?php if ($i == $purchase_rows) echo 'selected'; ?>><?php echo $i; ?></option>
-                                <?php endfor; ?>
-                            </select>
-                        </div>
-
-                        <!-- Dynamic Purchase Entry Fields -->
-                        <div id="purchase_entries">
-                            <?php for ($i = 0; $i < $purchase_rows; $i++): ?>
-                                <div class="form-row">
-                                    <div class="form-group col-md-3">
-                                        <label for="purchase_number">Purchase Number</label>
-                                        <input type="text" class="form-control" name="purchase_number[]" required>
-                                    </div>
-                                    <div class="form-group col-md-3">
-                                        <label for="purchase_category">Category</label>
-                                        <select class="form-control" name="purchase_category[]">
-                                            <option value="Box">Box</option>
-                                            <option value="Straight">Straight</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-md-3">
-                                        <label for="purchase_amount">Amount (RM)</label>
-                                        <input type="number" class="form-control" name="purchase_amount[]" required>
-                                    </div>
-                                    <div class="form-group col-md-3">
-                                        <label for="purchase_date">Purchase Date</label>
-                                        <input type="text" class="form-control purchase_datepicker" name="purchase_date[]" required>
-                                    </div>
-                                </div>
-                            <?php endfor; ?>
-                        </div>
-
-                        <button type="submit" name="confirm_purchase" class="btn btn-primary mt-4">Submit Purchase Entries</button>
-                    </form>
                 </div>
                 <!-- /.container-fluid -->
             </div>
@@ -209,26 +144,68 @@ if (isset($_POST['confirm_purchase'])) {
     </div>
     <!-- End of Page Wrapper -->
 
-    <!-- Bootstrap core JavaScript -->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="vendor/jquery-ui/jquery-ui.min.js"></script> <!-- Datepicker -->
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
     <script src="js/sb-admin-2.min.js"></script>
 
     <script>
-        // Datepicker initialization
-        $(function() {
-            $('.purchase_datepicker').datepicker({
-                dateFormat: 'yy-mm-dd'
-            });
-        });
+        // Filter customers based on search input
+        function filterCustomers() {
+            var input = document.getElementById("customer_search").value.toLowerCase();
+            var select = document.getElementById("customer_select");
+            var options = select.getElementsByTagName("option");
+            for (var i = 0; i < options.length; i++) {
+                var optionText = options[i].text.toLowerCase();
+                options[i].style.display = optionText.includes(input) ? "" : "none";
+            }
+        }
 
-        // Update dynamic purchase fields based on selection
-        $('#num_purchases').change(function() {
-            $('#purchase_form').submit();
-        });
+        // Display customer details when selected
+        function displayCustomerDetails() {
+            var select = document.getElementById("customer_select");
+            var selectedCustomerId = select.value;
+            document.getElementById("selected_customer_id").value = selectedCustomerId;
+
+            // Fetch and display customer details (hardcoded details for now)
+            document.getElementById("customer_details").innerHTML = `
+                <h5>Customer Details:</h5>
+                <p>ID: ${selectedCustomerId}</p>
+                <p>Name: ${select.options[select.selectedIndex].text}</p>
+            `;
+        }
+
+        // Generate dynamic purchase entry fields based on the selected number of purchases
+        function generatePurchaseFields() {
+            var count = document.getElementById("purchase_entries_count").value;
+            var container = document.getElementById("purchase_entries_container");
+            container.innerHTML = '';
+
+            for (var i = 0; i < count; i++) {
+                container.innerHTML += `
+                    <div class="form-group">
+                        <label>Purchase Number</label>
+                        <input type="text" name="purchase_entries[${i}][purchase_no]" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Purchase Category</label>
+                        <select name="purchase_entries[${i}][purchase_category]" class="form-control">
+                            <option value="Box">Box</option>
+                            <option value="Straight">Straight</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Purchase Amount (RM)</label>
+                        <input type="number" name="purchase_entries[${i}][purchase_amount]" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Purchase Date</label>
+                        <input type="date" name="purchase_entries[${i}][purchase_date]" class="form-control" required>
+                    </div>
+                    <hr>
+                `;
+            }
+        }
     </script>
-
 </body>
 </html>
