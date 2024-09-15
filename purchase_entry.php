@@ -8,23 +8,42 @@ if (!isset($_SESSION['admin'])) {
     exit;
 }
 
-// Initialize variables
-$success_message = '';
-$error_message = '';
-$serial_number = gethostname() . '_' . date('YmdHis'); // Generate the serial number on page load
-$agent_id = $_SESSION['agent_id'];
-$access_level = $_SESSION['access_level']; // Assuming access_level is stored in session
+// Generate a unique serial number based on computer ID and current datetime
+$computer_id = gethostname(); // Example computer ID
+$serial_number = $computer_id . '_' . date('YmdHis');
+
+// Fetch customer data for search filter
+$query = ($_SESSION['access_level'] === 'super_admin') ? 
+    "SELECT customer_id, customer_name FROM customer_details" : 
+    "SELECT customer_id, customer_name FROM customer_details WHERE agent_id = :agent_id";
+$stmt = $conn->prepare($query);
+
+if ($_SESSION['access_level'] !== 'super_admin') {
+    $stmt->bindParam(':agent_id', $_SESSION['agent_id']);
+}
+
+$stmt->execute();
+$customers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Fetch agents for super_admin dropdown (optional for super_admin only)
+$agents = [];
+if ($_SESSION['access_level'] === 'super_admin') {
+    $stmt = $conn->prepare("SELECT agent_id, agent_name FROM admin_access");
+    $stmt->execute();
+    $agents = $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['confirm'])) {
-        // Insert purchase entries into the database after confirmation
         $customer_id = $_POST['customer_id'];
         $purchase_entries = $_POST['purchase_no'];
         $purchase_category = $_POST['purchase_category'];
         $purchase_amount = $_POST['purchase_amount'];
         $purchase_date = $_POST['purchase_date'];
-        $agent_id_to_save = ($access_level === 'super_admin') ? $_POST['agent_id'] : $agent_id;
+        
+        // Set agent ID based on access level
+        $agent_id_to_save = ($_SESSION['access_level'] === 'super_admin') ? $_POST['agent_id'] : $_SESSION['agent_id'];
 
         // Insert each purchase entry into the database
         for ($i = 0; $i < count($purchase_entries); $i++) {
@@ -44,16 +63,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $success_message = "Purchase entries added successfully with serial number: $serial_number";
     }
 }
-
-// Fetch customer details on search
-if (isset($_POST['query'])) {
-    $query = $_POST['query'];
-    $stmt = $conn->prepare("SELECT * FROM customer_details WHERE customer_name LIKE :query AND agent_id = :agent_id LIMIT 1");
-    $stmt->bindParam(':query', "%$query%");
-    $stmt->bindParam(':agent_id', $_SESSION['agent_id']);
-    $stmt->execute();
-    $customer = $stmt->fetch(PDO::FETCH_ASSOC);
-}
 ?>
 
 <!DOCTYPE html>
@@ -68,82 +77,100 @@ if (isset($_POST['query'])) {
 
     <title>Purchase Entry</title>
 
-    <!-- Custom fonts for this template-->
+    <!-- Custom fonts and styles for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
+    <script src="vendor/jquery/jquery.min.js"></script>
 </head>
 
 <body id="page-top">
-
-    <!-- Page Wrapper -->
     <div id="wrapper">
-        <!-- Sidebar -->
         <?php include('sidebar.php'); ?>
 
-        <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
             <div id="content">
-                <!-- Topbar -->
                 <?php include('topbar.php'); ?>
 
-                <!-- Begin Page Content -->
                 <div class="container-fluid">
                     <h1 class="h3 mb-4 text-gray-800">Purchase Entry</h1>
 
-                    <!-- Success or error messages -->
-                    <?php if ($success_message): ?>
+                    <!-- Success message -->
+                    <?php if (isset($success_message)): ?>
                         <div class="alert alert-success"><?php echo $success_message; ?></div>
-                    <?php elseif ($error_message): ?>
-                        <div class="alert alert-danger"><?php echo $error_message; ?></div>
                     <?php endif; ?>
 
-                    <!-- Customer search -->
+                    <!-- Display Serial Number -->
                     <div class="form-group">
-                        <label for="customer_search">Search Customer</label>
-                        <input type="text" class="form-control" id="customer_search" placeholder="Start typing customer name...">
-                        <div id="customer_details">
-                            <?php if (isset($customer)): ?>
-                                <p>Customer ID: <?php echo $customer['customer_id']; ?></p>
-                                <p>Customer Name: <?php echo $customer['customer_name']; ?></p>
-                                <p>Credit Limit: <?php echo $customer['credit_limit']; ?></p>
-                                <p>VIP Status: <?php echo $customer['vip_status']; ?></p>
-                            <?php endif; ?>
-                        </div>
+                        <label for="serial_number">Serial Number</label>
+                        <input type="text" class="form-control" id="serial_number" value="<?php echo $serial_number; ?>" readonly>
                     </div>
 
-                    <!-- Purchase entry form -->
+                    <!-- Customer Search and Display -->
                     <form method="POST" action="purchase_entry.php">
                         <div class="form-group">
-                            <label for="purchase_no">Number of Purchase Entries</label>
-                            <select class="form-control" id="purchase_no" name="purchase_no[]" required>
-                                <?php for ($i = 1; $i <= 10; $i++) { ?>
-                                    <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
-                                <?php } ?>
+                            <label for="customer_search">Search Customer</label>
+                            <input type="text" class="form-control" id="customer_search" placeholder="Start typing to search..." onkeyup="filterCustomers()">
+                            <ul id="customer_list" class="list-group mt-2"></ul>
+                        </div>
+
+                        <!-- Agent Dropdown (only for super_admin) -->
+                        <?php if ($_SESSION['access_level'] === 'super_admin'): ?>
+                        <div class="form-group">
+                            <label for="agent_dropdown">Agent</label>
+                            <select id="agent_dropdown" class="form-control" name="agent_id" required>
+                                <option value="">Select Agent</option>
+                                <?php foreach ($agents as $agent): ?>
+                                    <option value="<?php echo $agent['agent_id']; ?>"><?php echo $agent['agent_name']; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <?php endif; ?>
+
+                        <!-- Dynamic Purchase Entry Count Selection -->
+                        <div class="form-group">
+                            <label for="purchase_count">Number of Purchases</label>
+                            <select id="purchase_count" class="form-control" onchange="populatePurchaseEntries()" required>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
                             </select>
                         </div>
 
-                        <!-- Dynamic purchase entries -->
-                        <div id="dynamic_purchase_entries">
-                            <!-- Default one entry -->
-                            <div class="form-group">
-                                <label>Purchase Entry</label>
-                                <input type="text" class="form-control" name="purchase_no[]" placeholder="Enter purchase number">
-                                <select class="form-control" name="purchase_category[]">
-                                    <option value="Box">Box</option>
-                                    <option value="Straight">Straight</option>
-                                </select>
-                                <input type="number" class="form-control" name="purchase_amount[]" placeholder="Enter purchase amount">
-                                <input type="date" class="form-control" name="purchase_date[]" placeholder="Enter purchase date">
+                        <!-- Dynamic Purchase Entries -->
+                        <div id="purchase_entries_wrapper">
+                            <!-- Initially display 1 row by default -->
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <label for="purchase_no_0">Purchase Number</label>
+                                    <input type="text" class="form-control" name="purchase_no[]" required>
+                                </div>
+                                <div class="col-md-2">
+                                    <label for="purchase_category_0">Category</label>
+                                    <select class="form-control" name="purchase_category[]">
+                                        <option value="Box">Box</option>
+                                        <option value="Straight">Straight</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="purchase_amount_0">Amount</label>
+                                    <input type="number" class="form-control" name="purchase_amount[]" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="purchase_date_0">Purchase Date</label>
+                                    <input type="date" class="form-control" name="purchase_date[]" required>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="serial_number">Serial Number</label>
-                            <input type="text" class="form-control" id="serial_number" value="<?php echo $serial_number; ?>" readonly>
-                        </div>
-
-                        <!-- Submit button to preview and confirm -->
-                        <button type="submit" name="preview_summary" class="btn btn-info">Preview</button>
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn btn-info mt-3" name="preview_summary">Preview</button>
 
                         <!-- After preview, show confirmation form -->
                         <?php if (isset($_POST['preview_summary'])) { ?>
@@ -163,37 +190,74 @@ if (isset($_POST['query'])) {
                         <?php } ?>
                     </form>
                 </div>
-                <!-- /.container-fluid -->
             </div>
-            <!-- End of Main Content -->
 
-            <!-- Footer -->
             <?php include('footer.php'); ?>
         </div>
-        <!-- End of Content Wrapper -->
     </div>
-    <!-- End of Page Wrapper -->
-
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-    <script src="js/sb-admin-2.min.js"></script>
 
     <script>
-        $('#customer_search').on('input', function () {
-            var searchQuery = $(this).val();
-            if (searchQuery.length > 0) {
-                $.ajax({
-                    url: 'fetch_customer_details.php',
-                    method: 'POST',
-                    data: { query: searchQuery },
-                    success: function (data) {
-                        $('#customer_details').html(data);
-                    }
-                });
-            }
-        });
-    </script>
+        const customers = <?php echo json_encode($customers); ?>;
 
+        // Filter and display customer list
+        function filterCustomers() {
+            const searchValue = document.getElementById('customer_search').value.toLowerCase();
+            const customerList = document.getElementById('customer_list');
+            customerList.innerHTML = ''; // Clear previous list
+
+            customers.forEach(function(customer) {
+                if (customer.customer_name.toLowerCase().includes(searchValue)) {
+                    const li = document.createElement('li');
+                    li.classList.add('list-group-item');
+                    li.textContent = customer.customer_name;
+                    li.onclick = function() {
+                        selectCustomer(customer.customer_id, customer.customer_name);
+                    };
+                    customerList.appendChild(li);
+                }
+            });
+        }
+
+        // Select customer and hide list
+        function selectCustomer(customerId, customerName) {
+            document.getElementById('customer_search').value = customerName;
+            document.getElementById('customer_list').innerHTML = '';
+            const customerField = `<input type="hidden" name="customer_id" value="${customerId}">`;
+            document.getElementById('purchase_entries_wrapper').insertAdjacentHTML('beforebegin', customerField);
+        }
+
+        // Populate dynamic purchase entry rows based on the selected number of purchases
+        function populatePurchaseEntries() {
+            const count = parseInt(document.getElementById('purchase_count').value);
+            const wrapper = document.getElementById('purchase_entries_wrapper');
+            wrapper.innerHTML = ''; // Clear existing entries
+
+            for (let i = 0; i < count; i++) {
+                wrapper.innerHTML += `
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <label for="purchase_no_${i}">Purchase Number</label>
+                            <input type="text" class="form-control" name="purchase_no[]" required>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="purchase_category_${i}">Category</label>
+                            <select class="form-control" name="purchase_category[]">
+                                <option value="Box">Box</option>
+                                <option value="Straight">Straight</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="purchase_amount_${i}">Amount</label>
+                            <input type="number" class="form-control" name="purchase_amount[]" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="purchase_date_${i}">Purchase Date</label>
+                            <input type="date" class="form-control" name="purchase_date[]" required>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+    </script>
 </body>
 </html>
