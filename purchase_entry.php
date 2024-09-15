@@ -9,7 +9,7 @@ if (!isset($_SESSION['admin'])) {
 
 include('config/database.php'); // Include your database connection
 
-// Fetch access level from session
+// Fetch access level and agent ID from session
 $access_level = $_SESSION['access_level'];
 $agent_id = $_SESSION['agent_id'];
 
@@ -27,6 +27,15 @@ if ($access_level !== 'super_admin') {
 $stmt->execute();
 $customers = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+// Fetch agent list if user is super_admin
+$agents = [];
+if ($access_level === 'super_admin') {
+    $query = "SELECT * FROM admin_access";
+    $stmt = $conn->prepare($query);
+    $stmt->execute();
+    $agents = $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $customer_id = $_POST['customer_id'];
@@ -34,6 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $purchase_category = $_POST['purchase_category'];
     $purchase_amount = $_POST['purchase_amount'];
     $purchase_date = $_POST['purchase_date'];
+    $agent_id_to_save = ($_SESSION['access_level'] === 'super_admin') ? $_POST['agent_id'] : $agent_id;
     
     // Generate a unique serial number based on computer ID and current datetime
     $computer_id = gethostname(); // Example computer ID
@@ -45,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 VALUES (:customer_id, :agent_id, :purchase_no, :purchase_category, :purchase_amount, :purchase_date, :serial_number)";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':customer_id', $customer_id);
-        $stmt->bindParam(':agent_id', $agent_id);
+        $stmt->bindParam(':agent_id', $agent_id_to_save);
         $stmt->bindParam(':purchase_no', $purchase_entries[$i]);
         $stmt->bindParam(':purchase_category', $purchase_category[$i]);
         $stmt->bindParam(':purchase_amount', $purchase_amount[$i]);
@@ -90,59 +100,41 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                     <!-- Customer Search Section -->
                     <div class="form-group">
-                        <label for="customerSearch">Search Customer</label>
+                        <label for="customerSearch">Search or Select Customer</label>
                         <input type="text" class="form-control" id="customerSearch" placeholder="Search by customer name..." onkeyup="filterCustomers()">
+                        <select id="customerDropdown" class="form-control mt-2" onchange="selectCustomer(this)">
+                            <option value="">-- Select Customer --</option>
+                            <?php foreach ($customers as $customer): ?>
+                                <option value="<?php echo $customer['customer_id']; ?>"><?php echo $customer['customer_name']; ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
 
-                    <!-- Customer Table -->
-                    <div class="table-responsive">
-                        <table class="table table-bordered" id="customerTable">
-                            <thead>
-                                <tr>
-                                    <th>Customer ID</th>
-                                    <th>Customer Name</th>
-                                    <th>Agent Name</th>
-                                    <th>Credit Limit</th>
-                                    <th>VIP Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($customers as $customer): ?>
-                                    <tr class="customer-row" onclick="selectCustomer('<?php echo $customer['customer_id']; ?>', '<?php echo $customer['customer_name']; ?>')">
-                                        <td><?php echo $customer['customer_id']; ?></td>
-                                        <td><?php echo $customer['customer_name']; ?></td>
-                                        <td><?php echo $customer['agent_id']; ?></td>
-                                        <td><?php echo $customer['credit_limit']; ?></td>
-                                        <td><?php echo $customer['vip_status']; ?></td>
-                                    </tr>
+                    <!-- Customer Details -->
+                    <div id="customerDetails">
+                        <input type="hidden" name="customer_id" id="selectedCustomerId" required>
+                        <p><strong>Customer Name:</strong> <span id="customerName"></span></p>
+                        <p><strong>Agent ID:</strong> <?php echo ($access_level === 'super_admin') ? '<select name="agent_id">' : '<span id="customerAgentId">' . $agent_id . '</span>'; ?>
+                            <?php if ($access_level === 'super_admin'): ?>
+                                <option value="">-- Select Agent --</option>
+                                <?php foreach ($agents as $agent): ?>
+                                    <option value="<?php echo $agent['agent_id']; ?>"><?php echo $agent['agent_name']; ?></option>
                                 <?php endforeach; ?>
-                            </tbody>
-                        </table>
+                                </select>
+                            <?php endif; ?>
+                        </p>
+                        <p><strong>Serial Number:</strong> <span id="serialNumberDisplay"></span></p>
                     </div>
 
                     <!-- Purchase Entry Form -->
                     <form method="POST" action="purchase_entry.php">
-                        <!-- Hidden input to store selected customer ID -->
-                        <input type="hidden" name="customer_id" id="selectedCustomerId" required>
-                        <div class="form-group">
-                            <label for="customerNameDisplay">Customer Name</label>
-                            <input type="text" id="customerNameDisplay" class="form-control" readonly>
-                        </div>
-
-                        <!-- Dynamic Purchase Entry -->
                         <div class="form-group">
                             <label for="purchaseEntries">Number of Purchase Entries</label>
                             <select id="purchaseEntries" class="form-control" onchange="createPurchaseEntries()">
                                 <option value="1">1 Entry</option>
-                                <option value="2">2 Entries</option>
-                                <option value="3">3 Entries</option>
-                                <option value="4">4 Entries</option>
-                                <option value="5">5 Entries</option>
-                                <option value="6">6 Entries</option>
-                                <option value="7">7 Entries</option>
-                                <option value="8">8 Entries</option>
-                                <option value="9">9 Entries</option>
-                                <option value="10">10 Entries</option>
+                                <?php for ($i = 2; $i <= 10; $i++): ?>
+                                    <option value="<?php echo $i; ?>"><?php echo $i; ?> Entries</option>
+                                <?php endfor; ?>
                             </select>
                         </div>
 
@@ -186,27 +178,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <!-- JavaScript for handling customer search -->
     <script>
         function filterCustomers() {
-            var input = document.getElementById("customerSearch");
-            var filter = input.value.toLowerCase();
-            var rows = document.getElementsByClassName("customer-row");
-
-            for (var i = 0; i < rows.length; i++) {
-                var customerName = rows[i].cells[1].innerText.toLowerCase();
-                if (customerName.includes(filter)) {
-                    rows[i].style.display = "";
-                } else {
-                    rows[i].style.display = "none";
+            var input = document.getElementById("customerSearch").value.toLowerCase();
+            var dropdown = document.getElementById("customerDropdown");
+            dropdown.innerHTML = '<option value="">-- Select Customer --</option>';
+            
+            <?php foreach ($customers as $customer): ?>
+                if ('<?php echo strtolower($customer['customer_name']); ?>'.includes(input)) {
+                    var option = document.createElement("option");
+                    option.value = "<?php echo $customer['customer_id']; ?>";
+                    option.text = "<?php echo $customer['customer_name']; ?>";
+                    dropdown.appendChild(option);
                 }
-            }
+            <?php endforeach; ?>
         }
 
-        function selectCustomer(customerId, customerName) {
-            document.getElementById("selectedCustomerId").value = customerId;
-            document.getElementById("customerNameDisplay").value = customerName;
+        function selectCustomer(element) {
+            var selectedCustomer = element.options[element.selectedIndex].value;
+            var customerName = element.options[element.selectedIndex].text;
+            document.getElementById("selectedCustomerId").value = selectedCustomer;
+            document.getElementById("customerName").innerText = customerName;
+            
+            // Generate and display serial number
+            var serialNumber = "<?php echo gethostname(); ?>_" + new Date().toISOString().replace(/[-:.]/g, "");
+            document.getElementById("serialNumberDisplay").innerText = serialNumber;
         }
     </script>
 
-    <!-- JavaScript for handling dynamic purchase entries with max 10 records -->
+    <!-- JavaScript for handling dynamic purchase entries -->
     <script>
         function createPurchaseEntries() {
             var numEntries = document.getElementById("purchaseEntries").value;
@@ -221,8 +219,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 var purchaseAmount = document.createElement("td");
                 var purchaseDate = document.createElement("td");
 
-                purchaseNo.innerHTML = '<input type="text" class="form-control" name="purchase_no[]" required>';
-                purchaseCategory.innerHTML = '<select class="form-control" name="purchase_category[]"><option value="Box">Box</option><option value="Straight">Straight</option></select>';
+                purchaseNo.innerHTML = '<input type="number" class="form-control" name="purchase_no[]" required>';
+                purchaseCategory.innerHTML = '<select name="purchase_category[]" class="form-control"><option value="Box">Box</option><option value="Straight">Straight</option></select>';
                 purchaseAmount.innerHTML = '<input type="number" class="form-control" name="purchase_amount[]" required>';
                 purchaseDate.innerHTML = '<input type="date" class="form-control" name="purchase_date[]" required>';
 
@@ -234,6 +232,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 tbody.appendChild(row);
             }
         }
+
+        // Initialize with one purchase entry
+        window.onload = function() {
+            createPurchaseEntries();
+        };
     </script>
 
 </body>
