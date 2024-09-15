@@ -18,18 +18,29 @@ $error_message = '';
 $success_message = '';
 $purchase_rows = isset($_POST['num_purchases']) ? $_POST['num_purchases'] : 1;
 
-// Handle customer search
-if (isset($_POST['search_customer'])) {
-    $customer_name = $_POST['customer_name'];
+// Fetch default customer list for the agent
+$customers = [];
+try {
+    $stmt = $conn->prepare("SELECT * FROM customer_details WHERE agent_id = :agent_id");
+    $stmt->bindParam(':agent_id', $agent_id);
+    $stmt->execute();
+    $customers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    $error_message = "Error fetching customers: " . $e->getMessage();
+}
+
+// Handle customer selection and show customer info
+$selected_customer = null;
+if (isset($_POST['select_customer'])) {
+    $customer_id = $_POST['customer_id'];
     try {
-        // Fetch customer details for the agent level
-        $stmt = $conn->prepare("SELECT * FROM customer_details WHERE agent_id = :agent_id AND customer_name LIKE :customer_name");
+        $stmt = $conn->prepare("SELECT * FROM customer_details WHERE customer_id = :customer_id AND agent_id = :agent_id");
+        $stmt->bindParam(':customer_id', $customer_id);
         $stmt->bindParam(':agent_id', $agent_id);
-        $stmt->bindValue(':customer_name', '%' . $customer_name . '%');
         $stmt->execute();
-        $customers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $selected_customer = $stmt->fetch(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {
-        $error_message = "Error fetching customers: " . $e->getMessage();
+        $error_message = "Error fetching customer details: " . $e->getMessage();
     }
 }
 
@@ -118,29 +129,36 @@ if (isset($_POST['confirm_purchase'])) {
                         <div class="alert alert-success"><?php echo $success_message; ?></div>
                     <?php endif; ?>
 
-                    <!-- Customer Search Form -->
+                    <!-- Customer Selection -->
                     <form method="POST">
                         <div class="form-group">
-                            <label for="customer_name">Search Customer by Name</label>
-                            <input type="text" class="form-control" id="customer_name" name="customer_name" required>
-                            <button type="submit" name="search_customer" class="btn btn-primary mt-2">Search</button>
+                            <label for="customer_id">Select Customer</label>
+                            <select name="customer_id" id="customer_id" class="form-control" required>
+                                <option value="">Choose a customer</option>
+                                <?php foreach ($customers as $customer): ?>
+                                    <option value="<?php echo $customer['customer_id']; ?>" <?php echo (isset($selected_customer) && $selected_customer['customer_id'] == $customer['customer_id']) ? 'selected' : ''; ?>>
+                                        <?php echo $customer['customer_name']; ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                            <button type="submit" name="select_customer" class="btn btn-primary mt-2">Select Customer</button>
                         </div>
                     </form>
 
-                    <!-- Show search results -->
-                    <?php if (isset($customers) && count($customers) > 0): ?>
+                    <!-- Display selected customer information -->
+                    <?php if ($selected_customer): ?>
                         <div class="form-group">
-                            <label for="customer_id">Select Customer</label>
-                            <select name="customer_id" id="customer_id" class="form-control">
-                                <?php foreach ($customers as $customer): ?>
-                                    <option value="<?php echo $customer['customer_id']; ?>"><?php echo $customer['customer_name']; ?></option>
-                                <?php endforeach; ?>
-                            </select>
+                            <h5>Customer Information:</h5>
+                            <p><strong>Name:</strong> <?php echo $selected_customer['customer_name']; ?></p>
+                            <p><strong>Credit Limit:</strong> RM<?php echo $selected_customer['credit_limit']; ?></p>
+                            <p><strong>VIP Status:</strong> <?php echo $selected_customer['vip_status']; ?></p>
                         </div>
                     <?php endif; ?>
 
                     <!-- Purchase Entry Form -->
                     <form method="POST" id="purchase_form">
+                        <input type="hidden" name="customer_id" value="<?php echo isset($selected_customer) ? $selected_customer['customer_id'] : ''; ?>" required>
+
                         <div class="form-group">
                             <label for="num_purchases">Number of Purchase Entries</label>
                             <select id="num_purchases" name="num_purchases" class="form-control">
@@ -177,12 +195,13 @@ if (isset($_POST['confirm_purchase'])) {
                             <?php endfor; ?>
                         </div>
 
-                        <button type="submit" name="confirm_purchase" class="btn btn-primary mt-4">Submit and Confirm</button>
+                        <button type="submit" name="confirm_purchase" class="btn btn-primary mt-4">Submit Purchase Entries</button>
                     </form>
                 </div>
                 <!-- /.container-fluid -->
             </div>
             <!-- End of Main Content -->
+
             <!-- Footer -->
             <?php include('footer.php'); ?>
         </div>
@@ -190,26 +209,26 @@ if (isset($_POST['confirm_purchase'])) {
     </div>
     <!-- End of Page Wrapper -->
 
-    <!-- Bootstrap core JavaScript-->
+    <!-- Bootstrap core JavaScript -->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="vendor/jquery-ui/jquery-ui.min.js"></script>
+    <script src="vendor/jquery-ui/jquery-ui.min.js"></script> <!-- Datepicker -->
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
     <script src="js/sb-admin-2.min.js"></script>
 
-    <!-- Dynamic Field JS -->
     <script>
-        $(function () {
-            // Datepicker for Purchase Date
-            $(".purchase_datepicker").datepicker({
-                dateFormat: "yy-mm-dd"
-            });
-
-            // Update form dynamically based on number of purchases selected
-            $("#num_purchases").change(function () {
-                $("#purchase_form").submit();
+        // Datepicker initialization
+        $(function() {
+            $('.purchase_datepicker').datepicker({
+                dateFormat: 'yy-mm-dd'
             });
         });
+
+        // Update dynamic purchase fields based on selection
+        $('#num_purchases').change(function() {
+            $('#purchase_form').submit();
+        });
     </script>
+
 </body>
 </html>
