@@ -12,25 +12,38 @@ if (!isset($_SESSION['admin'])) {
 $access_level = $_SESSION['access_level'];
 $agent_id = $_SESSION['agent_id'];
 
+// Fetch agents for the agent filter dropdown (for super_admin only)
+$agents = [];
+if ($access_level === 'super_admin') {
+    $stmt = $conn->query("SELECT agent_id, agent_name FROM admin_access");
+    $agents = $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
 // Fetch purchase records based on the access level
 $sql = "
     SELECT p.purchase_no, p.purchase_amount, DATE(p.purchase_datetime) AS purchase_date, 
+           p.serial_number, a.agent_name, a.agent_id,
            c.customer_name
     FROM purchase_entries p
     JOIN customer_details c ON p.customer_id = c.customer_id
+    JOIN admin_access a ON p.agent_id = a.agent_id
 ";
 
 // If the user is an agent, filter results by agent ID
 if ($access_level !== 'super_admin') {
     $sql .= " WHERE p.agent_id = :agent_id";
+} else {
+    $sql .= " WHERE 1=1"; // Dummy condition for super_admin to add more filters easily
 }
 
-// Apply date and customer filters if provided
+// Apply date, customer, agent, purchase no filters if provided
 $filters = [];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $from_date = !empty($_POST['from_date']) ? $_POST['from_date'] : null;
     $to_date = !empty($_POST['to_date']) ? $_POST['to_date'] : null;
     $customer_name = !empty($_POST['customer_name']) ? $_POST['customer_name'] : null;
+    $agent_filter = !empty($_POST['agent_filter']) ? $_POST['agent_filter'] : null;
+    $purchase_no = !empty($_POST['purchase_no']) ? $_POST['purchase_no'] : null;
 
     if ($from_date && $to_date) {
         $sql .= " AND p.purchase_datetime BETWEEN :from_date AND :to_date";
@@ -42,6 +55,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $sql .= " AND c.customer_name LIKE :customer_name";
         $filters['customer_name'] = '%' . $customer_name . '%';
     }
+
+    if ($agent_filter && $access_level === 'super_admin') {
+        $sql .= " AND p.agent_id = :agent_filter";
+        $filters['agent_filter'] = $agent_filter;
+    }
+
+    if ($purchase_no) {
+        $sql .= " AND p.purchase_no LIKE :purchase_no";
+        $filters['purchase_no'] = '%' . $purchase_no . '%';
+    }
 }
 
 $stmt = $conn->prepare($sql);
@@ -51,7 +74,7 @@ if ($access_level !== 'super_admin') {
     $stmt->bindParam(':agent_id', $agent_id);
 }
 
-// Bind date and customer name filters if provided
+// Bind other filters
 if (isset($filters['from_date']) && isset($filters['to_date'])) {
     $stmt->bindParam(':from_date', $filters['from_date']);
     $stmt->bindParam(':to_date', $filters['to_date']);
@@ -59,6 +82,14 @@ if (isset($filters['from_date']) && isset($filters['to_date'])) {
 
 if (isset($filters['customer_name'])) {
     $stmt->bindParam(':customer_name', $filters['customer_name']);
+}
+
+if (isset($filters['agent_filter'])) {
+    $stmt->bindParam(':agent_filter', $filters['agent_filter']);
+}
+
+if (isset($filters['purchase_no'])) {
+    $stmt->bindParam(':purchase_no', $filters['purchase_no']);
 }
 
 $stmt->execute();
@@ -88,6 +119,8 @@ foreach ($purchases as $purchase) {
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
     <script src="vendor/jquery/jquery.min.js"></script>
     <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- Sortable JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js"></script>
 </head>
 
 <body id="page-top">
@@ -116,10 +149,29 @@ foreach ($purchases as $purchase) {
                                 <label for="to_date">To Date</label>
                                 <input type="date" class="form-control" id="to_date" name="to_date" value="<?php echo isset($to_date) ? $to_date : ''; ?>">
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <label for="customer_name">Customer Name</label>
                                 <input type="text" class="form-control" id="customer_name" name="customer_name" placeholder="Search by customer name" value="<?php echo isset($customer_name) ? $customer_name : ''; ?>">
                             </div>
+                            <div class="col-md-3">
+                                <label for="purchase_no">Purchase No</label>
+                                <input type="text" class="form-control" id="purchase_no" name="purchase_no" placeholder="Search by purchase no" value="<?php echo isset($purchase_no) ? $purchase_no : ''; ?>">
+                            </div>
+                        </div>
+                        <div class="form-row mt-3">
+                            <?php if ($access_level === 'super_admin'): ?>
+                            <div class="col-md-4">
+                                <label for="agent_filter">Agent</label>
+                                <select class="form-control" id="agent_filter" name="agent_filter">
+                                    <option value="">All Agents</option>
+                                    <?php foreach ($agents as $agent): ?>
+                                        <option value="<?php echo $agent['agent_id']; ?>" <?php echo isset($agent_filter) && $agent_filter == $agent['agent_id'] ? 'selected' : ''; ?>>
+                                            <?php echo $agent['agent_name']; ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <?php endif; ?>
                             <div class="col-md-2">
                                 <button type="submit" class="btn btn-primary mt-4">Filter</button>
                             </div>
@@ -128,13 +180,16 @@ foreach ($purchases as $purchase) {
 
                     <!-- Purchase List Table -->
                     <div class="table-responsive">
-                        <table class="table table-bordered">
+                        <table class="table table-bordered tablesorter">
                             <thead>
                                 <tr>
                                     <th>Customer Name</th>
                                     <th>Purchase No</th>
                                     <th>Purchase Amount</th>
                                     <th>Purchase Date</th>
+                                    <th>Serial Number</th>
+                                    <th>Agent Name</th>
+                                    <th>Agent ID</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -145,16 +200,19 @@ foreach ($purchases as $purchase) {
                                             <td><?php echo $purchase['purchase_no']; ?></td>
                                             <td><?php echo number_format($purchase['purchase_amount'], 2); ?></td>
                                             <td><?php echo $purchase['purchase_date']; ?></td> <!-- Purchase Date only -->
+                                            <td><?php echo $purchase['serial_number']; ?></td> <!-- Serial Number -->
+                                            <td><?php echo $purchase['agent_name']; ?></td> <!-- Agent Name -->
+                                            <td><?php echo $purchase['agent_id']; ?></td> <!-- Agent ID -->
                                         </tr>
                                     <?php endforeach; ?>
                                     <!-- Grand Total Row -->
                                     <tr>
                                         <td colspan="2" class="text-right font-weight-bold">Grand Total:</td>
-                                        <td colspan="2" class="font-weight-bold"><?php echo number_format($grand_total, 2); ?></td>
+                                        <td colspan="5" class="font-weight-bold"><?php echo number_format($grand_total, 2); ?></td>
                                     </tr>
                                 <?php else: ?>
                                     <tr>
-                                        <td colspan="4" class="text-center">No purchases found</td>
+                                        <td colspan="7" class="text-center">No records found for the applied filters</td>
                                     </tr>
                                 <?php endif; ?>
                             </tbody>
@@ -180,6 +238,13 @@ foreach ($purchases as $purchase) {
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
+
+    <script>
+        // Initialize tablesorter for sorting columns
+        $(document).ready(function() {
+            $(".tablesorter").tablesorter();
+        });
+    </script>
 </body>
 
 </html>
