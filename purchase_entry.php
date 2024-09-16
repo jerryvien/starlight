@@ -113,12 +113,6 @@ function calculatePermutationFactor($purchase_no) {
                 <div class="container-fluid">
                     <h1 class="h3 mb-4 text-gray-800">Purchase Record Entry</h1>
 
-                    <!-- Display Serial Number -->
-                    <div class="form-group">
-                        <label for="serial_number">Serial Number</label>
-                        <input type="text" class="form-control" id="serial_number" value="<?php echo $serial_number; ?>" readonly>
-                    </div>
-
                     <!-- Customer Search and Display -->
                     <form method="POST" action="purchase_entry.php">
                         <div class="form-group">
