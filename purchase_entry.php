@@ -10,7 +10,7 @@ if (!isset($_SESSION['admin'])) {
 }
 
 // Generate a unique serial number based on computer ID and current datetime
-$serial_number = generateSerialNumber();
+$serial_number = 'Tesing123';
 
 // Fetch customer data for search filter
 $query = ($_SESSION['access_level'] === 'super_admin') ? 
