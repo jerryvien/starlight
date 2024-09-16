@@ -1,7 +1,7 @@
 <?php
 session_start();
 include('config/database.php'); // Include your database connection
-
+include('config/utilities.php');
 // Redirect to login page if the user is not logged in
 if (!isset($_SESSION['admin'])) {
     header("Location: index.php");
@@ -10,7 +10,7 @@ if (!isset($_SESSION['admin'])) {
 
 // Generate a unique serial number based on computer ID and current datetime
 $computer_id = gethostname(); // Example computer ID
-$serial_number = $computer_id . '_' . date('YmdHis');
+$serial_number = generategenerateSerialNumber();
 
 // Fetch customer data for search filter
 $query = ($_SESSION['access_level'] === 'super_admin') ? 
