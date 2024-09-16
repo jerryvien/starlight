@@ -293,6 +293,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                 // Append the row to the wrapper
                 wrapper.appendChild(row);
+
+                // Set default date and initialize total price calculation
+                calculateTotalPrice(i);
             }
         }
 
