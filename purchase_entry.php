@@ -1,7 +1,6 @@
 <?php
 session_start();
 include('config/database.php'); // Include your database connection
-include('utilities.php')// Include Utilities Function
 
 // Redirect to login page if the user is not logged in
 if (!isset($_SESSION['admin'])) {
@@ -143,7 +142,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <div class="form-group row">
                                 <div class="col-md-3">
                                     <label for="purchase_no_0">Purchase Number</label>
-                                    <input type="text" class="form-control" name="purchase_no[]" id="purchase_no_0" pattern="\d{2,3}" title="Please enter a number with 2 or 3 digits" required>
+                                    <input type="text" class="form-control" name="purchase_no[]" required>
                                 </div>
                                 <div class="col-md-2">
                                     <label for="purchase_category_0">Category</label>
@@ -210,7 +209,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
 
-        //function to handle the dynamic purchase field
+        
         function populatePurchaseEntries() {
             const count = parseInt(document.getElementById('purchase_count').value);
             const wrapper = document.getElementById('purchase_entries_wrapper');
@@ -229,7 +228,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 col1.classList.add('col-md-3');
                 col1.innerHTML = `
                     <label for="purchase_no_${i}">Purchase Number</label>
-                    <input type="text" class="form-control" name="purchase_no[]" id="purchase_no_0" pattern="\d{2,3}" title="Please enter a number with 2 or 3 digits" required>
+                    <input type="text" class="form-control" name="purchase_no[]" required>
                 `;
                 
                 // Purchase Category Field
