@@ -1,7 +1,6 @@
 <?php
 session_start();
 include('config/database.php'); // Include your database connection
-include('utilities.php')
 
 // Redirect to login page if the user is not logged in
 if (!isset($_SESSION['admin'])) {
@@ -10,8 +9,8 @@ if (!isset($_SESSION['admin'])) {
 }
 
 // Generate a unique serial number based on computer ID and current datetime
-$computer_id = generateSerialNumber();
-$serial_number = generateSerialNumber();
+$computer_id = gethostname(); // Example computer ID
+$serial_number = $computer_id . '_' . date('YmdHis');
 
 // Fetch customer data for search filter
 $query = ($_SESSION['access_level'] === 'super_admin') ? 
@@ -210,7 +209,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
 
-        // Function to populate dynamic entry field
+        // Function to populate dynamic entry field 
         function populatePurchaseEntries() {
             const count = parseInt(document.getElementById('purchase_count').value);
             const wrapper = document.getElementById('purchase_entries_wrapper');
