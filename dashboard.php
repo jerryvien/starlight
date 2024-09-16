@@ -126,7 +126,7 @@ if (!isset($_SESSION['admin'])) {
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Purchase Utilities:</h6>
-                        <a class="collapse-item" href="new_purchase.php">
+                        <a class="collapse-item" href="purchase_entry.php">
                             <i class="fas fa-shopping-cart"></i> <!-- New Purchase icon -->
                             New Purchase
                         </a>
