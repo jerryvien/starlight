@@ -100,6 +100,21 @@ function calculatePermutationFactor($purchase_no) {
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
     <script src="vendor/jquery/jquery.min.js"></script>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet"> <!-- Ensure Bootstrap is correctly linked -->
+    <style>
+        .form-row > div {
+            padding-right: 5px; /* Adds spacing between columns */
+        }
+        .form-control {
+            width: 100%; /* Ensures input fields use the full width of their column */
+        }
+        /* Adjust specific field widths if needed */
+        #total_price_0 {
+            max-width: 150px; /* Adjust width of total price input */
+        }
+    </style>
+    
 </head>
 
 <body id="page-top">
