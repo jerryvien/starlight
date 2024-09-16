@@ -119,6 +119,33 @@ function calculatePermutationFactor($purchase_no) {
         #purchase_category_0 {
             max-width: 140px; /* Adjusts width for category dropdown */
         }
+        .form-group.row > div {
+        padding-right: 4px; /* Adjusts right padding for tighter fitting */
+        padding-left: 4px; /* Adjusts left padding for consistency */
+        }
+        .form-control {
+            width: 100%; /* Ensures input fields use the full width of their column */
+        }
+        /* Specific field width adjustments for better alignment */
+        #wrapper .form-group.row > div {
+            margin-bottom: 10px; /* Adds bottom margin for spacing between rows */
+        }
+        .col-md-3, .col-md-2, .col-md-4 { /* Adjust column widths if needed */
+            padding-right: 2px;
+            padding-left: 2px;
+        }
+        /* Ensures labels and inputs are aligned nicely */
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        input[type="text"], input[type="number"], input[type="date"], select {
+            height: calc(1.5em + .75rem + 2px); /* Adjusts input height for uniformity */
+        }
+        input[type="text"][readonly], input[type="number"][readonly] {
+            background-color: #e9ecef; /* Gives a distinct look to readonly fields */
+            opacity: 1; /* Makes sure readonly fields are not dimmed */
+        }
     </style>
 
 </head>
