@@ -202,18 +202,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             document.getElementById('purchase_entries_wrapper').insertAdjacentHTML('beforebegin', customerField);
         }
 
-        // Populate dynamic purchase entry rows based on the selected number of purchases
         function populatePurchaseEntries() {
             const count = parseInt(document.getElementById('purchase_count').value);
             const wrapper = document.getElementById('purchase_entries_wrapper');
             wrapper.innerHTML = ''; // Clear existing entries
+            
             // Get today's date in 'YYYY-MM-DD' format
             const today = new Date().toISOString().split('T')[0];
-    
-            // Set the value of the date input field to today's date
-            document.getElementById('purchase_date_${i}').value = today;
 
             for (let i = 0; i < count; i++) {
+                // Append new form row
                 wrapper.innerHTML += `
                     <div class="form-group row">
                         <div class="col-md-3">
@@ -237,8 +235,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </div>
                     </div>
                 `;
+
+                // Set the value of the date input field to today's date after the row is added
+                document.getElementById(`purchase_date_${i}`).value = today;
+                }
             }
-        }
+
     </script>
 </body>
 </html>
