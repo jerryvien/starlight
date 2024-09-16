@@ -15,9 +15,11 @@ $agent_id = $_SESSION['agent_id'];
 // Fetch purchase records based on the access level
 $sql = "
     SELECT p.purchase_no, p.purchase_amount, DATE(p.purchase_datetime) AS purchase_date, 
+           p.serial_number, a.agent_name, a.agent_id,
            c.customer_name
     FROM purchase_entries p
     JOIN customer_details c ON p.customer_id = c.customer_id
+    JOIN admin_access a ON p.agent_id = a.agent_id
 ";
 
 // If the user is an agent, filter results by agent ID
@@ -135,6 +137,9 @@ foreach ($purchases as $purchase) {
                                     <th>Purchase No</th>
                                     <th>Purchase Amount</th>
                                     <th>Purchase Date</th>
+                                    <th>Serial Number</th>
+                                    <th>Agent Name</th>
+                                    <th>Agent ID</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -145,16 +150,19 @@ foreach ($purchases as $purchase) {
                                             <td><?php echo $purchase['purchase_no']; ?></td>
                                             <td><?php echo number_format($purchase['purchase_amount'], 2); ?></td>
                                             <td><?php echo $purchase['purchase_date']; ?></td> <!-- Purchase Date only -->
+                                            <td><?php echo $purchase['serial_number']; ?></td> <!-- Serial Number -->
+                                            <td><?php echo $purchase['agent_name']; ?></td> <!-- Agent Name -->
+                                            <td><?php echo $purchase['agent_id']; ?></td> <!-- Agent ID -->
                                         </tr>
                                     <?php endforeach; ?>
                                     <!-- Grand Total Row -->
                                     <tr>
                                         <td colspan="2" class="text-right font-weight-bold">Grand Total:</td>
-                                        <td colspan="2" class="font-weight-bold"><?php echo number_format($grand_total, 2); ?></td>
+                                        <td colspan="5" class="font-weight-bold"><?php echo number_format($grand_total, 2); ?></td>
                                     </tr>
                                 <?php else: ?>
                                     <tr>
-                                        <td colspan="4" class="text-center">No purchases found</td>
+                                        <td colspan="7" class="text-center">No purchases found</td>
                                     </tr>
                                 <?php endif; ?>
                             </tbody>
