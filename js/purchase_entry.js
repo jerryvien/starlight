@@ -1,4 +1,4 @@
-const customers = <?php echo json_encode($customers); ?>;
+
 
 // Filter and display customer list
 function filterCustomers() {
@@ -36,6 +36,12 @@ function populatePurchaseEntries() {
     const wrapper = document.getElementById('purchase_entries_wrapper');
     wrapper.innerHTML = ''; // Clear existing entries
 
+    // Get today's date in 'YYYY-MM-DD' format
+    const today = new Date().toISOString().split('T')[0];
+    
+    // Set the value of the date input field to today's date
+    document.getElementById('purchase_date_${i}').value = today;
+
     for (let i = 0; i < count; i++) {
         wrapper.innerHTML += `
             <div class="form-group row">
@@ -56,7 +62,7 @@ function populatePurchaseEntries() {
                 </div>
                 <div class="col-md-4">
                     <label for="purchase_date_${i}">Purchase Date</label>
-                    <input type="date" class="form-control" name="purchase_date[]" value="<?php echo date('Y-m-d'); ?>" required>
+                    <input type="date" class="form-control" name="purchase_date[]" id="purchase_date_${i}" required>
                 </div>
             </div>
         `;

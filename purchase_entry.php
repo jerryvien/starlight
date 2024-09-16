@@ -207,6 +207,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             const count = parseInt(document.getElementById('purchase_count').value);
             const wrapper = document.getElementById('purchase_entries_wrapper');
             wrapper.innerHTML = ''; // Clear existing entries
+            // Get today's date in 'YYYY-MM-DD' format
+            const today = new Date().toISOString().split('T')[0];
+    
+            // Set the value of the date input field to today's date
+            document.getElementById('purchase_date_${i}').value = today;
 
             for (let i = 0; i < count; i++) {
                 wrapper.innerHTML += `
@@ -228,7 +233,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </div>
                         <div class="col-md-4">
                             <label for="purchase_date_${i}">Purchase Date</label>
-                            <input type="date" class="form-control" name="purchase_date[]" required>
+                            <input type="date" class="form-control" name="purchase_date[]" id="purchase_date_${i}" required>
                         </div>
                     </div>
                 `;

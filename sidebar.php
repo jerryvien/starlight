@@ -7,7 +7,7 @@
         <div class="sidebar-brand-icon rotate-n-15">
             <i class="fas fa-laugh-wink"></i>
         </div>
-        <div class="sidebar-brand-text mx-3">KEN Group Admin <sup>2</sup></div>
+        <div class="sidebar-brand-text mx-3">KEN Group Admin</div>
     </a>
 
     <!-- Divider -->
@@ -50,7 +50,7 @@
     <hr class="sidebar-divider">
 
     <!-- Heading -->
-    <div class="sidebar-heading">Purchase Management</div>
+    <div class="sidebar-heading">Purchase Management System</div>
 
     <!-- Nav Item - Purchase Management Collapse Menu -->
     <li class="nav-item">
