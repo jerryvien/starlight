@@ -10,7 +10,8 @@ if (!isset($_SESSION['admin'])) {
 }
 
 // Generate a unique serial number based on computer ID and current datetime
-$serial_number = generateSerialNumber();
+$computer_id = gethostname(); // Example computer ID
+$serial_number = $computer_id . '_' . date('YmdHis');
 
 // Fetch customer data for search filter
 $query = ($_SESSION['access_level'] === 'super_admin') ? 
@@ -44,9 +45,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Set agent ID based on access level
     $agent_id_to_save = ($_SESSION['access_level'] === 'super_admin') ? $_POST['agent_id'] : $_SESSION['agent_id'];
 
-    // Flag for success message
-    $message = '';
-
     // Insert each purchase entry into the database
     for ($i = 0; $i < count($purchase_entries); $i++) {
         $sql = "INSERT INTO purchase_entries (customer_id, agent_id, purchase_no, purchase_category, purchase_amount, purchase_datetime, serial_number) 
@@ -61,6 +59,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->bindParam(':serial_number', $serial_number);
         $stmt->execute();
     }
+
+    echo "<div class='alert alert-success'>Purchase entries added successfully with serial number: $serial_number</div>";
 }
 ?>
 
