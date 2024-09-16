@@ -204,6 +204,20 @@ $bar_chart_data = json_encode(array_values($sales_by_customer));
                         </div>
                     </form>
 
+                    <!-- Charts Section -->
+                    <div class="row mt-5">
+                        <div class="col-md-6">
+                            <!-- Line Chart for Sales by Date -->
+                            <h5>Sales by Date</h5>
+                            <canvas id="salesLineChart"></canvas>
+                        </div>
+                        <div class="col-md-6">
+                            <!-- Bar Chart for Sales by Customer -->
+                            <h5>Sales by Customer</h5>
+                            <canvas id="salesBarChart"></canvas>
+                        </div>
+                    </div>
+
                     <!-- Purchase List Table -->
                     <div class="table-responsive">
                         <table class="table table-bordered">
@@ -243,19 +257,7 @@ $bar_chart_data = json_encode(array_values($sales_by_customer));
                         </table>
                     </div>
 
-                    <!-- Charts Section -->
-                    <div class="row mt-5">
-                        <div class="col-md-6">
-                            <!-- Line Chart for Sales by Date -->
-                            <h5>Sales by Date</h5>
-                            <canvas id="salesLineChart"></canvas>
-                        </div>
-                        <div class="col-md-6">
-                            <!-- Bar Chart for Sales by Customer -->
-                            <h5>Sales by Customer</h5>
-                            <canvas id="salesBarChart"></canvas>
-                        </div>
-                    </div>
+                    
                 </div>
                 <!-- /.container-fluid -->
             </div>
