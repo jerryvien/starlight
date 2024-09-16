@@ -166,7 +166,42 @@ $bar_chart_data = json_encode(array_values($sales_by_customer));
 
                     <!-- Filter Form -->
                     <form method="POST" action="purchase_listing.php" class="mb-4">
-                        <!-- Your filter form goes here -->
+                        <div class="form-row">
+                            <div class="col-md-3">
+                                <label for="from_date">From Date</label>
+                                <input type="date" class="form-control" id="from_date" name="from_date" value="<?php echo isset($from_date) ? $from_date : ''; ?>">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="to_date">To Date</label>
+                                <input type="date" class="form-control" id="to_date" name="to_date" value="<?php echo isset($to_date) ? $to_date : ''; ?>">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="customer_name">Customer Name</label>
+                                <input type="text" class="form-control" id="customer_name" name="customer_name" placeholder="Search by customer name" value="<?php echo isset($customer_name) ? $customer_name : ''; ?>">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="purchase_no">Purchase No</label>
+                                <input type="text" class="form-control" id="purchase_no" name="purchase_no" placeholder="Search by purchase no" value="<?php echo isset($purchase_no) ? $purchase_no : ''; ?>">
+                            </div>
+                        </div>
+                        <div class="form-row mt-3">
+                            <?php if ($access_level === 'super_admin'): ?>
+                            <div class="col-md-4">
+                                <label for="agent_filter">Agent</label>
+                                <select class="form-control" id="agent_filter" name="agent_filter">
+                                    <option value="">All Agents</option>
+                                    <?php foreach ($agents as $agent): ?>
+                                        <option value="<?php echo $agent['agent_id']; ?>" <?php echo isset($agent_filter) && $agent_filter == $agent['agent_id'] ? 'selected' : ''; ?>>
+                                            <?php echo $agent['agent_name']; ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <?php endif; ?>
+                            <div class="col-md-2">
+                                <button type="submit" class="btn btn-primary mt-4">Filter</button>
+                            </div>
+                        </div>
                     </form>
 
                     <!-- Purchase List Table -->
@@ -178,7 +213,6 @@ $bar_chart_data = json_encode(array_values($sales_by_customer));
                                     <th>Purchase No</th>
                                     <th>Purchase Amount</th>
                                     <th>Purchase Date</th>
-                                    <th>Serial Number</th>
                                     <th>Agent Name</th>
                                     <th>Agent ID</th>
                                 </tr>
@@ -190,20 +224,19 @@ $bar_chart_data = json_encode(array_values($sales_by_customer));
                                             <td><?php echo $purchase['customer_name']; ?></td>
                                             <td><?php echo $purchase['purchase_no']; ?></td>
                                             <td><?php echo number_format($purchase['purchase_amount'], 2); ?></td>
-                                            <td><?php echo $purchase['purchase_date']; ?></td> <!-- Purchase Date only -->
-                                            <td><?php echo $purchase['serial_number']; ?></td> <!-- Serial Number -->
-                                            <td><?php echo $purchase['agent_name']; ?></td> <!-- Agent Name -->
-                                            <td><?php echo $purchase['agent_id']; ?></td> <!-- Agent ID -->
+                                            <td><?php echo $purchase['purchase_date']; ?></td>
+                                            <td><?php echo $purchase['agent_name']; ?></td>
+                                            <td><?php echo $purchase['agent_id']; ?></td>
                                         </tr>
                                     <?php endforeach; ?>
                                     <!-- Grand Total Row -->
                                     <tr>
                                         <td colspan="2" class="text-right font-weight-bold">Grand Total:</td>
-                                        <td colspan="5" class="font-weight-bold"><?php echo number_format($grand_total, 2); ?></td>
+                                        <td colspan="4" class="font-weight-bold"><?php echo number_format($grand_total, 2); ?></td>
                                     </tr>
                                 <?php else: ?>
                                     <tr>
-                                        <td colspan="7" class="text-center">No records found for the applied filters</td>
+                                        <td colspan="6" class="text-center">No records found for the applied filters</td>
                                     </tr>
                                 <?php endif; ?>
                             </tbody>
