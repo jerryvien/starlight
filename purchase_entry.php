@@ -69,7 +69,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->execute();
     }
 
-    echo "<div class='alert alert-success'>Purchase entries added successfully with serial number: $serial_number</div>";
+    // Store the success message in session
+    $_SESSION['success_message'] = "Purchase entries added successfully with serial number: $serial_number";
+
+    // Redirect to the same page to show the message
+    header("Location: ".$_SERVER['PHP_SELF']);
+    exit;
+    //echo "<div class='alert alert-success'>Purchase entries added successfully with serial number: $serial_number</div>";
 }
 
 // Function to calculate permutation factor for "Box"
@@ -110,6 +116,13 @@ function calculatePermutationFactor($purchase_no) {
         <?php include('sidebar.php'); ?>
 
         <div id="content-wrapper" class="d-flex flex-column">
+            <!-- Display success message if it exists -->
+        <?php if (isset($_SESSION['success_message'])): ?>
+        <div class="alert alert-success">
+            <?php echo $_SESSION['success_message']; ?>
+            <?php unset($_SESSION['success_message']); // Clear message after displaying ?>
+        </div>
+        <?php endif; ?>
             <div id="content">
                 <?php include('topbar.php'); ?>
 
