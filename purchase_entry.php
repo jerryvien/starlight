@@ -1,6 +1,7 @@
 <?php
 session_start();
 include('config/database.php'); // Include your database connection
+include('utilities.php')
 
 // Redirect to login page if the user is not logged in
 if (!isset($_SESSION['admin'])) {
@@ -9,8 +10,8 @@ if (!isset($_SESSION['admin'])) {
 }
 
 // Generate a unique serial number based on computer ID and current datetime
-$computer_id = gethostname(); // Example computer ID
-$serial_number = $computer_id . '_' . date('YmdHis');
+$computer_id = generateSerialNumber();
+$serial_number = generateSerialNumber();
 
 // Fetch customer data for search filter
 $query = ($_SESSION['access_level'] === 'super_admin') ? 
@@ -209,7 +210,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
 
-        
+        // Function to populate dynamic entry field
         function populatePurchaseEntries() {
             const count = parseInt(document.getElementById('purchase_count').value);
             const wrapper = document.getElementById('purchase_entries_wrapper');
@@ -228,7 +229,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 col1.classList.add('col-md-3');
                 col1.innerHTML = `
                     <label for="purchase_no_${i}">Purchase Number</label>
-                    <input type="text" class="form-control" name="purchase_no[]" id="purchase_no_0" pattern="\d{2,3}" title="Please enter a number with 2 or 3 digits" required>
+                    <input type="text" class="form-control" name="purchase_no[]" id="purchase_no_${i}" pattern="\\d{2,3}" title="Please enter a number with 2 or 3 digits" required>
                 `;
                 
                 // Purchase Category Field
@@ -258,6 +259,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 dateInput.classList.add('form-control');
                 dateInput.name = 'purchase_date[]';
                 dateInput.id = `purchase_date_${i}`;
+                dateInput.required = true;
                 dateInput.value = today;  // Set today's date as default
                 col4.innerHTML = `<label for="purchase_date_${i}">Purchase Date</label>`;
                 col4.appendChild(dateInput);  // Append the input to the column
