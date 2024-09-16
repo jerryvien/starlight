@@ -109,15 +109,6 @@ function calculatePermutationFactor($purchase_no) {
 
     <link href="css/bootstrap.min.css" rel="stylesheet"> <!-- Ensure Bootstrap is correctly linked -->
 
-    <style>
-        .container-fluid {
-            display: flex;
-        }
-        #customer-details-table {
-            margin-left: 50px; /* Space between form and table */
-        }
-    </style>
-
 </head>
 
 <body id="page-top">
@@ -130,115 +121,91 @@ function calculatePermutationFactor($purchase_no) {
                 <div class="container-fluid">
                     <h1 class="h3 mb-4 text-gray-800">Purchase Record Entry</h1>
                     
-                    <!-- Display success message if it exists -->
-                    <?php if (isset($_SESSION['success_message'])): ?>
-                    <div class="alert alert-success">
-                        <?php echo $_SESSION['success_message']; ?>
-                        <?php unset($_SESSION['success_message']); // Clear message after displaying ?>
-                    </div>
-                    <?php endif; ?>
+                         <!-- Display success message if it exists -->
+                        <?php if (isset($_SESSION['success_message'])): ?>
+                        <div class="alert alert-success">
+                            <?php echo $_SESSION['success_message']; ?>
+                            <?php unset($_SESSION['success_message']); // Clear message after displaying ?>
+                        </div>
+                        <?php endif; ?>
 
-                    <div class="row">
-                        <div class="col-md-6">
-                            <!-- Customer Search and Display -->
-                            <form method="POST" action="purchase_entry.php">
-                                <div class="form-group">
-                                    <label for="customer_search">Search Customer</label>
-                                    <input type="text" class="form-control" id="customer_search" placeholder="Start typing to search..." onkeyup="filterCustomers()">
-                                    <ul id="customer_list" class="list-group mt-2"></ul>
-                                </div>
-
-                                <!-- Agent Dropdown (only for super_admin) -->
-                                <?php if ($_SESSION['access_level'] === 'super_admin'): ?>
-                                <div class="form-group">
-                                    <label for="agent_dropdown">Agent</label>
-                                    <select id="agent_dropdown" class="form-control" name="agent_id" required>
-                                        <option value="">Select Agent</option>
-                                        <?php foreach ($agents as $agent): ?>
-                                            <option value="<?php echo $agent['agent_id']; ?>"><?php echo $agent['agent_name']; ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
-                                <?php endif; ?>
-
-                                <!-- Dynamic Purchase Entry Count Selection -->
-                                <div class="form-group">
-                                    <label for="purchase_count">Number of Purchases</label>
-                                    <select id="purchase_count" class="form-control" onchange="populatePurchaseEntries()" required>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                        <option value="5">5</option>
-                                        <option value="6">6</option>
-                                        <option value="7">7</option>
-                                        <option value="8">8</option>
-                                        <option value="9">9</option>
-                                        <option value="10">10</option>
-                                    </select>
-                                </div>
-
-                                <!-- Dynamic Purchase Entries -->
-                                <div id="purchase_entries_wrapper">
-                                    <!-- Initially display 1 row by default -->
-                                    <div class="form-group row">
-                                        <div class="col-md-3">
-                                            <label for="purchase_no_0">Purchase Number</label>
-                                            <input type="text" class="form-control" name="purchase_no[]" id="purchase_no_0" pattern="\d{2,3}" title="Please enter a number with 2 or 3 digits" required>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <label for="purchase_category_0">Category</label>
-                                            <select class="form-control" name="purchase_category[]" id="purchase_category_0" onchange="calculateTotalPrice(0)">
-                                                <option value="Box">Box</option>
-                                                <option value="Straight">Straight</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <label for="purchase_amount_0">Amount</label>
-                                            <input type="number" class="form-control" name="purchase_amount[]" id="purchase_amount_0" oninput="calculateTotalPrice(0)" required>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <label for="total_price_0">Total Price</label>
-                                            <input type="text" class="form-control" name="total_price[]" id="total_price_0" readonly>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label for="purchase_date_0">Purchase Date</label>
-                                            <input type="date" class="form-control" name="purchase_date[]" id="purchase_date_0" required>
-                                        </div>
-
-                                        <script>
-                                        // Set the default date to today for the initial column
-                                        const today = new Date().toISOString().split('T')[0];
-                                        document.getElementById('purchase_date_0').value = today;
-                                        </script>
-                                    </div>
-                                </div>
-
-                                <!-- Submit Button -->
-                                <button type="submit" class="btn btn-success mt-3">Submit Purchase Entry</button>
-                            </form>
+                    <!-- Customer Search and Display -->
+                    <form method="POST" action="purchase_entry.php">
+                        <div class="form-group">
+                            <label for="customer_search">Search Customer</label>
+                            <input type="text" class="form-control" id="customer_search" placeholder="Start typing to search..." onkeyup="filterCustomers()">
+                            <ul id="customer_list" class="list-group mt-2"></ul>
                         </div>
 
-                        <!-- Right: Table for displaying selected customer details -->
-                        <div id="customer-details-table" class="col-md-6">
-                            <h4>Customer Details</h4>
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>Customer ID</th>
-                                        <th>Customer Name</th>
-                                        <th>Agent ID</th>
-                                        <th>Credit Limit</th>
-                                        <th>VIP Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="customer-details-body">
-                                    <!-- Rows populated by JavaScript -->
-                                </tbody>
-                            </table>
+                        <!-- Agent Dropdown (only for super_admin) -->
+                        <?php if ($_SESSION['access_level'] === 'super_admin'): ?>
+                        <div class="form-group">
+                            <label for="agent_dropdown">Agent</label>
+                            <select id="agent_dropdown" class="form-control" name="agent_id" required>
+                                <option value="">Select Agent</option>
+                                <?php foreach ($agents as $agent): ?>
+                                    <option value="<?php echo $agent['agent_id']; ?>"><?php echo $agent['agent_name']; ?></option>
+                                <?php endforeach; ?>
+                            </select>
                         </div>
-                    </div>
+                        <?php endif; ?>
 
+                        <!-- Dynamic Purchase Entry Count Selection -->
+                        <div class="form-group">
+                            <label for="purchase_count">Number of Purchases</label>
+                            <select id="purchase_count" class="form-control" onchange="populatePurchaseEntries()" required>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                            </select>
+                        </div>
+
+                        <!-- Dynamic Purchase Entries -->
+                        <div id="purchase_entries_wrapper">
+                            <!-- Initially display 1 row by default -->
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <label for="purchase_no_0">Purchase Number</label>
+                                    <input type="text" class="form-control" name="purchase_no[]" id="purchase_no_0" pattern="\d{2,3}" title="Please enter a number with 2 or 3 digits" required>
+                                </div>
+                                <div class="col-md-2">
+                                    <label for="purchase_category_0">Category</label>
+                                    <select class="form-control" name="purchase_category[]" id="purchase_category_0" onchange="calculateTotalPrice(0)">
+                                        <option value="Box">Box</option>
+                                        <option value="Straight">Straight</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="purchase_amount_0">Amount</label>
+                                    <input type="number" class="form-control" name="purchase_amount[]" id="purchase_amount_0" oninput="calculateTotalPrice(0)" required>
+                                </div>
+                                <div class="col-md-2">
+                                    <label for="total_price_0">Total Price</label>
+                                    <input type="text" class="form-control" name="total_price[]" id="total_price_0" readonly>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="purchase_date_0">Purchase Date</label>
+                                    <input type="date" class="form-control" name="purchase_date[]" id="purchase_date_0" required>
+                                </div>
+
+                                <script>
+                                // Set the default date to today for the initial column
+                                const today = new Date().toISOString().split('T')[0];
+                                document.getElementById('purchase_date_0').value = today;
+                                </script>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn btn-success mt-3">Submit Purchase Entry</button>
+                    </form>
                 </div>
             </div>
 
@@ -274,27 +241,6 @@ function calculatePermutationFactor($purchase_no) {
             document.getElementById('customer_list').innerHTML = '';
             const customerField = `<input type="hidden" name="customer_id" value="${customerId}">`;
             document.getElementById('purchase_entries_wrapper').insertAdjacentHTML('beforebegin', customerField);
-
-            // Call the function to populate the customer details table
-            populateCustomerDetails(customerId);
-        }
-
-        // Populate customer details in the right-hand table
-        function populateCustomerDetails(customerId) {
-            const customer = customers.find(c => c.customer_id === customerId);
-            
-            if (customer) {
-                const tableBody = document.getElementById('customer-details-body');
-                tableBody.innerHTML = `
-                    <tr>
-                        <td>${customer.customer_id}</td>
-                        <td>${customer.customer_name}</td>
-                        <td>${customer.agent_id || 'N/A'}</td>
-                        <td>${customer.credit_limit || 'N/A'}</td>
-                        <td>${customer.vip_status || 'N/A'}</td>
-                    </tr>
-                `;
-            }
         }
 
         // Function to populate dynamic entry field 
@@ -416,7 +362,10 @@ function calculatePermutationFactor($purchase_no) {
         function factorial(n) {
             return n ? n * factorial(n - 1) : 1;
         }
+
+        
     </script>
 </body>
 
 </html>
+
