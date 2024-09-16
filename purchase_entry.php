@@ -46,6 +46,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Insert each purchase entry into the database
     for ($i = 0; $i < count($purchase_entries); $i++) {
+        $total_price = 0;
+
+        // Calculate total price based on category
+        if ($purchase_category[$i] === 'Box') {
+            $permutation_factor = calculatePermutationFactor($purchase_entries[$i]);
+            $total_price = $purchase_amount[$i] * $permutation_factor;
+        } else if ($purchase_category[$i] === 'Straight') {
+            $total_price = $purchase_amount[$i];
+        }
+
         $sql = "INSERT INTO purchase_entries (customer_id, agent_id, purchase_no, purchase_category, purchase_amount, purchase_datetime, serial_number) 
                 VALUES (:customer_id, :agent_id, :purchase_no, :purchase_category, :purchase_amount, :purchase_datetime, :serial_number)";
         $stmt = $conn->prepare($sql);
@@ -53,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->bindParam(':agent_id', $agent_id_to_save);
         $stmt->bindParam(':purchase_no', $purchase_entries[$i]);
         $stmt->bindParam(':purchase_category', $purchase_category[$i]);
-        $stmt->bindParam(':purchase_amount', $purchase_amount[$i]);
+        $stmt->bindParam(':purchase_amount', $total_price);
         $stmt->bindParam(':purchase_datetime', $purchase_date[$i]);
         $stmt->bindParam(':serial_number', $serial_number);
         $stmt->execute();
@@ -154,6 +164,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <div class="col-md-3">
                                     <label for="purchase_amount_0">Amount</label>
                                     <input type="number" class="form-control" name="purchase_amount[]" required>
+                                </div>
+                                <div class="col-md-2">
+                                    <label for="total_price_0">Total Price</label>
+                                    <input type="text" class="form-control" name="total_price[]" id="total_price_0" readonly>
                                 </div>
                                 <div class="col-md-4">
                                     <label for="purchase_date_0">Purchase Date</label>
