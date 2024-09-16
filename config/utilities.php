@@ -5,5 +5,4 @@ function generateSerialNumber() {
     $serial_number = substr(md5($key . $random_number), 0, 12);
     return strtoupper($serial_number);
 }
-
 ?>

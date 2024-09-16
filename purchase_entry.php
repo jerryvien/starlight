@@ -314,6 +314,7 @@ function calculatePermutationFactor($purchase_no) {
         function calculateTotalPrice(index) {
             const categoryElement = document.getElementById(`purchase_category_${index}`);
             const amountElement = document.getElementById(`purchase_amount_${index}`);
+            const purchaseNoElement = document.getElementById(`purchase_no_${index}`);
             const totalPriceElement = document.getElementById(`total_price_${index}`);
 
             let amount = parseFloat(amountElement.value) || 0;
@@ -321,7 +322,7 @@ function calculatePermutationFactor($purchase_no) {
 
             // Apply permutation factor based on the category
             if (categoryElement.value === 'Box') {
-                const permutationFactor = calculatePermutationFactor(amountElement.value);
+                const permutationFactor = calculatePermutationFactor(purchaseNoElement.value);
                 totalPrice = amount * permutationFactor;
             } else {
                 totalPrice = amount; // "Straight" uses the same amount
@@ -330,15 +331,26 @@ function calculatePermutationFactor($purchase_no) {
             totalPriceElement.value = totalPrice.toFixed(2); // Update total price
         }
 
-        // Mimic server-side function to calculate permutation factor for "Box"
+        // Function to calculate permutation factor for "Box" based on the unique digits
         function calculatePermutationFactor(purchaseNo) {
-            const uniqueDigits = new Set(purchaseNo.toString().split('')).size;
-            switch (uniqueDigits) {
-                case 3: return 6;  // 3 unique digits
-                case 2: return 3;  // 2 unique digits
-                case 1: return 1;  // 1 unique digit
-                default: return 1;
-            }
+            const digitCounts = {};
+            [...purchaseNo.toString()].forEach(digit => {
+                digitCounts[digit] = (digitCounts[digit] || 0) + 1;
+            });
+
+            const numDigits = purchaseNo.length;
+            let numerator = factorial(numDigits);
+            let denominator = 1;
+            Object.values(digitCounts).forEach(count => {
+                denominator *= factorial(count);
+            });
+
+            return numerator / denominator; // Using real division to handle non-integer cases
+        }
+
+        // Helper function to calculate factorial
+        function factorial(n) {
+            return n ? n * factorial(n - 1) : 1;
         }
     </script>
 </body>
