@@ -90,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <?php include('topbar.php'); ?>
 
                 <div class="container-fluid">
-                    <h1 class="h3 mb-4 text-gray-800">Purchase Entry</h1>
+                    <h1 class="h3 mb-4 text-gray-800">Purchase Record Entry</h1>
 
                     <!-- Display Serial Number -->
                     <div class="form-group">
@@ -157,8 +157,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 </div>
                                 <div class="col-md-4">
                                     <label for="purchase_date_0">Purchase Date</label>
-                                    <input type="date" class="form-control" name="purchase_date[]" required>
+                                    <input type="date" class="form-control" name="purchase_date[]" id="purchase_date_0" required>
                                 </div>
+
+                                <script>
+                                // Set the default date to today for the initial column
+                                const today = new Date().toISOString().split('T')[0];
+                                document.getElementById('purchase_date_0').value = today;
+                                </script>
                             </div>
                         </div>
 
@@ -206,40 +212,65 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             const count = parseInt(document.getElementById('purchase_count').value);
             const wrapper = document.getElementById('purchase_entries_wrapper');
             wrapper.innerHTML = ''; // Clear existing entries
-            
+
             // Get today's date in 'YYYY-MM-DD' format
             const today = new Date().toISOString().split('T')[0];
 
             for (let i = 0; i < count; i++) {
-                // Append new form row
-                wrapper.innerHTML += `
-                    <div class="form-group row">
-                        <div class="col-md-3">
-                            <label for="purchase_no_${i}">Purchase Number</label>
-                            <input type="text" class="form-control" name="purchase_no[]" required>
-                        </div>
-                        <div class="col-md-2">
-                            <label for="purchase_category_${i}">Category</label>
-                            <select class="form-control" name="purchase_category[]">
-                                <option value="Box">Box</option>
-                                <option value="Straight">Straight</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <label for="purchase_amount_${i}">Amount</label>
-                            <input type="number" class="form-control" name="purchase_amount[]" required>
-                        </div>
-                        <div class="col-md-4">
-                            <label for="purchase_date_${i}">Purchase Date</label>
-                            <input type="date" class="form-control" name="purchase_date[]" id="purchase_date_${i}" required>
-                        </div>
-                    </div>
+                // Create a new row
+                const row = document.createElement('div');
+                row.classList.add('form-group', 'row');
+
+                // Purchase Number Field
+                const col1 = document.createElement('div');
+                col1.classList.add('col-md-3');
+                col1.innerHTML = `
+                    <label for="purchase_no_${i}">Purchase Number</label>
+                    <input type="text" class="form-control" name="purchase_no[]" required>
+                `;
+                
+                // Purchase Category Field
+                const col2 = document.createElement('div');
+                col2.classList.add('col-md-2');
+                col2.innerHTML = `
+                    <label for="purchase_category_${i}">Category</label>
+                    <select class="form-control" name="purchase_category[]">
+                        <option value="Box">Box</option>
+                        <option value="Straight">Straight</option>
+                    </select>
                 `;
 
-                // Set the value of the date input field to today's date after the row is added
-                document.getElementById(`purchase_date_${i}`).value = today;
-                }
+                // Purchase Amount Field
+                const col3 = document.createElement('div');
+                col3.classList.add('col-md-3');
+                col3.innerHTML = `
+                    <label for="purchase_amount_${i}">Amount</label>
+                    <input type="number" class="form-control" name="purchase_amount[]" required>
+                `;
+
+                // Purchase Date Field
+                const col4 = document.createElement('div');
+                col4.classList.add('col-md-4');
+                const dateInput = document.createElement('input');
+                dateInput.type = 'date';
+                dateInput.classList.add('form-control');
+                dateInput.name = 'purchase_date[]';
+                dateInput.id = `purchase_date_${i}`;
+                dateInput.value = today;  // Set today's date as default
+                col4.innerHTML = `<label for="purchase_date_${i}">Purchase Date</label>`;
+                col4.appendChild(dateInput);  // Append the input to the column
+
+                // Append all columns to the row
+                row.appendChild(col1);
+                row.appendChild(col2);
+                row.appendChild(col3);
+                row.appendChild(col4);
+
+                // Append the row to the wrapper
+                wrapper.appendChild(row);
             }
+        }
+
 
     </script>
 </body>
