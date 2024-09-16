@@ -14,12 +14,10 @@ $agent_id = $_SESSION['agent_id'];
 
 // Fetch purchase records based on the access level
 $sql = "
-    SELECT p.purchase_no, p.purchase_category, p.purchase_amount, p.purchase_datetime, 
-           c.customer_name, c.credit_limit, c.vip_status, 
-           a.agent_name, a.agent_id
+    SELECT p.purchase_no, p.purchase_amount, DATE(p.purchase_datetime) AS purchase_date, 
+           c.customer_name
     FROM purchase_entries p
     JOIN customer_details c ON p.customer_id = c.customer_id
-    JOIN admin_access a ON p.agent_id = a.agent_id
 ";
 
 // If the user is an agent, filter results by agent ID
@@ -65,6 +63,12 @@ if (isset($filters['customer_name'])) {
 
 $stmt->execute();
 $purchases = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Calculate the grand total of the purchase amounts
+$grand_total = 0;
+foreach ($purchases as $purchase) {
+    $grand_total += $purchase['purchase_amount'];
+}
 ?>
 
 <!DOCTYPE html>
@@ -127,35 +131,30 @@ $purchases = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
-                                    <th>Purchase No</th>
-                                    <th>Category</th>
-                                    <th>Amount</th>
-                                    <th>Date</th>
                                     <th>Customer Name</th>
-                                    <th>Credit Limit</th>
-                                    <th>VIP Status</th>
-                                    <th>Agent Name</th>
-                                    <th>Agent ID</th>
+                                    <th>Purchase No</th>
+                                    <th>Purchase Amount</th>
+                                    <th>Purchase Date</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php if (count($purchases) > 0): ?>
                                     <?php foreach ($purchases as $purchase): ?>
                                         <tr>
-                                            <td><?php echo $purchase['purchase_no']; ?></td>
-                                            <td><?php echo $purchase['purchase_category']; ?></td>
-                                            <td><?php echo number_format($purchase['purchase_amount'], 2); ?></td>
-                                            <td><?php echo $purchase['purchase_datetime']; ?></td>
                                             <td><?php echo $purchase['customer_name']; ?></td>
-                                            <td><?php echo number_format($purchase['credit_limit'], 2); ?></td>
-                                            <td><?php echo $purchase['vip_status']; ?></td>
-                                            <td><?php echo $purchase['agent_name']; ?></td>
-                                            <td><?php echo $purchase['agent_id']; ?></td>
+                                            <td><?php echo $purchase['purchase_no']; ?></td>
+                                            <td><?php echo number_format($purchase['purchase_amount'], 2); ?></td>
+                                            <td><?php echo $purchase['purchase_date']; ?></td> <!-- Purchase Date only -->
                                         </tr>
                                     <?php endforeach; ?>
+                                    <!-- Grand Total Row -->
+                                    <tr>
+                                        <td colspan="2" class="text-right font-weight-bold">Grand Total:</td>
+                                        <td colspan="2" class="font-weight-bold"><?php echo number_format($grand_total, 2); ?></td>
+                                    </tr>
                                 <?php else: ?>
                                     <tr>
-                                        <td colspan="9" class="text-center">No purchases found</td>
+                                        <td colspan="4" class="text-center">No purchases found</td>
                                     </tr>
                                 <?php endif; ?>
                             </tbody>
