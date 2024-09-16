@@ -277,6 +277,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 col4.innerHTML = `<label for="purchase_date_${i}">Purchase Date</label>`;
                 col4.appendChild(dateInput);  // Append the input to the column
 
+                // Total Price Field
+                const col5 = document.createElement('div');
+                col5.classList.add('col-md-2');
+                col5.innerHTML = `
+                    <label for="total_price_${i}">Total Price</label>
+                    <input type="text" class="form-control" name="total_price[]" id="total_price_${i}" readonly>
+                `;
+
                 // Append all columns to the row
                 row.appendChild(col1);
                 row.appendChild(col2);
