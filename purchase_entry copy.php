@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $purchase_category = $_POST['purchase_category'];
     $purchase_amount = $_POST['purchase_amount'];
     $purchase_date = $_POST['purchase_date'];
-
+    
     // Set agent ID based on access level
     $agent_id_to_save = ($_SESSION['access_level'] === 'super_admin') ? $_POST['agent_id'] : $_SESSION['agent_id'];
 
@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $permutation_factor = calculatePermutationFactor($purchase_entries[$i]);
             $total_price = $purchase_amount[$i] * $permutation_factor;
         } else if ($purchase_category[$i] === 'Straight') {
-            $total_price = $purchase_amount[$i]; // Straight amount stays the same
+            $total_price = $purchase_amount[$i];
         }
 
         $sql = "INSERT INTO purchase_entries (customer_id, agent_id, purchase_no, purchase_category, purchase_amount, purchase_datetime, serial_number) 
@@ -63,24 +63,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->bindParam(':agent_id', $agent_id_to_save);
         $stmt->bindParam(':purchase_no', $purchase_entries[$i]);
         $stmt->bindParam(':purchase_category', $purchase_category[$i]);
-        $stmt->bindParam(':purchase_amount', $total_price); // Store total price in purchase_amount
+        $stmt->bindParam(':purchase_amount', $total_price);
         $stmt->bindParam(':purchase_datetime', $purchase_date[$i]);
         $stmt->bindParam(':serial_number', $serial_number);
         $stmt->execute();
     }
 
     echo "<div class='alert alert-success'>Purchase entries added successfully with serial number: $serial_number</div>";
-}
-
-// Function to calculate permutation factor for "Box"
-function calculatePermutationFactor($purchase_no) {
-    $unique_digits = count(array_unique(str_split($purchase_no)));
-    switch ($unique_digits) {
-        case 3: return 6; // 123 -> 6 combinations
-        case 2: return 3; // 223 -> 3 combinations
-        case 1: return 1; // 111 -> 1 combination
-        default: return 1;
-    }
 }
 ?>
 
@@ -167,14 +156,14 @@ function calculatePermutationFactor($purchase_no) {
                                 </div>
                                 <div class="col-md-2">
                                     <label for="purchase_category_0">Category</label>
-                                    <select class="form-control" name="purchase_category[]" id="purchase_category_0" onchange="calculateTotalPrice(0)">
+                                    <select class="form-control" name="purchase_category[]">
                                         <option value="Box">Box</option>
                                         <option value="Straight">Straight</option>
                                     </select>
                                 </div>
                                 <div class="col-md-3">
                                     <label for="purchase_amount_0">Amount</label>
-                                    <input type="number" class="form-control" name="purchase_amount[]" id="purchase_amount_0" oninput="calculateTotalPrice(0)" required>
+                                    <input type="number" class="form-control" name="purchase_amount[]" required>
                                 </div>
                                 <div class="col-md-2">
                                     <label for="total_price_0">Total Price</label>
@@ -233,6 +222,7 @@ function calculatePermutationFactor($purchase_no) {
             document.getElementById('purchase_entries_wrapper').insertAdjacentHTML('beforebegin', customerField);
         }
 
+
         // Function to populate dynamic entry field 
         function populatePurchaseEntries() {
             const count = parseInt(document.getElementById('purchase_count').value);
@@ -260,7 +250,7 @@ function calculatePermutationFactor($purchase_no) {
                 col2.classList.add('col-md-2');
                 col2.innerHTML = `
                     <label for="purchase_category_${i}">Category</label>
-                    <select class="form-control" name="purchase_category[]" id="purchase_category_${i}" onchange="calculateTotalPrice(${i})">
+                    <select class="form-control" name="purchase_category[]">
                         <option value="Box">Box</option>
                         <option value="Straight">Straight</option>
                     </select>
@@ -271,7 +261,7 @@ function calculatePermutationFactor($purchase_no) {
                 col3.classList.add('col-md-3');
                 col3.innerHTML = `
                     <label for="purchase_amount_${i}">Amount</label>
-                    <input type="number" class="form-control" name="purchase_amount[]" id="purchase_amount_${i}" oninput="calculateTotalPrice(${i})" required>
+                    <input type="number" class="form-control" name="purchase_amount[]" required>
                 `;
 
                 // Purchase Date Field
@@ -285,7 +275,7 @@ function calculatePermutationFactor($purchase_no) {
                 dateInput.required = true;
                 dateInput.value = today;  // Set today's date as default
                 col4.innerHTML = `<label for="purchase_date_${i}">Purchase Date</label>`;
-                col4.appendChild(dateInput);
+                col4.appendChild(dateInput);  // Append the input to the column
 
                 // Total Price Field
                 const col5 = document.createElement('div');
@@ -300,7 +290,6 @@ function calculatePermutationFactor($purchase_no) {
                 row.appendChild(col2);
                 row.appendChild(col3);
                 row.appendChild(col4);
-                row.appendChild(col5);
 
                 // Append the row to the wrapper
                 wrapper.appendChild(row);
@@ -310,38 +299,44 @@ function calculatePermutationFactor($purchase_no) {
             }
         }
 
-        // Function to calculate total price based on category and amount
+        // Function to calculate the total price based on category and amount
         function calculateTotalPrice(index) {
             const categoryElement = document.getElementById(`purchase_category_${index}`);
             const amountElement = document.getElementById(`purchase_amount_${index}`);
+            const purchaseNoElement = document.getElementById(`purchase_no_${index}`);
             const totalPriceElement = document.getElementById(`total_price_${index}`);
 
             let amount = parseFloat(amountElement.value) || 0;
+            let purchaseNo = purchaseNoElement.value;
             let totalPrice = 0;
 
-            // Apply permutation factor based on the category
+            // If category is "Box", apply the permutation factor
             if (categoryElement.value === 'Box') {
-                const permutationFactor = calculatePermutationFactor(amountElement.value);
+                const permutationFactor = calculatePermutationFactor(purchaseNo);
                 totalPrice = amount * permutationFactor;
-            } else {
-                totalPrice = amount; // "Straight" uses the same amount
+            } else if (categoryElement.value === 'Straight') {
+                // For "Straight", amount stays the same
+                totalPrice = amount;
             }
 
-            totalPriceElement.value = totalPrice.toFixed(2); // Update total price
+            // Set the total price
+            totalPriceElement.value = totalPrice.toFixed(2);
         }
 
-        // Mimic server-side function to calculate permutation factor for "Box"
+        // Mimic the server-side function to calculate permutation factor
         function calculatePermutationFactor(purchaseNo) {
-            const uniqueDigits = new Set(purchaseNo.toString().split('')).size;
+            const uniqueDigits = new Set(purchaseNo.split('')).size;
             switch (uniqueDigits) {
-                case 3: return 6;  // 3 unique digits
-                case 2: return 3;  // 2 unique digits
-                case 1: return 1;  // 1 unique digit
-                default: return 1;
+                case 3:
+                    return 6; // 3 unique digits -> 6 combinations
+                case 2:
+                    return 3; // 2 unique digits -> 3 combinations
+                case 1:
+                    return 1; // 1 unique digit -> 1 combination
+                default:
+                    return 1;
             }
         }
     </script>
 </body>
-
 </html>
-
