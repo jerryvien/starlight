@@ -1,6 +1,7 @@
 <?php
 session_start();
 include('config/database.php'); // Include your database connection
+include('utilities.php')// Include Utilities Function
 
 // Redirect to login page if the user is not logged in
 if (!isset($_SESSION['admin'])) {
@@ -9,8 +10,7 @@ if (!isset($_SESSION['admin'])) {
 }
 
 // Generate a unique serial number based on computer ID and current datetime
-$computer_id = gethostname(); // Example computer ID
-$serial_number = $computer_id . '_' . date('YmdHis');
+$serial_number = generateSerialNumber();
 
 // Fetch customer data for search filter
 $query = ($_SESSION['access_level'] === 'super_admin') ? 
@@ -44,6 +44,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Set agent ID based on access level
     $agent_id_to_save = ($_SESSION['access_level'] === 'super_admin') ? $_POST['agent_id'] : $_SESSION['agent_id'];
 
+    // Flag for success message
+    $message = '';
+
     // Insert each purchase entry into the database
     for ($i = 0; $i < count($purchase_entries); $i++) {
         $sql = "INSERT INTO purchase_entries (customer_id, agent_id, purchase_no, purchase_category, purchase_amount, purchase_datetime, serial_number) 
@@ -59,7 +62,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->execute();
     }
 
-    echo "<div class='alert alert-success'>Purchase entries added successfully with serial number: $serial_number</div>";
+    // Store the success message in session
+    $_SESSION['success_message'] = "Purchase entries added successfully with serial number: $serial_number";
+
+    // Redirect to the same page to show the message
+    header("Location: ".$_SERVER['PHP_SELF']);
+    exit;
 }
 ?>
 
@@ -142,7 +150,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <div class="form-group row">
                                 <div class="col-md-3">
                                     <label for="purchase_no_0">Purchase Number</label>
-                                    <input type="text" class="form-control" name="purchase_no[]" required>
+                                    <input type="text" class="form-control" name="purchase_no[]" id="purchase_no_0" pattern="\d{2,3}" title="Please enter a number with 2 or 3 digits" required>
                                 </div>
                                 <div class="col-md-2">
                                     <label for="purchase_category_0">Category</label>
@@ -208,6 +216,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             document.getElementById('purchase_entries_wrapper').insertAdjacentHTML('beforebegin', customerField);
         }
 
+
+        //function to handle the dynamic purchase field
         function populatePurchaseEntries() {
             const count = parseInt(document.getElementById('purchase_count').value);
             const wrapper = document.getElementById('purchase_entries_wrapper');
@@ -226,7 +236,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 col1.classList.add('col-md-3');
                 col1.innerHTML = `
                     <label for="purchase_no_${i}">Purchase Number</label>
-                    <input type="text" class="form-control" name="purchase_no[]" required>
+                    <input type="text" class="form-control" name="purchase_no[]" id="purchase_no_0" pattern="\d{2,3}" title="Please enter a number with 2 or 3 digits" required>
                 `;
                 
                 // Purchase Category Field

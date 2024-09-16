@@ -30,45 +30,6 @@ function selectCustomer(customerId, customerName) {
     document.getElementById('customer_details').innerHTML = `Customer: ${customerName}`;
 }
 
-// Populate dynamic purchase entry rows based on the selected number of purchases
-function populatePurchaseEntries() {
-    const count = parseInt(document.getElementById('purchase_count').value);
-    const wrapper = document.getElementById('purchase_entries_wrapper');
-    wrapper.innerHTML = ''; // Clear existing entries
-
-    // Get today's date in 'YYYY-MM-DD' format
-    const today = new Date().toISOString().split('T')[0];
-    
-    // Set the value of the date input field to today's date
-    document.getElementById('purchase_date_${i}').value = today;
-
-    for (let i = 0; i < count; i++) {
-        wrapper.innerHTML += `
-            <div class="form-group row">
-                <div class="col-md-3">
-                    <label for="purchase_no_${i}">Purchase Number</label>
-                    <input type="text" class="form-control purchase_no" name="purchase_no[]" oninput="validatePurchaseNo(this)" required>
-                </div>
-                <div class="col-md-2">
-                    <label for="purchase_category_${i}">Category</label>
-                    <select class="form-control" name="purchase_category[]">
-                        <option value="Box">Box</option>
-                        <option value="Straight">Straight</option>
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <label for="purchase_amount_${i}">Amount</label>
-                    <input type="number" class="form-control" name="purchase_amount[]" required>
-                </div>
-                <div class="col-md-4">
-                    <label for="purchase_date_${i}">Purchase Date</label>
-                    <input type="date" class="form-control" name="purchase_date[]" id="purchase_date_${i}" required>
-                </div>
-            </div>
-        `;
-    }
-}
-
 // Validate the purchase number (only 2 or 3 digits allowed)
 function validatePurchaseNo(input) {
     const value = input.value;
