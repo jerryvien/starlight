@@ -10,7 +10,7 @@ if (!isset($_SESSION['admin'])) {
 }
 
 // Generate a unique serial number based on computer ID and current datetime
-$serial_number = 'Tesing123';
+$serial_number = generateSerialNumber();
 
 // Fetch customer data for search filter
 $query = ($_SESSION['access_level'] === 'super_admin') ? 
@@ -61,13 +61,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->bindParam(':serial_number', $serial_number);
         $stmt->execute();
     }
-
-    // Store the success message in session
-    $_SESSION['success_message'] = "Purchase entries added successfully with serial number: $serial_number";
-
-    // Redirect to the same page to show the message
-    header("Location: ".$_SERVER['PHP_SELF']);
-    exit;
 }
 ?>
 
