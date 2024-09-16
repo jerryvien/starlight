@@ -62,12 +62,12 @@
     </li>
     <!-- Nav Item - Purchase Management Collapse Menu -->
     <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-            aria-expanded="true" aria-controls="collapseUtilities">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSample"
+            aria-expanded="true" aria-controls="collapseSample">
             <i class="fas fa-shopping-cart"></i>
             <span>Sample</span>
         </a>
-        <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
+        <div id="collapseSample" class="collapse" aria-labelledby="headingSample"
             data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Purchase Operations:</h6>
