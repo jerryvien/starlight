@@ -109,12 +109,18 @@ function calculatePermutationFactor($purchase_no) {
         .form-control {
             width: 100%; /* Ensures input fields use the full width of their column */
         }
-        /* Adjust specific field widths if needed */
-        #total_price_0 {
-            max-width: 150px; /* Adjust width of total price input */
+        /* Specific field width adjustments */
+        #purchase_no_0, #total_price_0 {
+            max-width: 100px; /* Adjusts width of purchase number and total price */
+        }
+        #purchase_amount_0, #purchase_date_0 {
+            max-width: 120px; /* Adjusts width for amount and date fields */
+        }
+        #purchase_category_0 {
+            max-width: 140px; /* Adjusts width for category dropdown */
         }
     </style>
-    
+
 </head>
 
 <body id="page-top">
