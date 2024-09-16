@@ -114,20 +114,20 @@ function calculatePermutationFactor($purchase_no) {
 <body id="page-top">
     <div id="wrapper">
         <?php include('sidebar.php'); ?>
-
         <div id="content-wrapper" class="d-flex flex-column">
-            <!-- Display success message if it exists -->
-        <?php if (isset($_SESSION['success_message'])): ?>
-        <div class="alert alert-success">
-            <?php echo $_SESSION['success_message']; ?>
-            <?php unset($_SESSION['success_message']); // Clear message after displaying ?>
-        </div>
-        <?php endif; ?>
             <div id="content">
                 <?php include('topbar.php'); ?>
 
                 <div class="container-fluid">
                     <h1 class="h3 mb-4 text-gray-800">Purchase Record Entry</h1>
+                    
+                         <!-- Display success message if it exists -->
+                        <?php if (isset($_SESSION['success_message'])): ?>
+                        <div class="alert alert-success">
+                            <?php echo $_SESSION['success_message']; ?>
+                            <?php unset($_SESSION['success_message']); // Clear message after displaying ?>
+                        </div>
+                        <?php endif; ?>
 
                     <!-- Customer Search and Display -->
                     <form method="POST" action="purchase_entry.php">
