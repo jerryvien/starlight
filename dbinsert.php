@@ -2,6 +2,11 @@
 // Database connection
 include('config/database.php');
 
+// Enable error reporting for debugging
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 // Array of common European names (you can expand this list as needed)
 $european_first_names = [
     "John", "Paul", "George", "David", "Michael", "James", "Robert", "Peter", "William", "Richard",
