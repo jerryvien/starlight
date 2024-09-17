@@ -49,16 +49,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     $length = $_POST['length']; // Number of records per page
 
     try {
-        $where_clause = '';
+        $where_clause = 'WHERE c.is_archieve = 0'; // Only show customers that are not archived
         $params = [];
-        
+
+        // Add condition to check if updated_at is within the last 365 days
+        $where_clause .= ' AND c.updated_at >= DATE_SUB(CURDATE(), INTERVAL 365 DAY)';
+
+        // Restrict access for non-super_admin agents
         if ($access_level !== 'super_admin') {
-            $where_clause = 'WHERE c.agent_id = :agent_id';
+            $where_clause .= ' AND c.agent_id = :agent_id';
             $params[':agent_id'] = $agent_id;
         }
-        
+
+        // Search filter condition
         if (!empty($search_value)) {
-            $where_clause .= ($where_clause ? ' AND' : ' WHERE') . ' (customer_name LIKE :search_value OR a.agent_name LIKE :search_value)';
+            $where_clause .= ' AND (c.customer_name LIKE :search_value OR a.agent_name LIKE :search_value)';
             $params[':search_value'] = '%' . $search_value . '%';
         }
 
@@ -68,14 +73,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         $stmt_total->execute($params);
         $total_records = $stmt_total->fetch(PDO::FETCH_ASSOC)['total'];
 
-        // Fetch filtered data
+        // Fetch filtered data with pagination
         $query = "SELECT c.*, a.agent_name 
                   FROM customer_details c 
                   LEFT JOIN admin_access a ON c.agent_id = a.agent_id 
                   $where_clause 
                   ORDER BY c.created_at DESC 
                   LIMIT :start, :length";
-        
+
         $stmt = $conn->prepare($query);
         foreach ($params as $key => &$value) {
             $stmt->bindParam($key, $value);
@@ -112,6 +117,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     }
     exit;
 }
+
 ?>
 
 <!DOCTYPE html>
