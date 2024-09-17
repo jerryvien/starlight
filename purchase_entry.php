@@ -67,6 +67,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->bindParam(':purchase_datetime', $purchase_date[$i]);
         $stmt->bindParam(':serial_number', $serial_number);
         $stmt->execute();
+
+        // Update the updated_at field in customer_details table
+        $updateCustomerSQL = "UPDATE customer_details SET updated_at = NOW() WHERE customer_id = :customer_id";
+        $updateStmt = $conn->prepare($updateCustomerSQL);
+        $updateStmt->bindParam(':customer_id', $customer_id);
+        $updateStmt->execute();
     }
 
     // Store the success message in session
