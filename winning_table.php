@@ -19,9 +19,13 @@ if ($_SESSION['access_level'] !== 'super_admin') {
     exit;
 }
 
-// Initialize variables for messages
+// Initialize variables for messages and form fields
 $message = '';
 $error = '';
+$existingRecord = null;
+$winning_number = '';
+$winning_game = '';
+$winning_date = date('Y-m-d'); // Default value for winning date
 
 // Handle password authentication
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['authenticate'])) {
@@ -68,14 +72,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_winning'])) {
             $existingRecord = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if ($existingRecord) {
-                // If record exists, allow modification
-                echo "<script>
-                    if (confirm('A record for this game and date already exists. Would you like to modify it?')) {
-                        document.getElementById('winning_number').value = '{$existingRecord['winning_number']}';
-                        document.getElementById('winning_game').value = '{$existingRecord['winning_game']}';
-                        document.getElementById('winning_date').value = '{$existingRecord['winning_date']}';
-                    }
-                </script>";
+                // If record exists, populate the form fields with existing data for modification
+                $winning_number = $existingRecord['winning_number'];
+                $winning_game = $existingRecord['winning_game'];
+                $winning_date = $existingRecord['winning_date'];
+                $message = 'Duplicate record found. You can modify the existing record.';
             } else {
                 // Insert new record into the database
                 try {
@@ -96,6 +97,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_winning'])) {
         }
     }
 }
+
+// Handle record modification (if needed)
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['modify_winning'])) {
+    if (isset($existingRecord)) {
+        $winning_number = $_POST['winning_number'];
+        $winning_game = $_POST['winning_game'];
+        $winning_date = $_POST['winning_date'];
+        
+        try {
+            $stmt = $conn->prepare("UPDATE winning_record 
+                                    SET winning_number = :winning_number, 
+                                        winning_game = :winning_game, 
+                                        winning_date = :winning_date 
+                                    WHERE id = :id");
+            $stmt->bindParam(':winning_number', $winning_number);
+            $stmt->bindParam(':winning_game', $winning_game);
+            $stmt->bindParam(':winning_date', $winning_date);
+            $stmt->bindParam(':id', $existingRecord['id']);
+            $stmt->execute();
+
+            $message = "Winning record successfully modified. Game: $winning_game, Winning Number: $winning_number.";
+        } catch (PDOException $e) {
+            $error = 'Error modifying winning record: ' . $e->getMessage();
+        }
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -109,6 +136,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_winning'])) {
 </head>
 
 <body id="page-top">
+
     <!-- Page Wrapper -->
     <div id="wrapper">
         <!-- Sidebar -->
@@ -116,6 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_winning'])) {
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
+
             <!-- Main Content -->
             <div id="content">
                 <!-- Topbar -->
@@ -147,26 +176,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_winning'])) {
                             <!-- Winning Number -->
                             <div class="form-group">
                                 <label for="winning_number">Winning Number</label>
-                                <input type="text" class="form-control" name="winning_number" id="winning_number" placeholder="Enter 2 or 3-digit number" required>
+                                <input type="text" class="form-control" name="winning_number" id="winning_number" value="<?php echo $winning_number; ?>" placeholder="Enter 2 or 3-digit number" required>
                             </div>
 
                             <!-- Winning Game -->
                             <div class="form-group">
                                 <label for="winning_game">Winning Game</label>
                                 <select name="winning_game" id="winning_game" class="form-control" required>
-                                    <option value="2-D">2-D</option>
-                                    <option value="3-D">3-D</option>
+                                    <option value="2-D" <?php if($winning_game == '2-D') echo 'selected'; ?>>2-D</option>
+                                    <option value="3-D" <?php if($winning_game == '3-D') echo 'selected'; ?>>3-D</option>
                                 </select>
                             </div>
 
                             <!-- Winning Date -->
                             <div class="form-group">
                                 <label for="winning_date">Winning Date</label>
-                                <input type="date" class="form-control" name="winning_date" id="winning_date" value="<?php echo date('Y-m-d'); ?>" required>
+                                <input type="date" class="form-control" name="winning_date" id="winning_date" value="<?php echo $winning_date; ?>" required>
                             </div>
 
                             <!-- Submit Button -->
-                            <button type="submit" name="submit_winning" class="btn btn-success">Submit Winning Entry</button>
+                            <?php if ($existingRecord): ?>
+                                <button type="submit" name="modify_winning" class="btn btn-warning">Modify Winning Entry</button>
+                            <?php else: ?>
+                                <button type="submit" name="submit_winning" class="btn btn-success">Submit Winning Entry</button>
+                            <?php endif; ?>
                         </form>
                     <?php endif; ?>
 
