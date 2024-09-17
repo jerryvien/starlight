@@ -32,6 +32,23 @@ try {
 } catch (Exception $e) {
     die("Error fetching sales data: " . $e->getMessage());
 }
+//Fetch customer who register last 30 days
+try {
+    // Fetch number of new customers registered in the last 30 days
+    $new_customers_query = ($access_level === 'super_admin') ? 
+        "SELECT COUNT(*) AS new_customers_last_30_days FROM customer_details WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)" :
+        "SELECT COUNT(*) AS new_customers_last_30_days FROM customer_details WHERE agent_id = :agent_id AND created_at >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)";
+
+    $new_customers_stmt = $conn->prepare($new_customers_query);
+    if ($access_level !== 'super_admin') {
+        $new_customers_stmt->bindParam(':agent_id', $agent_id);
+    }
+    $new_customers_stmt->execute();
+    $new_customers_data = $new_customers_stmt->fetch(PDO::FETCH_ASSOC);
+} catch (Exception $e) {
+    die("Error fetching new customer data: " . $e->getMessage());
+}
+
 
 // Fetch sales by category (Pie chart)
 try {
@@ -189,6 +206,22 @@ try {
                         </div>
 
                         <div class="col-xl-4 col-md-6 mb-4">
+                            <div class="card border-left-info shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Average Purchase Value</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">RM <?php echo number_format($sales_data['avg_order_value'], 2); ?></div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-bolt fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-4 col-md-6 mb-4">
                             <div class="card border-left-success shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
@@ -205,25 +238,20 @@ try {
                         </div>
 
                         <div class="col-xl-4 col-md-6 mb-4">
-                            <div class="card border-left-info shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Average Purchase Value</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">RM <?php echo number_format($sales_data['avg_order_value'], 2); ?></div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-bolt fa-2x text-gray-300"></i>
-                                        </div>
+                        <div class="card border-left-warning shadow h-100 py-2"> <!-- Gold border -->
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">New Customers (Last 30 Days)</div> <!-- Updated text -->
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $new_customers_data['new_customers_last_30_days']; ?></div> <!-- New customer data -->
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-user fa-2x text-gray-300"></i> <!-- Customer/user icon -->
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    
-
-                    
 
                     <!-- Top 5 Spend and Winner Customers (Bar Charts) -->
                     <div class="row">
