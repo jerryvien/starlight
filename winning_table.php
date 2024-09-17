@@ -15,8 +15,7 @@ if (!isset($_SESSION['admin'])) {
 
 // Ensure the user is a super_admin
 if ($_SESSION['access_level'] !== 'super_admin') {
-    echo "<script>alert('You must be a super admin to access this page.'); window.location.href='index.php';</script>";
-    exit;
+    $error = 'You must be a super admin to access this page.';
 }
 
 // Initialize variables for messages and form fields
@@ -73,22 +72,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && (isset($_POST['submit_winning']) || 
 
             // Debugging: Check if a record was found
             if ($existingRecord) {
-                $message = "Existing record found for $winning_game on $winning_date. Ready to modify.";
-            } else {
-                $message = "No existing record found for $winning_game on $winning_date.";
+                if ($existingRecord['winning_listing']) {
+                    // If winning_listing is true, modification is not allowed
+                    $error = "Winning listing for $winning_game on $winning_date is already out. Modification is not allowed.";
+                } else {
+                    $message = "Existing record found for $winning_game on $winning_date. Ready to modify.";
+                }
             }
 
-            if ($existingRecord && isset($_POST['modify_winning'])) {
-                // If modifying an existing record, update it in the database
+            if ($existingRecord && isset($_POST['modify_winning']) && !$existingRecord['winning_listing']) {
+                // If modifying an existing record, update it in the database including the hash
                 try {
                     $stmt = $conn->prepare("UPDATE winning_record 
                                             SET winning_number = :winning_number, 
                                                 winning_game = :winning_game, 
-                                                winning_date = :winning_date 
+                                                winning_date = :winning_date,
+                                                agent_hashed_secretkey = :hashed_secret_key
                                             WHERE id = :id");
                     $stmt->bindParam(':winning_number', $winning_number);
                     $stmt->bindParam(':winning_game', $winning_game);
                     $stmt->bindParam(':winning_date', $winning_date);
+                    $stmt->bindParam(':hashed_secret_key', $hashed_secret_key);
                     $stmt->bindParam(':id', $existingRecord['id']);
                     if ($stmt->execute()) {
                         $message = "Winning record successfully modified. Game: $winning_game, Winning Number: $winning_number.";
@@ -196,7 +200,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && (isset($_POST['submit_winning']) || 
 
                             <!-- Submit Button -->
                             <?php if ($existingRecord): ?>
-                                <button type="submit" name="modify_winning" class="btn btn-warning">Modify Winning Entry</button>
+                                <button type="submit" name="modify_winning" class="btn btn-primary">Modify Winning Entry</button>
                             <?php else: ?>
                                 <button type="submit" name="submit_winning" class="btn btn-success">Submit Winning Entry</button>
                             <?php endif; ?>
