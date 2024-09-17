@@ -50,7 +50,6 @@ try {
 }
 
 // Fetch top 5 spend and winner customers (Bar chart)
-// We need to join purchase_entries with customer_details to get customer_name
 try {
     $top_spend_query = ($access_level === 'super_admin') ? 
         "SELECT c.customer_name, SUM(p.purchase_amount) AS total_spent 
@@ -155,153 +154,171 @@ try {
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
     <script src="vendor/chart.js/Chart.min.js"></script>
 </head>
-<body>
-<div class="container-fluid">
-    <!-- Total Sales, Total Sales Per Day, Average Order Value -->
-    <div class="row">
-        <div class="col-md-4">
-            <div class="card bg-primary text-white">
-                <div class="card-body">
-                    <h5>Total Sales</h5>
-                    <p><?php echo number_format($sales_data['total_sales'], 2); ?> RM</p>
+<body id="page-top">
+    <div id="wrapper">
+        <!-- Sidebar -->
+        <?php include('sidebar.php'); ?>
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+            <!-- Main Content -->
+            <div id="content">
+                <!-- Topbar -->
+                <?php include('topbar.php'); ?>
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+                    <!-- Total Sales, Total Sales Per Day, Average Order Value -->
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card bg-primary text-white">
+                                <div class="card-body">
+                                    <h5>Total Sales</h5>
+                                    <p><?php echo number_format($sales_data['total_sales'], 2); ?> RM</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card bg-success text-white">
+                                <div class="card-body">
+                                    <h5>Total Sales Per Day</h5>
+                                    <p><?php echo $sales_data['sales_per_day']; ?></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card bg-warning text-white">
+                                <div class="card-body">
+                                    <h5>Average Order Value</h5>
+                                    <p><?php echo number_format($sales_data['avg_order_value'], 2); ?> RM</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sales by Category (Pie Chart) -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <canvas id="salesByCategoryChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Top 5 Spend and Winner Customers (Bar Charts) -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <canvas id="topSpendCustomersChart"></canvas>
+                        </div>
+                        <div class="col-md-6">
+                            <canvas id="topWinnerCustomersChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Customer Performance (Line Chart) -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <canvas id="customerGrowthChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Recent Purchases (Table) -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h5>Recent Purchases</h5>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Customer</th>
+                                        <th>Agent</th>
+                                        <th>Purchase No</th>
+                                        <th>Category</th>
+                                        <th>Amount</th>
+                                        <th>Purchase Date</th>
+                                        <th>Result</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($recent_purchases as $purchase): ?>
+                                        <tr>
+                                            <td><?php echo $purchase['customer_name']; ?></td>
+                                            <td><?php echo $purchase['agent_name']; ?></td>
+                                            <td><?php echo $purchase['purchase_no']; ?></td>
+                                            <td><?php echo $purchase['purchase_category']; ?></td>
+                                            <td><?php echo number_format($purchase['purchase_amount'], 2); ?></td>
+                                            <td><?php echo $purchase['purchase_datetime']; ?></td>
+                                            <td><?php echo $purchase['result']; ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
+                <!-- End of Page Content -->
+
+                <!-- Footer -->
+                <?php include('footer.php'); ?>
             </div>
+            <!-- End of Content Wrapper -->
         </div>
-        <div class="col-md-4">
-            <div class="card bg-success text-white">
-                <div class="card-body">
-                    <h5>Total Sales Per Day</h5>
-                    <p><?php echo $sales_data['sales_per_day']; ?></p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card bg-warning text-white">
-                <div class="card-body">
-                    <h5>Average Order Value</h5>
-                    <p><?php echo number_format($sales_data['avg_order_value'], 2); ?> RM</p>
-                </div>
-            </div>
-        </div>
-    </div>
+        <!-- End of Wrapper -->
 
-    <!-- Sales by Category (Pie Chart) -->
-    <div class="row">
-        <div class="col-md-6">
-            <canvas id="salesByCategoryChart"></canvas>
-        </div>
-    </div>
+    <script>
+    // Sales by Category Chart
+    var ctx = document.getElementById('salesByCategoryChart').getContext('2d');
+    var salesByCategoryChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: <?php echo json_encode(array_column($category_sales, 'purchase_category')); ?>,
+            datasets: [{
+                data: <?php echo json_encode(array_column($category_sales, 'total_sales')); ?>,
+                backgroundColor: ['#007bff', '#28a745']
+            }]
+        }
+    });
 
-    <!-- Top 5 Spend and Winner Customers (Bar Charts) -->
-    <div class="row">
-        <div class="col-md-6">
-            <canvas id="topSpendCustomersChart"></canvas>
-        </div>
-        <div class="col-md-6">
-            <canvas id="topWinnerCustomersChart"></canvas>
-        </div>
-    </div>
+    // Top Spend Customers Chart
+    var ctx = document.getElementById('topSpendCustomersChart').getContext('2d');
+    var topSpendCustomersChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: <?php echo json_encode(array_column($top_spend_customers, 'customer_name')); ?>,
+            datasets: [{
+                label: 'Total Spent (RM)',
+                data: <?php echo json_encode(array_column($top_spend_customers, 'total_spent')); ?>,
+                backgroundColor: '#ffc107'
+            }]
+        }
+    });
 
-    <!-- Customer Performance (Line Chart) -->
-    <div class="row">
-        <div class="col-md-12">
-            <canvas id="customerGrowthChart"></canvas>
-        </div>
-    </div>
+    // Top Winner Customers Chart
+    var ctx = document.getElementById('topWinnerCustomersChart').getContext('2d');
+    var topWinnerCustomersChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: <?php echo json_encode(array_column($top_winner_customers, 'customer_name')); ?>,
+            datasets: [{
+                label: 'Total Wins',
+                data: <?php echo json_encode(array_column($top_winner_customers, 'total_wins')); ?>,
+                backgroundColor: '#17a2b8'
+            }]
+        }
+    });
 
-    <!-- Recent Purchases (Table) -->
-    <div class="row">
-        <div class="col-md-12">
-            <h5>Recent Purchases</h5>
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Customer</th>
-                        <th>Agent</th>
-                        <th>Purchase No</th>
-                        <th>Category</th>
-                        <th>Amount</th>
-                        <th>Purchase Date</th>
-                        <th>Result</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($recent_purchases as $purchase): ?>
-                        <tr>
-                            <td><?php echo $purchase['customer_name']; ?></td>
-                            <td><?php echo $purchase['agent_name']; ?></td>
-                            <td><?php echo $purchase['purchase_no']; ?></td>
-                            <td><?php echo $purchase['purchase_category']; ?></td>
-                            <td><?php echo number_format($purchase['purchase_amount'], 2); ?></td>
-                            <td><?php echo $purchase['purchase_datetime']; ?></td>
-                            <td><?php echo $purchase['result']; ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-</div>
-
-<script>
-// Sales by Category Chart
-var ctx = document.getElementById('salesByCategoryChart').getContext('2d');
-var salesByCategoryChart = new Chart(ctx, {
-    type: 'pie',
-    data: {
-        labels: <?php echo json_encode(array_column($category_sales, 'purchase_category')); ?>,
-        datasets: [{
-            data: <?php echo json_encode(array_column($category_sales, 'total_sales')); ?>,
-            backgroundColor: ['#007bff', '#28a745']
-        }]
-    }
-});
-
-// Top Spend Customers Chart
-var ctx = document.getElementById('topSpendCustomersChart').getContext('2d');
-var topSpendCustomersChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-        labels: <?php echo json_encode(array_column($top_spend_customers, 'customer_name')); ?>,
-        datasets: [{
-            label: 'Total Spent (RM)',
-            data: <?php echo json_encode(array_column($top_spend_customers, 'total_spent')); ?>,
-            backgroundColor: '#ffc107'
-        }]
-    }
-});
-
-// Top Winner Customers Chart
-var ctx = document.getElementById('topWinnerCustomersChart').getContext('2d');
-var topWinnerCustomersChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-        labels: <?php echo json_encode(array_column($top_winner_customers, 'customer_name')); ?>,
-        datasets: [{
-            label: 'Total Wins',
-            data: <?php echo json_encode(array_column($top_winner_customers, 'total_wins')); ?>,
-            backgroundColor: '#17a2b8'
-        }]
-    }
-});
-
-// Customer Growth Chart
-var ctx = document.getElementById('customerGrowthChart').getContext('2d');
-var customerGrowthChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: <?php echo json_encode(array_column($customer_growth, 'date')); ?>,
-        datasets: [{
-            label: 'New Customers',
-            data: <?php echo json_encode(array_column($customer_growth, 'new_customers')); ?>,
-            backgroundColor: '#28a745',
-            borderColor: '#28a745',
-            fill: false
-        }]
-    }
-});
-</script>
-
+    // Customer Growth Chart
+    var ctx = document.getElementById('customerGrowthChart').getContext('2d');
+    var customerGrowthChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: <?php echo json_encode(array_column($customer_growth, 'date')); ?>,
+            datasets: [{
+                label: 'New Customers',
+                data: <?php echo json_encode(array_column($customer_growth, 'new_customers')); ?>,
+                backgroundColor: '#28a745',
+                borderColor: '#28a745',
+                fill: false
+            }]
+        }
+    });
+    </script>
 </body>
 </html>
