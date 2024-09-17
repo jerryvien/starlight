@@ -213,7 +213,7 @@ try {
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">$<?php echo number_format($sales_data['avg_order_value'], 2); ?></div>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-truck-fast fa-2x text-gray-300"></i>
+                                            <i class="fa-solid fa-truck-fast fa-2x text-gray-300"></i>
                                         </div>
                                     </div>
                                 </div>
