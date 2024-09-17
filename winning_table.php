@@ -8,10 +8,9 @@ if (!isset($_SESSION['admin'])) {
     exit;
 }
 
-// Ensure the user is a super_admin
+// Check if the user is super_admin
 if ($_SESSION['access_level'] !== 'super_admin') {
-    echo "<script>alert('You must be a super admin to access this page.'); window.location.href='index.php';</script>";
-    exit;
+    $error = "You do not have access to this function. Please consult the super admin.";
 }
 
 // Initialize variables for messages
@@ -31,7 +30,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['authenticate'])) {
 
     // Verify the password
     if ($agent && password_verify($password, $agent['agent_password'])) {
-        $_SESSION['authenticated'] = true; // Set an authenticated flag
+        // Set authenticated flag
+        $_SESSION['authenticated'] = true;
+
+        // Hash the password and store in agent_hashed_secretkey table
+        $hashed_password = password_hash($password, PASSWORD_BCRYPT);
+        $insert_hash_stmt = $conn->prepare("INSERT INTO agent_hashed_secretkey (agent_id, hashed_secretkey) VALUES (:agent_id, :hashed_secretkey)");
+        $insert_hash_stmt->bindParam(':agent_id', $agent_id);
+        $insert_hash_stmt->bindParam(':hashed_secretkey', $hashed_password);
+        $insert_hash_stmt->execute();
+
+        $message = "Authenticated successfully!";
     } else {
         $error = 'Invalid password! Please try again.';
     }
@@ -108,7 +117,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_winning'])) {
                         <div class="alert alert-danger"><?php echo $error; ?></div>
                     <?php endif; ?>
 
-                    <?php if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true): ?>
+                    <?php if ($_SESSION['access_level'] === 'super_admin' && !isset($_SESSION['authenticated'])): ?>
                         <!-- Authentication Form -->
                         <form method="POST" action="">
                             <div class="form-group">
@@ -117,7 +126,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_winning'])) {
                             </div>
                             <button type="submit" name="authenticate" class="btn btn-primary">Authenticate</button>
                         </form>
-                    <?php else: ?>
+                    <?php elseif ($_SESSION['authenticated']): ?>
                         <!-- Winning Entry Form -->
                         <form method="POST" action="">
                             <!-- Winning Number -->
@@ -157,6 +166,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_winning'])) {
         <!-- End of Content Wrapper -->
     </div>
     <!-- End of Page Wrapper -->
+
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="js/sb-admin-2.min.js"></script>
 
 </body>
 </html>
