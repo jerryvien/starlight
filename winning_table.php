@@ -10,7 +10,8 @@ if (!isset($_SESSION['admin'])) {
 
 // Ensure the user is a super_admin
 if ($_SESSION['access_level'] !== 'super_admin') {
-    $error = "You must be a super admin to access this page.";
+    echo "<script>alert('You must be a super admin to access this page.'); window.location.href='index.php';</script>";
+    exit;
 }
 
 // Initialize variables for messages

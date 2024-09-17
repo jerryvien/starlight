@@ -64,7 +64,7 @@
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSample"
             aria-expanded="true" aria-controls="collapseSample">
-            <i class="fas fa-shopping-cart"></i>
+            <i class="fas fa-trophy"></i> 
             <span>Prize Report</span>
         </a>
         <div id="collapseSample" class="collapse" aria-labelledby="headingSample"
