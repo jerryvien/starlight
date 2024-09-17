@@ -7,7 +7,6 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-
 // Redirect to login page if the user is not logged in
 if (!isset($_SESSION['admin'])) {
     header("Location: index.php");
@@ -16,7 +15,8 @@ if (!isset($_SESSION['admin'])) {
 
 // Ensure the user is a super_admin
 if ($_SESSION['access_level'] !== 'super_admin') {
-    $error = "You must be a super admin to access this page.";
+    echo "<div class='alert alert-danger'>You must be a super admin to access this page. Please contact a super admin for access.</div>";
+    exit;
 }
 
 // Initialize variables for messages
@@ -37,15 +37,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['authenticate'])) {
     // Verify the password
     if ($agent && password_verify($password, $agent['agent_password'])) {
         $_SESSION['authenticated'] = true; // Set an authenticated flag
-
-        // Hash the password and insert it into the agent_hashed_secretkey table
-        $hashed_password = password_hash($password, PASSWORD_BCRYPT);
-        $insert_hash_stmt = $conn->prepare("INSERT INTO agent_hashed_secretkey (agent_id, hashed_secretkey) VALUES (:agent_id, :hashed_secretkey)");
-        $insert_hash_stmt->bindParam(':agent_id', $agent_id);
-        $insert_hash_stmt->bindParam(':hashed_secretkey', $hashed_password);
-        $insert_hash_stmt->execute();
-
-        $message = "Authenticated successfully!";
     } else {
         $error = 'Invalid password! Please try again.';
     }
@@ -69,12 +60,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_winning'])) {
         } else {
             // Insert into the database
             try {
-                $stmt = $conn->prepare("INSERT INTO winning_record (winning_number, winning_game, winning_date, created_by_agent, created_at) 
-                                        VALUES (:winning_number, :winning_game, :winning_date, :created_by_agent, NOW())");
+                // Fetch the agent's password and hash it
+                $stmt = $conn->prepare("SELECT agent_password FROM admin_access WHERE agent_id = :agent_id");
+                $stmt->bindParam(':agent_id', $created_by_agent);
+                $stmt->execute();
+                $agent = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                // Hash the password to store in the agent_hashed_secretkey column
+                $hashed_secretkey = password_hash($agent['agent_password'], PASSWORD_BCRYPT);
+
+                $stmt = $conn->prepare("INSERT INTO winning_record (winning_number, winning_game, winning_date, created_by_agent, agent_hashed_secretkey, created_at) 
+                                        VALUES (:winning_number, :winning_game, :winning_date, :created_by_agent, :agent_hashed_secretkey, NOW())");
                 $stmt->bindParam(':winning_number', $winning_number);
                 $stmt->bindParam(':winning_game', $winning_game);
                 $stmt->bindParam(':winning_date', $winning_date);
                 $stmt->bindParam(':created_by_agent', $created_by_agent);
+                $stmt->bindParam(':agent_hashed_secretkey', $hashed_secretkey);
                 $stmt->execute();
 
                 $message = 'Winning record successfully inserted.';
@@ -131,7 +132,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_winning'])) {
                             </div>
                             <button type="submit" name="authenticate" class="btn btn-primary">Authenticate</button>
                         </form>
-                    <?php elseif ($_SESSION['authenticated']): ?>
+                    <?php else: ?>
                         <!-- Winning Entry Form -->
                         <form method="POST" action="">
                             <!-- Winning Number -->
