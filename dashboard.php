@@ -2,6 +2,11 @@
 session_start();
 include('config/database.php'); // Database connection
 
+// Enable error reporting for debugging
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 // Redirect to login page if the user is not logged in
 if (!isset($_SESSION['admin'])) {
     header("Location: index.php");
@@ -13,72 +18,92 @@ $access_level = $_SESSION['access_level'];
 $agent_id = $_SESSION['agent_id'];
 
 // Fetch total sales, average order value, and total sales per day
-$sales_query = ($access_level === 'super_admin') ? 
-    "SELECT SUM(purchase_amount) AS total_sales, AVG(purchase_amount) AS avg_order_value, COUNT(DISTINCT DATE(purchase_datetime)) AS sales_per_day FROM purchase_entries" : 
-    "SELECT SUM(purchase_amount) AS total_sales, AVG(purchase_amount) AS avg_order_value, COUNT(DISTINCT DATE(purchase_datetime)) AS sales_per_day FROM purchase_entries WHERE agent_id = :agent_id";
+try {
+    $sales_query = ($access_level === 'super_admin') ? 
+        "SELECT SUM(purchase_amount) AS total_sales, AVG(purchase_amount) AS avg_order_value, COUNT(DISTINCT DATE(purchase_datetime)) AS sales_per_day FROM purchase_entries" : 
+        "SELECT SUM(purchase_amount) AS total_sales, AVG(purchase_amount) AS avg_order_value, COUNT(DISTINCT DATE(purchase_datetime)) AS sales_per_day FROM purchase_entries WHERE agent_id = :agent_id";
 
-$sales_stmt = $conn->prepare($sales_query);
-if ($access_level !== 'super_admin') {
-    $sales_stmt->bindParam(':agent_id', $agent_id);
+    $sales_stmt = $conn->prepare($sales_query);
+    if ($access_level !== 'super_admin') {
+        $sales_stmt->bindParam(':agent_id', $agent_id);
+    }
+    $sales_stmt->execute();
+    $sales_data = $sales_stmt->fetch(PDO::FETCH_ASSOC);
+} catch (Exception $e) {
+    die("Error fetching sales data: " . $e->getMessage());
 }
-$sales_stmt->execute();
-$sales_data = $sales_stmt->fetch(PDO::FETCH_ASSOC);
 
 // Fetch sales by category (Pie chart)
-$category_query = ($access_level === 'super_admin') ? 
-    "SELECT purchase_category, SUM(purchase_amount) AS total_sales FROM purchase_entries GROUP BY purchase_category" : 
-    "SELECT purchase_category, SUM(purchase_amount) AS total_sales FROM purchase_entries WHERE agent_id = :agent_id GROUP BY purchase_category";
+try {
+    $category_query = ($access_level === 'super_admin') ? 
+        "SELECT purchase_category, SUM(purchase_amount) AS total_sales FROM purchase_entries GROUP BY purchase_category" : 
+        "SELECT purchase_category, SUM(purchase_amount) AS total_sales FROM purchase_entries WHERE agent_id = :agent_id GROUP BY purchase_category";
 
-$category_stmt = $conn->prepare($category_query);
-if ($access_level !== 'super_admin') {
-    $category_stmt->bindParam(':agent_id', $agent_id);
+    $category_stmt = $conn->prepare($category_query);
+    if ($access_level !== 'super_admin') {
+        $category_stmt->bindParam(':agent_id', $agent_id);
+    }
+    $category_stmt->execute();
+    $category_sales = $category_stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (Exception $e) {
+    die("Error fetching sales by category: " . $e->getMessage());
 }
-$category_stmt->execute();
-$category_sales = $category_stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Fetch top 5 spend and winner customers (Bar chart)
-$top_spend_query = ($access_level === 'super_admin') ? 
-    "SELECT customer_name, SUM(purchase_amount) AS total_spent FROM purchase_entries GROUP BY customer_id ORDER BY total_spent DESC LIMIT 5" : 
-    "SELECT customer_name, SUM(purchase_amount) AS total_spent FROM purchase_entries WHERE agent_id = :agent_id GROUP BY customer_id ORDER BY total_spent DESC LIMIT 5";
+try {
+    $top_spend_query = ($access_level === 'super_admin') ? 
+        "SELECT customer_name, SUM(purchase_amount) AS total_spent FROM purchase_entries GROUP BY customer_id ORDER BY total_spent DESC LIMIT 5" : 
+        "SELECT customer_name, SUM(purchase_amount) AS total_spent FROM purchase_entries WHERE agent_id = :agent_id GROUP BY customer_id ORDER BY total_spent DESC LIMIT 5";
 
-$top_winner_query = ($access_level === 'super_admin') ? 
-    "SELECT customer_name, COUNT(*) AS total_wins FROM purchase_entries WHERE result = 'Win' GROUP BY customer_id ORDER BY total_wins DESC LIMIT 5" : 
-    "SELECT customer_name, COUNT(*) AS total_wins FROM purchase_entries WHERE agent_id = :agent_id AND result = 'Win' GROUP BY customer_id ORDER BY total_wins DESC LIMIT 5";
+    $top_winner_query = ($access_level === 'super_admin') ? 
+        "SELECT customer_name, COUNT(*) AS total_wins FROM purchase_entries WHERE result = 'Win' GROUP BY customer_id ORDER BY total_wins DESC LIMIT 5" : 
+        "SELECT customer_name, COUNT(*) AS total_wins FROM purchase_entries WHERE agent_id = :agent_id AND result = 'Win' GROUP BY customer_id ORDER BY total_wins DESC LIMIT 5";
 
-$top_spend_stmt = $conn->prepare($top_spend_query);
-$top_winner_stmt = $conn->prepare($top_winner_query);
-if ($access_level !== 'super_admin') {
-    $top_spend_stmt->bindParam(':agent_id', $agent_id);
-    $top_winner_stmt->bindParam(':agent_id', $agent_id);
+    $top_spend_stmt = $conn->prepare($top_spend_query);
+    $top_winner_stmt = $conn->prepare($top_winner_query);
+    if ($access_level !== 'super_admin') {
+        $top_spend_stmt->bindParam(':agent_id', $agent_id);
+        $top_winner_stmt->bindParam(':agent_id', $agent_id);
+    }
+    $top_spend_stmt->execute();
+    $top_winner_stmt->execute();
+    $top_spend_customers = $top_spend_stmt->fetchAll(PDO::FETCH_ASSOC);
+    $top_winner_customers = $top_winner_stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (Exception $e) {
+    die("Error fetching top spend/winner customers: " . $e->getMessage());
 }
-$top_spend_stmt->execute();
-$top_winner_stmt->execute();
-$top_spend_customers = $top_spend_stmt->fetchAll(PDO::FETCH_ASSOC);
-$top_winner_customers = $top_winner_stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Fetch customer count growth (Line chart)
-$customer_growth_query = ($access_level === 'super_admin') ? 
-    "SELECT DATE(created_at) AS date, COUNT(*) AS new_customers FROM customer_details GROUP BY DATE(created_at)" : 
-    "SELECT DATE(created_at) AS date, COUNT(*) AS new_customers FROM customer_details WHERE agent_id = :agent_id GROUP BY DATE(created_at)";
+try {
+    $customer_growth_query = ($access_level === 'super_admin') ? 
+        "SELECT DATE(created_at) AS date, COUNT(*) AS new_customers FROM customer_details GROUP BY DATE(created_at)" : 
+        "SELECT DATE(created_at) AS date, COUNT(*) AS new_customers FROM customer_details WHERE agent_id = :agent_id GROUP BY DATE(created_at)";
 
-$customer_growth_stmt = $conn->prepare($customer_growth_query);
-if ($access_level !== 'super_admin') {
-    $customer_growth_stmt->bindParam(':agent_id', $agent_id);
+    $customer_growth_stmt = $conn->prepare($customer_growth_query);
+    if ($access_level !== 'super_admin') {
+        $customer_growth_stmt->bindParam(':agent_id', $agent_id);
+    }
+    $customer_growth_stmt->execute();
+    $customer_growth = $customer_growth_stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (Exception $e) {
+    die("Error fetching customer growth data: " . $e->getMessage());
 }
-$customer_growth_stmt->execute();
-$customer_growth = $customer_growth_stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Fetch recent purchases (Table)
-$recent_purchases_query = ($access_level === 'super_admin') ? 
-    "SELECT * FROM purchase_entries ORDER BY purchase_datetime DESC LIMIT 10" : 
-    "SELECT * FROM purchase_entries WHERE agent_id = :agent_id ORDER BY purchase_datetime DESC LIMIT 10";
+try {
+    $recent_purchases_query = ($access_level === 'super_admin') ? 
+        "SELECT * FROM purchase_entries ORDER BY purchase_datetime DESC LIMIT 10" : 
+        "SELECT * FROM purchase_entries WHERE agent_id = :agent_id ORDER BY purchase_datetime DESC LIMIT 10";
 
-$recent_purchases_stmt = $conn->prepare($recent_purchases_query);
-if ($access_level !== 'super_admin') {
-    $recent_purchases_stmt->bindParam(':agent_id', $agent_id);
+    $recent_purchases_stmt = $conn->prepare($recent_purchases_query);
+    if ($access_level !== 'super_admin') {
+        $recent_purchases_stmt->bindParam(':agent_id', $agent_id);
+    }
+    $recent_purchases_stmt->execute();
+    $recent_purchases = $recent_purchases_stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (Exception $e) {
+    die("Error fetching recent purchases: " . $e->getMessage());
 }
-$recent_purchases_stmt->execute();
-$recent_purchases = $recent_purchases_stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -93,7 +118,6 @@ $recent_purchases = $recent_purchases_stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body>
 <div class="container-fluid">
-
     <!-- Total Sales, Total Sales Per Day, Average Order Value -->
     <div class="row">
         <div class="col-md-4">
@@ -165,7 +189,7 @@ $recent_purchases = $recent_purchases_stmt->fetchAll(PDO::FETCH_ASSOC);
                 <tbody>
                     <?php foreach ($recent_purchases as $purchase): ?>
                         <tr>
-                            <td><?php echo $purchase['customer_name']; ?></td>
+                            <td><?php echo $purchase['customer_id']; ?></td>
                             <td><?php echo $purchase['agent_id']; ?></td>
                             <td><?php echo $purchase['purchase_no']; ?></td>
                             <td><?php echo $purchase['purchase_category']; ?></td>
@@ -178,7 +202,6 @@ $recent_purchases = $recent_purchases_stmt->fetchAll(PDO::FETCH_ASSOC);
             </table>
         </div>
     </div>
-
 </div>
 
 <script>
