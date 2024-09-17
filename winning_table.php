@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['authenticate'])) {
 }
 
 // Handle form submission to insert or modify the winning number
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_winning'])) {
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && (isset($_POST['submit_winning']) || isset($_POST['modify_winning']))) {
     if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
         $error = 'Please authenticate to access this function.';
     } else {
@@ -71,14 +71,37 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_winning'])) {
             $stmt->execute();
             $existingRecord = $stmt->fetch(PDO::FETCH_ASSOC);
 
+            // Debugging: Check if a record was found
             if ($existingRecord) {
-                // If record exists, populate the form fields with existing data for modification
-                $winning_number = $existingRecord['winning_number'];
-                $winning_game = $existingRecord['winning_game'];
-                $winning_date = $existingRecord['winning_date'];
-                $message = 'Duplicate record found. You can modify the existing record.';
+                $message = "Existing record found for $winning_game on $winning_date. Ready to modify.";
             } else {
-                // Insert new record into the database
+                $message = "No existing record found for $winning_game on $winning_date.";
+            }
+
+            if ($existingRecord && isset($_POST['modify_winning'])) {
+                // If modifying an existing record, update it in the database including the hash
+                try {
+                    $stmt = $conn->prepare("UPDATE winning_record 
+                                            SET winning_number = :winning_number, 
+                                                winning_game = :winning_game, 
+                                                winning_date = :winning_date,
+                                                agent_hashed_secretkey = :hashed_secret_key
+                                            WHERE id = :id");
+                    $stmt->bindParam(':winning_number', $winning_number);
+                    $stmt->bindParam(':winning_game', $winning_game);
+                    $stmt->bindParam(':winning_date', $winning_date);
+                    $stmt->bindParam(':hashed_secret_key', $hashed_secret_key);
+                    $stmt->bindParam(':id', $existingRecord['id']);
+                    if ($stmt->execute()) {
+                        $message = "Winning record successfully modified. Game: $winning_game, Winning Number: $winning_number.";
+                    } else {
+                        $error = "Failed to modify the winning record. Please try again.";
+                    }
+                } catch (PDOException $e) {
+                    $error = 'Error modifying winning record: ' . $e->getMessage();
+                }
+            } elseif (!$existingRecord && isset($_POST['submit_winning'])) {
+                // Insert new record into the database if no duplicate exists
                 try {
                     $stmt = $conn->prepare("INSERT INTO winning_record (winning_number, winning_game, winning_date, created_by_agent, agent_hashed_secretkey, created_at) 
                                             VALUES (:winning_number, :winning_game, :winning_date, :created_by_agent, :hashed_secret_key, NOW())");
@@ -87,39 +110,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_winning'])) {
                     $stmt->bindParam(':winning_date', $winning_date);
                     $stmt->bindParam(':created_by_agent', $created_by_agent);
                     $stmt->bindParam(':hashed_secret_key', $hashed_secret_key);
-                    $stmt->execute();
-
-                    $message = "Winning record successfully inserted. Game: $winning_game, Winning Number: $winning_number.";
+                    if ($stmt->execute()) {
+                        $message = "Winning record successfully inserted. Game: $winning_game, Winning Number: $winning_number.";
+                    } else {
+                        $error = "Failed to insert the winning record. Please try again.";
+                    }
                 } catch (PDOException $e) {
                     $error = 'Error inserting winning record: ' . $e->getMessage();
                 }
+            } elseif ($existingRecord && isset($_POST['submit_winning'])) {
+                $error = "A record for $winning_game on $winning_date already exists. Please modify the existing record.";
             }
-        }
-    }
-}
-
-// Handle record modification (if needed)
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['modify_winning'])) {
-    if (isset($existingRecord)) {
-        $winning_number = $_POST['winning_number'];
-        $winning_game = $_POST['winning_game'];
-        $winning_date = $_POST['winning_date'];
-        
-        try {
-            $stmt = $conn->prepare("UPDATE winning_record 
-                                    SET winning_number = :winning_number, 
-                                        winning_game = :winning_game, 
-                                        winning_date = :winning_date 
-                                    WHERE id = :id");
-            $stmt->bindParam(':winning_number', $winning_number);
-            $stmt->bindParam(':winning_game', $winning_game);
-            $stmt->bindParam(':winning_date', $winning_date);
-            $stmt->bindParam(':id', $existingRecord['id']);
-            $stmt->execute();
-
-            $message = "Winning record successfully modified. Game: $winning_game, Winning Number: $winning_number.";
-        } catch (PDOException $e) {
-            $error = 'Error modifying winning record: ' . $e->getMessage();
         }
     }
 }
@@ -173,6 +174,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['modify_winning'])) {
                     <?php else: ?>
                         <!-- Winning Entry Form -->
                         <form method="POST" action="">
+
                             <!-- Winning Number -->
                             <div class="form-group">
                                 <label for="winning_number">Winning Number</label>
@@ -196,7 +198,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['modify_winning'])) {
 
                             <!-- Submit Button -->
                             <?php if ($existingRecord): ?>
-                                <button type="submit" name="modify_winning" class="btn btn-warning">Modify Winning Entry</button>
+                                <button type="submit" name="modify_winning" class="btn btn-primary">Modify Winning Entry</button>
                             <?php else: ?>
                                 <button type="submit" name="submit_winning" class="btn btn-success">Submit Winning Entry</button>
                             <?php endif; ?>
@@ -214,5 +216,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['modify_winning'])) {
         <!-- End of Content Wrapper -->
     </div>
     <!-- End of Page Wrapper -->
+
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="js/sb-admin-2.min.js"></script>
+
 </body>
 </html>
