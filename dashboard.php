@@ -238,20 +238,25 @@ try {
                         </div>
 
                         <div class="col-xl-4 col-md-6 mb-4">
-                        <div class="card border-left-warning shadow h-100 py-2"> <!-- Gold border -->
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">New Customers (Last 30 Days)</div> <!-- Updated text -->
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $new_customers_data['new_customers_last_30_days']; ?></div> <!-- New customer data -->
-                                    </div>
-                                    <div class="col-auto">
-                                        <i class="fas fa-user fa-2x text-gray-300"></i> <!-- Customer/user icon -->
+                            <div class="card border-left-warning shadow h-100 py-2"> <!-- Gold border -->
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">New Customers (Last 30 Days)</div> <!-- Updated text -->
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $new_customers_data['new_customers_last_30_days']; ?></div> <!-- New customer data -->
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-user fa-2x text-gray-300"></i> <!-- Customer/user icon -->
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
                     </div>
-                
+
+                    
+
+                    
 
                     <!-- Top 5 Spend and Winner Customers (Bar Charts) -->
                     <div class="row">
