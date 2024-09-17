@@ -64,7 +64,13 @@ function handle_winning_entry() {
         $existing_record = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($existing_record) {
-            // Populate the existing record into the modal for modification
+            // Check if the record has been locked with winning_listing = 1
+            if ($existing_record['winning_listing'] == 1) {
+                echo "<script>$(document).ready(function(){ $('#lockedRecordModal').modal('show'); });</script>";
+                return;
+            }
+
+            // If duplicate found, show modal for modification
             echo "<script>
                     $(document).ready(function() {
                         $('#existingWinningNumber').val('{$existing_record['winning_number']}');
@@ -222,9 +228,8 @@ function handle_winning_entry() {
         </div>
     </div>
 
-    <!-- Other modals like Success, Invalid Number, etc., can follow the same structure -->
+    <!-- Other modals (Success, Invalid Number, Locked Record, etc.) -->
 
-    <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
