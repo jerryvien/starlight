@@ -69,10 +69,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->execute();
 
         // Update the updated_at field in customer_details table
-        $updateCustomerSQL = "UPDATE customer_details SET updated_at = NOW() WHERE customer_id = :customer_id";
-        $updateStmt = $conn->prepare($updateCustomerSQL);
-        $updateStmt->bindParam(':customer_id', $customer_id);
-        $updateStmt->execute();
+        try {
+            // First, get the current purchase_history_count for the customer
+            $getCountSQL = "SELECT purchase_history_count FROM customer_details WHERE customer_id = :customer_id";
+            $countStmt = $conn->prepare($getCountSQL);
+            $countStmt->bindParam(':customer_id', $customer_id);
+            $countStmt->execute();
+        
+            $result = $countStmt->fetch(PDO::FETCH_ASSOC);
+        
+            if ($result) {
+                $currentCount = $result['purchase_history_count'];
+        
+                // Increment the count by 1
+                $newCount = $currentCount + 1;
+        
+                // Update the purchase_history_count and updated_at fields in customer_details table
+                $updateCustomerSQL = "UPDATE customer_details 
+                                      SET updated_at = NOW(), 
+                                          purchase_history_count = :newCount 
+                                      WHERE customer_id = :customer_id";
+                $updateStmt = $conn->prepare($updateCustomerSQL);
+                $updateStmt->bindParam(':newCount', $newCount);
+                $updateStmt->bindParam(':customer_id', $customer_id);
+                $updateStmt->execute();
+            }
+        } catch (PDOException $e) {
+            echo "Error updating customer details: " . $e->getMessage();
+        }
+        
     }
 
     // Store the success message in session
