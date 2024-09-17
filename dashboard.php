@@ -153,6 +153,8 @@ try {
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
     <script src="vendor/chart.js/Chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.7.0"></script>
+
 </head>
 <body id="page-top">
     <div id="wrapper">
@@ -289,8 +291,52 @@ try {
                 data: <?php echo json_encode(array_column($top_spend_customers, 'total_spent')); ?>,
                 backgroundColor: '#ffc107'
             }]
-        }
+        },
+        options: {
+            maintainAspectRatio: false,
+            layout: {
+                padding: {
+                    left: 10,
+                    right: 25,
+                    top: 25,
+                    bottom: 0
+                }
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        callback: function(value, index, values) {
+                            return 'RM' + number_format(value);
+                        }
+                    }
+                }]
+            },
+            legend: {
+                display: false // Disable the legend
+            },
+            tooltips: {
+                callbacks: {
+                    label: function(tooltipItem, data) {
+                        var label = data.datasets[tooltipItem.datasetIndex].label || '';
+                        return label + ': RM' + number_format(tooltipItem.yLabel);
+                    }
+                }
+            },
+            plugins: {
+                datalabels: {
+                    anchor: 'end',
+                    align: 'end',
+                    color: '#444',
+                    formatter: function(value, context) {
+                        return 'RM' + number_format(value);
+                    }
+                }
+            }
+        },
+        plugins: [ChartDataLabels] // Load the Chart.js DataLabels Plugin
     });
+
 
     // Top Winner Customers Chart
     var ctx = document.getElementById('topWinnerCustomersChart').getContext('2d');
