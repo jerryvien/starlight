@@ -185,7 +185,7 @@ try {
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-                    <h1 class="h3 mb-4 text-gray-800">Business Dashboard</h1>
+                    <h1 class="h1 mb-4 text-gray-800">Business Dashboard</h1>
                     <!-- Total Sales, Total Sales Per Day, Average Order Value -->
                     <!-- Top Row: KPIs -->
                     <div class="row">
@@ -195,7 +195,7 @@ try {
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Sales</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">RM <?php echo number_format($sales_data['total_sales'], 2); ?></div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">RM <?php echo number_format($sales_data['total_sales']); ?></div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -211,7 +211,7 @@ try {
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Average Purchase Value</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">RM <?php echo number_format($sales_data['avg_order_value'], 2); ?></div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">RM <?php echo number_format($sales_data['avg_order_value']); ?></div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-bolt fa-2x text-gray-300"></i>
