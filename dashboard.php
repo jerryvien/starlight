@@ -279,7 +279,6 @@ try {
     });
 
     // Top Spend Customers Chart
-    // Top Spend Customers Chart
     var ctx = document.getElementById('topSpendCustomersChart').getContext('2d');
     var topSpendCustomersChart = new Chart(ctx, {
         type: 'bar',
@@ -287,77 +286,11 @@ try {
             labels: <?php echo json_encode(array_column($top_spend_customers, 'customer_name')); ?>,
             datasets: [{
                 label: 'Total Spent (RM)',
-                backgroundColor: "rgba(78, 115, 223, 1)", // Set bar color
-                hoverBackgroundColor: "rgba(78, 115, 223, 0.9)", // Set hover color
-                borderColor: "rgba(78, 115, 223, 1)", // Set border color
                 data: <?php echo json_encode(array_column($top_spend_customers, 'total_spent')); ?>,
+                backgroundColor: '#ffc107'
             }]
-        },
-        options: {
-            maintainAspectRatio: false,
-            layout: {
-                padding: {
-                    left: 10,
-                    right: 25,
-                    top: 25,
-                    bottom: 0
-                }
-            },
-            scales: {
-                xAxes: [{
-                    gridLines: {
-                        display: false,
-                        drawBorder: false
-                    },
-                    ticks: {
-                        maxTicksLimit: 6
-                    },
-                    maxBarThickness: 25,
-                }],
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true,
-                        maxTicksLimit: 5,
-                        padding: 10,
-                        // Include a RM sign in the ticks
-                        callback: function(value, index, values) {
-                            return 'RM' + number_format(value);
-                        }
-                    },
-                    gridLines: {
-                        color: "rgb(234, 236, 244)",
-                        zeroLineColor: "rgb(234, 236, 244)",
-                        drawBorder: false,
-                        borderDash: [2],
-                        zeroLineBorderDash: [2]
-                    }
-                }],
-            },
-            legend: {
-                display: false
-            },
-            tooltips: {
-                backgroundColor: "rgb(255,255,255)",
-                bodyFontColor: "#858796",
-                titleMarginBottom: 10,
-                titleFontColor: '#6e707e',
-                titleFontSize: 14,
-                borderColor: '#dddfeb',
-                borderWidth: 1,
-                xPadding: 15,
-                yPadding: 15,
-                displayColors: false,
-                caretPadding: 10,
-                callbacks: {
-                    label: function(tooltipItem, chart) {
-                        var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
-                        return datasetLabel + ': RM' + number_format(tooltipItem.yLabel);
-                    }
-                }
-            }
         }
     });
-
 
     // Top Winner Customers Chart
     var ctx = document.getElementById('topWinnerCustomersChart').getContext('2d');
