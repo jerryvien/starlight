@@ -196,12 +196,6 @@ try {
                         </div>
                     </div>
 
-                    <!-- Sales by Category (Pie Chart) -->
-                    <div class="row">
-                        <div class="col-md-6">
-                            <canvas id="salesByCategoryChart"></canvas>
-                        </div>
-                    </div>
 
                     <!-- Top 5 Spend and Winner Customers (Bar Charts) -->
                     <div class="row">
