@@ -2,78 +2,67 @@
 // Database connection
 include('config/database.php');
 
-// Array of common Asian names (you can expand this list as needed)
-$asian_names = [
-    "Lee", "Wang", "Li", "Chen", "Zhang", "Liu", "Kim", "Huang", "Choi", "Park", 
-    "Tan", "Lim", "Yamamoto", "Takahashi", "Ito", "Kobayashi", "Nguyen", "Tran", 
-    "Pham", "Jiang", "Khanh", "Chung", "Rizwan", "Sato", "Murata", "Shen"
-];
-
-// List of Asian countries for the agent's market
-$asian_countries = [
-    "China", "India", "Japan", "South Korea", "Vietnam", "Thailand", 
-    "Malaysia", "Singapore", "Indonesia", "Philippines", "Pakistan", 
-    "Sri Lanka", "Bangladesh", "Cambodia", "Myanmar", "Nepal"
-];
-
-// Prepare the insert query for admin_access table
-$sql = "INSERT INTO admin_access (agent_id, agent_name, agent_login_id, agent_password, agent_market, agent_credit_limit, access_level, created_at) 
-        VALUES (:agent_id, :agent_name, :agent_login_id, :agent_password, :agent_market, :agent_credit_limit, :access_level, :created_at)";
+// Prepare the insert query for purchase_entries table
+$sql = "INSERT INTO purchase_entries (agent_id, customer_id, purchase_no, purchase_amount, purchase_category, purchase_datetime, serial_number) 
+        VALUES (:agent_id, :customer_id, :purchase_no, :purchase_amount, :purchase_category, :purchase_datetime, :serial_number)";
 
 // Prepare the statement
 $stmt = $conn->prepare($sql);
 
-// Starting agent ID
-$starting_agent_id = 4;
+// Fetch available agent IDs and customer IDs
+$agents_stmt = $conn->query("SELECT agent_id FROM admin_access");
+$agents = $agents_stmt->fetchAll(PDO::FETCH_COLUMN);
 
-// Generate 30 agent records
-for ($i = 0; $i < 35; $i++) {
-    // Sequentially increment agent_id
-    $agent_id = $starting_agent_id + $i;
+$customers_stmt = $conn->query("SELECT customer_id FROM customer_details");
+$customers = $customers_stmt->fetchAll(PDO::FETCH_COLUMN);
 
-    // Randomly select an Asian name
-    $agent_name = $asian_names[array_rand($asian_names)];
+// Helper function to generate random serial number
+function generateSerialNumber() {
+    return strtoupper(bin2hex(random_bytes(6))); // 12-character alphanumeric serial number
+}
 
-    // Generate agent login ID (e.g., "agent3", "agent4", etc.)
-    $agent_login_id = 'AG' . $agent_id;
+// Generate 1000 purchase entries
+for ($i = 0; $i < 1000; $i++) {
+    // Randomly assign an agent ID from the list
+    $agent_id = $agents[array_rand($agents)];
 
-    // Generate random password (this should be hashed in a real system)
-    $agent_password = password_hash('admin123' . $agent_id, PASSWORD_BCRYPT); // Random password for demo
+    // Randomly assign a customer ID from the list
+    $customer_id = $customers[array_rand($customers)];
 
-    // Randomly select an Asian country for the market
-    $agent_market = $asian_countries[array_rand($asian_countries)];
+    // Generate a random purchase number (2-3 digits)
+    $purchase_no = str_pad(rand(10, 999), 3, '0', STR_PAD_LEFT);
 
-    // Random agent credit limit between 5000 and 10000
-    $agent_credit_limit = rand(5000, 10000);
+    // Random purchase amount between 100 and 5000
+    $purchase_amount = rand(100, 5000);
 
-    // Assign "agent" access level
-    $access_level = 'agent';
+    // Random purchase category ("Box" or "Straight")
+    $purchase_category = rand(0, 1) == 0 ? 'Box' : 'Straight';
 
-    // Generate random creation date across 2023-2024
-    $year = rand(2023, 2024);
+    // Generate random purchase date across 2022-2024
+    $year = rand(2022, 2024);
     $month = str_pad(rand(1, 12), 2, '0', STR_PAD_LEFT);
-    $day = str_pad(rand(1, 28), 2, '0', STR_PAD_LEFT); // Use 28 days to avoid issues with February
+    $day = str_pad(rand(1, 28), 2, '0', STR_PAD_LEFT);
     $hour = str_pad(rand(0, 23), 2, '0', STR_PAD_LEFT);
     $minute = str_pad(rand(0, 59), 2, '0', STR_PAD_LEFT);
     $second = str_pad(rand(0, 59), 2, '0', STR_PAD_LEFT);
+    $purchase_datetime = "$year-$month-$day $hour:$minute:$second";
 
-    // Construct the created_at timestamp
-    $created_at = "$year-$month-$day $hour:$minute:$second";
+    // Generate a random serial number
+    $serial_number = generateSerialNumber();
 
     // Bind the values to the prepared statement
     $stmt->bindParam(':agent_id', $agent_id);
-    $stmt->bindParam(':agent_name', $agent_name);
-    $stmt->bindParam(':agent_login_id', $agent_login_id);
-    $stmt->bindParam(':agent_password', $agent_password);
-    $stmt->bindParam(':agent_market', $agent_market);
-    $stmt->bindParam(':agent_credit_limit', $agent_credit_limit);
-    $stmt->bindParam(':access_level', $access_level);
-    $stmt->bindParam(':created_at', $created_at);
+    $stmt->bindParam(':customer_id', $customer_id);
+    $stmt->bindParam(':purchase_no', $purchase_no);
+    $stmt->bindParam(':purchase_amount', $purchase_amount);
+    $stmt->bindParam(':purchase_category', $purchase_category);
+    $stmt->bindParam(':purchase_datetime', $purchase_datetime);
+    $stmt->bindParam(':serial_number', $serial_number);
 
     // Execute the insert query
     $stmt->execute();
 }
 
 // Success message
-echo "30 agents have been successfully inserted!";
+echo "1000 purchase entries have been successfully inserted!";
 ?>
