@@ -14,7 +14,7 @@ function enter_winning_entry() {
 
     // Check if the user is logged in and is super_admin
     if ($_SESSION['access_level'] !== 'super_admin') {
-        echo "<script>$('#errorModal').modal('show');</script>";
+        echo "<script>$(document).ready(function(){ $('#errorModal').modal('show'); });</script>";
         return;
     }
 
@@ -31,22 +31,25 @@ function enter_winning_entry() {
         $agent = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if (!$agent || !password_verify($password, $agent['agent_password'])) {
-            echo "<script>$('#authFailedModal').modal('show');</script>";
-            return;
-        }
-
-        // Winning number validation (must be 2 or 3 digits)
-        $winning_number = $_POST['winning_number'];
-        if (!preg_match('/^\d{2,3}$/', $winning_number)) {
-            echo "<script>$('#invalidNumberModal').modal('show');</script>";
+            echo "<script>$(document).ready(function(){ $('#authFailedModal').modal('show'); });</script>";
             return;
         }
 
         // Get the winning_game and other data
+        $winning_number = $_POST['winning_number'];
         $winning_game = $_POST['winning_game'];
         $winning_period = 'Evening';
         $winning_date = $_POST['winning_date'];
         $created_by_agent = $agent_id;
+
+        // Validate winning number based on winning game
+        if ($winning_game == '2-D' && !preg_match('/^\d{2}$/', $winning_number)) {
+            echo "<script>$(document).ready(function(){ $('#invalidNumberModal').modal('show'); });</script>";
+            return;
+        } elseif ($winning_game == '3-D' && !preg_match('/^\d{3}$/', $winning_number)) {
+            echo "<script>$(document).ready(function(){ $('#invalidNumberModal').modal('show'); });</script>";
+            return;
+        }
 
         // Check if there's already a record for the same date and game
         $stmt = $conn->prepare("SELECT * FROM winning_record WHERE winning_date = :winning_date AND winning_game = :winning_game");
@@ -56,11 +59,11 @@ function enter_winning_entry() {
         $existing_record = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($existing_record) {
-            echo "<script>$('#duplicateRecordModal').modal('show');</script>";
+            echo "<script>$(document).ready(function(){ $('#duplicateRecordModal').modal('show'); });</script>";
             return;
         }
 
-        // If no existing record, proceed to insert
+        // If no existing record, proceed to insert after confirmation
         if (isset($_POST['confirm']) && $_POST['confirm'] === 'yes') {
             // Generate agent_hashed_secretkey
             $agent_hashed_secretkey = hash('sha256', $password);
@@ -77,10 +80,10 @@ function enter_winning_entry() {
             $stmt->bindParam(':agent_hashed_secretkey', $agent_hashed_secretkey);
             $stmt->execute();
 
-            echo "<script>$('#successModal').modal('show');</script>";
+            echo "<script>$(document).ready(function(){ $('#successModal').modal('show'); });</script>";
         } else {
             // If the user has not confirmed, show the confirmation popup
-            echo "<script>$('#confirmationModal').modal('show');</script>";
+            echo "<script>$(document).ready(function(){ $('#confirmationModal').modal('show'); });</script>";
         }
     }
 }
@@ -209,7 +212,7 @@ function enter_winning_entry() {
                     </button>
                 </div>
                 <div class="modal-body">
-                    Invalid winning number. It must be 2 or 3 digits.
+                    The winning number must be 2 digits for 2-D and 3 digits for 3-D.
                 </div>
             </div>
         </div>
@@ -278,5 +281,6 @@ function enter_winning_entry() {
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
     <script src="js/sb-admin-2.min.js"></script>
+
 </body>
 </html>
