@@ -307,10 +307,10 @@ try {
                             </div>
                         </div>
                     </div>
+                    <!-- Enf Of Top Row: KPIs -->
 
                     
 
-                    
 
                     <!-- Top 5 Spend and Winner Customers (Bar Charts) -->
                     <div class="row">
