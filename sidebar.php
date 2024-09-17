@@ -65,14 +65,14 @@
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSample"
             aria-expanded="true" aria-controls="collapseSample">
             <i class="fas fa-shopping-cart"></i>
-            <span>Sample</span>
+            <span>Prize Report</span>
         </a>
         <div id="collapseSample" class="collapse" aria-labelledby="headingSample"
             data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Purchase Operations:</h6>
-                <a class="collapse-item" href="blank.php">Blank</a>
-                <a class="collapse-item" href="purchase_listing.php">Purchase Listing</a>
+                <h6 class="collapse-header">Prize Operations:</h6>
+                <a class="collapse-item" href="winning_table.php">Create Prize</a>
+                <a class="collapse-item" href="winning_report.php">Prize Listing</a>
             </div>
         </div>
     </li>

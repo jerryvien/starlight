@@ -1,5 +1,13 @@
 <?php
 session_start();
+include('config/database.php'); // Include your database connection
+
+
+// Enable error reporting for debugging
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 
 // Ensure the user is logged in; redirect if not
 if (!isset($_SESSION['admin'])) {
