@@ -20,8 +20,15 @@ $agent_id = $_SESSION['agent_id'];
 // Fetch total sales, average order value, and total sales per day
 try {
     $sales_query = ($access_level === 'super_admin') ? 
-        "SELECT SUM(purchase_amount) AS total_sales, AVG(purchase_amount) AS avg_order_value, COUNT(DISTINCT DATE(purchase_datetime)) AS sales_per_day FROM purchase_entries" : 
-        "SELECT SUM(purchase_amount) AS total_sales, AVG(purchase_amount) AS avg_order_value, COUNT(DISTINCT DATE(purchase_datetime)) AS sales_per_day FROM purchase_entries WHERE agent_id = :agent_id";
+        "SELECT SUM(purchase_amount) AS total_sales, 
+                AVG(purchase_amount) AS avg_order_value, 
+                COUNT(CASE WHEN DATE(purchase_datetime) = CURDATE() THEN 1 END) AS sales_today 
+        FROM purchase_entries" :
+        "SELECT SUM(purchase_amount) AS total_sales, 
+                AVG(purchase_amount) AS avg_order_value, 
+                COUNT(CASE WHEN DATE(purchase_datetime) = CURDATE() THEN 1 END) AS sales_today 
+        FROM purchase_entries 
+        WHERE agent_id = :agent_id";
 
     $sales_stmt = $conn->prepare($sales_query);
     if ($access_level !== 'super_admin') {
@@ -185,7 +192,7 @@ try {
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-                    <h1 class="h1 mb-4 text-gray-800">Business Dashboard</h1>
+                    <h1 class="h3 mb-4 text-gray-800">Business Dashboard</h1>
                     <!-- Total Sales, Total Sales Per Day, Average Order Value -->
                     <!-- Top Row: KPIs -->
                     <div class="row">
