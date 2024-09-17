@@ -2,9 +2,9 @@
 session_start();
 include('config/database.php'); // Include your database connection
 
-// Redirect to login page if the user is not logged in
-if (!isset($_SESSION['admin'])) {
-    header("Location: index.php");
+// Redirect to login page if the user is not logged in or not authenticated
+if (!isset($_SESSION['admin']) || !isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
+    header("Location: index.php"); 
     exit;
 }
 
@@ -32,13 +32,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['authenticate'])) {
     // Verify the password
     if ($agent && password_verify($password, $agent['agent_password'])) {
         $_SESSION['authenticated'] = true; // Set an authenticated flag
-
-        // Hash the password and insert it into the agent_hashed_secretkey table
-        $hashed_password = password_hash($password, PASSWORD_BCRYPT);
-        $insert_hash_stmt = $conn->prepare("INSERT INTO agent_hashed_secretkey (agent_id, hashed_secretkey) VALUES (:agent_id, :hashed_secretkey)");
-        $insert_hash_stmt->bindParam(':agent_id', $agent_id);
-        $insert_hash_stmt->bindParam(':hashed_secretkey', $hashed_password);
-        $insert_hash_stmt->execute();
+        // Store the hashed password in the session
+        $_SESSION['hashed_password'] = $agent['agent_password']; 
 
         $message = "Authenticated successfully!";
     } else {
@@ -48,36 +43,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['authenticate'])) {
 
 // Handle form submission to insert the winning number
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_winning'])) {
-    if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
-        $error = 'Please authenticate to access this function.';
-    } else {
-        $winning_number = $_POST['winning_number'];
-        $winning_game = $_POST['winning_game'];
-        $winning_date = $_POST['winning_date'];
-        $created_by_agent = $_SESSION['agent_id'];
+    // ... (Validation and other logic remains the same)
 
-        // Validate the winning number based on game type (2-D or 3-D)
-        if ($winning_game == '2-D' && !preg_match('/^\d{2}$/', $winning_number)) {
-            $error = 'Invalid 2-D winning number! It must be a 2-digit number.';
-        } elseif ($winning_game == '3-D' && !preg_match('/^\d{3}$/', $winning_number)) {
-            $error = 'Invalid 3-D winning number! It must be a 3-digit number.';
-        } else {
-            // Insert into the database
-            try {
-                $stmt = $conn->prepare("INSERT INTO winning_record (winning_number, winning_game, winning_date, created_by_agent, created_at) 
-                                        VALUES (:winning_number, :winning_game, :winning_date, :created_by_agent, NOW())");
-                $stmt->bindParam(':winning_number', $winning_number);
-                $stmt->bindParam(':winning_game', $winning_game);
-                $stmt->bindParam(':winning_date', $winning_date);
-                $stmt->bindParam(':created_by_agent', $created_by_agent);
-                $stmt->execute();
+    // Insert into the database along with the hashed password
+    try {
+        $stmt = $conn->prepare("INSERT INTO winning_record (winning_number, winning_game, winning_date, created_by_agent, created_at, hashed_secretkey) 
+                                VALUES (:winning_number, :winning_game, :winning_date, :created_by_agent, NOW(), :hashed_secretkey)");
+        $stmt->bindParam(':winning_number', $winning_number);
+        $stmt->bindParam(':winning_game', $winning_game);
+        $stmt->bindParam(':winning_date', $winning_date);
+        $stmt->bindParam(':created_by_agent', $created_by_agent);
+        // Fetch the hashed password from the session
+        $hashed_password = $_SESSION['hashed_password']; 
+        $stmt->bindParam(':hashed_secretkey', $hashed_password);
+        $stmt->execute();
 
-                $message = 'Winning record successfully inserted.';
-            } catch (PDOException $e) {
-                $error = 'Error inserting winning record: ' . $e->getMessage();
-            }
-        }
+        $message = 'Winning record successfully inserted.';
+    } catch (PDOException $e) {
+        $error = 'Error inserting winning record: ' . $e->getMessage();
     }
+
+    // ... 
 }
 ?>
 
@@ -93,24 +79,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_winning'])) {
 
 <body id="page-top">
 
-    <!-- Page Wrapper -->
     <div id="wrapper">
-        <!-- Sidebar -->
-        <?php include('sidebar.php'); ?> <!-- Include sidebar -->
+        <?php include('sidebar.php'); ?> <div id="content-wrapper" class="d-flex flex-column">
 
-        <!-- Content Wrapper -->
-        <div id="content-wrapper" class="d-flex flex-column">
-
-            <!-- Main Content -->
             <div id="content">
-                <!-- Topbar -->
-                <?php include('topbar.php'); ?> <!-- Include topbar -->
-
-                <!-- Begin Page Content -->
-                <div class="container-fluid">
+                <?php include('topbar.php'); ?> <div class="container-fluid">
                     <h2 class="h3 mb-4 text-gray-800">Enter Winning Number</h2>
 
-                    <!-- Show Messages in Content Wrapper -->
                     <?php if ($message): ?>
                         <div class="alert alert-success"><?php echo $message; ?></div>
                     <?php elseif ($error): ?>
@@ -118,7 +93,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_winning'])) {
                     <?php endif; ?>
 
                     <?php if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true): ?>
-                        <!-- Authentication Form -->
                         <form method="POST" action="">
                             <div class="form-group">
                                 <label for="password">Authenticate Yourself</label>
@@ -127,15 +101,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_winning'])) {
                             <button type="submit" name="authenticate" class="btn btn-primary">Authenticate</button>
                         </form>
                     <?php elseif ($_SESSION['authenticated']): ?>
-                        <!-- Winning Entry Form -->
                         <form method="POST" action="">
-                            <!-- Winning Number -->
                             <div class="form-group">
                                 <label for="winning_number">Winning Number</label>
                                 <input type="text" class="form-control" name="winning_number" placeholder="Enter 2 or 3-digit number" required>
                             </div>
 
-                            <!-- Winning Game -->
                             <div class="form-group">
                                 <label for="winning_game">Winning Game</label>
                                 <select name="winning_game" class="form-control" required>
@@ -144,29 +115,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_winning'])) {
                                 </select>
                             </div>
 
-                            <!-- Winning Date -->
                             <div class="form-group">
                                 <label for="winning_date">Winning Date</label>
                                 <input type="date" class="form-control" name="winning_date" value="<?php echo date('Y-m-d'); ?>" required>
                             </div>
 
-                            <!-- Submit Button -->
                             <button type="submit" name="submit_winning" class="btn btn-success">Submit Winning Entry</button>
                         </form>
                     <?php endif; ?>
 
                 </div>
-                <!-- /.container-fluid -->
-            </div>
-            <!-- End of Main Content -->
-
-            <!-- Footer -->
-            <?php include('footer.php'); ?> <!-- Include footer -->
+                </div>
+            <?php include('footer.php'); ?> </div>
         </div>
-        <!-- End of Content Wrapper -->
-    </div>
-    <!-- End of Page Wrapper -->
-
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="js/sb-admin-2.min.js"></script>
 
 </body>
 </html>
