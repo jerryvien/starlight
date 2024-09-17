@@ -13,8 +13,8 @@ if (!isset($_SESSION['admin'])) {
     exit;
 }
 
-// Function to validate and store/modify winning entry
-function enter_winning_entry() {
+// Function to handle form submission and check for duplicate records
+function handle_winning_entry() {
     global $conn;
 
     // Check if the user is logged in and is super_admin
@@ -64,7 +64,15 @@ function enter_winning_entry() {
         $existing_record = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($existing_record) {
-            echo "<script>$(document).ready(function(){ $('#duplicateRecordModal').modal('show'); });</script>";
+            // Populate the existing record into the modal for modification
+            echo "<script>
+                    $(document).ready(function() {
+                        $('#existingWinningNumber').val('{$existing_record['winning_number']}');
+                        $('#existingWinningGame').val('{$existing_record['winning_game']}');
+                        $('#existingWinningDate').val('{$existing_record['winning_date']}');
+                        $('#duplicateRecordModal').modal('show');
+                    });
+                  </script>";
             return;
         }
 
@@ -157,7 +165,7 @@ function enter_winning_entry() {
 
                     <?php
                     // Call the function to handle form submission
-                    enter_winning_entry();
+                    handle_winning_entry();
                     ?>
                 </div>
                 <!-- /.container-fluid -->
@@ -172,114 +180,49 @@ function enter_winning_entry() {
     <!-- End of Page Wrapper -->
 
     <!-- Modal Templates -->
-    <!-- Error Modal -->
-    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="errorModalLabel">Error</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    You must be a super_admin to access this feature. Please get approval from a super_admin.
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Authentication Failed Modal -->
-    <div class="modal fade" id="authFailedModal" tabindex="-1" role="dialog" aria-labelledby="authFailedModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="authFailedModalLabel">Authentication Failed</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    Authentication failed. Please enter the correct password.
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Invalid Winning Number Modal -->
-    <div class="modal fade" id="invalidNumberModal" tabindex="-1" role="dialog" aria-labelledby="invalidNumberModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="invalidNumberModalLabel">Invalid Winning Number</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    The winning number must be 2 digits for 2-D and 3 digits for 3-D.
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Duplicate Record Modal -->
+    <!-- Duplicate Record Modal (for modification) -->
     <div class="modal fade" id="duplicateRecordModal" tabindex="-1" role="dialog" aria-labelledby="duplicateRecordModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="duplicateRecordModalLabel">Duplicate Record Found</h5>
+                    <h5 class="modal-title" id="duplicateRecordModalLabel">Modify Existing Record</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
-                    A record for this date and game already exists. Please authenticate again to modify the record.
-                </div>
+                <form method="POST" action="">
+                    <div class="modal-body">
+                        <input type="hidden" name="modify" value="yes">
+                        <div class="form-group">
+                            <label for="existingWinningNumber">Winning Number</label>
+                            <input type="text" class="form-control" id="existingWinningNumber" name="winning_number" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="existingWinningGame">Winning Game</label>
+                            <select id="existingWinningGame" name="winning_game" class="form-control" required>
+                                <option value="2-D">2-D</option>
+                                <option value="3-D">3-D</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="existingWinningDate">Winning Date</label>
+                            <input type="date" class="form-control" id="existingWinningDate" name="winning_date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Re-enter Password for Authentication</label>
+                            <input type="password" class="form-control" name="password" placeholder="Enter your password" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Submit Changes</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 
-    <!-- Success Modal -->
-    <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="successModalLabel">Success</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    Winning number successfully added!
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Confirmation Modal -->
-    <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="confirmationModalLabel">Confirm Entry</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    Are you sure you want to add this winning entry?
-                </div>
-                <div class="modal-footer">
-                    <form method="POST" action="">
-                        <input type="hidden" name="confirm" value="yes">
-                        <button type="submit" class="btn btn-primary">Yes</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- Other modals like Success, Invalid Number, etc., can follow the same structure -->
 
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
