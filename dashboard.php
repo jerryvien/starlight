@@ -221,11 +221,11 @@ try {
                         </div>
 
                         <div class="col-xl-4 col-md-6 mb-4">
-                            <div class="card border-left-secondary shadow h-100 py-2">
+                            <div class="card border-left-success shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1">
+                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                                 Sales for <?php echo date('F Y'); ?> <!-- Dynamically display the current month and year -->
                                             </div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">RM <?php echo format_number_short($sales_data['sales_this_month']); ?></div> <!-- Monthly sales data -->
@@ -239,11 +239,11 @@ try {
                         </div>
 
                         <div class="col-xl-4 col-md-6 mb-4">
-                            <div class="card border-left-warning shadow h-100 py-2">
+                            <div class="card border-left-secondary shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                            <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1">
                                                 Sales for <?php echo date('Y'); ?> <!-- Dynamically display the current year -->
                                             </div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">RM <?php echo format_number_short($sales_data['sales_this_year']); ?></div> <!-- Yearly sales data -->
