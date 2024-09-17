@@ -79,18 +79,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && (isset($_POST['submit_winning']) || 
             }
 
             if ($existingRecord && isset($_POST['modify_winning'])) {
-                // If modifying an existing record, update it in the database including the hash
+                // If modifying an existing record, update it in the database
                 try {
                     $stmt = $conn->prepare("UPDATE winning_record 
                                             SET winning_number = :winning_number, 
                                                 winning_game = :winning_game, 
-                                                winning_date = :winning_date,
-                                                agent_hashed_secretkey = :hashed_secret_key
+                                                winning_date = :winning_date 
                                             WHERE id = :id");
                     $stmt->bindParam(':winning_number', $winning_number);
                     $stmt->bindParam(':winning_game', $winning_game);
                     $stmt->bindParam(':winning_date', $winning_date);
-                    $stmt->bindParam(':hashed_secret_key', $hashed_secret_key);
                     $stmt->bindParam(':id', $existingRecord['id']);
                     if ($stmt->execute()) {
                         $message = "Winning record successfully modified. Game: $winning_game, Winning Number: $winning_number.";
@@ -198,7 +196,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && (isset($_POST['submit_winning']) || 
 
                             <!-- Submit Button -->
                             <?php if ($existingRecord): ?>
-                                <button type="submit" name="modify_winning" class="btn btn-primary">Modify Winning Entry</button>
+                                <button type="submit" name="modify_winning" class="btn btn-warning">Modify Winning Entry</button>
                             <?php else: ?>
                                 <button type="submit" name="submit_winning" class="btn btn-success">Submit Winning Entry</button>
                             <?php endif; ?>
