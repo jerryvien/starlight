@@ -10,8 +10,7 @@ if (!isset($_SESSION['admin'])) {
 
 // Ensure the user is a super_admin
 if ($_SESSION['access_level'] !== 'super_admin') {
-    echo "<script>alert('You must be a super admin to access this page.'); window.location.href='index.php';</script>";
-    exit;
+    $error = "You must be a super admin to access this page.";
 }
 
 // Initialize variables for messages
@@ -167,6 +166,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_winning'])) {
     </div>
     <!-- End of Page Wrapper -->
 
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="js/sb-admin-2.min.js"></script>
 
 </body>
 </html>
