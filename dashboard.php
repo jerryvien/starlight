@@ -1,6 +1,8 @@
 <?php
 session_start();
 include('config/database.php'); // Database connection
+include('config/utilities.php'); // utilities connection
+
 
 // Enable error reporting for debugging
 ini_set('display_errors', 1);
@@ -24,15 +26,15 @@ try {
             SUM(purchase_amount) AS total_sales, 
             AVG(purchase_amount) AS avg_order_value, 
             COUNT(CASE WHEN DATE(purchase_datetime) = CURDATE() THEN 1 END) AS sales_today,
-            COUNT(CASE WHEN MONTH(purchase_datetime) = MONTH(CURDATE()) AND YEAR(purchase_datetime) = YEAR(CURDATE()) THEN 1 END) AS sales_this_month,
-            COUNT(CASE WHEN YEAR(purchase_datetime) = YEAR(CURDATE()) THEN 1 END) AS sales_this_year
+            SUM(CASE WHEN MONTH(purchase_datetime) = MONTH(CURDATE()) AND YEAR(purchase_datetime) = YEAR(CURDATE()) THEN 1 END) AS sales_this_month,
+            SUM(CASE WHEN YEAR(purchase_datetime) = YEAR(CURDATE()) THEN 1 END) AS sales_this_year
         FROM purchase_entries" :
         "SELECT 
             SUM(purchase_amount) AS total_sales, 
             AVG(purchase_amount) AS avg_order_value, 
             COUNT(CASE WHEN DATE(purchase_datetime) = CURDATE() THEN 1 END) AS sales_today,
-            COUNT(CASE WHEN MONTH(purchase_datetime) = MONTH(CURDATE()) AND YEAR(purchase_datetime) = YEAR(CURDATE()) THEN 1 END) AS sales_this_month,
-            COUNT(CASE WHEN YEAR(purchase_datetime) = YEAR(CURDATE()) THEN 1 END) AS sales_this_year
+            SUM(CASE WHEN MONTH(purchase_datetime) = MONTH(CURDATE()) AND YEAR(purchase_datetime) = YEAR(CURDATE()) THEN 1 END) AS sales_this_month,
+            SUM(CASE WHEN YEAR(purchase_datetime) = YEAR(CURDATE()) THEN 1 END) AS sales_this_year
         FROM purchase_entries 
         WHERE agent_id = :agent_id";
 
@@ -208,7 +210,7 @@ try {
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Sales</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">RM <?php echo number_format($sales_data['total_sales']); ?></div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">RM <?php echo format_number_short($sales_data['total_sales']); ?></div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
