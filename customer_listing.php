@@ -16,61 +16,25 @@ if (!isset($_SESSION['admin'])) {
 }
 
 // Fetch the access level from session
-$access_level = $_SESSION['access_level']; // Assuming 'access_level' is stored in session
+$access_level = $_SESSION['access_level']; 
 $agent_id = $_SESSION['agent_id'];
-
-$customers = [];
-$success_message = ''; // Initialize the success message variable
-$error_message = ''; // Initialize the error message variable
-
-try {
-    // Fetch all customers with their agent names if access_level is 'super_admin', or customers related to the agent if access_level is 'Agent'
-    if ($access_level === 'super_admin') {
-        $query = "
-            SELECT c.*, a.agent_name 
-            FROM customer_details c 
-            LEFT JOIN admin_access a ON c.agent_id = a.agent_id
-            ORDER BY c.created_at DESC
-        ";
-        $stmt = $conn->prepare($query);
-    } else {
-        // For agent-level users, filter by agent_id
-        $query = "
-            SELECT c.*, a.agent_name 
-            FROM customer_details c 
-            LEFT JOIN admin_access a ON c.agent_id = a.agent_id
-            WHERE c.agent_id = :agent_id 
-            ORDER BY c.created_at DESC
-        ";
-        $stmt = $conn->prepare($query);
-        $stmt->bindParam(':agent_id', $agent_id);
-    }
-
-    $stmt->execute();
-    $customers = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (PDOException $e) {
-    $error_message = "Error fetching customers: " . $e->getMessage();
-}
 
 // Handle update submission (when edit button is clicked)
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_customer'])) {
     $customer_id = $_POST['customer_id'];
-    $customer_name = $_POST['customer_name'];
     $credit_limit = $_POST['credit_limit'];
     $vip_status = $_POST['vip_status'];
 
     try {
-        $updateQuery = "UPDATE customer_details SET customer_name = :customer_name, credit_limit = :credit_limit, vip_status = :vip_status WHERE customer_id = :customer_id";
+        $updateQuery = "UPDATE customer_details SET credit_limit = :credit_limit, vip_status = :vip_status WHERE customer_id = :customer_id";
         $stmt = $conn->prepare($updateQuery);
-        $stmt->bindParam(':customer_name', $customer_name);
         $stmt->bindParam(':credit_limit', $credit_limit);
         $stmt->bindParam(':vip_status', $vip_status);
         $stmt->bindParam(':customer_id', $customer_id);
         
         if ($stmt->execute()) {
-            // After successfully updating the customer, redirect back to customer listing
             header("Location: customer_listing.php?success=1");
-            exit; // Exit after redirect to prevent further code execution
+            exit;
         } else {
             $error_message = "Failed to update customer details.";
         }
@@ -98,26 +62,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_customer'])) {
     <!-- Page Wrapper -->
     <div id="wrapper">
         <!-- Sidebar -->
-        <?php include('sidebar.php'); ?> <!-- Reuse your standard sidebar -->
+        <?php include('sidebar.php'); ?> 
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
             <div id="content">
                 <!-- Topbar -->
-                <?php include('topbar.php'); ?> <!-- Reuse your standard topbar -->
+                <?php include('topbar.php'); ?> 
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                     <h1 class="h3 mb-4 text-gray-800">Customer Listing</h1>
 
-                    <!-- Display success message if redirected with ?success=1 in URL -->
+                    <!-- Display success message -->
                     <?php if (isset($_GET['success'])): ?>
                         <div class="alert alert-success">Customer details updated successfully.</div>
-                    <?php endif; ?>
-
-                    <!-- Display error message -->
-                    <?php if ($error_message): ?>
-                        <div class="alert alert-danger"><?php echo $error_message; ?></div>
                     <?php endif; ?>
 
                     <!-- Customer Listing Table -->
@@ -127,34 +86,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_customer'])) {
                                 <tr>
                                     <th>Customer ID</th>
                                     <th>Customer Name</th>
-                                    <th>Agent Name</th> <!-- Changed from Agent ID to Agent Name -->
+                                    <th>Agent Name</th>
                                     <th>Credit Limit (RM)</th>
                                     <th>VIP Status</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <?php foreach ($customers as $customer): ?>
-                                    <tr>
-                                        <form method="POST" action="customer_listing.php">
-                                            <input type="hidden" name="customer_id" value="<?php echo $customer['customer_id']; ?>">
-                                            <td><?php echo $customer['customer_id']; ?></td>
-                                            <td><input type="text" name="customer_name" value="<?php echo $customer['customer_name']; ?>" class="form-control"></td>
-                                            <td><?php echo $customer['agent_name']; ?></td> <!-- Display Agent Name -->
-                                            <td><input type="number" name="credit_limit" value="<?php echo $customer['credit_limit']; ?>" class="form-control"></td>
-                                            <td>
-                                                <select name="vip_status" class="form-control">
-                                                    <option value="Normal" <?php echo $customer['vip_status'] == 'Normal' ? 'selected' : ''; ?>>Normal</option>
-                                                    <option value="VIP" <?php echo $customer['vip_status'] == 'VIP' ? 'selected' : ''; ?>>VIP</option>
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <button type="submit" name="edit_customer" class="btn btn-primary">Save</button>
-                                            </td>
-                                        </form>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </tbody>
+                            <tbody></tbody>
                         </table>
                     </div>
 
@@ -164,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_customer'])) {
             <!-- End of Main Content -->
 
             <!-- Footer -->
-            <?php include('footer.php'); ?> <!-- Reuse your standard footer -->
+            <?php include('footer.php'); ?> 
         </div>
         <!-- End of Content Wrapper -->
     </div>
@@ -175,6 +113,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_customer'])) {
     <script>
         $(document).ready(function() {
             $('#myTable').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "ajax": {
+                    "url": "fetch_customer_data.php", // Fetch data from server
+                    "type": "POST"
+                },
+                "columns": [
+                    { "data": "customer_id" },
+                    { "data": "customer_name" },
+                    { "data": "agent_name" },
+                    { "data": "credit_limit" },
+                    { "data": "vip_status" },
+                    { "data": "actions" }
+                ],
                 "paging": true,
                 "searching": true,
                 "ordering": true,
@@ -183,7 +135,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_customer'])) {
             });
         });
     </script>
-
 </body>
 
 </html>
