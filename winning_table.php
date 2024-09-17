@@ -3,11 +3,6 @@ session_start();
 include('config/database.php'); // Database connection
 include('utilities.php'); // Utility functions for hash, etc.
 
-// Enable error reporting for debugging
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
 // Redirect to login page if the user is not logged in
 if (!isset($_SESSION['admin'])) {
     header("Location: index.php");
@@ -93,24 +88,28 @@ function handle_winning_entry() {
             }
         }
 
-        // Insert or update the record in the database
-        if ($existing_record) {
-            // Update the existing record
-            $stmt = $conn->prepare("UPDATE winning_record SET winning_number = :winning_number, created_by_agent = :created_by_agent, updated_at = NOW() WHERE winning_date = :winning_date AND winning_game = :winning_game");
-        } else {
-            // Insert a new record
-            $stmt = $conn->prepare("INSERT INTO winning_record (winning_number, winning_period, winning_game, winning_date, created_by_agent, created_at) 
-                                    VALUES (:winning_number, :winning_period, :winning_game, :winning_date, :created_by_agent, NOW())");
+        try {
+            // Insert or update the record in the database
+            if ($existing_record) {
+                // Update the existing record
+                $stmt = $conn->prepare("UPDATE winning_record SET winning_number = :winning_number, created_by_agent = :created_by_agent, updated_at = NOW() WHERE winning_date = :winning_date AND winning_game = :winning_game");
+            } else {
+                // Insert a new record
+                $stmt = $conn->prepare("INSERT INTO winning_record (winning_number, winning_period, winning_game, winning_date, created_by_agent, created_at) 
+                                        VALUES (:winning_number, :winning_period, :winning_game, :winning_date, :created_by_agent, NOW())");
+            }
+
+            $stmt->bindParam(':winning_number', $winning_number);
+            $stmt->bindParam(':winning_period', $winning_period);
+            $stmt->bindParam(':winning_game', $winning_game);
+            $stmt->bindParam(':winning_date', $winning_date);
+            $stmt->bindParam(':created_by_agent', $created_by_agent);
+            $stmt->execute();
+
+            echo "<div class='alert alert-success'>Winning number successfully recorded.</div>";
+        } catch (PDOException $e) {
+            echo "<div class='alert alert-danger'>Error inserting winning number: " . $e->getMessage() . "</div>";
         }
-
-        $stmt->bindParam(':winning_number', $winning_number);
-        $stmt->bindParam(':winning_period', $winning_period);
-        $stmt->bindParam(':winning_game', $winning_game);
-        $stmt->bindParam(':winning_date', $winning_date);
-        $stmt->bindParam(':created_by_agent', $created_by_agent);
-        $stmt->execute();
-
-        echo "<script>alert('Winning number successfully recorded.');</script>";
     }
 }
 
