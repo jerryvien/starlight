@@ -2,13 +2,6 @@
 session_start();
 include('config/database.php'); // Include your database connection
 
-
-// Enable error reporting for debugging
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
-
 // Redirect to login page if the user is not logged in
 if (!isset($_SESSION['admin'])) {
     header("Location: index.php");
@@ -16,7 +9,7 @@ if (!isset($_SESSION['admin'])) {
 }
 
 // Fetch the access level from session
-$access_level = $_SESSION['access_level']; 
+$access_level = $_SESSION['access_level'];
 $agent_id = $_SESSION['agent_id'];
 
 // Handle update submission (when edit button is clicked)
@@ -62,21 +55,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_customer'])) {
     <!-- Page Wrapper -->
     <div id="wrapper">
         <!-- Sidebar -->
-        <?php include('sidebar.php'); ?> 
+        <?php include('sidebar.php'); ?> <!-- Include sidebar -->
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
             <div id="content">
                 <!-- Topbar -->
-                <?php include('topbar.php'); ?> 
+                <?php include('topbar.php'); ?> <!-- Include topbar -->
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                     <h1 class="h3 mb-4 text-gray-800">Customer Listing</h1>
 
-                    <!-- Display success message -->
+                    <!-- Display success message if redirected with ?success=1 in URL -->
                     <?php if (isset($_GET['success'])): ?>
                         <div class="alert alert-success">Customer details updated successfully.</div>
+                    <?php endif; ?>
+
+                    <!-- Display error message -->
+                    <?php if (!empty($error_message)): ?>
+                        <div class="alert alert-danger"><?php echo $error_message; ?></div>
                     <?php endif; ?>
 
                     <!-- Customer Listing Table -->
@@ -102,7 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_customer'])) {
             <!-- End of Main Content -->
 
             <!-- Footer -->
-            <?php include('footer.php'); ?> 
+            <?php include('footer.php'); ?> <!-- Include footer -->
         </div>
         <!-- End of Content Wrapper -->
     </div>
@@ -116,8 +114,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_customer'])) {
                 "processing": true,
                 "serverSide": true,
                 "ajax": {
-                    "url": "fetch_customer_data.php", // Fetch data from server
-                    "type": "POST"
+                    "url": "customer_listing.php", // Fetch data from the same page
+                    "type": "POST",
+                    "data": {
+                        "action": "fetch_customers" // Set a flag to differentiate between display and update operations
+                    }
                 },
                 "columns": [
                     { "data": "customer_id" },
@@ -135,6 +136,78 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_customer'])) {
             });
         });
     </script>
+
 </body>
 
 </html>
+
+<?php
+// Server-side processing for DataTables
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'fetch_customers') {
+    $columns = ['customer_id', 'customer_name', 'agent_name', 'credit_limit', 'vip_status'];
+
+    // Base query for both access levels
+    $query = ($access_level === 'super_admin') ? 
+        "SELECT c.*, a.agent_name FROM customer_details c LEFT JOIN admin_access a ON c.agent_id = a.agent_id" : 
+        "SELECT c.*, a.agent_name FROM customer_details c LEFT JOIN admin_access a ON c.agent_id = a.agent_id WHERE c.agent_id = :agent_id";
+
+    // Add search functionality
+    if (isset($_POST['search']['value']) && $_POST['search']['value'] != '') {
+        $search_value = $_POST['search']['value'];
+        $query .= " AND (c.customer_name LIKE '%" . $search_value . "%' OR a.agent_name LIKE '%" . $search_value . "%')";
+    }
+
+    // Add ordering functionality
+    $query .= " ORDER BY " . $columns[$_POST['order'][0]['column']] . " " . $_POST['order'][0]['dir'];
+    $query .= " LIMIT " . $_POST['start'] . ", " . $_POST['length'];
+
+    // Execute query
+    $stmt = $conn->prepare($query);
+    if ($access_level !== 'super_admin') {
+        $stmt->bindParam(':agent_id', $agent_id);
+    }
+    $stmt->execute();
+    $customers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Get total records for pagination
+    $total_query = ($access_level === 'super_admin') ? 
+        "SELECT COUNT(*) FROM customer_details" : 
+        "SELECT COUNT(*) FROM customer_details WHERE agent_id = :agent_id";
+    
+    $total_stmt = $conn->prepare($total_query);
+    if ($access_level !== 'super_admin') {
+        $total_stmt->bindParam(':agent_id', $agent_id);
+    }
+    $total_stmt->execute();
+    $total_records = $total_stmt->fetchColumn();
+
+    // Prepare data for DataTables
+    $data = [];
+    foreach ($customers as $customer) {
+        $data[] = [
+            'customer_id' => $customer['customer_id'],
+            'customer_name' => $customer['customer_name'],
+            'agent_name' => $customer['agent_name'],
+            'credit_limit' => number_format($customer['credit_limit'], 2),
+            'vip_status' => $customer['vip_status'],
+            'actions' => '<form method="POST" action="customer_listing.php">
+                            <input type="hidden" name="customer_id" value="'.$customer['customer_id'].'">
+                            <input type="number" name="credit_limit" value="'.$customer['credit_limit'].'" class="form-control" />
+                            <select name="vip_status" class="form-control">
+                                <option value="Normal" '.($customer['vip_status'] == 'Normal' ? 'selected' : '').'>Normal</option>
+                                <option value="VIP" '.($customer['vip_status'] == 'VIP' ? 'selected' : '').'>VIP</option>
+                            </select>
+                            <button type="submit" name="edit_customer" class="btn btn-primary">Save</button>
+                          </form>'
+        ];
+    }
+
+    // Send output to DataTables
+    echo json_encode([
+        "draw" => intval($_POST['draw']),
+        "recordsTotal" => $total_records,
+        "recordsFiltered" => $total_records,
+        "data" => $data
+    ]);
+}
+?>
