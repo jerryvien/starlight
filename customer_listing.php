@@ -2,6 +2,13 @@
 session_start();
 include('config/database.php'); // Include your database connection
 
+
+// Enable error reporting for debugging
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+
 // Redirect to login page if the user is not logged in
 if (!isset($_SESSION['admin'])) {
     header("Location: index.php");
@@ -83,6 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_customer'])) {
     <title>Customer Listing</title>
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
 </head>
 
 <body id="page-top">
@@ -114,7 +122,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_customer'])) {
 
                     <!-- Customer Listing Table -->
                     <div class="table-responsive">
-                        <table class="table table-bordered">
+                        <table id="myTable" class="table table-bordered">
                             <thead>
                                 <tr>
                                     <th>Customer ID</th>
@@ -131,7 +139,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_customer'])) {
                                         <form method="POST" action="customer_listing.php">
                                             <input type="hidden" name="customer_id" value="<?php echo $customer['customer_id']; ?>">
                                             <td><?php echo $customer['customer_id']; ?></td>
-                                            <td><input type="text" name="customer_name" value="<?php echo $customer['customer_name']; ?>" class="form-control" <?php if ($access_level !== 'Admin') echo 'readonly'; ?>></td>
+                                            <td><input type="text" name="customer_name" value="<?php echo $customer['customer_name']; ?>" class="form-control"></td>
                                             <td><?php echo $customer['agent_name']; ?></td> <!-- Display Agent Name -->
                                             <td><input type="number" name="credit_limit" value="<?php echo $customer['credit_limit']; ?>" class="form-control"></td>
                                             <td>
@@ -162,6 +170,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_customer'])) {
     </div>
     <!-- End of Page Wrapper -->
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#myTable').DataTable({
+                "paging": true,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": true
+            });
+        });
+    </script>
 
 </body>
 
