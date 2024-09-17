@@ -280,7 +280,7 @@ try {
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                                 Sales Today (<?php echo date('F j, Y'); ?>) <!-- Display today's date -->
                                             </div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php format_number_short(echo $sales_data['sales_today']); ?></div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo format_number_short($sales_data['sales_today']); ?></div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-chart-line fa-2x text-gray-300"></i>
