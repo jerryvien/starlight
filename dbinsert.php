@@ -2,8 +2,19 @@
 // Database connection
 include('config/database.php');
 
-// Starting agent ID (adjust based on your existing data)
-$starting_agent_id = 100;
+// Array of common Asian names (you can expand this list as needed)
+$asian_names = [
+    "Lee", "Wang", "Li", "Chen", "Zhang", "Liu", "Kim", "Huang", "Choi", "Park", 
+    "Tan", "Lim", "Yamamoto", "Takahashi", "Ito", "Kobayashi", "Nguyen", "Tran", 
+    "Pham", "Jiang", "Khanh", "Chung", "Rizwan", "Sato", "Murata", "Shen"
+];
+
+// List of Asian countries for the agent's market
+$asian_countries = [
+    "China", "India", "Japan", "South Korea", "Vietnam", "Thailand", 
+    "Malaysia", "Singapore", "Indonesia", "Philippines", "Pakistan", 
+    "Sri Lanka", "Bangladesh", "Cambodia", "Myanmar", "Nepal"
+];
 
 // Prepare the insert query for admin_access table
 $sql = "INSERT INTO admin_access (agent_id, agent_name, agent_login_id, agent_password, agent_market, agent_credit_limit, access_level, created_at) 
@@ -12,23 +23,25 @@ $sql = "INSERT INTO admin_access (agent_id, agent_name, agent_login_id, agent_pa
 // Prepare the statement
 $stmt = $conn->prepare($sql);
 
+// Starting agent ID
+$starting_agent_id = 4;
+
 // Generate 30 agent records
-for ($i = 0; $i < 30; $i++) {
-    // Generate agent_id (e.g., 100, 101, etc.)
+for ($i = 0; $i < 35; $i++) {
+    // Sequentially increment agent_id
     $agent_id = $starting_agent_id + $i;
 
-    // Generate agent name (e.g., "Agent 100", "Agent 101", etc.)
-    $agent_name = 'Agent ' . $agent_id;
+    // Randomly select an Asian name
+    $agent_name = $asian_names[array_rand($asian_names)];
 
-    // Generate agent login ID (e.g., "agent100", "agent101", etc.)
-    $agent_login_id = 'agent' . $agent_id;
+    // Generate agent login ID (e.g., "agent3", "agent4", etc.)
+    $agent_login_id = 'AG' . $agent_id;
 
     // Generate random password (this should be hashed in a real system)
-    $agent_password = password_hash('password' . $agent_id, PASSWORD_BCRYPT); // Random password for demo
+    $agent_password = password_hash('admin123' . $agent_id, PASSWORD_BCRYPT); // Random password for demo
 
-    // Random agent market (e.g., "North", "South", "East", "West")
-    $agent_market_options = ['North', 'South', 'East', 'West'];
-    $agent_market = $agent_market_options[rand(0, 3)];
+    // Randomly select an Asian country for the market
+    $agent_market = $asian_countries[array_rand($asian_countries)];
 
     // Random agent credit limit between 5000 and 10000
     $agent_credit_limit = rand(5000, 10000);
@@ -36,7 +49,7 @@ for ($i = 0; $i < 30; $i++) {
     // Assign "agent" access level
     $access_level = 'agent';
 
-    // Random creation date across 2023-2024
+    // Generate random creation date across 2023-2024
     $year = rand(2023, 2024);
     $month = str_pad(rand(1, 12), 2, '0', STR_PAD_LEFT);
     $day = str_pad(rand(1, 28), 2, '0', STR_PAD_LEFT); // Use 28 days to avoid issues with February
