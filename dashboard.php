@@ -250,8 +250,8 @@ try {
                                     </div>
                                 </div>
                             </div>
-                        </div>
                     </div>
+                
 
                     <!-- Top 5 Spend and Winner Customers (Bar Charts) -->
                     <div class="row">
