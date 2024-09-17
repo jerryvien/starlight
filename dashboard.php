@@ -50,14 +50,38 @@ try {
 }
 
 // Fetch top 5 spend and winner customers (Bar chart)
+// We need to join purchase_entries with customer_details to get customer_name
 try {
     $top_spend_query = ($access_level === 'super_admin') ? 
-        "SELECT customer_name, SUM(purchase_amount) AS total_spent FROM purchase_entries GROUP BY customer_id ORDER BY total_spent DESC LIMIT 5" : 
-        "SELECT customer_name, SUM(purchase_amount) AS total_spent FROM purchase_entries WHERE agent_id = :agent_id GROUP BY customer_id ORDER BY total_spent DESC LIMIT 5";
+        "SELECT c.customer_name, SUM(p.purchase_amount) AS total_spent 
+         FROM purchase_entries p 
+         JOIN customer_details c ON p.customer_id = c.customer_id 
+         GROUP BY p.customer_id 
+         ORDER BY total_spent DESC 
+         LIMIT 5" : 
+        "SELECT c.customer_name, SUM(p.purchase_amount) AS total_spent 
+         FROM purchase_entries p 
+         JOIN customer_details c ON p.customer_id = c.customer_id 
+         WHERE p.agent_id = :agent_id 
+         GROUP BY p.customer_id 
+         ORDER BY total_spent DESC 
+         LIMIT 5";
 
     $top_winner_query = ($access_level === 'super_admin') ? 
-        "SELECT customer_name, COUNT(*) AS total_wins FROM purchase_entries WHERE result = 'Win' GROUP BY customer_id ORDER BY total_wins DESC LIMIT 5" : 
-        "SELECT customer_name, COUNT(*) AS total_wins FROM purchase_entries WHERE agent_id = :agent_id AND result = 'Win' GROUP BY customer_id ORDER BY total_wins DESC LIMIT 5";
+        "SELECT c.customer_name, COUNT(*) AS total_wins 
+         FROM purchase_entries p 
+         JOIN customer_details c ON p.customer_id = c.customer_id 
+         WHERE p.result = 'Win' 
+         GROUP BY p.customer_id 
+         ORDER BY total_wins DESC 
+         LIMIT 5" : 
+        "SELECT c.customer_name, COUNT(*) AS total_wins 
+         FROM purchase_entries p 
+         JOIN customer_details c ON p.customer_id = c.customer_id 
+         WHERE p.agent_id = :agent_id AND p.result = 'Win' 
+         GROUP BY p.customer_id 
+         ORDER BY total_wins DESC 
+         LIMIT 5";
 
     $top_spend_stmt = $conn->prepare($top_spend_query);
     $top_winner_stmt = $conn->prepare($top_winner_query);
@@ -76,8 +100,12 @@ try {
 // Fetch customer count growth (Line chart)
 try {
     $customer_growth_query = ($access_level === 'super_admin') ? 
-        "SELECT DATE(created_at) AS date, COUNT(*) AS new_customers FROM customer_details GROUP BY DATE(created_at)" : 
-        "SELECT DATE(created_at) AS date, COUNT(*) AS new_customers FROM customer_details WHERE agent_id = :agent_id GROUP BY DATE(created_at)";
+        "SELECT DATE(created_at) AS date, COUNT(*) AS new_customers 
+         FROM customer_details 
+         GROUP BY DATE(created_at)" : 
+        "SELECT DATE(created_at) AS date, COUNT(*) AS new_customers 
+         FROM customer_details WHERE agent_id = :agent_id 
+         GROUP BY DATE(created_at)";
 
     $customer_growth_stmt = $conn->prepare($customer_growth_query);
     if ($access_level !== 'super_admin') {
@@ -92,8 +120,19 @@ try {
 // Fetch recent purchases (Table)
 try {
     $recent_purchases_query = ($access_level === 'super_admin') ? 
-        "SELECT * FROM purchase_entries ORDER BY purchase_datetime DESC LIMIT 10" : 
-        "SELECT * FROM purchase_entries WHERE agent_id = :agent_id ORDER BY purchase_datetime DESC LIMIT 10";
+        "SELECT p.*, c.customer_name, a.agent_name 
+         FROM purchase_entries p 
+         JOIN customer_details c ON p.customer_id = c.customer_id 
+         JOIN admin_access a ON p.agent_id = a.agent_id 
+         ORDER BY p.purchase_datetime DESC 
+         LIMIT 10" : 
+        "SELECT p.*, c.customer_name, a.agent_name 
+         FROM purchase_entries p 
+         JOIN customer_details c ON p.customer_id = c.customer_id 
+         JOIN admin_access a ON p.agent_id = a.agent_id 
+         WHERE p.agent_id = :agent_id 
+         ORDER BY p.purchase_datetime DESC 
+         LIMIT 10";
 
     $recent_purchases_stmt = $conn->prepare($recent_purchases_query);
     if ($access_level !== 'super_admin') {
@@ -189,8 +228,8 @@ try {
                 <tbody>
                     <?php foreach ($recent_purchases as $purchase): ?>
                         <tr>
-                            <td><?php echo $purchase['customer_id']; ?></td>
-                            <td><?php echo $purchase['agent_id']; ?></td>
+                            <td><?php echo $purchase['customer_name']; ?></td>
+                            <td><?php echo $purchase['agent_name']; ?></td>
                             <td><?php echo $purchase['purchase_no']; ?></td>
                             <td><?php echo $purchase['purchase_category']; ?></td>
                             <td><?php echo number_format($purchase['purchase_amount'], 2); ?></td>
@@ -202,6 +241,7 @@ try {
             </table>
         </div>
     </div>
+
 </div>
 
 <script>
