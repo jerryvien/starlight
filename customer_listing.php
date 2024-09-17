@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     $length = $_POST['length']; // Number of records per page
 
     try {
-        $where_clause = 'WHERE c.is_archieve = 0'; // Only show customers that are not archived
+        $where_clause = 'WHERE c.is_archived = 0'; // Only show customers that are not archived
         $params = [];
 
         // Add condition to check if updated_at is within the last 365 days
