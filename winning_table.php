@@ -1,27 +1,20 @@
 <?php
 session_start();
 include('config/database.php'); // Database connection
-include('utilities.php'); // Include utility functions like for generating hashes, serial numbers, etc.
-
-
-// Enable error reporting for debugging
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
+include('utilities.php'); // Utility functions for hash, etc.
 
 if (!isset($_SESSION['admin'])) {
     header("Location: index.php");
     exit;
 }
 
-// Function to validate and store winning entry
+// Function to validate and store/modify winning entry
 function enter_winning_entry() {
     global $conn;
 
     // Check if the user is logged in and is super_admin
     if ($_SESSION['access_level'] !== 'super_admin') {
-        echo "<div class='alert alert-danger'>You must be a super_admin to access this feature. Please get approval from a super_admin.</div>";
+        echo "<script>$('#errorModal').modal('show');</script>";
         return;
     }
 
@@ -38,59 +31,59 @@ function enter_winning_entry() {
         $agent = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if (!$agent || !password_verify($password, $agent['agent_password'])) {
-            echo "<div class='alert alert-danger'>Authentication failed. Please enter the correct password.</div>";
+            echo "<script>$('#authFailedModal').modal('show');</script>";
             return;
         }
 
         // Winning number validation (must be 2 or 3 digits)
         $winning_number = $_POST['winning_number'];
         if (!preg_match('/^\d{2,3}$/', $winning_number)) {
-            echo "<div class='alert alert-danger'>Invalid winning number. It must be 2 or 3 digits.</div>";
+            echo "<script>$('#invalidNumberModal').modal('show');</script>";
             return;
         }
 
-        // Set default values for winning period and created_by_agent
+        // Get the winning_game and other data
+        $winning_game = $_POST['winning_game'];
         $winning_period = 'Evening';
         $winning_date = $_POST['winning_date'];
-        $winning_total_payout = $_POST['winning_total_payout'];
         $created_by_agent = $agent_id;
 
-        // Generate a hashed secret key for the agent
-        $agent_hashed_secretkey = hash('sha256', $password);
+        // Check if there's already a record for the same date and game
+        $stmt = $conn->prepare("SELECT * FROM winning_record WHERE winning_date = :winning_date AND winning_game = :winning_game");
+        $stmt->bindParam(':winning_date', $winning_date);
+        $stmt->bindParam(':winning_game', $winning_game);
+        $stmt->execute();
+        $existing_record = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // Show a confirmation pop-up
+        if ($existing_record) {
+            echo "<script>$('#duplicateRecordModal').modal('show');</script>";
+            return;
+        }
+
+        // If no existing record, proceed to insert
         if (isset($_POST['confirm']) && $_POST['confirm'] === 'yes') {
+            // Generate agent_hashed_secretkey
+            $agent_hashed_secretkey = hash('sha256', $password);
+
             // Insert data into the winning_record table
-            $stmt = $conn->prepare("INSERT INTO winning_record (winning_number, winning_period, winning_date, winning_total_payout, created_by_agent, agent_hashed_secretkey, created_at) 
-                                    VALUES (:winning_number, :winning_period, :winning_date, :winning_total_payout, :created_by_agent, :agent_hashed_secretkey, NOW())");
+            $stmt = $conn->prepare("INSERT INTO winning_record (winning_number, winning_period, winning_game, winning_date, created_by_agent, agent_hashed_secretkey, created_at) 
+                                    VALUES (:winning_number, :winning_period, :winning_game, :winning_date, :created_by_agent, :agent_hashed_secretkey, NOW())");
 
             $stmt->bindParam(':winning_number', $winning_number);
             $stmt->bindParam(':winning_period', $winning_period);
+            $stmt->bindParam(':winning_game', $winning_game);
             $stmt->bindParam(':winning_date', $winning_date);
-            $stmt->bindParam(':winning_total_payout', $winning_total_payout);
             $stmt->bindParam(':created_by_agent', $created_by_agent);
             $stmt->bindParam(':agent_hashed_secretkey', $agent_hashed_secretkey);
             $stmt->execute();
 
-            echo "<div class='alert alert-success'>Winning entry for $winning_number has been added successfully!</div>";
+            echo "<script>$('#successModal').modal('show');</script>";
         } else {
             // If the user has not confirmed, show the confirmation popup
-            echo "<div class='alert alert-info'>
-                    Are you sure you want to add the winning number: $winning_number for date: $winning_date?<br>
-                    <form method='POST' action=''>
-                        <input type='hidden' name='winning_number' value='$winning_number'>
-                        <input type='hidden' name='winning_date' value='$winning_date'>
-                        <input type='hidden' name='winning_total_payout' value='$winning_total_payout'>
-                        <input type='hidden' name='password' value='$password'>
-                        <button type='submit' name='confirm' value='yes' class='btn btn-success'>Yes</button>
-                        <button type='submit' name='confirm' value='no' class='btn btn-danger'>No</button>
-                    </form>
-                  </div>";
+            echo "<script>$('#confirmationModal').modal('show');</script>";
         }
     }
 }
-
-// Example HTML form for entering winning data with sidebar, topbar, and footer
 ?>
 
 <!DOCTYPE html>
@@ -130,16 +123,19 @@ function enter_winning_entry() {
                             <input type="text" class="form-control" name="winning_number" placeholder="Enter 2 or 3-digit number" required>
                         </div>
 
+                        <!-- Winning Game -->
+                        <div class="form-group">
+                            <label for="winning_game">Winning Game</label>
+                            <select name="winning_game" class="form-control" required>
+                                <option value="2-D">2-D</option>
+                                <option value="3-D">3-D</option>
+                            </select>
+                        </div>
+
                         <!-- Winning Date -->
                         <div class="form-group">
                             <label for="winning_date">Winning Date</label>
                             <input type="date" class="form-control" name="winning_date" value="<?php echo date('Y-m-d'); ?>" required>
-                        </div>
-
-                        <!-- Total Payout -->
-                        <div class="form-group">
-                            <label for="winning_total_payout">Total Payout (RM)</label>
-                            <input type="number" class="form-control" name="winning_total_payout" placeholder="Enter total payout" required>
                         </div>
 
                         <!-- Re-enter Password for Authentication -->
@@ -167,14 +163,120 @@ function enter_winning_entry() {
     </div>
     <!-- End of Page Wrapper -->
 
+    <!-- Modal Templates -->
+    <!-- Error Modal -->
+    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="errorModalLabel">Error</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    You must be a super_admin to access this feature. Please get approval from a super_admin.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Authentication Failed Modal -->
+    <div class="modal fade" id="authFailedModal" tabindex="-1" role="dialog" aria-labelledby="authFailedModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="authFailedModalLabel">Authentication Failed</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Authentication failed. Please enter the correct password.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Invalid Winning Number Modal -->
+    <div class="modal fade" id="invalidNumberModal" tabindex="-1" role="dialog" aria-labelledby="invalidNumberModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="invalidNumberModalLabel">Invalid Winning Number</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Invalid winning number. It must be 2 or 3 digits.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Duplicate Record Modal -->
+    <div class="modal fade" id="duplicateRecordModal" tabindex="-1" role="dialog" aria-labelledby="duplicateRecordModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="duplicateRecordModalLabel">Duplicate Record Found</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    A record for this date and game already exists. Please authenticate again to modify the record.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="successModalLabel">Success</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Winning number successfully added!
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmationModalLabel">Confirm Entry</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to add this winning entry?
+                </div>
+                <div class="modal-footer">
+                    <form method="POST" action="">
+                        <input type="hidden" name="confirm" value="yes">
+                        <button type="submit" class="btn btn-primary">Yes</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Core plugin JavaScript-->
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-
-    <!-- Custom scripts for all pages-->
     <script src="js/sb-admin-2.min.js"></script>
 </body>
 </html>
