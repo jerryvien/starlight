@@ -170,33 +170,6 @@ try {
                 <div class="container-fluid">
                     <h1 class="h3 mb-4 text-gray-800">Business Dashboard</h1>
                     <!-- Total Sales, Total Sales Per Day, Average Order Value -->
-                    <div class="row">
-                        <div class="col-xl-4 col-md-6 mb-4">
-                            <div class="card card border-left-primary shadow h-100 py-2">
-                                <div class="card-body">
-                                    <h5>Total Sales</h5>
-                                    <p><?php echo number_format($sales_data['total_sales'], 2); ?> RM</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card bg-success text-white">
-                                <div class="card-body">
-                                    <h5>Total Sales Per Day</h5>
-                                    <p><?php echo $sales_data['sales_per_day']; ?></p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card bg-warning text-white">
-                                <div class="card-body">
-                                    <h5>Average Order Value</h5>
-                                    <p><?php echo number_format($sales_data['avg_order_value'], 2); ?> RM</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                     <!-- Top Row: KPIs -->
                     <div class="row">
                         <div class="col-xl-4 col-md-6 mb-4">
@@ -230,9 +203,8 @@ try {
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="col-xl-4 col-md-6 mb-4">
+                        
+                        <div class="col-xl-4 col-md-6 mb-4">
                             <div class="card border-left-success shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
@@ -248,6 +220,8 @@ try {
                             </div>
                         </div>
                     </div>
+
+                    
 
                     
 
