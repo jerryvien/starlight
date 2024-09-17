@@ -8,9 +8,9 @@ if (!isset($_SESSION['admin'])) {
     exit;
 }
 
-// Check if the user is super_admin
+// Ensure the user is a super_admin
 if ($_SESSION['access_level'] !== 'super_admin') {
-    $error = "You do not have access to this function. Please consult the super admin.";
+    $error = "You must be a super admin to access this page.";
 }
 
 // Initialize variables for messages
@@ -30,10 +30,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['authenticate'])) {
 
     // Verify the password
     if ($agent && password_verify($password, $agent['agent_password'])) {
-        // Set authenticated flag
-        $_SESSION['authenticated'] = true;
+        $_SESSION['authenticated'] = true; // Set an authenticated flag
 
-        // Hash the password and store in agent_hashed_secretkey table
+        // Hash the password and insert it into the agent_hashed_secretkey table
         $hashed_password = password_hash($password, PASSWORD_BCRYPT);
         $insert_hash_stmt = $conn->prepare("INSERT INTO agent_hashed_secretkey (agent_id, hashed_secretkey) VALUES (:agent_id, :hashed_secretkey)");
         $insert_hash_stmt->bindParam(':agent_id', $agent_id);
@@ -117,7 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_winning'])) {
                         <div class="alert alert-danger"><?php echo $error; ?></div>
                     <?php endif; ?>
 
-                    <?php if ($_SESSION['access_level'] === 'super_admin' && !isset($_SESSION['authenticated'])): ?>
+                    <?php if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true): ?>
                         <!-- Authentication Form -->
                         <form method="POST" action="">
                             <div class="form-group">
@@ -167,6 +166,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_winning'])) {
     </div>
     <!-- End of Page Wrapper -->
 
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="js/sb-admin-2.min.js"></script>
 
 </body>
 </html>
