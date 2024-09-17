@@ -20,13 +20,19 @@ $agent_id = $_SESSION['agent_id'];
 // Fetch total sales, average order value, and total sales per day
 try {
     $sales_query = ($access_level === 'super_admin') ? 
-        "SELECT SUM(purchase_amount) AS total_sales, 
-                AVG(purchase_amount) AS avg_order_value, 
-                COUNT(CASE WHEN DATE(purchase_datetime) = CURDATE() THEN 1 END) AS sales_today 
+        "SELECT 
+            SUM(purchase_amount) AS total_sales, 
+            AVG(purchase_amount) AS avg_order_value, 
+            COUNT(CASE WHEN DATE(purchase_datetime) = CURDATE() THEN 1 END) AS sales_today,
+            COUNT(CASE WHEN MONTH(purchase_datetime) = MONTH(CURDATE()) AND YEAR(purchase_datetime) = YEAR(CURDATE()) THEN 1 END) AS sales_this_month,
+            COUNT(CASE WHEN YEAR(purchase_datetime) = YEAR(CURDATE()) THEN 1 END) AS sales_this_year
         FROM purchase_entries" :
-        "SELECT SUM(purchase_amount) AS total_sales, 
-                AVG(purchase_amount) AS avg_order_value, 
-                COUNT(CASE WHEN DATE(purchase_datetime) = CURDATE() THEN 1 END) AS sales_today 
+        "SELECT 
+            SUM(purchase_amount) AS total_sales, 
+            AVG(purchase_amount) AS avg_order_value, 
+            COUNT(CASE WHEN DATE(purchase_datetime) = CURDATE() THEN 1 END) AS sales_today,
+            COUNT(CASE WHEN MONTH(purchase_datetime) = MONTH(CURDATE()) AND YEAR(purchase_datetime) = YEAR(CURDATE()) THEN 1 END) AS sales_this_month,
+            COUNT(CASE WHEN YEAR(purchase_datetime) = YEAR(CURDATE()) THEN 1 END) AS sales_this_year
         FROM purchase_entries 
         WHERE agent_id = :agent_id";
 
@@ -206,6 +212,42 @@ try {
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-4 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                Sales for <?php echo date('F Y'); ?> <!-- Dynamically display the current month and year -->
+                                            </div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $sales_data['sales_this_month']; ?></div> <!-- Monthly sales data -->
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-calendar-alt fa-2x text-gray-300"></i> <!-- Icon representing the calendar/month -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-4 col-md-6 mb-4">
+                            <div class="card border-left-warning shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                                Sales for <?php echo date('Y'); ?> <!-- Dynamically display the current year -->
+                                            </div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $sales_data['sales_this_year']; ?></div> <!-- Yearly sales data -->
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-chart-bar fa-2x text-gray-300"></i> <!-- Icon representing a bar chart for yearly sales -->
                                         </div>
                                     </div>
                                 </div>
