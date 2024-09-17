@@ -12,10 +12,29 @@ if (!isset($_SESSION['admin'])) {
 $access_level = $_SESSION['access_level'];
 $agent_id = $_SESSION['agent_id'];
 
-// Define where clause based on access level (agent vs. super_admin)
+// Define the WHERE clause based on access level (agent vs. super_admin)
 $where_clause = "";
+$params = [];
+
 if ($access_level !== 'super_admin') {
     $where_clause = "WHERE p.agent_id = :agent_id";
+    $params[':agent_id'] = $agent_id;
+}
+
+// Error handling for database queries
+function executeQuery($sql, $params, $conn) {
+    try {
+        $stmt = $conn->prepare($sql);
+        foreach ($params as $key => $val) {
+            $stmt->bindValue($key, $val);
+        }
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        // Log the error and show a generic message
+        error_log("Database Query Error: " . $e->getMessage());
+        return [];
+    }
 }
 
 // Fetch total sales for each day (Line Chart: Total Sales Overview)
@@ -26,12 +45,7 @@ $sales_by_date_sql = "
     GROUP BY DATE(p.purchase_datetime)
     ORDER BY DATE(p.purchase_datetime) ASC
 ";
-$sales_by_date_stmt = $conn->prepare($sales_by_date_sql);
-if ($access_level !== 'super_admin') {
-    $sales_by_date_stmt->bindParam(':agent_id', $agent_id);
-}
-$sales_by_date_stmt->execute();
-$sales_by_date_results = $sales_by_date_stmt->fetchAll(PDO::FETCH_ASSOC);
+$sales_by_date_results = executeQuery($sales_by_date_sql, $params, $conn);
 $line_chart_labels = json_encode(array_column($sales_by_date_results, 'purchase_date'));
 $line_chart_data = json_encode(array_column($sales_by_date_results, 'total_sales'));
 
@@ -45,12 +59,7 @@ $top_customers_sql = "
     ORDER BY total_sales DESC
     LIMIT 5
 ";
-$top_customers_stmt = $conn->prepare($top_customers_sql);
-if ($access_level !== 'super_admin') {
-    $top_customers_stmt->bindParam(':agent_id', $agent_id);
-}
-$top_customers_stmt->execute();
-$top_customers_results = $top_customers_stmt->fetchAll(PDO::FETCH_ASSOC);
+$top_customers_results = executeQuery($top_customers_sql, $params, $conn);
 $bar_chart_labels = json_encode(array_column($top_customers_results, 'customer_name'));
 $bar_chart_data = json_encode(array_column($top_customers_results, 'total_sales'));
 
@@ -61,29 +70,9 @@ $sales_by_category_sql = "
     $where_clause
     GROUP BY p.purchase_category
 ";
-$sales_by_category_stmt = $conn->prepare($sales_by_category_sql);
-if ($access_level !== 'super_admin') {
-    $sales_by_category_stmt->bindParam(':agent_id', $agent_id);
-}
-$sales_by_category_stmt->execute();
-$sales_by_category_results = $sales_by_category_stmt->fetchAll(PDO::FETCH_ASSOC);
+$sales_by_category_results = executeQuery($sales_by_category_sql, $params, $conn);
 $pie_chart_labels = json_encode(array_column($sales_by_category_results, 'purchase_category'));
 $pie_chart_data = json_encode(array_column($sales_by_category_results, 'total_sales'));
-
-// Fetch sales by agent (for Super_admin) (Bar Chart: Sales by Agent)
-$sales_by_agent_sql = "
-    SELECT a.agent_name, SUM(p.purchase_amount) as total_sales
-    FROM purchase_entries p
-    JOIN admin_access a ON p.agent_id = a.agent_id
-    GROUP BY a.agent_name
-";
-$sales_by_agent_stmt = $conn->prepare($sales_by_agent_sql);
-if ($access_level === 'super_admin') {
-    $sales_by_agent_stmt->execute();
-    $sales_by_agent_results = $sales_by_agent_stmt->fetchAll(PDO::FETCH_ASSOC);
-    $agent_bar_chart_labels = json_encode(array_column($sales_by_agent_results, 'agent_name'));
-    $agent_bar_chart_data = json_encode(array_column($sales_by_agent_results, 'total_sales'));
-}
 
 // Fetch average order value for the current month (KPI: Average Order Value)
 $average_order_value_sql = "
@@ -91,14 +80,9 @@ $average_order_value_sql = "
     FROM purchase_entries p
     WHERE MONTH(p.purchase_datetime) = MONTH(CURRENT_DATE())
     AND YEAR(p.purchase_datetime) = YEAR(CURRENT_DATE())
-    $where_clause
-";
-$average_order_value_stmt = $conn->prepare($average_order_value_sql);
-if ($access_level !== 'super_admin') {
-    $average_order_value_stmt->bindParam(':agent_id', $agent_id);
-}
-$average_order_value_stmt->execute();
-$average_order_value = $average_order_value_stmt->fetchColumn();
+    " . ($access_level !== 'super_admin' ? "AND p.agent_id = :agent_id" : "");
+$average_order_value_results = executeQuery($average_order_value_sql, $params, $conn);
+$average_order_value = $average_order_value_results[0]['average_order_value'] ?? 0;
 
 // Fetch customer growth over time (Line Chart: Customer Growth)
 $customer_growth_sql = "
@@ -107,11 +91,22 @@ $customer_growth_sql = "
     GROUP BY DATE(c.created_at)
     ORDER BY DATE(c.created_at) ASC
 ";
-$customer_growth_stmt = $conn->prepare($customer_growth_sql);
-$customer_growth_stmt->execute();
-$customer_growth_results = $customer_growth_stmt->fetchAll(PDO::FETCH_ASSOC);
+$customer_growth_results = executeQuery($customer_growth_sql, [], $conn);
 $customer_growth_labels = json_encode(array_column($customer_growth_results, 'registration_date'));
 $customer_growth_data = json_encode(array_column($customer_growth_results, 'new_customers'));
+
+// Fetch sales by agent (for Super_admin) (Bar Chart: Sales by Agent)
+if ($access_level === 'super_admin') {
+    $sales_by_agent_sql = "
+        SELECT a.agent_name, SUM(p.purchase_amount) as total_sales
+        FROM purchase_entries p
+        JOIN admin_access a ON p.agent_id = a.agent_id
+        GROUP BY a.agent_name
+    ";
+    $sales_by_agent_results = executeQuery($sales_by_agent_sql, [], $conn);
+    $agent_bar_chart_labels = json_encode(array_column($sales_by_agent_results, 'agent_name'));
+    $agent_bar_chart_data = json_encode(array_column($sales_by_agent_results, 'total_sales'));
+}
 
 ?>
 <!DOCTYPE html>
@@ -205,14 +200,15 @@ $customer_growth_data = json_encode(array_column($customer_growth_results, 'new_
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
                                     <h6 class="m-0 font-weight-bold text-primary">Top 5 Customers</h6>
-                                    <div class="card-body">
+                                </div>
+                                <div class="card-body">
                                     <canvas id="salesBarChart"></canvas>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Bottom Row: Sales by Category and Customer Growth -->
+                    <!-- Bottom Row: Sales Breakdown by Category and Customer Growth -->
                     <div class="row">
                         <div class="col-lg-6">
                             <!-- Pie Chart for Sales Breakdown by Category -->
@@ -375,18 +371,9 @@ $customer_growth_data = json_encode(array_column($customer_growth_results, 'new_
                     borderColor: 'rgba(255, 159, 64, 1)',
                     borderWidth: 1
                 }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
+            });
         <?php endif; ?>
     </script>
 </body>
 
 </html>
-
