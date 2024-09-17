@@ -228,7 +228,7 @@ try {
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                                 Sales for <?php echo date('F Y'); ?> <!-- Dynamically display the current month and year -->
                                             </div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo format_number_short($sales_data['sales_this_month'];) ?></div> <!-- Monthly sales data -->
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo format_number_short($sales_data['sales_this_month']); ?></div> <!-- Monthly sales data -->
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-calendar-alt fa-2x text-gray-300"></i> <!-- Icon representing the calendar/month -->
@@ -246,7 +246,7 @@ try {
                                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                                 Sales for <?php echo date('Y'); ?> <!-- Dynamically display the current year -->
                                             </div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo format_number_short($sales_data['sales_this_year'];) ?></div> <!-- Yearly sales data -->
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo format_number_short($sales_data['sales_this_year']); ?></div> <!-- Yearly sales data -->
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-chart-bar fa-2x text-gray-300"></i> <!-- Icon representing a bar chart for yearly sales -->
@@ -280,7 +280,7 @@ try {
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                                 Sales Today (<?php echo date('F j, Y'); ?>) <!-- Display today's date -->
                                             </div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php format_number_short(echo $sales_data['sales_today'];) ?></div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php format_number_short(echo $sales_data['sales_today']); ?></div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-chart-line fa-2x text-gray-300"></i>
