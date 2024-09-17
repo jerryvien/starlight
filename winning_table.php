@@ -214,10 +214,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['modify_winning'])) {
         <!-- End of Content Wrapper -->
     </div>
     <!-- End of Page Wrapper -->
-
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-    <script src="js/sb-admin-2.min.js"></script>
 </body>
 </html>
