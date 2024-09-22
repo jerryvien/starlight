@@ -153,13 +153,13 @@ $bar_chart_data = json_encode(array_values($sales_by_customer));
     <!-- Page Wrapper -->
     <div id="wrapper">
         <!-- Sidebar -->
-        <?php include('sidebar.php'); ?>
+        <?php include('config/sidebar.php'); ?>
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
             <!-- Main Content -->
             <div id="content">
                 <!-- Topbar -->
-                <?php include('topbar.php'); ?>
+                <?php include('config/topbar.php'); ?>
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                     <h1 class="h3 mb-4 text-gray-800">Purchase Listing</h1>
@@ -264,7 +264,7 @@ $bar_chart_data = json_encode(array_values($sales_by_customer));
             <!-- End of Main Content -->
 
             <!-- Footer -->
-            <?php include('footer.php'); ?>
+            <?php include('config/footer.php'); ?>
             <!-- End of Footer -->
 
         </div>

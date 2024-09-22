@@ -138,13 +138,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     <!-- Page Wrapper -->
     <div id="wrapper">
         <!-- Sidebar -->
-        <?php include('sidebar.php'); ?> <!-- Reuse your standard sidebar -->
+        <?php include('config/sidebar.php'); ?> <!-- Reuse your standard sidebar -->
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
             <div id="content">
                 <!-- Topbar -->
-                <?php include('topbar.php'); ?> <!-- Reuse your standard topbar -->
+                <?php include('config/topbar.php'); ?> <!-- Reuse your standard topbar -->
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
@@ -172,7 +172,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             <!-- End of Main Content -->
 
             <!-- Footer -->
-            <?php include('footer.php'); ?> <!-- Reuse your standard footer -->
+            <?php include('config/footer.php'); ?> <!-- Reuse your standard footer -->
         </div>
         <!-- End of Content Wrapper -->
     </div>
