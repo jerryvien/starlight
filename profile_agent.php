@@ -162,13 +162,13 @@ $leader = $leader_query->fetch(PDO::FETCH_ASSOC);
 
                     <hr>
 
-                    <!-- Org Chart (Agent Leader) -->
+                    <!-- Org Chart (Agent Leader) 
                     <h3>Your Leader</h3>
                     <div class="card">
                         <div class="card-body">
                             <p><strong>Leader: </strong><?php echo $leader['agent_name']; ?></p>
                         </div>
-                    </div>
+                    </div>-->
                 </div>
                 <!-- /.container-fluid -->
             </div>
