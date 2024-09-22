@@ -149,10 +149,10 @@ function calculatePermutationFactor($purchase_no) {
 
 <body id="page-top">
     <div id="wrapper">
-        <?php include('sidebar.php'); ?>
+        <?php include('config/sidebar.php'); ?>
         <div id="content-wrapper" class="d-flex flex-column">
             <div id="content">
-                <?php include('topbar.php'); ?>
+                <?php include('config/topbar.php'); ?>
 
                 <div class="container-fluid">
                     <h1 class="h3 mb-4 text-gray-800">Purchase Record Entry</h1>
@@ -245,7 +245,7 @@ function calculatePermutationFactor($purchase_no) {
                 </div>
             </div>
 
-            <?php include('footer.php'); ?>
+            <?php include('config/footer.php'); ?>
         </div>
     </div>
 
