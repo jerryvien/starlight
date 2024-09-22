@@ -798,15 +798,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       </div>
     </div>
 
-    <!-- Login Modal -->
+   
+      <!-- Login Modal -->
       <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered"> <!-- Centered modal window -->
+          <div class="modal-dialog modal-dialog-centered">
               <div class="modal-content">
                   <div class="modal-header">
                       <h5 class="modal-title" id="loginModalLabel">Login</h5>
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-body">
+                      <!-- Custom Welcome Header -->
+                      <h4 class="text-center mb-4">Welcome Back, Agent !!</h4>
+
                       <form method="POST" action="index.php">
                           <div class="mb-3">
                               <label for="login_id" class="form-label">Login ID</label>
@@ -816,15 +820,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                               <label for="password" class="form-label">Password</label>
                               <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
                           </div>
-                          <button type="submit" class="btn btn-primary btn-custom">Login</button> <!-- Applied custom button class -->
+                          <button type="submit" class="btn btn-custom" style="background-color: red; color: white;">Login</button>
                       </form>
                       <?php if (isset($error)) { echo "<p class='text-danger mt-3'>$error</p>"; } ?>
                   </div>
               </div>
           </div>
       </div>
-
-
 
     <div class="container copyright text-center mt-4">
       <p>© <span>Copyright</span> <strong class="px-1 sitename">Day</strong> <span>All Rights Reserved</span></p>
