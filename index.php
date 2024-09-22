@@ -808,9 +808,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-body">
-                      <!-- Custom Welcome Header -->
-                      <h4 class="text-center mb-4" style="color: black";>Welcome Back, Agent !!</h4>
-
                       <form method="POST" action="index.php">
                           <div class="mb-3">
                               <label for="login_id" class="form-label">Login ID</label>
