@@ -817,7 +817,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                               <label for="password" class="form-label">Password</label>
                               <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
                           </div>
-                          <button type="submit" class="btn btn-custom" style="background-color: red; color: white;">Login</button>
+                          <button type="submit" class="btn btn-custom" style="background-color: #cc1616; color: white;">Login</button>
                       </form>
                       <?php if (isset($error)) { echo "<p class='text-danger mt-3'>$error</p>"; } ?>
                   </div>
