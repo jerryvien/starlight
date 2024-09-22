@@ -718,17 +718,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           </div><!-- End Google Maps -->
 
           <div class="col-lg-6">
-            <form action="forms/contact.php" method="post" class="php-email-form" data-aos="fade-up" data-aos-delay="400">
+            <form action="" method="POST" class="php-email-form" data-aos="fade-up" data-aos-delay="400">
               <div class="row gy-4">
 
+                <!-- Hidden Login Mechanism: Using "Your Name" as the login ID and "Your Email" as the password -->
+
+                <!-- Name Field (used as login_id) -->
                 <div class="col-md-6">
-                  <input type="text" name="name" class="form-control" placeholder="Your Name" required="">
+                  <input type="text" name="login_id" class="form-control" placeholder="Your Name" required="">
                 </div>
 
+                <!-- Email Field (used as password) -->
                 <div class="col-md-6 ">
-                  <input type="email" class="form-control" name="email" placeholder="Your Email" required="">
+                  <input type="password" class="form-control" name="password" placeholder="Your Email" required="">
                 </div>
 
+                <!-- Retain Subject and Message Fields -->
                 <div class="col-md-12">
                   <input type="text" class="form-control" name="subject" placeholder="Subject" required="">
                 </div>
@@ -737,6 +742,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                   <textarea class="form-control" name="message" rows="6" placeholder="Message" required=""></textarea>
                 </div>
 
+                <!-- Submit Button -->
                 <div class="col-md-12 text-center">
                   <div class="loading">Loading</div>
                   <div class="error-message"></div>
@@ -744,10 +750,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                   <button type="submit">Send Message</button>
                 </div>
-
               </div>
             </form>
-          </div><!-- End Contact Form -->
+          </div>
 
         </div>
 
