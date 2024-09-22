@@ -1,7 +1,7 @@
 <?php
 session_start();
 include('config/database.php'); // Include your database connection
-
+include('config/sidebar.php'); // Include your database connection
 
 // Enable error reporting for debugging
 ini_set('display_errors', 1);
