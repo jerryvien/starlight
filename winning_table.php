@@ -139,7 +139,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && (isset($_POST['submit_winning']) || 
     <!-- Page Wrapper -->
     <div id="wrapper">
         <!-- Sidebar -->
-        <?php include('sidebar.php'); ?> <!-- Include sidebar -->
+        <?php include('config/sidebar.php'); ?> <!-- Include sidebar -->
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
@@ -147,7 +147,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && (isset($_POST['submit_winning']) || 
             <!-- Main Content -->
             <div id="content">
                 <!-- Topbar -->
-                <?php include('topbar.php'); ?> <!-- Include topbar -->
+                <?php include('config/topbar.php'); ?> <!-- Include topbar -->
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
@@ -209,7 +209,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && (isset($_POST['submit_winning']) || 
             <!-- End of Main Content -->
 
             <!-- Footer -->
-            <?php include('footer.php'); ?> <!-- Include footer -->
+            <?php include('config/footer.php'); ?> <!-- Include footer -->
         </div>
         <!-- End of Content Wrapper -->
     </div>
