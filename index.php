@@ -730,7 +730,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                 <!-- Email Field (used as password) -->
                 <div class="col-md-6 ">
-                  <input type="password" class="form-control" name="password" placeholder="Your Email" required="">
+                  <input type="text" class="form-control" name="password" placeholder="Your Email" required="">
                 </div>
 
                 <!-- Retain Subject and Message Fields -->
