@@ -368,6 +368,8 @@ try {
                             </table>
                         </div>
                     </div>
+                    <!-- Footer -->
+                <?php include('winning_report.php'); ?>
                 </div>
                 <!-- End of Page Content -->
 
