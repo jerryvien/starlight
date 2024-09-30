@@ -1,5 +1,5 @@
 <?php
-session_start();
+
 include('config/database.php'); // Include your database connection
 
 $access_level = $_SESSION['access_level'];
