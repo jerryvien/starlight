@@ -150,7 +150,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['upload_picture'])) {
                     <div class="row">
                         <!-- Profile Overview -->
                         <div class="col-lg-4">
-                            <div class="card mb-4">
+                            <div class="card mb-2">
                                 <div class="card-body text-center">
                                     <?php 
                                     $profile_picture = (!empty($agent_data['profile_picture'])) ? 'uploads/' . $agent_data['profile_picture'] : 'img/team/team-1.jpg'; 
