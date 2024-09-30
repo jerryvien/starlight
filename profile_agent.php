@@ -66,6 +66,39 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['agent_name'])) {
     $agent_query->execute();
     $agent_data = $agent_query->fetch(PDO::FETCH_ASSOC);
 }
+
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['upload_picture'])) {
+    if (isset($_FILES['profile_picture']) && $_FILES['profile_picture']['error'] == 0) {
+        // Allowed file types (jpeg, png)
+        $allowed = ['jpg', 'jpeg', 'png'];
+        $file_name = $_FILES['profile_picture']['name'];
+        $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+
+        if (in_array($file_ext, $allowed)) {
+            $new_file_name = 'agent_' . $agent_data['agent_id'] . '.' . $file_ext;
+            $upload_dir = 'uploads/';
+            $upload_file = $upload_dir . $new_file_name;
+
+            // Move the file to the uploads directory
+            if (move_uploaded_file($_FILES['profile_picture']['tmp_name'], $upload_file)) {
+                // Update the database with the new profile picture
+                $stmt = $conn->prepare("UPDATE admin_access SET profile_picture = :profile_picture WHERE agent_id = :agent_id");
+                $stmt->bindParam(':profile_picture', $new_file_name);
+                $stmt->bindParam(':agent_id', $agent_data['agent_id']);
+                $stmt->execute();
+
+                echo "<div class='alert alert-success'>Profile picture updated successfully!</div>";
+            } else {
+                echo "<div class='alert alert-danger'>Failed to upload profile picture. Please try again.</div>";
+            }
+        } else {
+            echo "<div class='alert alert-danger'>Invalid file type. Only JPG, JPEG, and PNG files are allowed.</div>";
+        }
+    } else {
+        echo "<div class='alert alert-danger'>Please select a valid profile picture to upload.</div>";
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -115,20 +148,48 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['agent_name'])) {
 
                     <!-- Profile Overview -->
                     <div class="row">
-                        <div class="col-lg-6">
-                            <div class="card mb-4">
-                                <div class="card-header">
-                                    Overview
-                                </div>
-                                <div class="card-body">
-                                    <p><strong>Agent Name:</strong> <?php echo $agent_data['agent_name']; ?></p>
-                                    <p><strong>Market:</strong> <?php echo $agent_data['agent_market']; ?></p>
-                                    <p><strong>Credit Limit:</strong> RM <?php echo number_format($agent_data['agent_credit_limit'], 2); ?></p>
-                                    <p><strong>Profile Picture:</strong></p>
-                                    <img src="img/team/team-1.jpg" alt="Profile Picture" class="img-fluid rounded-circle">
+                       <!-- Profile Overview -->
+                        
+                            <div class="col-lg-6">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        Overview
+                                    </div>
+                                    <div class="card-body text-center"> <!-- Center align the content -->
+                                        <p><strong>Agent Name:</strong> <?php echo $agent_data['agent_name']; ?></p>
+                                        <p><strong>Market:</strong> <?php echo $agent_data['agent_market']; ?></p>
+                                        <p><strong>Credit Limit:</strong> RM <?php echo number_format($agent_data['agent_credit_limit'], 2); ?></p>
+                                        <p><strong>Profile Picture:</strong></p>
+                                        
+                                        <?php 
+                                        // Display profile picture if uploaded, otherwise show a default image
+                                        $profile_picture = (!empty($agent_data['profile_picture'])) ? 'uploads/' . $agent_data['profile_picture'] : 'img/team/team-1.jpg'; 
+                                        ?>
+                                        
+                                        <img src="<?php echo $profile_picture; ?>" alt="Profile Picture" class="profile-picture img-fluid rounded-circle">
+                                        
+                                        <!-- Profile Picture Upload Form -->
+                                        <form method="POST" enctype="multipart/form-data">
+                                            <div class="form-group mt-3">
+                                                <label for="profile_picture">Change Profile Picture</label>
+                                                <input type="file" name="profile_picture" class="form-control-file">
+                                            </div>
+                                            <button type="submit" name="upload_picture" class="btn btn-primary">Upload Picture</button>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                    
+                            <!-- Internal CSS for Profile Picture -->
+                            <style>
+                                .profile-picture {
+                                    width: 150px; /* Fixed width */
+                                    height: 150px; /* Fixed height */
+                                    object-fit: cover; /* Ensure image fits within the container while maintaining aspect ratio */
+                                    margin: 0 auto; /* Center the image horizontally */
+                                    display: block; /* Ensure the image takes up its own block */
+                                }
+                            </style>
 
                         <!-- Edit Profile -->
                         <div class="col-lg-6">
