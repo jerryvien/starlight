@@ -118,6 +118,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['upload_picture'])) {
     <script src="vendor/chart.js/Chart.min.js"></script>
     <script src="vendor/datatables/jquery.dataTables.min.js"></script>
     <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <style>
+        /* Ensure the top bar has the highest z-index */
+        #topbar {
+            z-index: 1050; /* Should be higher than other elements */
+        }
+
+        /* Fixed profile picture styling */
+        .profile-picture {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            margin: 0 auto;
+            display: block;
+        }
+    </style>
 </head>
 
 <body id="page-top">
@@ -135,7 +151,40 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['upload_picture'])) {
             <div id="content">
 
                 <!-- Topbar -->
-                <?php include('config/topbar.php'); ?>
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow" id="topbar">
+                    <!-- Sidebar Toggle (Topbar) -->
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
+
+                    <!-- Topbar Navbar -->
+                    <ul class="navbar-nav ml-auto">
+                        <!-- User Information -->
+                        <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Agent Name</span>
+                                <img class="img-profile rounded-circle" src="img/team/team-1.jpg">
+                            </a>
+                            <!-- Dropdown - User Information -->
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                                <a class="dropdown-item" href="profile_agent.php">
+                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Profile
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Settings
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="logout.php">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Logout
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </nav>
+                <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
@@ -150,7 +199,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['upload_picture'])) {
                     <div class="row">
                         <!-- Profile Overview -->
                         <div class="col-lg-4">
-                            <div class="card mb-2">
+                            <div class="card mb-4">
                                 <div class="card-body text-center">
                                     <?php 
                                     $profile_picture = (!empty($agent_data['profile_picture'])) ? 'uploads/' . $agent_data['profile_picture'] : 'img/team/team-1.jpg'; 
