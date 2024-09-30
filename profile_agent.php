@@ -1,215 +1,252 @@
 <?php
 session_start();
-include('config/database.php');
+include('config/database.php'); // Include your database connection
 
-// Ensure the user is logged in
+// Redirect to login page if the user is not logged in
 if (!isset($_SESSION['admin'])) {
     header("Location: index.php");
     exit;
 }
 
-// Fetch agent data
 $agent_id = $_SESSION['agent_id'];
+
+// Fetch agent data
 $agent_query = $conn->prepare("SELECT * FROM admin_access WHERE agent_id = :agent_id");
 $agent_query->bindParam(':agent_id', $agent_id);
 $agent_query->execute();
 $agent_data = $agent_query->fetch(PDO::FETCH_ASSOC);
 
-// Fetch recent purchase activity (last 7 days)
-$recent_purchase_query = $conn->prepare("SELECT * FROM purchase_entries WHERE agent_id = :agent_id AND purchase_datetime >= NOW() - INTERVAL 7 DAY ORDER BY purchase_datetime DESC");
-$recent_purchase_query->bindParam(':agent_id', $agent_id);
-$recent_purchase_query->execute();
-$recent_purchases = $recent_purchase_query->fetchAll(PDO::FETCH_ASSOC);
+// Fetch recent purchases (last 7 days with customer name)
+$recent_purchases_query = $conn->prepare("
+    SELECT p.purchase_no, p.purchase_category, p.purchase_amount, p.purchase_datetime, c.customer_name 
+    FROM purchase_entries p 
+    JOIN customer_details c ON p.customer_id = c.customer_id 
+    WHERE p.agent_id = :agent_id AND p.purchase_datetime >= DATE_SUB(NOW(), INTERVAL 7 DAY) 
+    ORDER BY p.purchase_datetime DESC
+");
+$recent_purchases_query->bindParam(':agent_id', $agent_id);
+$recent_purchases_query->execute();
+$recent_purchases = $recent_purchases_query->fetchAll(PDO::FETCH_ASSOC);
 
-// Fetch customers linked to the agent
-$customer_query = $conn->prepare("SELECT * FROM customer_details WHERE agent_id = :agent_id");
-$customer_query->bindParam(':agent_id', $agent_id);
-$customer_query->execute();
-$customers = $customer_query->fetchAll(PDO::FETCH_ASSOC);
+// Fetch customers updated in the last 3 months linked with the agent
+$customers_query = $conn->prepare("
+    SELECT * FROM customer_details 
+    WHERE agent_id = :agent_id AND updated_at >= DATE_SUB(NOW(), INTERVAL 3 MONTH)
+");
+$customers_query->bindParam(':agent_id', $agent_id);
+$customers_query->execute();
+$customers = $customers_query->fetchAll(PDO::FETCH_ASSOC);
 
-// Fetch the agent's leader
-$leader_query = $conn->prepare("SELECT agent_name FROM admin_access WHERE agent_id = :agent_leader");
-$leader_query->bindParam(':agent_leader', $agent_data['agent_leader']);
+// Fetch agent leader for the org chart
+$leader_query = $conn->prepare("SELECT agent_name FROM admin_access WHERE agent_id = :leader_id");
+$leader_query->bindParam(':leader_id', $agent_data['agent_leader']);
 $leader_query->execute();
-$leader_name = $leader_query->fetchColumn();
+$agent_leader = $leader_query->fetchColumn();
 
+// Handle profile update form submission
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['agent_name'])) {
+    $updated_name = $_POST['agent_name'];
+    $updated_market = $_POST['agent_market'];
+    $updated_credit_limit = $_POST['agent_credit_limit'];
+
+    // Update the agent's details in the database
+    $update_stmt = $conn->prepare("UPDATE admin_access SET agent_name = :agent_name, agent_market = :agent_market, agent_credit_limit = :agent_credit_limit WHERE agent_id = :agent_id");
+    $update_stmt->bindParam(':agent_name', $updated_name);
+    $update_stmt->bindParam(':agent_market', $updated_market);
+    $update_stmt->bindParam(':agent_credit_limit', $updated_credit_limit);
+    $update_stmt->bindParam(':agent_id', $agent_id);
+
+    if ($update_stmt->execute()) {
+        echo "<div class='alert alert-success'>Profile updated successfully!</div>";
+    } else {
+        echo "<div class='alert alert-danger'>Failed to update profile. Please try again.</div>";
+    }
+
+    // Refresh the agent data
+    $agent_query->execute();
+    $agent_data = $agent_query->fetch(PDO::FETCH_ASSOC);
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Agent Profile</title>
-  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href="assets/css/style.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Profile</title>
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="js/sb-admin-2.min.js"></script>
+    <script src="vendor/chart.js/Chart.min.js"></script>
+    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
 </head>
 
-<body>
+<body id="page-top">
 
-  <main id="main" class="main">
+    <!-- Page Wrapper -->
+    <div id="wrapper">
 
-    <div class="pagetitle">
-      <h1>Profile</h1>
-      <nav>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-          <li class="breadcrumb-item">Profile</li>
-        </ol>
-      </nav>
-    </div><!-- End Page Title -->
+        <!-- Sidebar -->
+        <?php include('sidebar.php'); ?>
 
-    <section class="section profile">
-      <div class="row">
-        <!-- Agent Information -->
-        <div class="col-xl-4">
-          <div class="card">
-            <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
-              <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
-              <h2><?php echo $agent_data['agent_name']; ?></h2>
-              <h3>Agent</h3>
-              <div class="social-links mt-2">
-                <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
-                <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
-                <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
-                <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
-              </div>
-            </div>
-          </div>
-        </div>
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
 
-        <!-- Profile Edit Form -->
-        <div class="col-xl-8">
-          <div class="card">
-            <div class="card-body pt-3">
-              <ul class="nav nav-tabs nav-tabs-bordered">
-                <li class="nav-item">
-                  <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Overview</button>
-                </li>
-                <li class="nav-item">
-                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit Profile</button>
-                </li>
-              </ul>
-              <div class="tab-content pt-2">
-                <!-- Overview Tab -->
-                <div class="tab-pane fade show active profile-overview" id="profile-overview">
-                  <h5 class="card-title">Profile Details</h5>
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label">Full Name</div>
-                    <div class="col-lg-9 col-md-8"><?php echo $agent_data['agent_name']; ?></div>
-                  </div>
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label">Market</div>
-                    <div class="col-lg-9 col-md-8"><?php echo $agent_data['agent_market']; ?></div>
-                  </div>
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label">Credit Limit</div>
-                    <div class="col-lg-9 col-md-8"><?php echo $agent_data['agent_credit_limit']; ?></div>
-                  </div>
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label">Leader</div>
-                    <div class="col-lg-9 col-md-8"><?php echo $leader_name; ?></div>
-                  </div>
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <?php include('topbar.php'); ?>
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <h1 class="h3 mb-4 text-gray-800">Agent Profile</h1>
+
+                    <!-- Profile Overview -->
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    Overview
+                                </div>
+                                <div class="card-body">
+                                    <p><strong>Agent Name:</strong> <?php echo $agent_data['agent_name']; ?></p>
+                                    <p><strong>Market:</strong> <?php echo $agent_data['agent_market']; ?></p>
+                                    <p><strong>Credit Limit:</strong> RM <?php echo number_format($agent_data['agent_credit_limit'], 2); ?></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Edit Profile -->
+                        <div class="col-lg-6">
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    Edit Profile
+                                </div>
+                                <div class="card-body">
+                                    <form method="POST" action="profile_agent.php">
+                                        <div class="form-group">
+                                            <label for="agent_name">Agent Name</label>
+                                            <input type="text" class="form-control" id="agent_name" name="agent_name" value="<?php echo $agent_data['agent_name']; ?>" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="agent_market">Market</label>
+                                            <input type="text" class="form-control" id="agent_market" name="agent_market" value="<?php echo $agent_data['agent_market']; ?>" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="agent_credit_limit">Credit Limit (RM)</label>
+                                            <input type="number" class="form-control" id="agent_credit_limit" name="agent_credit_limit" value="<?php echo $agent_data['agent_credit_limit']; ?>" required>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Update Profile</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Purchases -->
+                    <h2 class="h4 mb-4 text-gray-800">Recent Purchases (Last 7 Days)</h2>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Customer Name</th>
+                                    <th>Purchase Number</th>
+                                    <th>Category</th>
+                                    <th>Amount (RM)</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($recent_purchases as $purchase): ?>
+                                    <tr>
+                                        <td><?php echo $purchase['customer_name']; ?></td>
+                                        <td><?php echo $purchase['purchase_no']; ?></td>
+                                        <td><?php echo $purchase['purchase_category']; ?></td>
+                                        <td><?php echo number_format($purchase['purchase_amount'], 2); ?></td>
+                                        <td><?php echo $purchase['purchase_datetime']; ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Recent Purchases Chart -->
+                    <h2 class="h4 mb-4 text-gray-800">Purchase Chart (Last 7 Days)</h2>
+                    <canvas id="purchaseChart"></canvas>
+
+                    <!-- Linked Customers -->
+                    <h2 class="h4 mb-4 text-gray-800">Linked Customers (Updated Last 3 Months)</h2>
+                    <div class="table-responsive">
+                        <table id="customerTable" class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Customer ID</th>
+                                    <th>Customer Name</th>
+                                    <th>Credit Limit (RM)</th>
+                                    <th>Total Sales (RM)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($customers as $customer): ?>
+                                    <tr>
+                                        <td><?php echo $customer['customer_id']; ?></td>
+                                        <td><?php echo $customer['customer_name']; ?></td>
+                                        <td><?php echo number_format($customer['credit_limit'], 2); ?></td>
+                                        <td><?php echo number_format($customer['total_sales'], 2); ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Agent Leader Org Chart -->
+                    <h2 class="h4 mb-4 text-gray-800">Agent Leader</h2>
+                    <div class="card">
+                        <div class="card-body">
+                            <p><strong>Agent Leader:</strong> <?php echo $agent_leader ? $agent_leader : 'No leader assigned'; ?></p>
+                        </div>
+                    </div>
+
                 </div>
-
-                <!-- Edit Profile Tab -->
-                <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
-                  <form method="POST" action="update_agent_profile.php">
-                    <div class="row mb-3">
-                      <label for="agent_name" class="col-md-4 col-lg-3 col-form-label">Full Name</label>
-                      <div class="col-md-8 col-lg-9">
-                        <input name="agent_name" type="text" class="form-control" value="<?php echo $agent_data['agent_name']; ?>">
-                      </div>
-                    </div>
-                    <div class="row mb-3">
-                      <label for="agent_market" class="col-md-4 col-lg-3 col-form-label">Market</label>
-                      <div class="col-md-8 col-lg-9">
-                        <input name="agent_market" type="text" class="form-control" value="<?php echo $agent_data['agent_market']; ?>">
-                      </div>
-                    </div>
-                    <div class="row mb-3">
-                      <label for="agent_credit_limit" class="col-md-4 col-lg-3 col-form-label">Credit Limit</label>
-                      <div class="col-md-8 col-lg-9">
-                        <input name="agent_credit_limit" type="text" class="form-control" value="<?php echo $agent_data['agent_credit_limit']; ?>">
-                      </div>
-                    </div>
-                    <div class="text-center">
-                      <button type="submit" class="btn btn-primary">Save Changes</button>
-                    </div>
-                  </form>
-                </div>
-              </div><!-- End Bordered Tabs -->
+                <!-- /.container-fluid -->
             </div>
-          </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <?php include('footer.php'); ?>
         </div>
+        <!-- End of Content Wrapper -->
+    </div>
+    <!-- End of Page Wrapper -->
 
-        <!-- Recent Purchases Section -->
-        <div class="col-xl-12 mt-4">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Recent Purchase Activity (Last 7 Days)</h5>
-              <table class="table table-bordered">
-                <thead>
-                  <tr>
-                    <th>Purchase Number</th>
-                    <th>Amount</th>
-                    <th>Category</th>
-                    <th>Date</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <?php foreach ($recent_purchases as $purchase): ?>
-                  <tr>
-                    <td><?php echo $purchase['purchase_no']; ?></td>
-                    <td><?php echo $purchase['purchase_amount']; ?></td>
-                    <td><?php echo $purchase['purchase_category']; ?></td>
-                    <td><?php echo $purchase['purchase_datetime']; ?></td>
-                  </tr>
-                  <?php endforeach; ?>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
+    <script>
+        // Initialize DataTable for customers
+        $(document).ready(function() {
+            $('#customerTable').DataTable();
+        });
 
-        <!-- Linked Customers Section -->
-        <div class="col-xl-12 mt-4">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Linked Customers</h5>
-              <table class="table table-bordered">
-                <thead>
-                  <tr>
-                    <th>Customer Name</th>
-                    <th>Credit Limit</th>
-                    <th>Total Sales</th>
-                    <th>VIP Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <?php foreach ($customers as $customer): ?>
-                  <tr>
-                    <td><?php echo $customer['customer_name']; ?></td>
-                    <td><?php echo $customer['credit_limit']; ?></td>
-                    <td><?php echo $customer['total_sales']; ?></td>
-                    <td><?php echo $customer['vip_status']; ?></td>
-                  </tr>
-                  <?php endforeach; ?>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-  </main><!-- End #main -->
-
-  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/js/main.js"></script>
-
+        // Recent Purchases Chart
+        var ctx = document.getElementById('purchaseChart').getContext('2d');
+        var purchaseChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: <?php echo json_encode(array_column($recent_purchases, 'customer_name')); ?>,
+                datasets: [{
+                    label: 'Total Purchase (RM)',
+                    data: <?php echo json_encode(array_column($recent_purchases, 'purchase_amount')); ?>,
+                    backgroundColor: '#007bff'
+                }]
+            }
+        });
+    </script>
 </body>
 </html>
