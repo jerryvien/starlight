@@ -186,7 +186,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['agent_name'])) {
                         </table>
                     </div>
 
-                    
+                    <script>
+                        $(document).ready(function() {
+                            $('#customerTable').DataTable({
+                                "paging": true,        // Enable pagination
+                                "searching": true,     // Enable search functionality
+                                "ordering": true,      // Enable sorting
+                                "info": true,          // Show table information (e.g., showing entries)
+                                "lengthChange": true   // Allow the user to change the number of rows shown
+                            });
+                        });
+                    </script>
+
+                    <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+                    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+                    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
 
                 </div>
                 <!-- /.container-fluid -->
@@ -220,5 +234,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['agent_name'])) {
             }
         });
     </script>
+
+
 </body>
 </html>
