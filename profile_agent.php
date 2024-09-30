@@ -157,14 +157,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['upload_picture'])) {
                                     ?>
                                     <img src="<?php echo $profile_picture; ?>" alt="Profile Picture" class="profile-picture img-fluid rounded-circle mb-2">
                                     
-                                    <!-- Profile Picture Upload Form -->
+                                    <!-- Profile Picture Upload Form 
                                     <form method="POST" enctype="multipart/form-data">
                                         <div class="form-group mt-3">
                                             <label for="profile_picture">Change Profile Picture</label>
                                             <input type="file" name="profile_picture" class="form-control-file">
                                             <button type="submit" name="upload_picture" class="btn btn-primary mt-3">Upload Picture</button>
                                         </div>
-                                    </form>
+                                    </form>-->
                                 </div>
                             </div>
                         </div>
