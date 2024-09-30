@@ -394,70 +394,7 @@ try {
                         </div>
                     </div>
 
-                    <div class="container-fluid">
-                            <h2 class="h4 mb-4 text-gray-800">Customer Growth</h2>
-
-                            <!-- Buttons to Toggle Between Monthly and Yearly Data -->
-                            <div class="form-group">
-                                <button id="monthlyBtn" class="btn btn-primary">Monthly</button>
-                                <button id="yearlyBtn" class="btn btn-secondary">Yearly</button>
-                            </div>
-
-                            <canvas id="customerGrowthChart"></canvas>
-                        </div>
-
-                        <script>
-                        // Parse PHP arrays to JavaScript
-                        var customerGrowthMonthly = <?php echo json_encode($customer_growth_monthly); ?>;
-                        var customerGrowthYearly = <?php echo json_encode($customer_growth_yearly); ?>;
-
-                        // Function to extract labels and data
-                        function extractChartData(data) {
-                            return {
-                                labels: data.map(item => item.period),
-                                values: data.map(item => item.new_customers)
-                            };
-                        }
-
-                        // Monthly Data
-                        var monthlyData = extractChartData(customerGrowthMonthly);
-                        // Yearly Data
-                        var yearlyData = extractChartData(customerGrowthYearly);
-
-                        // Function to Update Chart
-                        function updateChart(chart, labels, data) {
-                            chart.data.labels = labels;
-                            chart.data.datasets[0].data = data;
-                            chart.update();
-                        }
-
-                        // Initialize Chart.js Line Chart
-                        var ctx = document.getElementById('customerGrowthChart').getContext('2d');
-                        var customerGrowthChart = new Chart(ctx, {
-                            type: 'line',
-                            data: {
-                                labels: monthlyData.labels,
-                                datasets: [{
-                                    label: 'New Customers',
-                                    data: monthlyData.values,
-                                    backgroundColor: '#28a745',
-                                    borderColor: '#28a745',
-                                    fill: false
-                                }]
-                            }
-                        });
-
-                        // Event Listeners for Buttons
-                        document.getElementById('monthlyBtn').addEventListener('click', function() {
-                            updateChart(customerGrowthChart, monthlyData.labels, monthlyData.values);
-                        });
-
-                        document.getElementById('yearlyBtn').addEventListener('click', function() {
-                            updateChart(customerGrowthChart, yearlyData.labels, yearlyData.values);
-                        });
-                        </script>
-
-
+                    
 
                     <!-- Recent Purchases (Table) -->
                     <div class="row">
