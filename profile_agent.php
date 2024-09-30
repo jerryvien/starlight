@@ -93,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['agent_name'])) {
     <div id="wrapper">
 
         <!-- Sidebar -->
-        <?php include('sidebar.php'); ?>
+        <?php include('config/sidebar.php'); ?>
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
@@ -102,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['agent_name'])) {
             <div id="content">
 
                 <!-- Topbar -->
-                <?php include('topbar.php'); ?>
+                <?php include('config/topbar.php'); ?>
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
@@ -222,7 +222,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['agent_name'])) {
             <!-- End of Main Content -->
 
             <!-- Footer -->
-            <?php include('footer.php'); ?>
+            <?php include('config/footer.php'); ?>
         </div>
         <!-- End of Content Wrapper -->
     </div>
