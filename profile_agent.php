@@ -57,9 +57,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['agent_name'])) {
     $update_stmt->bindParam(':agent_id', $agent_id);
 
     if ($update_stmt->execute()) {
-        echo "<div class='alert alert-success'>Profile updated successfully!</div>";
+        $message = "<div class='alert alert-success'>Profile updated successfully!</div>";
     } else {
-        echo "<div class='alert alert-danger'>Failed to update profile. Please try again.</div>";
+        $message = "<div class='alert alert-danger'>Failed to update profile. Please try again.</div>";
     }
 
     // Refresh the agent data
@@ -110,6 +110,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['agent_name'])) {
                     <!-- Page Heading -->
                     <h1 class="h3 mb-4 text-gray-800">Agent Profile</h1>
 
+                    <!-- Show Message in Content Wrapper -->
+                    <?php if (isset($message)) echo $message; ?>
+
                     <!-- Profile Overview -->
                     <div class="row">
                         <div class="col-lg-6">
@@ -121,6 +124,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['agent_name'])) {
                                     <p><strong>Agent Name:</strong> <?php echo $agent_data['agent_name']; ?></p>
                                     <p><strong>Market:</strong> <?php echo $agent_data['agent_market']; ?></p>
                                     <p><strong>Credit Limit:</strong> RM <?php echo number_format($agent_data['agent_credit_limit'], 2); ?></p>
+                                    <p><strong>Profile Picture:</strong></p>
+                                    <img src="img/agent_profile.png" alt="Profile Picture" class="img-fluid rounded-circle">
                                 </div>
                             </div>
                         </div>
@@ -152,38 +157,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['agent_name'])) {
                         </div>
                     </div>
 
-                    <!-- Recent Purchases -->
-                    <h2 class="h4 mb-4 text-gray-800">Recent Purchases (Last 7 Days)</h2>
-                    <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Customer Name</th>
-                                    <th>Purchase Number</th>
-                                    <th>Category</th>
-                                    <th>Amount (RM)</th>
-                                    <th>Date</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($recent_purchases as $purchase): ?>
-                                    <tr>
-                                        <td><?php echo $purchase['customer_name']; ?></td>
-                                        <td><?php echo $purchase['purchase_no']; ?></td>
-                                        <td><?php echo $purchase['purchase_category']; ?></td>
-                                        <td><?php echo number_format($purchase['purchase_amount'], 2); ?></td>
-                                        <td><?php echo $purchase['purchase_datetime']; ?></td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </div>
-
                     <!-- Recent Purchases Chart -->
                     <h2 class="h4 mb-4 text-gray-800">Purchase Chart (Last 7 Days)</h2>
                     <canvas id="purchaseChart"></canvas>
 
-                    <!-- Linked Customers -->
+                    <!-- Linked Customers (Paginated Table) -->
                     <h2 class="h4 mb-4 text-gray-800">Linked Customers (Updated Last 3 Months)</h2>
                     <div class="table-responsive">
                         <table id="customerTable" class="table table-bordered">
