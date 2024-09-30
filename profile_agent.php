@@ -67,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['agent_name'])) {
     $agent_data = $agent_query->fetch(PDO::FETCH_ASSOC);
 }
 
-
+// Handle profile picture upload
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['upload_picture'])) {
     if (isset($_FILES['profile_picture']) && $_FILES['profile_picture']['error'] == 0) {
         // Allowed file types (jpeg, png)
@@ -88,15 +88,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['upload_picture'])) {
                 $stmt->bindParam(':agent_id', $agent_data['agent_id']);
                 $stmt->execute();
 
-                echo "<div class='alert alert-success'>Profile picture updated successfully!</div>";
+                $message = "<div class='alert alert-success'>Profile picture updated successfully!</div>";
             } else {
-                echo "<div class='alert alert-danger'>Failed to upload profile picture. Please try again.</div>";
+                $message = "<div class='alert alert-danger'>Failed to upload profile picture. Please try again.</div>";
             }
         } else {
-            echo "<div class='alert alert-danger'>Invalid file type. Only JPG, JPEG, and PNG files are allowed.</div>";
+            $message = "<div class='alert alert-danger'>Invalid file type. Only JPG, JPEG, and PNG files are allowed.</div>";
         }
     } else {
-        echo "<div class='alert alert-danger'>Please select a valid profile picture to upload.</div>";
+        $message = "<div class='alert alert-danger'>Please select a valid profile picture to upload.</div>";
     }
 }
 ?>
@@ -148,51 +148,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['upload_picture'])) {
 
                     <!-- Profile Overview -->
                     <div class="row">
-                       <!-- Profile Overview -->
-                        
-                            <div class="col-lg-6">
-                                <div class="card mb-4">
-                                    <div class="card-header">
-                                        Overview
-                                    </div>
-                                    <div class="card-body text-center"> <!-- Center align the content -->
-                                        <p><strong>Agent Name:</strong> <?php echo $agent_data['agent_name']; ?></p>
-                                        <p><strong>Market:</strong> <?php echo $agent_data['agent_market']; ?></p>
-                                        <p><strong>Credit Limit:</strong> RM <?php echo number_format($agent_data['agent_credit_limit'], 2); ?></p>
-                                        <p><strong>Profile Picture:</strong></p>
-                                        
-                                        <?php 
-                                        // Display profile picture if uploaded, otherwise show a default image
-                                        $profile_picture = (!empty($agent_data['profile_picture'])) ? 'uploads/' . $agent_data['profile_picture'] : 'img/team/team-1.jpg'; 
-                                        ?>
-                                        
-                                        <img src="<?php echo $profile_picture; ?>" alt="Profile Picture" class="profile-picture img-fluid rounded-circle">
-                                        
-                                        <!-- Profile Picture Upload Form -->
-                                        <form method="POST" enctype="multipart/form-data">
-                                            <div class="form-group mt-3">
-                                                <label for="profile_picture">Change Profile Picture</label>
-                                                <input type="file" name="profile_picture" class="form-control-file">
-                                            </div>
-                                            <button type="submit" name="upload_picture" class="btn btn-primary">Upload Picture</button>
-                                        </form>
-                                    </div>
+                        <!-- Profile Overview -->
+                        <div class="col-lg-4">
+                            <div class="card mb-4">
+                                <div class="card-body text-center">
+                                    <?php 
+                                    $profile_picture = (!empty($agent_data['profile_picture'])) ? 'uploads/' . $agent_data['profile_picture'] : 'img/team/team-1.jpg'; 
+                                    ?>
+                                    <img src="<?php echo $profile_picture; ?>" alt="Profile Picture" class="profile-picture img-fluid rounded-circle mb-2">
+                                    
+                                    <!-- Profile Picture Upload Form -->
+                                    <form method="POST" enctype="multipart/form-data">
+                                        <div class="form-group mt-3">
+                                            <label for="profile_picture">Change Profile Picture</label>
+                                            <input type="file" name="profile_picture" class="form-control-file">
+                                            <button type="submit" name="upload_picture" class="btn btn-primary mt-3">Upload Picture</button>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
-                    
-                            <!-- Internal CSS for Profile Picture -->
-                            <style>
-                                .profile-picture {
-                                    width: 150px; /* Fixed width */
-                                    height: 150px; /* Fixed height */
-                                    object-fit: cover; /* Ensure image fits within the container while maintaining aspect ratio */
-                                    margin: 0 auto; /* Center the image horizontally */
-                                    display: block; /* Ensure the image takes up its own block */
-                                }
-                            </style>
+                        </div>
 
                         <!-- Edit Profile -->
-                        <div class="col-lg-6">
+                        <div class="col-lg-8">
                             <div class="card mb-4">
                                 <div class="card-header">
                                     Edit Profile
@@ -276,11 +254,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['upload_picture'])) {
     <!-- End of Page Wrapper -->
 
     <script>
-        // Initialize DataTable for customers
-        $(document).ready(function() {
-            $('#customerTable').DataTable();
-        });
-
         // Recent Purchases Chart
         var ctx = document.getElementById('purchaseChart').getContext('2d');
         var purchaseChart = new Chart(ctx, {
@@ -295,7 +268,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['upload_picture'])) {
             }
         });
     </script>
-
 
 </body>
 </html>
