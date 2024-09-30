@@ -186,13 +186,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['agent_name'])) {
                         </table>
                     </div>
 
-                    <!-- Agent Leader Org Chart -->
-                    <h2 class="h4 mb-4 text-gray-800">Agent Leader</h2>
-                    <div class="card">
-                        <div class="card-body">
-                            <p><strong>Agent Leader:</strong> <?php echo $agent_leader ? $agent_leader : 'No leader assigned'; ?></p>
-                        </div>
-                    </div>
+                    
 
                 </div>
                 <!-- /.container-fluid -->
