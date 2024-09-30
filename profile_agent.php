@@ -200,25 +200,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['agent_name'])) {
     </div>
     <!-- End of Page Wrapper -->
 
-    <script>
-        // Initialize DataTable for customers
-        $(document).ready(function() {
-            $('#customerTable').DataTable();
-        });
-
-        // Recent Purchases Chart
-        var ctx = document.getElementById('purchaseChart').getContext('2d');
-        var purchaseChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: <?php echo json_encode(array_column($recent_purchases, 'customer_name')); ?>,
-                datasets: [{
-                    label: 'Total Purchase (RM)',
-                    data: <?php echo json_encode(array_column($recent_purchases, 'purchase_amount')); ?>,
-                    backgroundColor: '#007bff'
-                }]
-            }
-        });
-    </script>
 </body>
 </html>
