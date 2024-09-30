@@ -125,7 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['agent_name'])) {
                                     <p><strong>Market:</strong> <?php echo $agent_data['agent_market']; ?></p>
                                     <p><strong>Credit Limit:</strong> RM <?php echo number_format($agent_data['agent_credit_limit'], 2); ?></p>
                                     <p><strong>Profile Picture:</strong></p>
-                                    <img src="img/agent_profile.png" alt="Profile Picture" class="img-fluid rounded-circle">
+                                    <img src="img/team/team-1.jpg" alt="Profile Picture" class="img-fluid rounded-circle">
                                 </div>
                             </div>
                         </div>
@@ -200,5 +200,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['agent_name'])) {
     </div>
     <!-- End of Page Wrapper -->
 
+    <script>
+        // Initialize DataTable for customers
+        $(document).ready(function() {
+            $('#customerTable').DataTable();
+        });
+
+        // Recent Purchases Chart
+        var ctx = document.getElementById('purchaseChart').getContext('2d');
+        var purchaseChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: <?php echo json_encode(array_column($recent_purchases, 'customer_name')); ?>,
+                datasets: [{
+                    label: 'Total Purchase (RM)',
+                    data: <?php echo json_encode(array_column($recent_purchases, 'purchase_amount')); ?>,
+                    backgroundColor: '#007bff'
+                }]
+            }
+        });
+    </script>
 </body>
 </html>
