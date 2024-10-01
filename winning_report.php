@@ -2,6 +2,7 @@
 session_start();
 include('config/database.php');
 
+
 // Set time zone to Kuala Lumpur (GMT +8)
 date_default_timezone_set('Asia/Kuala_Lumpur');
 
@@ -20,6 +21,7 @@ try {
 
 // Matching function
 $matching_purchases = [];
+$winning_record = null; // Initialize to avoid undefined variable warning
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['select_winning_record'])) {
     $winning_id = $_POST['select_winning_record'];
 
@@ -32,7 +34,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['select_winning_record'
     if ($winning_record) {
         // Generate permutations of winning number
         $winning_number = $winning_record['winning_number'];
-        $winning_combinations = generate_combinations($winning_number);
+        if ($winning_number) {
+            $winning_combinations = generate_combinations($winning_number);
+        } else {
+            $winning_combinations = [];
+        }
 
         // Build SQL query with named placeholders for each combination
         $placeholders = [];
@@ -40,32 +46,42 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['select_winning_record'
             $placeholders[] = ":combination$key";
         }
 
-        // Build query with dynamic IN clause using named parameters
-        $purchase_stmt = $conn->prepare("
-            SELECT p.*, c.customer_name, a.agent_name 
-            FROM purchase_entries p
-            JOIN customer_details c ON p.customer_id = c.customer_id
-            JOIN admin_access a ON p.agent_id = a.agent_id
-            WHERE p.result NOT IN ('Win', 'Loss') 
-              AND DATE(p.purchase_datetime) <= :winning_date
-              AND p.purchase_no IN (" . implode(",", $placeholders) . ")
-        ");
+        if (!empty($placeholders)) {
+            // Build query with dynamic IN clause using named parameters
+            $purchase_stmt = $conn->prepare("
+                SELECT p.*, c.customer_name, a.agent_name 
+                FROM purchase_entries p
+                JOIN customer_details c ON p.customer_id = c.customer_id
+                JOIN admin_access a ON p.agent_id = a.agent_id
+                WHERE p.result NOT IN ('Win', 'Loss') 
+                  AND DATE(p.purchase_datetime) <= :winning_date
+                  AND p.purchase_no IN (" . implode(",", $placeholders) . ")
+            ");
 
-        // Bind the winning date
-        $purchase_stmt->bindValue(':winning_date', $winning_record['winning_date']);
+            // Bind the winning date
+            $purchase_stmt->bindValue(':winning_date', $winning_record['winning_date']);
 
-        // Bind each combination as a named parameter
-        foreach ($winning_combinations as $key => $combination) {
-            $purchase_stmt->bindValue(":combination$key", $combination);
+            // Bind each combination as a named parameter
+            foreach ($winning_combinations as $key => $combination) {
+                $purchase_stmt->bindValue(":combination$key", $combination);
+            }
+
+            $purchase_stmt->execute();
+            $matching_purchases = $purchase_stmt->fetchAll(PDO::FETCH_ASSOC);
+        } else {
+            echo "No winning number combinations found.";
         }
-
-        $purchase_stmt->execute();
-        $matching_purchases = $purchase_stmt->fetchAll(PDO::FETCH_ASSOC);
+    } else {
+        echo "No matching winning record found.";
     }
 }
 
 // Generate number permutations
 function generate_combinations($number) {
+    if (is_null($number)) {
+        return []; // Return an empty array if the number is null
+    }
+
     $permutations = [];
     if (strlen($number) == 3) {
         $permutations = [
@@ -226,6 +242,7 @@ if (isset($_POST['finalize_winning'])) {
                         </form>
                     </div>
                     <?php endif; ?>
+
                 </div>
                 <!-- /.container-fluid -->
 
