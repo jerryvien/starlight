@@ -31,14 +31,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['select_winning_record'
     $stmt->execute();
     $winning_record = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($winning_record) {
+    if ($winning_record && isset($winning_record['winning_number'])) {
         // Generate permutations of winning number
         $winning_number = $winning_record['winning_number'];
-        if ($winning_number) {
-            $winning_combinations = generate_combinations($winning_number);
-        } else {
-            $winning_combinations = [];
-        }
+        $winning_combinations = generate_combinations($winning_number);
 
         // Build SQL query with named placeholders for each combination
         $placeholders = [];
@@ -68,8 +64,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['select_winning_record'
 
             $purchase_stmt->execute();
             $matching_purchases = $purchase_stmt->fetchAll(PDO::FETCH_ASSOC);
-        } else {
-            echo "No winning number combinations found.";
         }
     } else {
         echo "No matching winning record found.";
@@ -112,8 +106,11 @@ if (isset($_POST['finalize_winning'])) {
         $purchase_stmt->execute();
         $purchase = $purchase_stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($purchase) {
+        if ($purchase && isset($winning_record['winning_number'])) {
             $is_winner = in_array($purchase['purchase_no'], generate_combinations($winning_record['winning_number']));
+
+            // Ensure that the winning_game key exists in $winning_record
+            $winning_category = isset($winning_record['winning_game']) ? $winning_record['winning_game'] : '';
 
             // Update the purchase record
             $update_stmt = $conn->prepare("
@@ -127,7 +124,6 @@ if (isset($_POST['finalize_winning'])) {
             ");
             
             $result = $is_winner ? 'Win' : 'Loss';
-            $winning_category = $winning_record['winning_game'];
             $winning_factor = $winning_category === 'Box' ? 1 : 2;
             $winning_amount = $is_winner ? $winning_factor * $purchase['purchase_amount'] : 0;
 
@@ -242,7 +238,6 @@ if (isset($_POST['finalize_winning'])) {
                         </form>
                     </div>
                     <?php endif; ?>
-
                 </div>
                 <!-- /.container-fluid -->
 
