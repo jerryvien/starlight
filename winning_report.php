@@ -18,7 +18,7 @@ try {
     die("Error fetching winning records: " . $e->getMessage());
 }
 
-// Matching function
+// Handle form submission for matching purchases
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['select_winning_record'])) {
     $winning_id = $_POST['select_winning_record'];
 
@@ -59,37 +59,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['select_winning_record'
         $purchase_stmt->execute();
         $matching_purchases = $purchase_stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        // Debugging: Print the content of the fetched purchases to check the fields
-        echo "<pre>";
-        print_r($matching_purchases);
-        echo "</pre>";
+        // Serialize the matching purchases so we can persist them across form submissions
+        $serialized_purchases = base64_encode(serialize($matching_purchases));
     }
 }
 
-// Generate number permutations
-function generate_combinations($number) {
-    $permutations = [];
-    if (strlen($number) == 3) {
-        $permutations = [
-            $number,
-            $number[0] . $number[2] . $number[1],
-            $number[1] . $number[0] . $number[2],
-            $number[1] . $number[2] . $number[0],
-            $number[2] . $number[0] . $number[1],
-            $number[2] . $number[1] . $number[0],
-        ];
-    } elseif (strlen($number) == 2) {
-        $permutations = [
-            $number,
-            $number[1] . $number[0],
-        ];
-    }
-    return $permutations;
-}
-
-// Handle winning result insertion
+// Handle form submission for finalizing the winning results
 if (isset($_POST['finalize_winning'])) {
     $winning_record_id = $_POST['winning_record_id'];
+
+    // Unserialize the matching purchases from the hidden input
+    if (isset($_POST['matching_purchases'])) {
+        $matching_purchases = unserialize(base64_decode($_POST['matching_purchases']));
+    }
 
     // Loop through all matched purchases
     foreach ($matching_purchases as $purchase) {
@@ -123,6 +105,27 @@ if (isset($_POST['finalize_winning'])) {
     }
 
     echo "Winning results have been updated!";
+}
+
+// Generate number permutations
+function generate_combinations($number) {
+    $permutations = [];
+    if (strlen($number) == 3) {
+        $permutations = [
+            $number,
+            $number[0] . $number[2] . $number[1],
+            $number[1] . $number[0] . $number[2],
+            $number[1] . $number[2] . $number[0],
+            $number[2] . $number[0] . $number[1],
+            $number[2] . $number[1] . $number[0],
+        ];
+    } elseif (strlen($number) == 2) {
+        $permutations = [
+            $number,
+            $number[1] . $number[0],
+        ];
+    }
+    return $permutations;
 }
 ?>
 
@@ -186,6 +189,7 @@ include('config/topbar.php');
     <h2>Matched Purchase Entries</h2>
     <form method="POST">
         <input type="hidden" name="winning_record_id" value="<?php echo $winning_id; ?>">
+        <input type="hidden" name="matching_purchases" value="<?php echo $serialized_purchases; ?>">
         <table id="matchedPurchasesTable" class="table table-bordered">
             <thead>
                 <tr>
