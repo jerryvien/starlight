@@ -182,7 +182,7 @@ try {
                 <?php include('config/topbar.php'); ?>
 
                 <!-- Begin Page Content -->
-                <div class="container">
+                <div class="container-fluid">
                     <h1 class="h3 mb-4 text-gray-800">Business Dashboard</h1>
                     <!-- Total Sales, Total Sales Per Day, Average Order Value -->
                     <!-- Top Row: KPIs -->
@@ -296,23 +296,19 @@ try {
 
 
                     <!-- Top 5 Spend and Winner Customers (Bar Charts) -->
-                    <div class="container-fluid"> <!-- Full-width container -->
-                        <!-- Improved Tab Navigation -->
+                    <div class="row">
+                        <!-- Tab Navigation -->
                         <ul class="nav nav-tabs" id="myTab" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link active custom-tab" id="top-spend-tab" data-toggle="tab" href="#top-spend" role="tab" aria-controls="top-spend" aria-selected="true">
-                                    Top Spend
-                                </a>
+                                <a class="nav-link active" id="top-spend-tab" data-toggle="tab" href="#top-spend" role="tab" aria-controls="top-spend" aria-selected="true">Top Spend</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link custom-tab" id="top-winner-tab" data-toggle="tab" href="#top-winner" role="tab" aria-controls="top-winner" aria-selected="false">
-                                    Top Winner
-                                </a>
+                                <a class="nav-link" id="top-winner-tab" data-toggle="tab" href="#top-winner" role="tab" aria-controls="top-winner" aria-selected="false">Top Winner</a>
                             </li>
                         </ul>
 
                         <!-- Tab Panes -->
-                        <div class="tab-content p-4" id="myTabContent"> <!-- Padding around the tab content -->
+                        <div class="tab-content" id="myTabContent">
                             <!-- First Tab: Top Spend Customers -->
                             <div class="tab-pane fade show active" id="top-spend" role="tabpanel" aria-labelledby="top-spend-tab">
                                 <div class="row">
@@ -338,50 +334,6 @@ try {
                             </div>
                         </div>
                     </div>
-
-                    <!-- Custom CSS for Better Tab Design -->
-                    <style>
-                        /* Full width for container and larger font for tabs */
-                        .container-fluid {
-                            width: 100%;
-                            max-width: 100%;
-                            padding-left: 0;
-                            padding-right: 0;
-                        }
-
-                        /* Customizing tab styles */
-                        .nav-tabs .nav-link {
-                            background-color: #f8f9fa;
-                            border: 1px solid #dee2e6;
-                            padding: 12px 20px;
-                            margin-right: 5px;
-                            border-radius: 5px;
-                            transition: background-color 0.3s ease, color 0.3s ease;
-                        }
-
-                        .nav-tabs .nav-link.active {
-                            background-color: #007bff;
-                            color: #fff;
-                            border-color: #007bff;
-                        }
-
-                        .nav-tabs .nav-link:hover {
-                            background-color: #e2e6ea;
-                            color: #007bff;
-                        }
-
-                        /* Customizing the tab pane content */
-                        .tab-content {
-                            border: 1px solid #dee2e6;
-                            border-top: none;
-                            background-color: #fff;
-                            border-radius: 0 0 5px 5px;
-                        }
-
-                        .custom-tab {
-                            font-size: 1.1rem; /* Slightly larger font */
-                        }
-                    </style>
 
                     <!-- Initialize Bootstrap Tabs -->
                     <script>
