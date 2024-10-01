@@ -2,40 +2,27 @@
 
 include('config/database.php'); // Include your database connection
 
-
 // Default grouping by month
 $group_by = 'month';
 
 // Fetch customer count grouped by month
 try {
-    $customer_growth_query_monthly = ($access_level === 'super_admin') ? 
+    $customer_growth_query_monthly = 
         "SELECT DATE_FORMAT(created_at, '%Y-%m') AS period, COUNT(*) AS new_customers 
          FROM customer_details 
-         GROUP BY DATE_FORMAT(created_at, '%Y-%m')" : 
-        "SELECT DATE_FORMAT(created_at, '%Y-%m') AS period, COUNT(*) AS new_customers 
-         FROM customer_details WHERE agent_id = :agent_id 
          GROUP BY DATE_FORMAT(created_at, '%Y-%m')";
-
+         
     $customer_growth_stmt_monthly = $conn->prepare($customer_growth_query_monthly);
-    if ($access_level !== 'super_admin') {
-        $customer_growth_stmt_monthly->bindParam(':agent_id', $agent_id);
-    }
     $customer_growth_stmt_monthly->execute();
     $customer_growth_monthly = $customer_growth_stmt_monthly->fetchAll(PDO::FETCH_ASSOC);
 
     // Fetch customer count grouped by year
-    $customer_growth_query_yearly = ($access_level === 'super_admin') ? 
+    $customer_growth_query_yearly = 
         "SELECT YEAR(created_at) AS period, COUNT(*) AS new_customers 
          FROM customer_details 
-         GROUP BY YEAR(created_at)" : 
-        "SELECT YEAR(created_at) AS period, COUNT(*) AS new_customers 
-         FROM customer_details WHERE agent_id = :agent_id 
          GROUP BY YEAR(created_at)";
 
     $customer_growth_stmt_yearly = $conn->prepare($customer_growth_query_yearly);
-    if ($access_level !== 'super_admin') {
-        $customer_growth_stmt_yearly->bindParam(':agent_id', $agent_id);
-    }
     $customer_growth_stmt_yearly->execute();
     $customer_growth_yearly = $customer_growth_stmt_yearly->fetchAll(PDO::FETCH_ASSOC);
 } catch (Exception $e) {
