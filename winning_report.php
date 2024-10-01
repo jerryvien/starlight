@@ -11,17 +11,21 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+// Debug flag
+$debug = true;
+
 // Fetch winning records
 try {
     $stmt = $conn->query("SELECT * FROM winning_record ORDER BY winning_date DESC");
     $winning_records = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    if ($debug) echo "<p>Winning records fetched successfully</p>";
 } catch (Exception $e) {
     die("Error fetching winning records: " . $e->getMessage());
 }
 
 // Matching function
 $matching_purchases = [];
-$winning_record = null; // Initialize to avoid undefined variable warning
+$winning_record = null;
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['select_winning_record'])) {
     $winning_id = $_POST['select_winning_record'];
 
@@ -35,6 +39,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['select_winning_record'
         // Generate permutations of winning number
         $winning_number = $winning_record['winning_number'];
         $winning_combinations = generate_combinations($winning_number);
+        if ($debug) {
+            echo "<p>Winning combinations: " . implode(', ', $winning_combinations) . "</p>";
+        }
 
         // Build SQL query with named placeholders for each combination
         $placeholders = [];
@@ -64,7 +71,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['select_winning_record'
 
             $purchase_stmt->execute();
             $matching_purchases = $purchase_stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            if ($debug) {
+                echo "<p>Matching purchases found: " . count($matching_purchases) . "</p>";
+            }
         }
+    } else {
+        echo "<p>Error: Winning record not found or winning number missing.</p>";
     }
 }
 
@@ -116,6 +129,10 @@ if (isset($_POST['finalize_winning'])) {
             $winning_factor = $winning_category === 'Box' ? 1 : 2;
             $winning_amount = $is_winner ? $winning_factor * $purchase['purchase_amount'] : 0;
 
+            if ($debug) {
+                echo "<p>Updating purchase ID {$purchase_id}: " . ($is_winner ? 'Win' : 'Loss') . " | Amount: {$winning_amount}</p>";
+            }
+
             // Update the purchase record with the result
             $update_stmt = $conn->prepare("
                 UPDATE purchase_entries
@@ -138,10 +155,16 @@ if (isset($_POST['finalize_winning'])) {
 
             // Execute the update statement
             $update_stmt->execute();
+
+            // Check if rows were updated
+            $affected_rows = $update_stmt->rowCount();
+            if ($debug) {
+                echo "<p>Rows affected for purchase ID {$purchase_id}: {$affected_rows}</p>";
+            }
         }
     }
 
-    echo "Winning results have been updated!";
+    echo "<p>Winning results have been updated!</p>";
 }
 ?>
 
