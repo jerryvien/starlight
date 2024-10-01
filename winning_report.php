@@ -20,6 +20,7 @@ try {
 
 // Handle form submission for matching purchases
 $winning_record = null;
+$matching_purchases = []; // Initialize as an empty array
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['select_winning_record'])) {
     $winning_id = $_POST['select_winning_record'];
 
