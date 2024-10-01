@@ -325,7 +325,7 @@ try {
                             <div class="tab-pane fade" id="top-winner" role="tabpanel" aria-labelledby="top-winner-tab">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <?php include('PHP_Data/winning_report.php'); ?>
+                                        <?php include('PHP_Data/growth_report.php'); ?>
                                     </div>
                                     <div class="col-md-6">
                                         <canvas id="topWinnerCustomersChart"></canvas>
