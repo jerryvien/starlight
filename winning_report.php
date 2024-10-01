@@ -111,7 +111,28 @@ if (isset($_POST['finalize_winning'])) {
         $update_stmt->execute();
     }
 
-    echo "Winning results have been updated!";
+    // Update unmatched entries to 'Loss'
+    update_loss_status($winning_record, $conn);
+
+    // Success message
+    $success_message = "Winning results have been updated successfully!";
+}
+// Utility function to update unmatched records to 'Loss'
+function update_loss_status($winning_record, $conn) {
+    try {
+        // Update all non-win purchases for the same date as the winning record
+        $update_stmt = $conn->prepare("
+            UPDATE purchase_entries
+            SET result = 'Loss'
+            WHERE result NOT IN ('Win')
+              AND DATE(purchase_datetime) = :winning_date
+              AND winning_record_id IS NULL
+        ");
+        $update_stmt->bindParam(':winning_date', $winning_record['winning_date']);
+        $update_stmt->execute();
+    } catch (Exception $e) {
+        die("Error updating loss status: " . $e->getMessage());
+    }
 }
 
 // Generate number permutations
@@ -161,6 +182,13 @@ function generate_combinations($number) {
             <div id="content">
                 <!-- Topbar -->
                 <?php include('config/topbar.php'); ?>
+
+                <!-- Success Message -->
+                    <?php if (!empty($success_message)): ?>
+                    <div class="alert alert-success" role="alert">
+                        <?php echo $success_message; ?>
+                    </div>
+                    <?php endif; ?>
 
 
                 <!-- Winning Records Table -->
