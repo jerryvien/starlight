@@ -12,7 +12,7 @@ if (!isset($_SESSION['admin'])) {
 try {
     $winning_records_query = "
         SELECT w.*, a.agent_name 
-        FROM winning_records w
+        FROM winning_record w
         JOIN admin_access a ON w.created_by_agent = a.agent_id
         ORDER BY w.winning_date DESC
     ";
