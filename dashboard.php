@@ -182,7 +182,7 @@ try {
                 <?php include('config/topbar.php'); ?>
 
                 <!-- Begin Page Content -->
-                <div class="container-fluid">
+                <div class="container">
                     <h1 class="h3 mb-4 text-gray-800">Business Dashboard</h1>
                     <!-- Total Sales, Total Sales Per Day, Average Order Value -->
                     <!-- Top Row: KPIs -->
