@@ -38,10 +38,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['select_winning_record'
 
         // Fetch matching purchase entries where purchase date matches exactly with the winning date
         $purchase_stmt = $conn->prepare("
-            SELECT * FROM purchase_entries 
-            WHERE result NOT IN ('Win', 'Loss') 
-              AND DATE(purchase_datetime) = :winning_date
-              AND purchase_no IN ($in_placeholders)
+            SELECT p.*, c.customer_name, a.agent_name 
+            FROM purchase_entries p
+            JOIN customer_details c ON p.customer_id = c.customer_id
+            JOIN admin_access a ON p.agent_id = a.agent_id
+            WHERE p.result NOT IN ('Win', 'Loss') 
+              AND DATE(p.purchase_datetime) = :winning_date
+              AND p.purchase_no IN ($in_placeholders)
         ");
 
         // Bind the :winning_date parameter
@@ -55,6 +58,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['select_winning_record'
         // Execute the statement
         $purchase_stmt->execute();
         $matching_purchases = $purchase_stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Debugging: Print the content of the fetched purchases to check the fields
+        echo "<pre>";
+        print_r($matching_purchases);
+        echo "</pre>";
     }
 }
 
@@ -198,13 +206,13 @@ include('config/topbar.php');
                     $winning_amount = $winning_factor * $purchase['purchase_amount'];
                 ?>
                 <tr>
-                    <td><?php echo $purchase['customer_name']; ?></td>
+                    <td><?php echo $purchase['customer_name'] ?? 'N/A'; ?></td>
                     <td><?php echo $purchase['purchase_no']; ?></td>
-                    <td><?php echo number_format($purchase['purchase_amount'], 2); ?></td>
+                    <td><?php echo $purchase['purchase_amount']; ?></td>
                     <td><?php echo $purchase['purchase_datetime']; ?></td>
-                    <td><?php echo $purchase['agent_name']; ?></td>
+                    <td><?php echo $purchase['agent_name'] ?? 'N/A'; ?></td>
                     <td><?php echo $winning_category; ?></td>
-                    <td><?php echo number_format($winning_amount, 2); ?></td>
+                    <td><?php echo $winning_amount; ?></td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>
