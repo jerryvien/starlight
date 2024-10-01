@@ -332,7 +332,7 @@ try {
                     <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
 
                     <!-- Recent Purchases (Table) -->
-                    <div class="row">
+                    <div class="container">
                         <div class="col-md-12">
                             <h5>Recent Purchases</h5>
                             <table id="recentPurchasesTable" class="table table-bordered">
@@ -340,7 +340,7 @@ try {
                                     <tr>
                                         <th>Customer</th>
                                         <th>Agent</th>
-                                        <th>Purchase No</th>
+                                        <th class="d-none d-md-table-cell">Purchase No</th> <!-- Hidden on small screens -->
                                         <th>Category</th>
                                         <th>Amount</th>
                                         <th>Purchase Date</th>
@@ -352,7 +352,7 @@ try {
                                         <tr>
                                             <td><?php echo $purchase['customer_name']; ?></td>
                                             <td><?php echo $purchase['agent_name']; ?></td>
-                                            <td><?php echo $purchase['purchase_no']; ?></td>
+                                            <td class="d-none d-md-table-cell"><?php echo $purchase['purchase_no']; ?></td> <!-- Hidden on small screens -->
                                             <td><?php echo $purchase['purchase_category']; ?></td>
                                             <td><?php echo number_format($purchase['purchase_amount'], 2); ?></td>
                                             
@@ -384,23 +384,11 @@ try {
                                 "searching": true,    // Enable search/filter functionality
                                 "ordering": true,     // Enable column sorting
                                 "info": true,         // Show table information
-                                "lengthChange": true  // Enable the ability to change the number of records per page
+                                "lengthChange": true, // Enable the ability to change the number of records per page
+                                "responsive": true,   // Enable responsiveness
                             });
                         });
                     </script>
-                
-                    
-                </div>
-                <!-- End of Page Content -->
-
-                <!-- Footer -->
-                <?php include('config/footer.php'); ?>
-            </div>
-            <!-- End of Content Wrapper -->
-        </div>
-        <!-- End of Wrapper -->
-
-    <script>
     
 
     // Top Spend Customers Chart
