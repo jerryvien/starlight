@@ -7,6 +7,9 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+// Set timezone to GMT +8 (Kuala Lumpur)
+date_default_timezone_set('Asia/Kuala_Lumpur');
+
 // Redirect to login page if the user is not logged in
 if (!isset($_SESSION['admin'])) {
     header("Location: index.php");
@@ -101,9 +104,11 @@ try {
                                             <td><?php echo $record['winning_number']; ?></td>
                                             <td><?php echo $record['winning_game']; ?></td>
                                             <td><?php echo $record['winning_period']; ?></td>
+                                            <!-- Date formatted in GMT +8 (Kuala Lumpur timezone) -->
                                             <td><?php echo date('M d, Y', strtotime($record['winning_date'])); ?></td>
                                             <td><?php echo number_format($record['winning_total_payout'], 2); ?></td>
                                             <td><?php echo $record['agent_name']; ?></td>
+                                            <!-- Created_at field also displayed in GMT +8 timezone -->
                                             <td><?php echo date('M d, Y h:i A', strtotime($record['created_at'])); ?></td>
                                             <td>
                                                 <?php echo $record['winning_listing'] ? '<span class="text-success">Listed</span>' : '<span class="text-danger">Not Listed</span>'; ?>
