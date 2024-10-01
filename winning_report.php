@@ -1,157 +1,211 @@
 <?php
 session_start();
-include('config/database.php'); // Include your database connection
+include('config/database.php');
+include('config/sidebar.php');
+include('config/topbar.php');
+include('config/footer.php');
 
-// Enable error reporting for debugging
+// Set time zone to Kuala Lumpur (GMT +8)
+date_default_timezone_set('Asia/Kuala_Lumpur');
+
+// Error reporting for debugging
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// Set timezone to GMT +8 (Kuala Lumpur)
-date_default_timezone_set('Asia/Kuala_Lumpur');
-
-// Redirect to login page if the user is not logged in
-if (!isset($_SESSION['admin'])) {
-    header("Location: index.php");
-    exit;
-}
-
 // Fetch winning records
 try {
-    $winning_records_query = "
-        SELECT w.*, a.agent_name 
-        FROM winning_record w
-        JOIN admin_access a ON w.created_by_agent = a.agent_id
-        ORDER BY w.winning_date DESC
-    ";
-
-    $winning_records_stmt = $conn->prepare($winning_records_query);
-    $winning_records_stmt->execute();
-    $winning_records = $winning_records_stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt = $conn->query("SELECT * FROM winning_record ORDER BY winning_date DESC");
+    $winning_records = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (Exception $e) {
     die("Error fetching winning records: " . $e->getMessage());
+}
+
+// Matching function
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['select_winning_record'])) {
+    $winning_id = $_POST['select_winning_record'];
+
+    // Fetch winning record
+    $stmt = $conn->prepare("SELECT * FROM winning_record WHERE id = :winning_id");
+    $stmt->bindParam(':winning_id', $winning_id);
+    $stmt->execute();
+    $winning_record = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($winning_record) {
+        // Generate permutations of winning number
+        $winning_number = $winning_record['winning_number'];
+        $winning_combinations = generate_combinations($winning_number);
+
+        // Fetch matching purchase entries
+        $purchase_stmt = $conn->prepare("
+            SELECT * FROM purchase_entries 
+            WHERE result NOT IN ('Win', 'Loss') 
+              AND DATE(purchase_datetime) <= :winning_date
+              AND purchase_no IN (" . implode(",", array_fill(0, count($winning_combinations), '?')) . ")
+        ");
+        
+        $params = array_merge([":winning_date" => $winning_record['winning_date']], $winning_combinations);
+        $purchase_stmt->execute($params);
+        $matching_purchases = $purchase_stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+}
+
+// Generate number permutations
+function generate_combinations($number) {
+    $permutations = [];
+    if (strlen($number) == 3) {
+        $permutations = [
+            $number,
+            $number[0] . $number[2] . $number[1],
+            $number[1] . $number[0] . $number[2],
+            $number[1] . $number[2] . $number[0],
+            $number[2] . $number[0] . $number[1],
+            $number[2] . $number[1] . $number[0],
+        ];
+    } elseif (strlen($number) == 2) {
+        $permutations = [
+            $number,
+            $number[1] . $number[0],
+        ];
+    }
+    return $permutations;
+}
+
+// Handle winning result insertion
+if (isset($_POST['finalize_winning'])) {
+    $winning_record_id = $_POST['winning_record_id'];
+
+    foreach ($_POST['selected_purchases'] as $purchase_id) {
+        // Check if this entry is a winner or not
+        $purchase_stmt = $conn->prepare("SELECT * FROM purchase_entries WHERE id = :purchase_id");
+        $purchase_stmt->bindParam(':purchase_id', $purchase_id);
+        $purchase_stmt->execute();
+        $purchase = $purchase_stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($purchase) {
+            $is_winner = in_array($purchase['purchase_no'], generate_combinations($winning_record['winning_number']));
+
+            // Update the purchase record
+            $update_stmt = $conn->prepare("
+                UPDATE purchase_entries
+                SET result = :result,
+                    winning_category = :winning_category,
+                    winning_amount = :winning_amount,
+                    winning_number = :winning_number,
+                    winning_record_id = :winning_record_id
+                WHERE id = :purchase_id
+            ");
+            
+            $result = $is_winner ? 'Win' : 'Loss';
+            $winning_category = $winning_record['winning_game'];
+            $winning_factor = $winning_category === 'Box' ? 1 : 2;
+            $winning_amount = $is_winner ? $winning_factor * $purchase['purchase_amount'] : 0;
+
+            $update_stmt->bindParam(':result', $result);
+            $update_stmt->bindParam(':winning_category', $winning_category);
+            $update_stmt->bindParam(':winning_amount', $winning_amount);
+            $update_stmt->bindParam(':winning_number', $winning_record['winning_number']);
+            $update_stmt->bindParam(':winning_record_id', $winning_record_id);
+            $update_stmt->bindParam(':purchase_id', $purchase_id);
+
+            $update_stmt->execute();
+        }
+    }
+
+    echo "Winning results have been updated!";
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Winning Records</title>
-
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- DataTables CSS -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
-
-    <!-- Custom styles for this template -->
+    <title>Winning Record Matching</title>
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
-
-    <!-- jQuery -->
+    <script src="vendor/chart.js/Chart.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    <!-- DataTables JS -->
+    <link href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-
 </head>
+<body>
 
-<body id="page-top">
-    <!-- Page Wrapper -->
-    <div id="wrapper">
+<!-- Winning Records Table -->
+<div class="container-fluid">
+    <h2>Winning Records</h2>
+    <table id="winningRecordsTable" class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Winning Number</th>
+                <th>Winning Game</th>
+                <th>Winning Period</th>
+                <th>Winning Date</th>
+                <th>Total Payout</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($winning_records as $record): ?>
+            <tr>
+                <td><?php echo $record['winning_number']; ?></td>
+                <td><?php echo $record['winning_game']; ?></td>
+                <td><?php echo $record['winning_period']; ?></td>
+                <td><?php echo $record['winning_date']; ?></td>
+                <td><?php echo $record['winning_total_payout']; ?></td>
+                <td>
+                    <form method="POST">
+                        <button type="submit" name="select_winning_record" value="<?php echo $record['id']; ?>" class="btn btn-primary">Select</button>
+                    </form>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
 
-        <!-- Sidebar -->
-        <?php include('config/sidebar.php'); ?>
+<!-- Matching Purchases Table -->
+<?php if (!empty($matching_purchases)): ?>
+<div class="container-fluid">
+    <h2>Matched Purchase Entries</h2>
+    <form method="POST">
+        <input type="hidden" name="winning_record_id" value="<?php echo $winning_id; ?>">
+        <table id="matchedPurchasesTable" class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Select</th>
+                    <th>Customer Name</th>
+                    <th>Purchase No</th>
+                    <th>Purchase Amount</th>
+                    <th>Purchase Date</th>
+                    <th>Agent Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($matching_purchases as $purchase): ?>
+                <tr>
+                    <td><input type="checkbox" name="selected_purchases[]" value="<?php echo $purchase['id']; ?>"></td>
+                    <td><?php echo $purchase['customer_name']; ?></td>
+                    <td><?php echo $purchase['purchase_no']; ?></td>
+                    <td><?php echo $purchase['purchase_amount']; ?></td>
+                    <td><?php echo $purchase['purchase_datetime']; ?></td>
+                    <td><?php echo $purchase['agent_name']; ?></td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+        <button type="submit" name="finalize_winning" class="btn btn-success">Finalize Winning</button>
+    </form>
+</div>
+<?php endif; ?>
 
-        <!-- Content Wrapper -->
-        <div id="content-wrapper" class="d-flex flex-column">
-
-            <!-- Main Content -->
-            <div id="content">
-
-                <!-- Topbar -->
-                <?php include('config/topbar.php'); ?>
-
-                <!-- Begin Page Content -->
-                <div class="container-fluid">
-                    <h1 class="h3 mb-4 text-gray-800">Winning Records</h1>
-
-                    <!-- Winning Records Table -->
-                    <div class="table-responsive mt-3">
-                        <table id="winningRecordsTable" class="table table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Winning Number</th>
-                                    <th>Winning Game</th>
-                                    <th>Winning Period</th>
-                                    <th>Winning Date</th>
-                                    <th>Total Payout</th>
-                                    <th>Created By Agent</th>
-                                    <th>Created At</th>
-                                    <th>Winning Listing</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php if (count($winning_records) > 0): ?>
-                                    <?php foreach ($winning_records as $record): ?>
-                                        <tr>
-                                            <td><?php echo $record['winning_number']; ?></td>
-                                            <td><?php echo $record['winning_game']; ?></td>
-                                            <td><?php echo $record['winning_period']; ?></td>
-                                            <!-- Date formatted in GMT +8 (Kuala Lumpur timezone) -->
-                                            <td><?php echo date('M d, Y', strtotime($record['winning_date'])); ?></td>
-                                            <td><?php echo number_format($record['winning_total_payout'], 2); ?></td>
-                                            <td><?php echo $record['agent_name']; ?></td>
-                                            <!-- Created_at field also displayed in GMT +8 timezone -->
-                                            <td><?php echo date('M d, Y h:i A', strtotime($record['created_at'])); ?></td>
-                                            <td>
-                                                <?php echo $record['winning_listing'] ? '<span class="text-success">Listed</span>' : '<span class="text-danger">Not Listed</span>'; ?>
-                                            </td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                <?php else: ?>
-                                    <tr>
-                                        <td colspan="8" class="text-center">No records found</td>
-                                    </tr>
-                                <?php endif; ?>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <!-- Initialize DataTable -->
-                    <script>
-                        $(document).ready(function() {
-                            $('#winningRecordsTable').DataTable({
-                                "paging": true,       // Enable pagination
-                                "searching": true,    // Enable search/filter functionality
-                                "ordering": true,     // Enable column sorting
-                                "info": true,         // Show table information
-                                "lengthChange": true  // Enable the ability to change the number of records per page
-                            });
-                        });
-                    </script>
-
-                </div>
-                <!-- /.container-fluid -->
-            </div>
-            <!-- End of Main Content -->
-
-            <!-- Footer -->
-            <?php include('config/footer.php'); ?>
-            <!-- End of Footer -->
-
-        </div>
-        <!-- End of Content Wrapper -->
-
-    </div>
-    <!-- End of Page Wrapper -->
+<!-- Initialize DataTable -->
+<script>
+$(document).ready(function() {
+    $('#winningRecordsTable').DataTable();
+    $('#matchedPurchasesTable').DataTable();
+});
+</script>
 
 </body>
-
 </html>
