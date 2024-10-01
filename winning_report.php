@@ -36,11 +36,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['select_winning_record'
         // Prepare placeholders for the IN clause dynamically
         $in_placeholders = implode(',', array_map(fn($key) => ":winning_comb_{$key}", array_keys($winning_combinations)));
 
-        // Fetch matching purchase entries
+        // Fetch matching purchase entries where purchase date matches exactly with the winning date
         $purchase_stmt = $conn->prepare("
             SELECT * FROM purchase_entries 
             WHERE result NOT IN ('Win', 'Loss') 
-              AND DATE(purchase_datetime) <= :winning_date
+              AND DATE(purchase_datetime) = :winning_date
               AND purchase_no IN ($in_placeholders)
         ");
 
@@ -83,41 +83,35 @@ function generate_combinations($number) {
 if (isset($_POST['finalize_winning'])) {
     $winning_record_id = $_POST['winning_record_id'];
 
-    foreach ($_POST['selected_purchases'] as $purchase_id) {
+    // Loop through all matched purchases
+    foreach ($matching_purchases as $purchase) {
         // Check if this entry is a winner or not
-        $purchase_stmt = $conn->prepare("SELECT * FROM purchase_entries WHERE id = :purchase_id");
-        $purchase_stmt->bindParam(':purchase_id', $purchase_id);
-        $purchase_stmt->execute();
-        $purchase = $purchase_stmt->fetch(PDO::FETCH_ASSOC);
+        $is_winner = in_array($purchase['purchase_no'], generate_combinations($winning_record['winning_number']));
 
-        if ($purchase) {
-            $is_winner = in_array($purchase['purchase_no'], generate_combinations($winning_record['winning_number']));
+        // Update the purchase record
+        $update_stmt = $conn->prepare("
+            UPDATE purchase_entries
+            SET result = :result,
+                winning_category = :winning_category,
+                winning_amount = :winning_amount,
+                winning_number = :winning_number,
+                winning_record_id = :winning_record_id
+            WHERE id = :purchase_id
+        ");
 
-            // Update the purchase record
-            $update_stmt = $conn->prepare("
-                UPDATE purchase_entries
-                SET result = :result,
-                    winning_category = :winning_category,
-                    winning_amount = :winning_amount,
-                    winning_number = :winning_number,
-                    winning_record_id = :winning_record_id
-                WHERE id = :purchase_id
-            ");
-            
-            $result = $is_winner ? 'Win' : 'Loss';
-            $winning_category = $winning_record['winning_game'];
-            $winning_factor = $winning_category === 'Box' ? 1 : 2;
-            $winning_amount = $is_winner ? $winning_factor * $purchase['purchase_amount'] : 0;
+        $result = $is_winner ? 'Win' : 'Loss';
+        $winning_category = $winning_record['winning_game'];
+        $winning_factor = $winning_category === 'Box' ? 1 : 2;
+        $winning_amount = $is_winner ? $winning_factor * $purchase['purchase_amount'] : 0;
 
-            $update_stmt->bindParam(':result', $result);
-            $update_stmt->bindParam(':winning_category', $winning_category);
-            $update_stmt->bindParam(':winning_amount', $winning_amount);
-            $update_stmt->bindParam(':winning_number', $winning_record['winning_number']);
-            $update_stmt->bindParam(':winning_record_id', $winning_record_id);
-            $update_stmt->bindParam(':purchase_id', $purchase_id);
+        $update_stmt->bindParam(':result', $result);
+        $update_stmt->bindParam(':winning_category', $winning_category);
+        $update_stmt->bindParam(':winning_amount', $winning_amount);
+        $update_stmt->bindParam(':winning_number', $winning_record['winning_number']);
+        $update_stmt->bindParam(':winning_record_id', $winning_record_id);
+        $update_stmt->bindParam(':purchase_id', $purchase['id']);
 
-            $update_stmt->execute();
-        }
+        $update_stmt->execute();
     }
 
     echo "Winning results have been updated!";
@@ -138,6 +132,12 @@ if (isset($_POST['finalize_winning'])) {
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 </head>
 <body>
+
+<?php
+// Include the sidebar, topbar, and footer within the HTML body.
+include('config/sidebar.php');
+include('config/topbar.php');
+?>
 
 <!-- Winning Records Table -->
 <div class="container-fluid">
@@ -209,7 +209,7 @@ if (isset($_POST['finalize_winning'])) {
                 <?php endforeach; ?>
             </tbody>
         </table>
-        <button type="submit" name="finalize_winning" class="btn btn-success">Finalize Winning</button>
+        <button type="submit" name="finalize_winning" class="btn btn-success" onclick="return confirm('Are you sure you want to finalize the winning entries?');">Finalize Winning</button>
     </form>
 </div>
 <?php endif; ?>
@@ -221,6 +221,8 @@ $(document).ready(function() {
     $('#matchedPurchasesTable').DataTable();
 });
 </script>
+
+<?php include('config/footer.php'); ?>
 
 </body>
 </html>
