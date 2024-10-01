@@ -1,9 +1,6 @@
 <?php
 session_start();
 include('config/database.php');
-include('config/sidebar.php');
-include('config/topbar.php');
-include('config/footer.php');
 
 // Set time zone to Kuala Lumpur (GMT +8)
 date_default_timezone_set('Asia/Kuala_Lumpur');
