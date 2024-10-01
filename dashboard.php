@@ -332,7 +332,7 @@ try {
                     <!-- Sales by Category (Pie Chart) -->
                     <div class="row">
                         <div class="col-md-6">
-                            <canvas id="salesByCategoryChart"></canvas>
+                            
                         </div>
                     </div>
 
