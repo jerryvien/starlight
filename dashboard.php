@@ -296,7 +296,7 @@ try {
 
 
                     <!-- Top 5 Spend and Winner Customers (Bar Charts) -->
-                    <div class="row">
+                    <div class="container-fluid">
                         <!-- Tab Navigation -->
                         <ul class="nav nav-tabs" id="myTab" role="tablist">
                             <li class="nav-item">
