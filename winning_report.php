@@ -19,6 +19,7 @@ try {
 }
 
 // Handle form submission for matching purchases
+$winning_record = null;
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['select_winning_record'])) {
     $winning_id = $_POST['select_winning_record'];
 
@@ -73,6 +74,12 @@ if (isset($_POST['finalize_winning'])) {
         $matching_purchases = unserialize(base64_decode($_POST['matching_purchases']));
     }
 
+    // Fetch winning record to calculate winning amounts
+    $stmt = $conn->prepare("SELECT * FROM winning_record WHERE id = :winning_record_id");
+    $stmt->bindParam(':winning_record_id', $winning_record_id);
+    $stmt->execute();
+    $winning_record = $stmt->fetch(PDO::FETCH_ASSOC);
+
     // Loop through all matched purchases
     foreach ($matching_purchases as $purchase) {
         // Check if this entry is a winner or not
@@ -90,8 +97,8 @@ if (isset($_POST['finalize_winning'])) {
         ");
 
         $result = $is_winner ? 'Win' : 'Loss';
-        $winning_category = $winning_record['winning_game'];
-        $winning_factor = $winning_category === 'Box' ? 1 : 2;
+        $winning_category = $winning_record['winning_game'] ?? 'Unknown';  // Handle missing key
+        $winning_factor = ($winning_category === 'Box') ? 1 : 2;
         $winning_amount = $is_winner ? $winning_factor * $purchase['purchase_amount'] : 0;
 
         $update_stmt->bindParam(':result', $result);
@@ -205,8 +212,8 @@ include('config/topbar.php');
             <tbody>
                 <?php foreach ($matching_purchases as $purchase): ?>
                 <?php
-                    $winning_category = $winning_record['winning_game'];
-                    $winning_factor = $winning_category === 'Box' ? 1 : 2;
+                    $winning_category = $winning_record['winning_game'] ?? 'Unknown';
+                    $winning_factor = ($winning_category === 'Box') ? 1 : 2;
                     $winning_amount = $winning_factor * $purchase['purchase_amount'];
                 ?>
                 <tr>
