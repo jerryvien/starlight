@@ -369,7 +369,7 @@ try {
                         </div>
                     </div>
                 
-                    <?php include('winning_table.php'); ?>
+                    <?php include('winning_report.php'); ?>
                 </div>
                 <!-- End of Page Content -->
 
