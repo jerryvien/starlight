@@ -26,15 +26,14 @@ try {
          FROM purchase_entries p 
          JOIN customer_details c ON p.customer_id = c.customer_id 
          JOIN admin_access a ON p.agent_id = a.agent_id 
-         ORDER BY p.purchase_datetime DESC 
-         LIMIT 100" : 
+         ORDER BY p.purchase_datetime DESC":
+    
         "SELECT p.*, c.customer_name, a.agent_name 
          FROM purchase_entries p 
          JOIN customer_details c ON p.customer_id = c.customer_id 
          JOIN admin_access a ON p.agent_id = a.agent_id 
          WHERE p.agent_id = :agent_id 
-         ORDER BY p.purchase_datetime DESC 
-         LIMIT 100";
+         ORDER BY p.purchase_datetime DESC;
 
     $recent_purchases_stmt = $conn->prepare($recent_purchases_query);
     if ($access_level !== 'super_admin') {
