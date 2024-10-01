@@ -296,24 +296,54 @@ try {
 
 
                     <!-- Top 5 Spend and Winner Customers (Bar Charts) -->
-                    <div class="row">
-                        <div class="col-md-6">
-                            <canvas id="topSpendCustomersChart"></canvas>
-                        </div>
-                        <div class="col-md-6">
-                            <canvas id="topWinnerCustomersChart"></canvas>
+                    <div class="container">
+                        <!-- Tab Navigation -->
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="top-spend-tab" data-toggle="tab" href="#top-spend" role="tab" aria-controls="top-spend" aria-selected="true">Top Spend</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="top-winner-tab" data-toggle="tab" href="#top-winner" role="tab" aria-controls="top-winner" aria-selected="false">Top Winner</a>
+                            </li>
+                        </ul>
+
+                        <!-- Tab Panes -->
+                        <div class="tab-content" id="myTabContent">
+                            <!-- First Tab: Top Spend Customers -->
+                            <div class="tab-pane fade show active" id="top-spend" role="tabpanel" aria-labelledby="top-spend-tab">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <canvas id="topSpendCustomersChart"></canvas>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <canvas id="topWinnerCustomersChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Second Tab: Winning Report -->
+                            <div class="tab-pane fade" id="top-winner" role="tabpanel" aria-labelledby="top-winner-tab">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <?php include('winning_report.php'); ?>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <canvas id="topWinnerCustomersChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Top 5 Spend and Winner Customers (Bar Charts) -->
-                    <div class="row">
-                        <div class="col-md-6">
-                            <?php include('winning_report.php'); ?>
-                        </div>
-                        <div class="col-md-6">
-                            <canvas id="topWinnerCustomersChart"></canvas>
-                        </div>
-                    </div>
+                    <!-- Initialize Bootstrap Tabs -->
+                    <script>
+                        $(document).ready(function () {
+                            $('#myTab a').on('click', function (e) {
+                                e.preventDefault();
+                                $(this).tab('show');
+                            });
+                        });
+                    </script>
 
                 <hr>
                 <style>
