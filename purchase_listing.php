@@ -219,43 +219,65 @@ $bar_chart_data = json_encode(array_values($sales_by_customer));
                     </div>
 
                     <!-- Purchase List Table -->
-                    <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Customer Name</th>
-                                    <th>Purchase No</th>
-                                    <th>Purchase Amount</th>
-                                    <th>Purchase Date</th>
-                                    <th>Agent Name</th>
-                                    <th>Agent ID</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php if (count($purchases) > 0): ?>
-                                    <?php foreach ($purchases as $purchase): ?>
+                    <!-- DataTables CSS -->
+                    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+
+                    <!-- jQuery (required for DataTables) -->
+                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+                    <!-- DataTables JS -->
+                    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+                    <!-- Purchase List Table -->
+                        <div class="container-fluid d-none d-md-block">
+                            <table id="purchaseListTable" class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Customer Name</th>
+                                        <th>Purchase No</th>
+                                        <th>Purchase Amount</th>
+                                        <th>Purchase Date</th>
+                                        <th>Agent Name</th>
+                                        <th>Agent ID</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php if (count($purchases) > 0): ?>
+                                        <?php foreach ($purchases as $purchase): ?>
+                                            <tr>
+                                                <td><?php echo $purchase['customer_name']; ?></td>
+                                                <td><?php echo $purchase['purchase_no']; ?></td>
+                                                <td><?php echo number_format($purchase['purchase_amount'], 2); ?></td>
+                                                <td><?php echo $purchase['purchase_date']; ?></td>
+                                                <td><?php echo $purchase['agent_name']; ?></td>
+                                                <td><?php echo $purchase['agent_id']; ?></td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                        <!-- Grand Total Row -->
                                         <tr>
-                                            <td><?php echo $purchase['customer_name']; ?></td>
-                                            <td><?php echo $purchase['purchase_no']; ?></td>
-                                            <td><?php echo number_format($purchase['purchase_amount'], 2); ?></td>
-                                            <td><?php echo $purchase['purchase_date']; ?></td>
-                                            <td><?php echo $purchase['agent_name']; ?></td>
-                                            <td><?php echo $purchase['agent_id']; ?></td>
+                                            <td colspan="2" class="text-right font-weight-bold">Grand Total:</td>
+                                            <td colspan="4" class="font-weight-bold"><?php echo number_format($grand_total, 2); ?></td>
                                         </tr>
-                                    <?php endforeach; ?>
-                                    <!-- Grand Total Row -->
-                                    <tr>
-                                        <td colspan="2" class="text-right font-weight-bold">Grand Total:</td>
-                                        <td colspan="4" class="font-weight-bold"><?php echo number_format($grand_total, 2); ?></td>
-                                    </tr>
-                                <?php else: ?>
-                                    <tr>
-                                        <td colspan="6" class="text-center">No records found for the applied filters</td>
-                                    </tr>
-                                <?php endif; ?>
-                            </tbody>
-                        </table>
-                    </div>
+                                    <?php else: ?>
+                                        <tr>
+                                            <td colspan="6" class="text-center">No records found for the applied filters</td>
+                                        </tr>
+                                    <?php endif; ?>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <script>
+                            $(document).ready(function() {
+                                $('#purchaseListTable').DataTable({
+                                    "paging": true,       // Enable pagination
+                                    "searching": true,    // Enable search/filter functionality
+                                    "ordering": true,     // Enable column sorting
+                                    "info": true,         // Show table information
+                                    "lengthChange": true  // Enable the ability to change the number of records per page
+                                });
+                            });
+                        </script>
 
                     
                 </div>
