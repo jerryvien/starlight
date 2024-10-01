@@ -2,8 +2,6 @@
 
 include('config/database.php'); // Include your database connection
 
-$access_level = $_SESSION['access_level'];
-$agent_id = $_SESSION['agent_id'];
 
 // Default grouping by month
 $group_by = 'month';
