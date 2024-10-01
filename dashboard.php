@@ -332,7 +332,7 @@ try {
                     <!-- Sales by Category (Pie Chart) -->
                     <div class="row">
                         <div class="col-md-6">
-                            
+                            <canvas id="salesByCategoryChart"></canvas>
                         </div>
                     </div>
 
@@ -381,18 +381,7 @@ try {
         <!-- End of Wrapper -->
 
     <script>
-    // Sales by Category Chart
-    var ctx = document.getElementById('salesByCategoryChart').getContext('2d');
-    var salesByCategoryChart = new Chart(ctx, {
-        type: 'pie',
-        data: {
-            labels: <?php echo json_encode(array_column($category_sales, 'purchase_category')); ?>,
-            datasets: [{
-                data: <?php echo json_encode(array_column($category_sales, 'total_sales')); ?>,
-                backgroundColor: ['#007bff', '#28a745']
-            }]
-        }
-    });
+    
 
     // Top Spend Customers Chart
     var ctx = document.getElementById('topSpendCustomersChart').getContext('2d');
