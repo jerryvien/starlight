@@ -135,7 +135,7 @@ $('#yearSelect').on('change', function() {
     var selectedYear = $(this).val();
 
     $.ajax({
-        url: 'fetch_growth_sales_data.php',
+        url: 'config/fetch_growth_sales_data.php',
         method: 'POST',
         data: { year: selectedYear },
         dataType: 'json',
