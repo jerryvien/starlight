@@ -1,7 +1,9 @@
 <?php
 session_start();
 include('config/database.php');
-
+include('config/sidebar.php');
+include('config/topbar.php');
+include('config/footer.php');
 
 // Set time zone to Kuala Lumpur (GMT +8)
 date_default_timezone_set('Asia/Kuala_Lumpur');
@@ -144,108 +146,83 @@ if (isset($_POST['finalize_winning'])) {
     <link href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 </head>
-<body id="page-top">
+<body>
 
-    <!-- Page Wrapper -->
-    <div id="wrapper">
-        <!-- Sidebar -->
-        <?php include('config/sidebar.php'); ?>
+<!-- Winning Records Table -->
+<div class="container-fluid">
+    <h2>Winning Records</h2>
+    <table id="winningRecordsTable" class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Winning Number</th>
+                <th>Winning Game</th>
+                <th>Winning Period</th>
+                <th>Winning Date</th>
+                <th>Total Payout</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($winning_records as $record): ?>
+            <tr>
+                <td><?php echo $record['winning_number']; ?></td>
+                <td><?php echo $record['winning_game']; ?></td>
+                <td><?php echo $record['winning_period']; ?></td>
+                <td><?php echo $record['winning_date']; ?></td>
+                <td><?php echo $record['winning_total_payout']; ?></td>
+                <td>
+                    <form method="POST">
+                        <button type="submit" name="select_winning_record" value="<?php echo $record['id']; ?>" class="btn btn-primary">Select</button>
+                    </form>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
 
-        <!-- Content Wrapper -->
-        <div id="content-wrapper" class="d-flex flex-column">
-            <!-- Main Content -->
-            <div id="content">
-                <!-- Topbar -->
-                <?php include('config/topbar.php'); ?>
+<!-- Matching Purchases Table -->
+<?php if (!empty($matching_purchases)): ?>
+<div class="container-fluid">
+    <h2>Matched Purchase Entries</h2>
+    <form method="POST">
+        <input type="hidden" name="winning_record_id" value="<?php echo $winning_id; ?>">
+        <table id="matchedPurchasesTable" class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Select</th>
+                    <th>Customer Name</th>
+                    <th>Purchase No</th>
+                    <th>Purchase Amount</th>
+                    <th>Purchase Date</th>
+                    <th>Agent Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($matching_purchases as $purchase): ?>
+                <tr>
+                    <td><input type="checkbox" name="selected_purchases[]" value="<?php echo $purchase['id']; ?>"></td>
+                    <td><?php echo $purchase['customer_name']; ?></td>
+                    <td><?php echo $purchase['purchase_no']; ?></td>
+                    <td><?php echo $purchase['purchase_amount']; ?></td>
+                    <td><?php echo $purchase['purchase_datetime']; ?></td>
+                    <td><?php echo $purchase['agent_name']; ?></td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+        <button type="submit" name="finalize_winning" class="btn btn-success">Finalize Winning</button>
+    </form>
+</div>
+<?php endif; ?>
 
-                <!-- Begin Page Content -->
-                <div class="container-fluid">
-                    <!-- Winning Records Table -->
-                    <div class="container-fluid">
-                        <h2>Winning Records</h2>
-                        <table id="winningRecordsTable" class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Winning Number</th>
-                                    <th>Winning Game</th>
-                                    <th>Winning Period</th>
-                                    <th>Winning Date</th>
-                                    <th>Total Payout</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($winning_records as $record): ?>
-                                <tr>
-                                    <td><?php echo $record['winning_number']; ?></td>
-                                    <td><?php echo $record['winning_game']; ?></td>
-                                    <td><?php echo $record['winning_period']; ?></td>
-                                    <td><?php echo $record['winning_date']; ?></td>
-                                    <td><?php echo $record['winning_total_payout']; ?></td>
-                                    <td>
-                                        <form method="POST">
-                                            <button type="submit" name="select_winning_record" value="<?php echo $record['id']; ?>" class="btn btn-primary">Select</button>
-                                        </form>
-                                    </td>
-                                </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <!-- Matching Purchases Table -->
-                    <?php if (!empty($matching_purchases)): ?>
-                    <div class="container-fluid">
-                        <h2>Matched Purchase Entries</h2>
-                        <form method="POST">
-                            <input type="hidden" name="winning_record_id" value="<?php echo $winning_id; ?>">
-                            <table id="matchedPurchasesTable" class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>Select</th>
-                                        <th>Customer Name</th>
-                                        <th>Purchase No</th>
-                                        <th>Purchase Amount</th>
-                                        <th>Purchase Date</th>
-                                        <th>Agent Name</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach ($matching_purchases as $purchase): ?>
-                                    <tr>
-                                        <td><input type="checkbox" name="selected_purchases[]" value="<?php echo $purchase['id']; ?>"></td>
-                                        <td><?php echo $purchase['customer_name']; ?></td>
-                                        <td><?php echo $purchase['purchase_no']; ?></td>
-                                        <td><?php echo $purchase['purchase_amount']; ?></td>
-                                        <td><?php echo $purchase['purchase_datetime']; ?></td>
-                                        <td><?php echo $purchase['agent_name']; ?></td>
-                                    </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            </table>
-                            <button type="submit" name="finalize_winning" class="btn btn-success">Finalize Winning</button>
-                        </form>
-                    </div>
-                    <?php endif; ?>
-                </div>
-                <!-- /.container-fluid -->
-
-                <!-- Footer -->
-                <?php include('config/footer.php'); ?>
-            </div>
-            <!-- End of Main Content -->
-        </div>
-        <!-- End of Content Wrapper -->
-    </div>
-    <!-- End of Page Wrapper -->
-
-    <!-- Initialize DataTable -->
-    <script>
-    $(document).ready(function() {
-        $('#winningRecordsTable').DataTable();
-        $('#matchedPurchasesTable').DataTable();
-    });
-    </script>
+<!-- Initialize DataTable -->
+<script>
+$(document).ready(function() {
+    $('#winningRecordsTable').DataTable();
+    $('#matchedPurchasesTable').DataTable();
+});
+</script>
 
 </body>
 </html>
