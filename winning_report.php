@@ -115,6 +115,9 @@ if (isset($_POST['finalize_winning'])) {
     // Update unmatched entries to 'Loss'
     update_loss_status($winning_record, $conn);
 
+    // Update total payout for the winning record
+    update_total_payout($winning_record_id, $conn);
+
     // Mark the winning listing as settled
     $update_winning_record_stmt = $conn->prepare("
         UPDATE winning_record
