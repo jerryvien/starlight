@@ -64,23 +64,6 @@ try {
     die("Error fetching new customer data: " . $e->getMessage());
 }
 
-
-// Fetch sales by category (Pie chart)
-try {
-    $category_query = ($access_level === 'super_admin') ? 
-        "SELECT purchase_category, SUM(purchase_amount) AS total_sales FROM purchase_entries GROUP BY purchase_category" : 
-        "SELECT purchase_category, SUM(purchase_amount) AS total_sales FROM purchase_entries WHERE agent_id = :agent_id GROUP BY purchase_category";
-
-    $category_stmt = $conn->prepare($category_query);
-    if ($access_level !== 'super_admin') {
-        $category_stmt->bindParam(':agent_id', $agent_id);
-    }
-    $category_stmt->execute();
-    $category_sales = $category_stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (Exception $e) {
-    die("Error fetching sales by category: " . $e->getMessage());
-}
-
 // Fetch top 5 spend and winner customers (Bar chart)
 try {
     $top_spend_query = ($access_level === 'super_admin') ? 
@@ -322,12 +305,29 @@ try {
                         </div>
                     </div>
 
+                    <!-- Top 5 Spend and Winner Customers (Bar Charts) -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <?php include('winning_report.php'); ?>
+                        </div>
+                        <div class="col-md-6">
+                            <canvas id="topWinnerCustomersChart"></canvas>
+                        </div>
+                    </div>
+
+                    
+
+
+                    <!-- Include DataTables CSS and JS -->
+                    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
+                    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+                    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
 
                     <!-- Recent Purchases (Table) -->
                     <div class="row">
                         <div class="col-md-12">
                             <h5>Recent Purchases</h5>
-                            <table class="table table-bordered">
+                            <table id="recentPurchasesTable" class="table table-bordered">
                                 <thead>
                                     <tr>
                                         <th>Customer</th>
@@ -355,8 +355,21 @@ try {
                             </table>
                         </div>
                     </div>
+
+                    <!-- Initialize DataTable -->
+                    <script>
+                        $(document).ready(function() {
+                            $('#recentPurchasesTable').DataTable({
+                                "paging": true,       // Enable pagination
+                                "searching": true,    // Enable search/filter functionality
+                                "ordering": true,     // Enable column sorting
+                                "info": true,         // Show table information
+                                "lengthChange": true  // Enable the ability to change the number of records per page
+                            });
+                        });
+                    </script>
                 
-                    <?php include('winning_report.php'); ?>
+                    
                 </div>
                 <!-- End of Page Content -->
 
