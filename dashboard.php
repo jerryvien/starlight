@@ -322,19 +322,6 @@ try {
                         </div>
                     </div>
 
-                    <!-- Customer Performance (Line Chart) -->
-                    <div class="row">
-                        <div class="col-md-12">
-                            <canvas id="customerGrowthChart"></canvas>
-                        </div>
-                    </div>
-
-                    <!-- Sales by Category (Pie Chart) -->
-                    <div class="row">
-                        <div class="col-md-6">
-                            <canvas id="salesByCategoryChart"></canvas>
-                        </div>
-                    </div>
 
                     <!-- Recent Purchases (Table) -->
                     <div class="row">
@@ -411,21 +398,7 @@ try {
         }
     });
 
-    // Customer Growth Chart
-    var ctx = document.getElementById('customerGrowthChart').getContext('2d');
-    var customerGrowthChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: <?php echo json_encode(array_column($customer_growth, 'date')); ?>,
-            datasets: [{
-                label: 'New Customers',
-                data: <?php echo json_encode(array_column($customer_growth, 'new_customers')); ?>,
-                backgroundColor: '#28a745',
-                borderColor: '#28a745',
-                fill: false
-            }]
-        }
-    });
+
     </script>
 </body>
 </html>
