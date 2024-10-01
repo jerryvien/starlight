@@ -22,7 +22,6 @@ try {
 }
 
 // Matching function
-$matching_purchases = [];
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['select_winning_record'])) {
     $winning_id = $_POST['select_winning_record'];
 
@@ -37,32 +36,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['select_winning_record'
         $winning_number = $winning_record['winning_number'];
         $winning_combinations = generate_combinations($winning_number);
 
-        // Build SQL query with named placeholders for each combination
-        $placeholders = [];
-        foreach ($winning_combinations as $key => $combination) {
-            $placeholders[] = ":combination$key";
-        }
-
-        // Build query with dynamic IN clause using named parameters
+        // Fetch matching purchase entries
         $purchase_stmt = $conn->prepare("
-            SELECT p.*, c.customer_name, a.agent_name 
-            FROM purchase_entries p
-            JOIN customer_details c ON p.customer_id = c.customer_id
-            JOIN admin_access a ON p.agent_id = a.agent_id
-            WHERE p.result NOT IN ('Win', 'Loss') 
-              AND DATE(p.purchase_datetime) <= :winning_date
-              AND p.purchase_no IN (" . implode(",", $placeholders) . ")
+            SELECT * FROM purchase_entries 
+            WHERE result NOT IN ('Win', 'Loss') 
+              AND DATE(purchase_datetime) <= :winning_date
+              AND purchase_no IN (" . implode(",", array_fill(0, count($winning_combinations), '?')) . ")
         ");
-
-        // Bind the winning date
-        $purchase_stmt->bindValue(':winning_date', $winning_record['winning_date']);
-
-        // Bind each combination as a named parameter
-        foreach ($winning_combinations as $key => $combination) {
-            $purchase_stmt->bindValue(":combination$key", $combination);
-        }
-
-        $purchase_stmt->execute();
+        
+        $params = array_merge([":winning_date" => $winning_record['winning_date']], $winning_combinations);
+        $purchase_stmt->execute($params);
         $matching_purchases = $purchase_stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
