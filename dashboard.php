@@ -315,9 +315,14 @@ try {
                         </div>
                     </div>
 
-                    <div class="row">
-                        
-                    </div>
+                <hr>
+                <style>
+                    hr {
+                        border: none;              /* Remove the default border */
+                        border-top: 2px solid #000; /* Create a solid line with 2px thickness and black color */
+                        margin: 20px 0;            /* Add spacing above and below the line */
+                    }
+                </style>
 
                 
 
