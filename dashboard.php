@@ -296,7 +296,7 @@ try {
 
 
                     <!-- Top 5 Spend and Winner Customers (Bar Charts) -->
-                    <div class="container-fluid">
+                    <div class="container-fluid d-none d-md-block">
                         <!-- Tab Navigation -->
                         <ul class="nav nav-tabs" id="myTab" role="tablist">
                             <li class="nav-item">
@@ -362,7 +362,7 @@ try {
                     <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
 
                     <!-- Recent Purchases (Table) -->
-                    <div class="row d-none d-md-block">
+                    <div class="container-fluid d-none d-md-block">
                         <div class="col-md-12">
                             <h5>Recent Purchases</h5>
                             <table id="recentPurchasesTable" class="table table-bordered">
