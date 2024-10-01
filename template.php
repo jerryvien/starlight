@@ -122,12 +122,12 @@ foreach ($purchases as $purchase) {
                                 <?php if (count($purchases) > 0): ?>
                                     <?php foreach ($purchases as $purchase): ?>
                                         <tr>
-                                            <td><?php echo $purchase['customer_name']; ?></td>
-                                            <td><?php echo $purchase['purchase_no']; ?></td>
+                                            <td><?php echo htmlspecialchars($purchase['customer_name']); ?></td>
+                                            <td><?php echo htmlspecialchars($purchase['purchase_no']); ?></td>
                                             <td><?php echo number_format($purchase['purchase_amount'], 2); ?></td>
                                             <td><?php echo date('M d, Y', strtotime($purchase['purchase_date'])); ?></td>
-                                            <td><?php echo $purchase['agent_name']; ?></td>
-                                            <td><?php echo $purchase['agent_id']; ?></td>
+                                            <td><?php echo htmlspecialchars($purchase['agent_name']); ?></td>
+                                            <td><?php echo htmlspecialchars($purchase['agent_id']); ?></td>
                                         </tr>
                                     <?php endforeach; ?>
                                     <!-- Grand Total Row -->
