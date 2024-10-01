@@ -22,6 +22,7 @@ try {
 }
 
 // Matching function
+$matching_purchases = [];
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['select_winning_record'])) {
     $winning_id = $_POST['select_winning_record'];
 
@@ -36,16 +37,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['select_winning_record'
         $winning_number = $winning_record['winning_number'];
         $winning_combinations = generate_combinations($winning_number);
 
+        // Build SQL query with dynamic placeholders for IN clause
+        $placeholders = implode(',', array_fill(0, count($winning_combinations), '?'));
+
         // Fetch matching purchase entries
         $purchase_stmt = $conn->prepare("
-            SELECT * FROM purchase_entries 
-            WHERE result NOT IN ('Win', 'Loss') 
-              AND DATE(purchase_datetime) <= :winning_date
-              AND purchase_no IN (" . implode(",", array_fill(0, count($winning_combinations), '?')) . ")
+            SELECT p.*, c.customer_name, a.agent_name 
+            FROM purchase_entries p
+            JOIN customer_details c ON p.customer_id = c.customer_id
+            JOIN admin_access a ON p.agent_id = a.agent_id
+            WHERE p.result NOT IN ('Win', 'Loss') 
+              AND DATE(p.purchase_datetime) <= :winning_date
+              AND p.purchase_no IN ($placeholders)
         ");
         
-        $params = array_merge([":winning_date" => $winning_record['winning_date']], $winning_combinations);
-        $purchase_stmt->execute($params);
+        // Bind the winning date and the purchase numbers
+        $purchase_stmt->bindValue(':winning_date', $winning_record['winning_date']);
+        foreach ($winning_combinations as $i => $combination) {
+            $purchase_stmt->bindValue($i + 1, $combination);
+        }
+        $purchase_stmt->execute();
         $matching_purchases = $purchase_stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
