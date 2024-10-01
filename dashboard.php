@@ -335,7 +335,7 @@ try {
                     <div class="container">
                         <div class="col-md-12">
                             <h5>Recent Purchases</h5>
-                            <table id="recentPurchasesTable" class="table table-bordered">
+                            <table id="recentPurchasesTable" class="table table-bordered d-none d-md-table-cell">
                                 <thead>
                                     <tr>
                                         <th>Customer</th>
