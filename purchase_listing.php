@@ -229,7 +229,7 @@ $bar_chart_data = json_encode(array_values($sales_by_customer));
                     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 
                     <!-- Purchase List Table -->
-                        <div class="container-fluid d-none d-md-block">
+                        <div class="table-responsive ">
                             <table id="purchaseListTable" class="table table-bordered">
                                 <thead>
                                     <tr>
