@@ -114,6 +114,15 @@ if (isset($_POST['finalize_winning'])) {
     // Update unmatched entries to 'Loss'
     update_loss_status($winning_record, $conn);
 
+    // Mark the winning listing as settled
+    $update_winning_record_stmt = $conn->prepare("
+        UPDATE winning_record
+        SET winning_listing = true
+        WHERE id = :winning_record_id
+    ");
+    $update_winning_record_stmt->bindParam(':winning_record_id', $winning_record_id);
+    $update_winning_record_stmt->execute();
+
     // Success message
     $success_message = "Winning results have been updated successfully!";
 }
@@ -214,9 +223,13 @@ function generate_combinations($number) {
                                 <td><?php echo $record['winning_date']; ?></td>
                                 <td><?php echo $record['winning_total_payout']; ?></td>
                                 <td>
-                                    <form method="POST">
-                                        <button type="submit" name="select_winning_record" value="<?php echo $record['id']; ?>" class="btn btn-primary">Select</button>
-                                    </form>
+                                <form method="POST">
+                                    <?php if ($record['winning_listing']): ?>
+                                        <button class="btn btn-success" disabled>Settled</button>
+                                    <?php else: ?>
+                                        <button type="submit" name="select_winning_record" value="<?php echo $record['id']; ?>" class="btn btn-primary">Huat!!</button>
+                                    <?php endif; ?>
+                                </form>
                                 </td>
                             </tr>
                             <?php endforeach; ?>
