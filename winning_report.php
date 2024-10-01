@@ -12,9 +12,8 @@ try {
     die("Error fetching available years: " . $e->getMessage());
 }
 
-// Fetch customer count, sales, and transaction count grouped by month
+// Fetch customer count, sales, and transaction count grouped by the last 12 months
 try {
-    // By default, fetch data for the last 12 months
     $customer_growth_query_monthly = 
         "SELECT DATE_FORMAT(created_at, '%Y-%m') AS period, COUNT(*) AS new_customers 
          FROM customer_details 
