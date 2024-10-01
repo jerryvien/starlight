@@ -19,37 +19,31 @@ if ($access_level === 'super_admin') {
     $agents = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-// Fetch purchase records based on the access level
-$sql = "
-    SELECT p.purchase_no, p.purchase_amount, DATE(p.purchase_datetime) AS purchase_date, 
-           p.serial_number, a.agent_name, a.agent_id,
-           c.customer_name
-    FROM purchase_entries p
-    JOIN customer_details c ON p.customer_id = c.customer_id
-    JOIN admin_access a ON p.agent_id = a.agent_id
-";
+/// Fetch recent purchases (Table)
+try {
+    $recent_purchases_query = ($access_level === 'super_admin') ? 
+        "SELECT p.*, c.customer_name, a.agent_name 
+         FROM purchase_entries p 
+         JOIN customer_details c ON p.customer_id = c.customer_id 
+         JOIN admin_access a ON p.agent_id = a.agent_id 
+         ORDER BY p.purchase_datetime DESC 
+         LIMIT 100" : 
+        "SELECT p.*, c.customer_name, a.agent_name 
+         FROM purchase_entries p 
+         JOIN customer_details c ON p.customer_id = c.customer_id 
+         JOIN admin_access a ON p.agent_id = a.agent_id 
+         WHERE p.agent_id = :agent_id 
+         ORDER BY p.purchase_datetime DESC 
+         LIMIT 100";
 
-// If the user is an agent, filter results by agent ID
-if ($access_level !== 'super_admin') {
-    $sql .= " WHERE p.agent_id = :agent_id";
-} else {
-    $sql .= " WHERE 1=1"; // Dummy condition for super_admin to add more filters easily
-}
-
-$stmt = $conn->prepare($sql);
-
-// Bind agent ID if the user is an agent
-if ($access_level !== 'super_admin') {
-    $stmt->bindParam(':agent_id', $agent_id);
-}
-
-$stmt->execute();
-$purchases = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// Calculate the grand total of the purchase amounts
-$grand_total = 0;
-foreach ($purchases as $purchase) {
-    $grand_total += $purchase['purchase_amount'];
+    $recent_purchases_stmt = $conn->prepare($recent_purchases_query);
+    if ($access_level !== 'super_admin') {
+        $recent_purchases_stmt->bindParam(':agent_id', $agent_id);
+    }
+    $recent_purchases_stmt->execute();
+    $recent_purchases = $recent_purchases_stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (Exception $e) {
+    die("Error fetching recent purchases: " . $e->getMessage());
 }
 ?>
 
@@ -102,52 +96,60 @@ foreach ($purchases as $purchase) {
                 <?php include('config/topbar.php'); ?>
 
                 <!-- Begin Page Content -->
-                <div class="container-fluid">
-                    <h1 class="h3 mb-4 text-gray-800">Purchase Listing</h1>
+                <!-- Include DataTables CSS and JS -->
+                <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
+                    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+                    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
 
-                    <!-- Purchase List Table -->
-                    <div class="table-responsive">
-                        <table id="purchaseListTable" class="table table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Customer Name</th>
-                                    <th>Purchase No</th>
-                                    <th>Purchase Amount</th>
-                                    <th>Purchase Date</th>
-                                    <th>Agent Name</th>
-                                    <th>Agent ID</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php if (count($purchases) > 0): ?>
-                                    <?php foreach ($purchases as $purchase): ?>
+                    <!-- Recent Purchases (Table) -->
+                    <div class="container-fluid d-none d-md-block">
+                        <div class="col-md-12">
+                            <h5>Recent Purchases</h5>
+                            <table id="recentPurchasesTable" class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Customer</th>
+                                        <th>Agent</th>
+                                        <th>Purchase No</th>
+                                        <th>Category</th>
+                                        <th>Amount</th>
+                                        <th>Purchase Date</th>
+                                        <th>Status</th> <!-- Changed Result to Status -->
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($recent_purchases as $purchase): ?>
                                         <tr>
-                                            <td><?php echo htmlspecialchars($purchase['customer_name']); ?></td>
-                                            <td><?php echo htmlspecialchars($purchase['purchase_no']); ?></td>
+                                            <td><?php echo $purchase['customer_name']; ?></td>
+                                            <td><?php echo $purchase['agent_name']; ?></td>
+                                            <td><?php echo $purchase['purchase_no']; ?></td>
+                                            <td><?php echo $purchase['purchase_category']; ?></td>
                                             <td><?php echo number_format($purchase['purchase_amount'], 2); ?></td>
-                                            <td><?php echo date('M d, Y', strtotime($purchase['purchase_date'])); ?></td>
-                                            <td><?php echo htmlspecialchars($purchase['agent_name']); ?></td>
-                                            <td><?php echo htmlspecialchars($purchase['agent_id']); ?></td>
+                                            
+                                            <!-- Format Purchase Date to show Month and Day -->
+                                            <td><?php echo date('M d', strtotime($purchase['purchase_datetime'])); ?></td>
+
+                                            <!-- Status with Color Coding -->
+                                            <td>
+                                                <?php if ($purchase['result'] == 'Pending'): ?>
+                                                    <span style="color: red; font-weight: bold;">Pending</span>
+                                                <?php elseif ($purchase['result'] == 'Prize Given'): ?>
+                                                    <span style="color: green; font-weight: bold;">Prize Given</span>
+                                                <?php else: ?>
+                                                    <span><?php echo $purchase['result']; ?></span>
+                                                <?php endif; ?>
+                                            </td>
                                         </tr>
                                     <?php endforeach; ?>
-                                    <!-- Grand Total Row -->
-                                    <tr>
-                                        <td colspan="2" class="text-right font-weight-bold">Grand Total:</td>
-                                        <td colspan="4" class="font-weight-bold"><?php echo number_format($grand_total, 2); ?></td>
-                                    </tr>
-                                <?php else: ?>
-                                    <tr>
-                                        <td colspan="6" class="text-center">No records found for the applied filters</td>
-                                    </tr>
-                                <?php endif; ?>
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
 
                     <!-- Initialize DataTable -->
                     <script>
                         $(document).ready(function() {
-                            $('#purchaseListTable').DataTable({
+                            $('#recentPurchasesTable').DataTable({
                                 "paging": true,       // Enable pagination
                                 "searching": true,    // Enable search/filter functionality
                                 "ordering": true,     // Enable column sorting
@@ -156,6 +158,9 @@ foreach ($purchases as $purchase) {
                             });
                         });
                     </script>
+                
+                    
+                </div>
 
                 </div>
                 <!-- /.container-fluid -->
