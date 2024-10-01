@@ -65,8 +65,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['select_winning_record'
             $purchase_stmt->execute();
             $matching_purchases = $purchase_stmt->fetchAll(PDO::FETCH_ASSOC);
         }
-    } else {
-        echo "No matching winning record found.";
     }
 }
 
@@ -99,6 +97,7 @@ function generate_combinations($number) {
 if (isset($_POST['finalize_winning'])) {
     $winning_record_id = $_POST['winning_record_id'];
 
+    // Loop over the selected purchases
     foreach ($_POST['selected_purchases'] as $purchase_id) {
         // Check if this entry is a winner or not
         $purchase_stmt = $conn->prepare("SELECT * FROM purchase_entries WHERE id = :purchase_id");
@@ -107,12 +106,17 @@ if (isset($_POST['finalize_winning'])) {
         $purchase = $purchase_stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($purchase && isset($winning_record['winning_number'])) {
+            // Check if the purchase number matches any of the winning combinations
             $is_winner = in_array($purchase['purchase_no'], generate_combinations($winning_record['winning_number']));
 
             // Ensure that the winning_game key exists in $winning_record
             $winning_category = isset($winning_record['winning_game']) ? $winning_record['winning_game'] : '';
 
-            // Update the purchase record
+            // Calculate winning amount based on category
+            $winning_factor = $winning_category === 'Box' ? 1 : 2;
+            $winning_amount = $is_winner ? $winning_factor * $purchase['purchase_amount'] : 0;
+
+            // Update the purchase record with the result
             $update_stmt = $conn->prepare("
                 UPDATE purchase_entries
                 SET result = :result,
@@ -122,10 +126,8 @@ if (isset($_POST['finalize_winning'])) {
                     winning_record_id = :winning_record_id
                 WHERE id = :purchase_id
             ");
-            
+
             $result = $is_winner ? 'Win' : 'Loss';
-            $winning_factor = $winning_category === 'Box' ? 1 : 2;
-            $winning_amount = $is_winner ? $winning_factor * $purchase['purchase_amount'] : 0;
 
             $update_stmt->bindParam(':result', $result);
             $update_stmt->bindParam(':winning_category', $winning_category);
@@ -134,6 +136,7 @@ if (isset($_POST['finalize_winning'])) {
             $update_stmt->bindParam(':winning_record_id', $winning_record_id);
             $update_stmt->bindParam(':purchase_id', $purchase_id);
 
+            // Execute the update statement
             $update_stmt->execute();
         }
     }
