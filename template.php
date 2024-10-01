@@ -36,37 +36,6 @@ if ($access_level !== 'super_admin') {
     $sql .= " WHERE 1=1"; // Dummy condition for super_admin to add more filters easily
 }
 
-// Apply date, customer, agent, purchase no filters if provided
-$filters = [];
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $from_date = !empty($_POST['from_date']) ? $_POST['from_date'] : null;
-    $to_date = !empty($_POST['to_date']) ? $_POST['to_date'] : null;
-    $customer_name = !empty($_POST['customer_name']) ? $_POST['customer_name'] : null;
-    $agent_filter = !empty($_POST['agent_filter']) ? $_POST['agent_filter'] : null;
-    $purchase_no = !empty($_POST['purchase_no']) ? $_POST['purchase_no'] : null;
-
-    if ($from_date && $to_date) {
-        $sql .= " AND p.purchase_datetime BETWEEN :from_date AND :to_date";
-        $filters['from_date'] = $from_date;
-        $filters['to_date'] = $to_date;
-    }
-
-    if ($customer_name) {
-        $sql .= " AND c.customer_name LIKE :customer_name";
-        $filters['customer_name'] = '%' . $customer_name . '%';
-    }
-
-    if ($agent_filter && $access_level === 'super_admin') {
-        $sql .= " AND p.agent_id = :agent_filter";
-        $filters['agent_filter'] = $agent_filter;
-    }
-
-    if ($purchase_no) {
-        $sql .= " AND p.purchase_no LIKE :purchase_no";
-        $filters['purchase_no'] = '%' . $purchase_no . '%';
-    }
-}
-
 $stmt = $conn->prepare($sql);
 
 // Bind agent ID if the user is an agent
@@ -74,30 +43,11 @@ if ($access_level !== 'super_admin') {
     $stmt->bindParam(':agent_id', $agent_id);
 }
 
-// Bind other filters
-if (isset($filters['from_date']) && isset($filters['to_date'])) {
-    $stmt->bindParam(':from_date', $filters['from_date']);
-    $stmt->bindParam(':to_date', $filters['to_date']);
-}
-
-if (isset($filters['customer_name'])) {
-    $stmt->bindParam(':customer_name', $filters['customer_name']);
-}
-
-if (isset($filters['agent_filter'])) {
-    $stmt->bindParam(':agent_filter', $filters['agent_filter']);
-}
-
-if (isset($filters['purchase_no'])) {
-    $stmt->bindParam(':purchase_no', $filters['purchase_no']);
-}
-
 $stmt->execute();
 $purchases = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Calculate the grand total of the purchase amounts and group data for charts
+// Calculate the grand total of the purchase amounts
 $grand_total = 0;
-
 foreach ($purchases as $purchase) {
     $grand_total += $purchase['purchase_amount'];
 }
@@ -116,7 +66,7 @@ foreach ($purchases as $purchase) {
     <title>Purchase Listing</title>
 
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
@@ -131,7 +81,7 @@ foreach ($purchases as $purchase) {
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 
     <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body id="page-top">
