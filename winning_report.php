@@ -1,9 +1,6 @@
 <?php
 session_start();
 include('config/database.php');
-include('config/sidebar.php');
-include('config/topbar.php');
-include('config/footer.php');
 
 // Set time zone to Kuala Lumpur (GMT +8)
 date_default_timezone_set('Asia/Kuala_Lumpur');
@@ -22,7 +19,6 @@ try {
 }
 
 // Matching function
-$matching_purchases = [];
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['select_winning_record'])) {
     $winning_id = $_POST['select_winning_record'];
 
@@ -37,31 +33,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['select_winning_record'
         $winning_number = $winning_record['winning_number'];
         $winning_combinations = generate_combinations($winning_number);
 
-        // Build SQL query with named placeholders for each combination
-        $placeholders = [];
-        foreach ($winning_combinations as $key => $combination) {
-            $placeholders[] = ":combination$key";
-        }
+        // Prepare placeholders for the IN clause dynamically
+        $in_placeholders = implode(',', array_map(fn($key) => ":winning_comb_{$key}", array_keys($winning_combinations)));
 
-        // Build query with dynamic IN clause using named parameters
+        // Fetch matching purchase entries
         $purchase_stmt = $conn->prepare("
-            SELECT p.*, c.customer_name, a.agent_name 
-            FROM purchase_entries p
-            JOIN customer_details c ON p.customer_id = c.customer_id
-            JOIN admin_access a ON p.agent_id = a.agent_id
-            WHERE p.result NOT IN ('Win', 'Loss') 
-              AND DATE(p.purchase_datetime) <= :winning_date
-              AND p.purchase_no IN (" . implode(",", $placeholders) . ")
+            SELECT * FROM purchase_entries 
+            WHERE result NOT IN ('Win', 'Loss') 
+              AND DATE(purchase_datetime) <= :winning_date
+              AND purchase_no IN ($in_placeholders)
         ");
 
-        // Bind the winning date
-        $purchase_stmt->bindValue(':winning_date', $winning_record['winning_date']);
+        // Bind the :winning_date parameter
+        $purchase_stmt->bindParam(':winning_date', $winning_record['winning_date']);
 
-        // Bind each combination as a named parameter
+        // Bind the winning combinations dynamically
         foreach ($winning_combinations as $key => $combination) {
-            $purchase_stmt->bindValue(":combination$key", $combination);
+            $purchase_stmt->bindValue(":winning_comb_{$key}", $combination);
         }
 
+        // Execute the statement
         $purchase_stmt->execute();
         $matching_purchases = $purchase_stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -190,23 +181,30 @@ if (isset($_POST['finalize_winning'])) {
         <table id="matchedPurchasesTable" class="table table-bordered">
             <thead>
                 <tr>
-                    <th>Select</th>
                     <th>Customer Name</th>
                     <th>Purchase No</th>
                     <th>Purchase Amount</th>
                     <th>Purchase Date</th>
                     <th>Agent Name</th>
+                    <th>Winning Category</th>
+                    <th>Winning Amount</th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($matching_purchases as $purchase): ?>
+                <?php
+                    $winning_category = $winning_record['winning_game'];
+                    $winning_factor = $winning_category === 'Box' ? 1 : 2;
+                    $winning_amount = $winning_factor * $purchase['purchase_amount'];
+                ?>
                 <tr>
-                    <td><input type="checkbox" name="selected_purchases[]" value="<?php echo $purchase['id']; ?>"></td>
                     <td><?php echo $purchase['customer_name']; ?></td>
                     <td><?php echo $purchase['purchase_no']; ?></td>
-                    <td><?php echo $purchase['purchase_amount']; ?></td>
+                    <td><?php echo number_format($purchase['purchase_amount'], 2); ?></td>
                     <td><?php echo $purchase['purchase_datetime']; ?></td>
                     <td><?php echo $purchase['agent_name']; ?></td>
+                    <td><?php echo $winning_category; ?></td>
+                    <td><?php echo number_format($winning_amount, 2); ?></td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>
