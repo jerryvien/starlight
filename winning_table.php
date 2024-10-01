@@ -1,5 +1,5 @@
 <?php
-session_start();
+
 include('config/database.php'); // Include your database connection
 
 // Enable error reporting for debugging
