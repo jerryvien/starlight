@@ -98,6 +98,7 @@ if (isset($_POST['finalize_winning'])) {
                 winning_record_id = :winning_record_id
             WHERE id = :purchase_id
         ");
+        echo "<p>Fake Winning results have been updated!</p>";
 
         $result = $is_winner ? 'Win' : 'Loss';
         $winning_category = $winning_record['winning_game'];
@@ -114,7 +115,7 @@ if (isset($_POST['finalize_winning'])) {
         $update_stmt->execute();
     }
 
-    echo "<p>Winning results have been updated!</p>";
+    echo "<p>Fake Winning results have been updated!</p>";
 }
 ?>
 
