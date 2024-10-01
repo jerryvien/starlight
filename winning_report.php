@@ -144,6 +144,34 @@ function update_loss_status($winning_record, $conn) {
     }
 }
 
+// Function to update the total payout for the winning record
+function update_total_payout($winning_record_id, $conn) {
+    try {
+        // Calculate the total payout by summing up the winning amounts from matched purchase entries
+        $stmt = $conn->prepare("
+            SELECT SUM(winning_amount) AS total_payout
+            FROM purchase_entries
+            WHERE winning_record_id = :winning_record_id
+              AND result = 'Win'
+        ");
+        $stmt->bindParam(':winning_record_id', $winning_record_id);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        // Update the winning_record table with the total payout
+        $update_stmt = $conn->prepare("
+            UPDATE winning_record
+            SET winning_total_payout = :total_payout
+            WHERE id = :winning_record_id
+        ");
+        $update_stmt->bindParam(':total_payout', $result['total_payout']);
+        $update_stmt->bindParam(':winning_record_id', $winning_record_id);
+        $update_stmt->execute();
+    } catch (Exception $e) {
+        die("Error updating total payout: " . $e->getMessage());
+    }
+}
+
 // Generate number permutations
 function generate_combinations($number) {
     $permutations = [];
@@ -237,6 +265,17 @@ function generate_combinations($number) {
                     </table>
                 </div>
 
+                <?php
+                    // Calculate the total sum of the winning amounts for the matched records
+                    $subtotal_winning_amount = 0;
+                    foreach ($matching_purchases as $purchase) {
+                        $winning_category = $winning_record['winning_game'] ?? 'Unknown';
+                        $winning_factor = ($winning_category === 'Box') ? 1 : 2;
+                        $winning_amount = $winning_factor * $purchase['purchase_amount'];
+                        $subtotal_winning_amount += $winning_amount;
+                    }
+                ?>
+
                 <!-- Matching Purchases Table -->
                 <?php if (!empty($matching_purchases)): ?>
                 <div class="container-fluid">
@@ -274,6 +313,13 @@ function generate_combinations($number) {
                                 </tr>
                                 <?php endforeach; ?>
                             </tbody>
+                            <!-- Subtotal Row -->
+                            <tfoot>
+                                <tr>
+                                    <td colspan="6" class="text-right"><strong>Subtotal Winning Amount:</strong></td>
+                                    <td><strong><?php echo $subtotal_winning_amount; ?></strong></td>
+                                </tr>
+                            </tfoot>
                         </table>
                         <button type="submit" name="finalize_winning" class="btn btn-success" onclick="return confirm('Are you sure you want to finalize the winning entries?');">Finalize Winning</button>
                     </form>
