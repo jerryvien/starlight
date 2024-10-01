@@ -139,14 +139,14 @@ try {
          JOIN customer_details c ON p.customer_id = c.customer_id 
          JOIN admin_access a ON p.agent_id = a.agent_id 
          ORDER BY p.purchase_datetime DESC 
-         LIMIT 10" : 
+         LIMIT 100" : 
         "SELECT p.*, c.customer_name, a.agent_name 
          FROM purchase_entries p 
          JOIN customer_details c ON p.customer_id = c.customer_id 
          JOIN admin_access a ON p.agent_id = a.agent_id 
          WHERE p.agent_id = :agent_id 
          ORDER BY p.purchase_datetime DESC 
-         LIMIT 10";
+         LIMIT 100";
 
     $recent_purchases_stmt = $conn->prepare($recent_purchases_query);
     if ($access_level !== 'super_admin') {
@@ -336,7 +336,7 @@ try {
                                         <th>Category</th>
                                         <th>Amount</th>
                                         <th>Purchase Date</th>
-                                        <th>Result</th>
+                                        <th>Status</th> <!-- Changed Result to Status -->
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -347,8 +347,20 @@ try {
                                             <td><?php echo $purchase['purchase_no']; ?></td>
                                             <td><?php echo $purchase['purchase_category']; ?></td>
                                             <td><?php echo number_format($purchase['purchase_amount'], 2); ?></td>
-                                            <td><?php echo $purchase['purchase_datetime']; ?></td>
-                                            <td><?php echo $purchase['result']; ?></td>
+                                            
+                                            <!-- Format Purchase Date to show Month and Day -->
+                                            <td><?php echo date('M d', strtotime($purchase['purchase_datetime'])); ?></td>
+
+                                            <!-- Status with Color Coding -->
+                                            <td>
+                                                <?php if ($purchase['result'] == 'Pending'): ?>
+                                                    <span style="color: red; font-weight: bold;">Pending</span>
+                                                <?php elseif ($purchase['result'] == 'Prize Given'): ?>
+                                                    <span style="color: green; font-weight: bold;">Prize Given</span>
+                                                <?php else: ?>
+                                                    <span><?php echo $purchase['result']; ?></span>
+                                                <?php endif; ?>
+                                            </td>
                                         </tr>
                                     <?php endforeach; ?>
                                 </tbody>
