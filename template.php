@@ -26,14 +26,15 @@ try {
          FROM purchase_entries p 
          JOIN customer_details c ON p.customer_id = c.customer_id 
          JOIN admin_access a ON p.agent_id = a.agent_id 
-         ORDER BY p.purchase_datetime DESC":
-    
+         ORDER BY p.purchase_datetime DESC 
+         LIMIT 100" : 
         "SELECT p.*, c.customer_name, a.agent_name 
          FROM purchase_entries p 
          JOIN customer_details c ON p.customer_id = c.customer_id 
          JOIN admin_access a ON p.agent_id = a.agent_id 
          WHERE p.agent_id = :agent_id 
-         ORDER BY p.purchase_datetime DESC;
+         ORDER BY p.purchase_datetime DESC 
+         LIMIT 100";
 
     $recent_purchases_stmt = $conn->prepare($recent_purchases_query);
     if ($access_level !== 'super_admin') {
@@ -96,7 +97,7 @@ try {
 
                 <!-- Begin Page Content -->
                 <!-- Include DataTables CSS and JS -->
-                <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
+                    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
                     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
                     <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
 
