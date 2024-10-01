@@ -59,7 +59,7 @@ try {
 
     <!-- Dropdown for selecting the year -->
     <div class="form-group">
-        <label for="yearSelect">Select Year:</label>
+        
         <select id="yearSelect" class="form-control" style="width: 150px;">
             <option value="">Last 12 Months</option>
             <?php foreach ($available_years as $year): ?>
