@@ -140,8 +140,8 @@ $bar_chart_data = json_encode(array_values($sales_by_customer));
     <title>Purchase Listing</title>
 
     <!-- Custom fonts and styles for this template-->
-    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+    
+    
     <script src="vendor/jquery/jquery.min.js"></script>
     <link href="css/bootstrap.min.css" rel="stylesheet">
 
