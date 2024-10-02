@@ -245,8 +245,6 @@ function generate_combinations($number) {
 
 
                 <!-- Winning Records Table -->
-
-                <!-- DataTales Example -->
                 <div class="container-fluid">
                     <div class="card shadow mb-4">
                             <div class="card-header py-3">
@@ -305,51 +303,61 @@ function generate_combinations($number) {
 
                 <!-- Matching Purchases Table -->
                 <?php if (!empty($matching_purchases)): ?>
+
+                <!-- Winning Records Table -->
                 <div class="container-fluid">
-                    <h2>Matched Purchase Entries</h2>
-                    <form method="POST">
-                        <input type="hidden" name="winning_record_id" value="<?php echo $winning_id; ?>">
-                        <input type="hidden" name="matching_purchases" value="<?php echo $serialized_purchases; ?>">
-                        <table id="matchedPurchasesTable" class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Customer Name</th>
-                                    <th>Purchase No</th>
-                                    <th>Purchase Amount</th>
-                                    <th>Purchase Date</th>
-                                    <th>Agent Name</th>
-                                    <th>Winning Category</th>
-                                    <th>Winning Amount</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($matching_purchases as $purchase): ?>
-                                <?php
-                                    $winning_category = $winning_record['winning_game'] ?? 'Unknown';
-                                    $winning_factor = ($winning_category === 'Box') ? 1 : 2;
-                                    $winning_amount = $winning_factor * $purchase['purchase_amount'];
-                                ?>
-                                <tr>
-                                    <td><?php echo $purchase['customer_name'] ?? 'N/A'; ?></td>
-                                    <td><?php echo $purchase['purchase_no']; ?></td>
-                                    <td><?php echo $purchase['purchase_amount']; ?></td>
-                                    <td><?php echo $purchase['purchase_datetime']; ?></td>
-                                    <td><?php echo $purchase['agent_name'] ?? 'N/A'; ?></td>
-                                    <td><?php echo $winning_category; ?></td>
-                                    <td><?php echo $winning_amount; ?></td>
-                                </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                            <!-- Subtotal Row -->
-                            <tfoot>
-                                <tr>
-                                    <td colspan="6" class="text-right"><strong>Subtotal Winning Amount:</strong></td>
-                                    <td><strong><?php echo $subtotal_winning_amount; ?></strong></td>
-                                </tr>
-                            </tfoot>
-                        </table>
-                        <button type="submit" name="finalize_winning" class="btn btn-Warning" onclick="return confirm('Are you sure you want to finalize the winning entries?');">Finalize Winning</button>
-                    </form>
+                    <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Matched Purchase Entries</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <form method="POST">
+                                        <input type="hidden" name="winning_record_id" value="<?php echo $winning_id; ?>">
+                                        <input type="hidden" name="matching_purchases" value="<?php echo $serialized_purchases; ?>">
+                                        <table id="matchedPurchasesTable" class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Customer Name</th>
+                                                    <th>Purchase No</th>
+                                                    <th>Purchase Amount</th>
+                                                    <th>Purchase Date</th>
+                                                    <th>Agent Name</th>
+                                                    <th>Winning Category</th>
+                                                    <th>Winning Amount</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php foreach ($matching_purchases as $purchase): ?>
+                                                <?php
+                                                    $winning_category = $winning_record['winning_game'] ?? 'Unknown';
+                                                    $winning_factor = ($winning_category === 'Box') ? 1 : 2;
+                                                    $winning_amount = $winning_factor * $purchase['purchase_amount'];
+                                                ?>
+                                                <tr>
+                                                    <td><?php echo $purchase['customer_name'] ?? 'N/A'; ?></td>
+                                                    <td><?php echo $purchase['purchase_no']; ?></td>
+                                                    <td><?php echo $purchase['purchase_amount']; ?></td>
+                                                    <td><?php echo $purchase['purchase_datetime']; ?></td>
+                                                    <td><?php echo $purchase['agent_name'] ?? 'N/A'; ?></td>
+                                                    <td><?php echo $winning_category; ?></td>
+                                                    <td><?php echo $winning_amount; ?></td>
+                                                </tr>
+                                                <?php endforeach; ?>
+                                            </tbody>
+                                            <!-- Subtotal Row -->
+                                            <tfoot>
+                                                <tr>
+                                                    <td colspan="6" class="text-right"><strong>Subtotal Winning Amount:</strong></td>
+                                                    <td><strong><?php echo $subtotal_winning_amount; ?></strong></td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                        <button type="submit" name="finalize_winning" class="btn btn-Warning" onclick="return confirm('Are you sure you want to finalize the winning entries?');">Finalize Winning</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                 </div>
                 <?php endif; ?>
 
