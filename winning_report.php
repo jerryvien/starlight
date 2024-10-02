@@ -287,6 +287,7 @@ function generate_combinations($number) {
                                 </table>
                             </div>
                         </div>
+                    </div>
                 </div>
 
                 <?php
