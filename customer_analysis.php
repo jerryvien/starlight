@@ -62,7 +62,6 @@ if ($selected_customer_id) {
     $performance_stmt->execute();
     $performance = $performance_stmt->fetch(PDO::FETCH_ASSOC);
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -79,6 +78,9 @@ if ($selected_customer_id) {
 
     <!-- Custom styles for this template -->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
+
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
 </head>
 
 <body id="page-top">
@@ -138,17 +140,24 @@ if ($selected_customer_id) {
                     <p>Customer ID: <?php echo $customer['customer_id']; ?></p>
                     <p>Customer Name: <?php echo $customer['customer_name']; ?></p>
                     <p>Agent Name: <?php echo $customer['agent_name']; ?></p>
-                    <p>Customer Age: <?php echo $customer['customer_age_years']; ?> years (<?php echo $customer['customer_age_months']; ?> months)</p>
+
+                    <!-- Check if customer age is set -->
+                    <p>
+                        Customer Age: 
+                        <?php echo isset($customer['customer_age_years']) ? $customer['customer_age_years'] . " years" : 'N/A'; ?> 
+                        (<?php echo isset($customer['customer_age_months']) ? $customer['customer_age_months'] . " months" : 'N/A'; ?>)
+                    </p>
+
                     <p>Last Purchase Date: <?php echo isset($performance['last_purchase_date']) ? $performance['last_purchase_date'] : 'N/A'; ?></p>
                     <p>Last Win Date: <?php echo isset($performance['last_win_date']) ? $performance['last_win_date'] : 'N/A'; ?></p>
 
                     <!-- Performance Analysis Charts -->
                     <div class="row">
                         <div class="col-md-6">
-                            <canvas id="revenueChart"></canvas>
+                            <canvas id="revenueChart" style="max-width: 100%; height: 400px;"></canvas>
                         </div>
                         <div class="col-md-6">
-                            <canvas id="winLossChart"></canvas>
+                            <canvas id="winLossChart" style="max-width: 100%; height: 400px;"></canvas>
                         </div>
                     </div>
                     <?php endif; ?>
@@ -160,7 +169,7 @@ if ($selected_customer_id) {
             <!-- End of Main Content -->
 
             <!-- Footer -->
-            <?php include('footer.php'); ?>
+            <?php include('config/footer.php'); ?>
             <!-- End of Footer -->
 
         </div>
@@ -184,6 +193,23 @@ if ($selected_customer_id) {
     <!-- Custom scripts for all pages-->
     <script src="js/sb-admin-2.min.js"></script>
 
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+    <!-- Initialize DataTables -->
+    <script>
+        $(document).ready(function() {
+            $('#customersTable').DataTable({
+                "paging": true,       // Enable pagination
+                "pageLength": 5,      // Display 5 rows at a time
+                "searching": true,    // Enable search/filter functionality
+                "ordering": true,     // Enable column sorting
+                "info": true,         // Show table information
+                "lengthChange": false // Disable ability to change rows per page
+            });
+        });
+    </script>
+
     <!-- Chart.js for Analysis Charts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -194,27 +220,34 @@ if ($selected_customer_id) {
         var revenueChart = new Chart(ctxRevenue, {
             type: 'line',
             data: {
-                labels: ['January', 'February', 'March'], // Placeholder labels; replace with actual data
+                labels: ['January', 'February', 'March', 'April', 'May'],  // Dummy data, replace with real dates
                 datasets: [{
-                    label: 'Revenue',
-                    data: [1200, 1500, 1800], // Placeholder data; replace with actual data
+                    label: 'Total Revenue',
+                    data: [1200, 1500, 1100, 2000, 1300],  // Dummy data, replace with real revenue
                     backgroundColor: 'rgba(54, 162, 235, 0.2)',
                     borderColor: 'rgba(54, 162, 235, 1)',
                     borderWidth: 1
                 }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
             }
         });
 
         // Chart for Win/Loss Ratio
         var ctxWinLoss = document.getElementById('winLossChart').getContext('2d');
         var winLossChart = new Chart(ctxWinLoss, {
-            type: 'doughnut',
+            type: 'pie',
             data: {
                 labels: ['Wins', 'Losses'],
                 datasets: [{
-                    label: 'Win/Loss',
                     data: [<?php echo $performance['total_wins']; ?>, <?php echo $performance['total_losses']; ?>],
-                    backgroundColor: ['#28a745', '#dc3545']
+                    backgroundColor: ['#28a745', '#dc3545'],
+                    borderWidth: 1
                 }]
             }
         });
