@@ -288,7 +288,7 @@ function generate_combinations($number) {
                             </div>
                         </div>
                     </div>
-                </div>
+                
 
                 <?php
                     // Calculate the total sum of the winning amounts for the matched records
