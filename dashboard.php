@@ -345,7 +345,7 @@ try {
                                         <?php include('PHP_Data/growth_report.php'); ?>
                                     </div>
                                     <div class="col-md-6">
-                                        <?php include('template.php'); ?>
+                                        <?php include('PHP_Data/sales_compare_chart.php'); ?>
                                     </div>
                                 </div>
                             </div>
