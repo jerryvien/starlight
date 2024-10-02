@@ -15,6 +15,10 @@ if (!isset($_SESSION['admin'])) {
     exit;
 }
 
+// Check user access level
+$access_level = $_SESSION['access_level'];
+$agent_id = $_SESSION['agent_id'];
+
 // Assuming you have verified the user login and set the user session
 $user_id = $_SESSION['agent_id']; // The logged-in user's ID
 $ip_address = getUserIP();
@@ -30,9 +34,7 @@ $stmt->bindParam(':ip_address', $ip_address);
 $stmt->bindParam(':user_agent', $user_agent);
 $stmt->execute();
 
-// Check user access level
-$access_level = $_SESSION['access_level'];
-$agent_id = $_SESSION['agent_id'];
+
 
 // Fetch total sales, average order value, and total sales per day
 try {
