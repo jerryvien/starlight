@@ -12,7 +12,7 @@ if (!isset($_SESSION['admin'])) {
 $agent_id = $_SESSION['agent_id'];
 
 // Get the last customer ID from the database
-$query = $conn->query("SELECT customer_id FROM customer_details ORDER BY created_at DESC LIMIT 1");
+$query = $conn->query("SELECT customer_id FROM customer_details ORDER BY customer_id DESC LIMIT 1");
 $last_customer = $query->fetch(PDO::FETCH_ASSOC);
 
 // Check if the result is valid and if the customer_id has the "CUST" prefix
