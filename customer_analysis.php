@@ -54,13 +54,19 @@ if ($selected_customer_id) {
             SUM(purchase_amount) AS total_revenue,
             COUNT(*) AS total_transactions,
             MAX(DATE(purchase_datetime)) AS last_purchase_date,
-            MAX(CASE WHEN result = 'Win' THEN DATE(purchase_datetime) END) AS last_win_date
+            MAX(CASE WHEN result = 'Win' THEN DATE(purchase_datetime) END) AS last_win_date,
+            GROUP_CONCAT(purchase_amount ORDER BY purchase_datetime ASC) AS sales_history,
+            GROUP_CONCAT(DATE(purchase_datetime) ORDER BY purchase_datetime ASC) AS sales_dates
         FROM purchase_entries
         WHERE customer_id = :customer_id
     ");
     $performance_stmt->bindParam(':customer_id', $selected_customer_id);
     $performance_stmt->execute();
     $performance = $performance_stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Prepare data for line and bar charts
+    $sales_history = explode(',', $performance['sales_history']);
+    $sales_dates = explode(',', $performance['sales_dates']);
 }
 ?>
 
@@ -210,20 +216,18 @@ if ($selected_customer_id) {
         });
     </script>
 
-    <!-- Chart.js for Analysis Charts -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+    <!-- Charts Script -->
     <?php if (isset($customer)): ?>
     <script>
-        // Chart for Revenue over Time
+        // Line Chart for Revenue
         var ctxRevenue = document.getElementById('revenueChart').getContext('2d');
         var revenueChart = new Chart(ctxRevenue, {
             type: 'line',
             data: {
-                labels: ['January', 'February', 'March', 'April', 'May'],  // Dummy data, replace with real dates
+                labels: <?php echo json_encode($sales_dates); ?>,
                 datasets: [{
                     label: 'Total Revenue',
-                    data: [1200, 1500, 1100, 2000, 1300],  // Dummy data, replace with real revenue
+                    data: <?php echo json_encode($sales_history); ?>,
                     backgroundColor: 'rgba(54, 162, 235, 0.2)',
                     borderColor: 'rgba(54, 162, 235, 1)',
                     borderWidth: 1
@@ -238,10 +242,10 @@ if ($selected_customer_id) {
             }
         });
 
-        // Chart for Win/Loss Ratio
+        // Bar Chart for Win/Loss Ratio
         var ctxWinLoss = document.getElementById('winLossChart').getContext('2d');
         var winLossChart = new Chart(ctxWinLoss, {
-            type: 'pie',
+            type: 'bar',
             data: {
                 labels: ['Wins', 'Losses'],
                 datasets: [{
