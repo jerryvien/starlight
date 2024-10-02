@@ -33,9 +33,11 @@ $customers = $customers_stmt->fetchAll(PDO::FETCH_ASSOC);
 $selected_customer_id = isset($_GET['customer_id']) ? $_GET['customer_id'] : null;
 
 if ($selected_customer_id) {
-    // Fetch the selected customer's data
+    // Fetch the selected customer's data and calculate the duration since account creation
     $customer_stmt = $conn->prepare("
-        SELECT c.*, a.agent_name 
+        SELECT c.*, a.agent_name, 
+               TIMESTAMPDIFF(YEAR, c.created_at, CURDATE()) AS customer_age_years,  -- Age in years
+               TIMESTAMPDIFF(MONTH, c.created_at, CURDATE()) AS customer_age_months  -- Age in months
         FROM customer_details c
         LEFT JOIN admin_access a ON c.agent_id = a.agent_id
         WHERE c.customer_id = :customer_id
@@ -59,54 +61,17 @@ if ($selected_customer_id) {
     $performance_stmt->bindParam(':customer_id', $selected_customer_id);
     $performance_stmt->execute();
     $performance = $performance_stmt->fetch(PDO::FETCH_ASSOC);
-
-    $win_rate = $performance['total_wins'] / max($performance['total_transactions'], 1) * 100;
-    $loss_rate = $performance['total_losses'] / max($performance['total_transactions'], 1) * 100;
-    $active_ratio = $performance['total_transactions'] / 100;
-
-    // Prepare data for charts
-    $sales_dates = [];
-    $sales_amounts = [];
-    $wins = [];
-    $losses = [];
-
-    // Fetch history data for line chart
-    $history_stmt = $conn->prepare("
-        SELECT DATE(purchase_datetime) AS date, purchase_amount, result 
-        FROM purchase_entries
-        WHERE customer_id = :customer_id
-        ORDER BY purchase_datetime ASC
-    ");
-    $history_stmt->bindParam(':customer_id', $selected_customer_id);
-    $history_stmt->execute();
-    $history_data = $history_stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    foreach ($history_data as $history) {
-        $sales_dates[] = $history['date'];
-        $sales_amounts[] = $history['purchase_amount'];
-
-        if ($history['result'] === 'Win') {
-            $wins[] = $history['purchase_amount'];
-            $losses[] = 0;
-        } elseif ($history['result'] === 'Loss') {
-            $losses[] = $history['purchase_amount'];
-            $wins[] = 0;
-        } else {
-            $wins[] = 0;
-            $losses[] = 0;
-        }
-    }
 }
+
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Customer Dashboard</title>
+    <title>Customer Analysis</title>
 
     <!-- Custom fonts for this template -->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -114,8 +79,6 @@ if ($selected_customer_id) {
 
     <!-- Custom styles for this template -->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
-    <link href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 </head>
 
 <body id="page-top">
@@ -124,7 +87,7 @@ if ($selected_customer_id) {
     <div id="wrapper">
 
         <!-- Sidebar -->
-        <?php include('config/sidebar.php'); ?> <!-- Include your sidebar here -->
+        <?php include('config/sidebar.php'); ?>
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
@@ -133,61 +96,61 @@ if ($selected_customer_id) {
             <div id="content">
 
                 <!-- Topbar -->
-                <?php include('config/topbar.php'); ?> <!-- Include your topbar here -->
+                <?php include('config/topbar.php'); ?>
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-4 text-gray-800">Customer Dashboard</h1>
+                    <h1 class="h3 mb-4 text-gray-800">Customer Analysis</h1>
 
-                    <!-- Customer Data Table -->
-                    <h2>Customer List</h2>
-                    <table id="customerTable" class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Customer ID</th>
-                                <th>Customer Name</th>
-                                <th>Agent Name</th>
-                                <th>Total Sales</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($customers as $customer): ?>
+                    <!-- Data Table to Select Customer -->
+                    <div class="table-responsive">
+                        <table id="customersTable" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Customer ID</th>
+                                    <th>Customer Name</th>
+                                    <th>Agent Name</th>
+                                    <th>Created At</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($customers as $customer): ?>
                                 <tr>
                                     <td><?php echo $customer['customer_id']; ?></td>
                                     <td><?php echo $customer['customer_name']; ?></td>
                                     <td><?php echo $customer['agent_name']; ?></td>
-                                    <td><?php echo number_format($customer['total_sales'], 2); ?></td>
+                                    <td><?php echo date('Y-m-d', strtotime($customer['created_at'])); ?></td>
                                     <td>
-                                        <a href="?customer_id=<?php echo $customer['customer_id']; ?>" class="btn btn-primary">Select</a>
+                                        <a href="customer_analysis.php?customer_id=<?php echo $customer['customer_id']; ?>" class="btn btn-primary">Select</a>
                                     </td>
                                 </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
 
-                    <!-- Customer Analysis Section (only if a customer is selected) -->
+                    <!-- Selected Customer Details and Analysis -->
                     <?php if (isset($customer)): ?>
-                        <h2>Customer Overview</h2>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <p><strong>Customer Name:</strong> <?php echo $customer['customer_name']; ?></p>
-                                <p><strong>Customer Age:</strong> <?php echo $customer['age']; ?> years</p>
-                                <p><strong>Agent:</strong> <?php echo $customer['agent_name']; ?></p>
-                                <p><strong>Last Purchase:</strong> <?php echo $performance['last_purchase_date']; ?></p>
-                                <p><strong>Last Win:</strong> <?php echo $performance['last_win_date'] ? $performance['last_win_date'] : 'No Wins'; ?></p>
-                            </div>
+                    <h2>Customer Details</h2>
+                    <p>Customer ID: <?php echo $customer['customer_id']; ?></p>
+                    <p>Customer Name: <?php echo $customer['customer_name']; ?></p>
+                    <p>Agent Name: <?php echo $customer['agent_name']; ?></p>
+                    <p>Customer Age: <?php echo $customer['customer_age_years']; ?> years (<?php echo $customer['customer_age_months']; ?> months)</p>
+                    <p>Last Purchase Date: <?php echo isset($performance['last_purchase_date']) ? $performance['last_purchase_date'] : 'N/A'; ?></p>
+                    <p>Last Win Date: <?php echo isset($performance['last_win_date']) ? $performance['last_win_date'] : 'N/A'; ?></p>
+
+                    <!-- Performance Analysis Charts -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <canvas id="revenueChart"></canvas>
                         </div>
-
-                        <!-- Performance Analysis (Radar Chart) -->
-                        <h2>Customer Performance Analysis</h2>
-                        <canvas id="performanceRadarChart"></canvas>
-
-                        <!-- Sales and Win/Loss History (Line Chart) -->
-                        <h2>Sales and Win/Loss History</h2>
-                        <canvas id="salesHistoryChart"></canvas>
+                        <div class="col-md-6">
+                            <canvas id="winLossChart"></canvas>
+                        </div>
+                    </div>
                     <?php endif; ?>
 
                 </div>
@@ -197,13 +160,7 @@ if ($selected_customer_id) {
             <!-- End of Main Content -->
 
             <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2020</span>
-                    </div>
-                </div>
-            </footer>
+            <?php include('footer.php'); ?>
             <!-- End of Footer -->
 
         </div>
@@ -227,81 +184,38 @@ if ($selected_customer_id) {
     <!-- Custom scripts for all pages-->
     <script src="js/sb-admin-2.min.js"></script>
 
-    <!-- DataTables initialization -->
-    <script>
-        $(document).ready(function() {
-            $('#customerTable').DataTable();
-        });
-    </script>
-
-    <?php if (isset($customer)): ?>
-    <!-- Chart.js for radar and line charts -->
+    <!-- Chart.js for Analysis Charts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <!-- Radar Chart for Customer Performance -->
+    <?php if (isset($customer)): ?>
     <script>
-        const performanceData = {
-            labels: ['Total Wins', 'Total Losses', 'Total Revenue', 'Active Ratio'],
-            datasets: [{
-                label: 'Performance',
-                data: [<?php echo $performance['total_wins']; ?>, <?php echo $performance['total_losses']; ?>, <?php echo $performance['total_revenue']; ?>, <?php echo $active_ratio; ?>],
-                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 1
-            }]
-        };
-
-        const performanceRadarChart = new Chart(document.getElementById('performanceRadarChart'), {
-            type: 'radar',
-            data: performanceData,
-            options: {
-                scales: {
-                    r: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-    </script>
-
-    <!-- Line Chart for Sales History -->
-    <script>
-        const salesHistoryData = {
-            labels: <?php echo json_encode($sales_dates); ?>,
-            datasets: [
-                {
-                    label: 'Sales Amount',
-                    data: <?php echo json_encode($sales_amounts); ?>,
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                },
-                {
-                    label: 'Wins',
-                    data: <?php echo json_encode($wins); ?>,
+        // Chart for Revenue over Time
+        var ctxRevenue = document.getElementById('revenueChart').getContext('2d');
+        var revenueChart = new Chart(ctxRevenue, {
+            type: 'line',
+            data: {
+                labels: ['January', 'February', 'March'], // Placeholder labels; replace with actual data
+                datasets: [{
+                    label: 'Revenue',
+                    data: [1200, 1500, 1800], // Placeholder data; replace with actual data
                     backgroundColor: 'rgba(54, 162, 235, 0.2)',
                     borderColor: 'rgba(54, 162, 235, 1)',
                     borderWidth: 1
-                },
-                {
-                    label: 'Losses',
-                    data: <?php echo json_encode($losses); ?>,
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    borderWidth: 1
-                }
-            ]
-        };
+                }]
+            }
+        });
 
-        const salesHistoryChart = new Chart(document.getElementById('salesHistoryChart'), {
-            type: 'line',
-            data: salesHistoryData,
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
+        // Chart for Win/Loss Ratio
+        var ctxWinLoss = document.getElementById('winLossChart').getContext('2d');
+        var winLossChart = new Chart(ctxWinLoss, {
+            type: 'doughnut',
+            data: {
+                labels: ['Wins', 'Losses'],
+                datasets: [{
+                    label: 'Win/Loss',
+                    data: [<?php echo $performance['total_wins']; ?>, <?php echo $performance['total_losses']; ?>],
+                    backgroundColor: ['#28a745', '#dc3545']
+                }]
             }
         });
     </script>
