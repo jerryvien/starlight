@@ -245,40 +245,48 @@ function generate_combinations($number) {
 
 
                 <!-- Winning Records Table -->
-                <div class="container-fluid">
-                    <h2>Winning Records</h2>
-                    <table id="winningRecordsTable" class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Winning Number</th>
-                                <th>Winning Game</th>
-                                
-                                <th>Winning Date</th>
-                                <th>Total Payout</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($winning_records as $record): ?>
-                            <tr>
-                                <td><?php echo $record['winning_number']; ?></td>
-                                <td><?php echo $record['winning_game']; ?></td>
-                                
-                                <td><?php echo date('d-M-Y', strtotime($record['winning_date'])); ?></td>
-                                <td>$$ <?php echo $record['winning_total_payout']; ?></td>
-                                <td>
-                                <form method="POST">
-                                    <?php if ($record['winning_listing']): ?>
-                                        <button class="btn btn-danger" disabled>Settled</button>
-                                    <?php else: ?>
-                                        <button type="submit" name="select_winning_record" value="<?php echo $record['id']; ?>" class="btn btn-warning">Huat!!</button>
-                                    <?php endif; ?>
-                                </form>
-                                </td>
-                            </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
+
+                <!-- DataTales Example -->
+                <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Winning Record</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="winningRecordsTable" class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Winning Number</th>
+                                            <th>Winning Game</th>
+                                            
+                                            <th>Winning Date</th>
+                                            <th>Total Payout</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($winning_records as $record): ?>
+                                        <tr>
+                                            <td><?php echo $record['winning_number']; ?></td>
+                                            <td><?php echo $record['winning_game']; ?></td>
+                                            
+                                            <td><?php echo date('d-M-Y', strtotime($record['winning_date'])); ?></td>
+                                            <td>$$ <?php echo $record['winning_total_payout']; ?></td>
+                                            <td>
+                                            <form method="POST">
+                                                <?php if ($record['winning_listing']): ?>
+                                                    <button class="btn btn-danger" disabled>Settled</button>
+                                                <?php else: ?>
+                                                    <button type="submit" name="select_winning_record" value="<?php echo $record['id']; ?>" class="btn btn-warning">Huat!!</button>
+                                                <?php endif; ?>
+                                            </form>
+                                            </td>
+                                        </tr>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                 </div>
 
                 <?php
