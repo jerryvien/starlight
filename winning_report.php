@@ -269,9 +269,9 @@ function generate_combinations($number) {
                                 <td>
                                 <form method="POST">
                                     <?php if ($record['winning_listing']): ?>
-                                        <button class="btn btn-success" disabled>Settled</button>
+                                        <button class="btn btn-danger" disabled>Settled</button>
                                     <?php else: ?>
-                                        <button type="submit" name="select_winning_record" value="<?php echo $record['id']; ?>" class="btn btn-primary">Huat!!</button>
+                                        <button type="submit" name="select_winning_record" value="<?php echo $record['id']; ?>" class="btn btn-warning">Huat!!</button>
                                     <?php endif; ?>
                                 </form>
                                 </td>
@@ -337,7 +337,7 @@ function generate_combinations($number) {
                                 </tr>
                             </tfoot>
                         </table>
-                        <button type="submit" name="finalize_winning" class="btn btn-success" onclick="return confirm('Are you sure you want to finalize the winning entries?');">Finalize Winning</button>
+                        <button type="submit" name="finalize_winning" class="btn btn-Warning" onclick="return confirm('Are you sure you want to finalize the winning entries?');">Finalize Winning</button>
                     </form>
                 </div>
                 <?php endif; ?>
