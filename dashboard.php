@@ -15,6 +15,21 @@ if (!isset($_SESSION['admin'])) {
     exit;
 }
 
+// Assuming you have verified the user login and set the user session
+$user_id = $_SESSION['agent_id']; // The logged-in user's ID
+$ip_address = getUserIP();
+$user_agent = $_SERVER['HTTP_USER_AGENT']; // Optional to store browser/device info
+
+// Log the login activity
+$stmt = $conn->prepare("
+    INSERT INTO user_activity_log (user_id, activity_type, ip_address, login_time, user_agent)
+    VALUES (:user_id, 'login', :ip_address, NOW(), :user_agent)
+");
+$stmt->bindParam(':user_id', $agent_id);
+$stmt->bindParam(':ip_address', $ip_address);
+$stmt->bindParam(':user_agent', $user_agent);
+$stmt->execute();
+
 // Check user access level
 $access_level = $_SESSION['access_level'];
 $agent_id = $_SESSION['agent_id'];
