@@ -345,7 +345,7 @@ try {
                                         <?php include('PHP_Data/growth_report.php'); ?>
                                     </div>
                                     <div class="col-md-6">
-                                        <canvas id="topWinnerCustomersChart"></canvas>
+                                        <?php include('template.php'); ?>
                                     </div>
                                 </div>
                             </div>
