@@ -1,6 +1,7 @@
 <?php
 session_start();
 include('config/database.php'); // Include your database connection
+include('config/utilities.php'); // Include your database connection
 
 // Process login request (your existing PHP login code stays here)
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -30,6 +31,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $error = $error_message;
     }
 }
+
+// Assuming you have verified the user login and set the user session
+$user_id = $_SESSION['user_id']; // The logged-in user's ID
+$ip_address = getUserIP();
+$user_agent = $_SERVER['HTTP_USER_AGENT']; // Optional to store browser/device info
+
+// Log the login activity
+$stmt = $conn->prepare("
+    INSERT INTO user_activity_log (user_id, activity_type, ip_address, login_time, user_agent)
+    VALUES (:user_id, 'login', :ip_address, NOW(), :user_agent)
+");
+$stmt->bindParam(':user_id', $user_id);
+$stmt->bindParam(':ip_address', $ip_address);
+$stmt->bindParam(':user_agent', $user_agent);
+$stmt->execute();
 ?>
 
 
