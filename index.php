@@ -34,11 +34,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-// Redirect to login page if the user is not logged in
-if (!isset($_SESSION['admin'])) {
-  header("Location: index.php");
-  exit;
-}
 
 // Assuming you have verified the user login and set the user session
 $user_id = $_SESSION['agent_id']; // The logged-in user's ID
