@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('config/database.php'); // Include your database connection
+include('config/database.php');
 
 // Enable error reporting for debugging
 ini_set('display_errors', 1);
@@ -13,61 +13,50 @@ if (!isset($_SESSION['admin'])) {
     exit;
 }
 
-// Determine access level
-$access_level = $_SESSION['access_level'];
-$agent_id = $_SESSION['agent_id'];
+// Handle filtering parameters
+$filters = [];
+$customer_name = isset($_POST['customer_name']) ? $_POST['customer_name'] : '';
+$purchase_category = isset($_POST['purchase_category']) ? $_POST['purchase_category'] : '';
+$status = isset($_POST['status']) ? $_POST['status'] : '';
+$from_date = isset($_POST['from_date']) ? $_POST['from_date'] : '';
+$to_date = isset($_POST['to_date']) ? $_POST['to_date'] : '';
 
-// Fetch customer data based on access level (super_admin sees all, agent sees their own customers)
-$customers_query = $access_level === 'super_admin' ? 
-    "SELECT c.*, a.agent_name FROM customer_details c LEFT JOIN admin_access a ON c.agent_id = a.agent_id" : 
-    "SELECT c.*, a.agent_name FROM customer_details c LEFT JOIN admin_access a ON c.agent_id = a.agent_id WHERE c.agent_id = :agent_id";
+$query = "
+    SELECT c.customer_name, p.purchase_no, p.purchase_amount, p.purchase_category, p.result, p.purchase_datetime
+    FROM purchase_entries p
+    JOIN customer_details c ON p.customer_id = c.customer_id
+    WHERE p.result = 'Win'
+";
 
-$customers_stmt = $conn->prepare($customers_query);
-if ($access_level !== 'super_admin') {
-    $customers_stmt->bindParam(':agent_id', $agent_id);
+// Apply filters if provided
+if (!empty($customer_name)) {
+    $query .= " AND c.customer_name LIKE :customer_name";
+    $filters[':customer_name'] = "%$customer_name%";
 }
-$customers_stmt->execute();
-$customers = $customers_stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// If a customer is selected from the table
-$selected_customer_id = isset($_GET['customer_id']) ? $_GET['customer_id'] : null;
-
-if ($selected_customer_id) {
-    // Fetch the selected customer's data and calculate the duration since account creation
-    $customer_stmt = $conn->prepare("
-        SELECT c.*, a.agent_name, 
-               TIMESTAMPDIFF(YEAR, c.created_at, CURDATE()) AS customer_age_years,  -- Age in years
-               TIMESTAMPDIFF(MONTH, c.created_at, CURDATE()) AS customer_age_months  -- Age in months
-        FROM customer_details c
-        LEFT JOIN admin_access a ON c.agent_id = a.agent_id
-        WHERE c.customer_id = :customer_id
-    ");
-    $customer_stmt->bindParam(':customer_id', $selected_customer_id);
-    $customer_stmt->execute();
-    $customer = $customer_stmt->fetch(PDO::FETCH_ASSOC);
-
-    // Fetch performance, sales, and win/loss data for the selected customer
-    $performance_stmt = $conn->prepare("
-        SELECT 
-            COUNT(CASE WHEN result = 'Win' THEN 1 END) AS total_wins,
-            COUNT(CASE WHEN result = 'Loss' THEN 1 END) AS total_losses,
-            SUM(purchase_amount) AS total_revenue,
-            COUNT(*) AS total_transactions,
-            MAX(DATE(purchase_datetime)) AS last_purchase_date,
-            MAX(CASE WHEN result = 'Win' THEN DATE(purchase_datetime) END) AS last_win_date,
-            GROUP_CONCAT(purchase_amount ORDER BY purchase_datetime ASC) AS sales_history,
-            GROUP_CONCAT(DATE(purchase_datetime) ORDER BY purchase_datetime ASC) AS sales_dates
-        FROM purchase_entries
-        WHERE customer_id = :customer_id
-    ");
-    $performance_stmt->bindParam(':customer_id', $selected_customer_id);
-    $performance_stmt->execute();
-    $performance = $performance_stmt->fetch(PDO::FETCH_ASSOC);
-
-    // Prepare data for line and bar charts
-    $sales_history = explode(',', $performance['sales_history']);
-    $sales_dates = explode(',', $performance['sales_dates']);
+if (!empty($purchase_category)) {
+    $query .= " AND p.purchase_category = :purchase_category";
+    $filters[':purchase_category'] = $purchase_category;
 }
+
+if (!empty($status)) {
+    $query .= " AND p.result = :status";
+    $filters[':status'] = $status;
+}
+
+if (!empty($from_date) && !empty($to_date)) {
+    $query .= " AND DATE(p.purchase_datetime) BETWEEN :from_date AND :to_date";
+    $filters[':from_date'] = $from_date;
+    $filters[':to_date'] = $to_date;
+}
+
+// Prepare and execute the query
+$stmt = $conn->prepare($query);
+foreach ($filters as $key => $value) {
+    $stmt->bindParam($key, $value);
+}
+$stmt->execute();
+$winning_customers = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -76,7 +65,7 @@ if ($selected_customer_id) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Customer Analysis</title>
+    <title>Customer Win Report</title>
 
     <!-- Custom fonts for this template -->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -87,6 +76,11 @@ if ($selected_customer_id) {
 
     <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/select/1.3.3/css/select.dataTables.min.css">
+
+    <!-- jQuery and DataTables JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 </head>
 
 <body id="page-top">
@@ -110,63 +104,74 @@ if ($selected_customer_id) {
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-4 text-gray-800">Customer Analysis</h1>
+                    <h1 class="h3 mb-4 text-gray-800">Customer Win Report</h1>
 
-                    <!-- Data Table to Select Customer -->
+                    <!-- Filter Form -->
+                    <form method="POST" action="customer_win_report.php" class="mb-4">
+                        <div class="form-row">
+                            <div class="col-md-3">
+                                <label for="customer_name">Customer Name</label>
+                                <input type="text" class="form-control" id="customer_name" name="customer_name" placeholder="Search by customer name" value="<?php echo $customer_name; ?>">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="purchase_category">Purchase Category</label>
+                                <select class="form-control" id="purchase_category" name="purchase_category">
+                                    <option value="">All Categories</option>
+                                    <option value="Box" <?php echo $purchase_category == 'Box' ? 'selected' : ''; ?>>Box</option>
+                                    <option value="Straight" <?php echo $purchase_category == 'Straight' ? 'selected' : ''; ?>>Straight</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="status">Status</label>
+                                <select class="form-control" id="status" name="status">
+                                    <option value="">All Status</option>
+                                    <option value="Win" <?php echo $status == 'Win' ? 'selected' : ''; ?>>Win</option>
+                                    <option value="Loss" <?php echo $status == 'Loss' ? 'selected' : ''; ?>>Loss</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="from_date">From Date</label>
+                                <input type="date" class="form-control" id="from_date" name="from_date" value="<?php echo $from_date; ?>">
+                            </div>
+                            <div class="col-md-3 mt-3">
+                                <label for="to_date">To Date</label>
+                                <input type="date" class="form-control" id="to_date" name="to_date" value="<?php echo $to_date; ?>">
+                            </div>
+                        </div>
+                        <div class="form-row mt-3">
+                            <div class="col-md-2">
+                                <button type="submit" class="btn btn-primary mt-4">Filter</button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- Data Table to Show Winning Customers -->
                     <div class="table-responsive">
-                        <table id="customersTable" class="table table-bordered table-striped">
+                        <table id="winReportTable" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th>Customer ID</th>
                                     <th>Customer Name</th>
-                                    <th>Agent Name</th>
-                                    <th>Created At</th>
-                                    <th>Action</th>
+                                    <th>Purchase No</th>
+                                    <th>Purchase Amount</th>
+                                    <th>Purchase Category</th>
+                                    <th>Status</th>
+                                    <th>Purchase Date</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php foreach ($customers as $customer): ?>
+                                <?php foreach ($winning_customers as $record): ?>
                                 <tr>
-                                    <td><?php echo $customer['customer_id']; ?></td>
-                                    <td><?php echo $customer['customer_name']; ?></td>
-                                    <td><?php echo $customer['agent_name']; ?></td>
-                                    <td><?php echo date('Y-m-d', strtotime($customer['created_at'])); ?></td>
-                                    <td>
-                                        <a href="customer_analysis.php?customer_id=<?php echo $customer['customer_id']; ?>" class="btn btn-primary">Select</a>
-                                    </td>
+                                    <td><?php echo $record['customer_name']; ?></td>
+                                    <td><?php echo $record['purchase_no']; ?></td>
+                                    <td><?php echo number_format($record['purchase_amount'], 2); ?></td>
+                                    <td><?php echo $record['purchase_category']; ?></td>
+                                    <td><?php echo $record['result']; ?></td>
+                                    <td><?php echo date('Y-m-d', strtotime($record['purchase_datetime'])); ?></td>
                                 </tr>
                                 <?php endforeach; ?>
                             </tbody>
                         </table>
                     </div>
-
-                    <!-- Selected Customer Details and Analysis -->
-                    <?php if (isset($customer)): ?>
-                    <h2>Customer Details</h2>
-                    <p>Customer ID: <?php echo $customer['customer_id']; ?></p>
-                    <p>Customer Name: <?php echo $customer['customer_name']; ?></p>
-                    <p>Agent Name: <?php echo $customer['agent_name']; ?></p>
-
-                    <!-- Check if customer age is set -->
-                    <p>
-                        Customer Age: 
-                        <?php echo isset($customer['customer_age_years']) ? $customer['customer_age_years'] . " years" : 'N/A'; ?> 
-                        (<?php echo isset($customer['customer_age_months']) ? $customer['customer_age_months'] . " months" : 'N/A'; ?>)
-                    </p>
-
-                    <p>Last Purchase Date: <?php echo isset($performance['last_purchase_date']) ? $performance['last_purchase_date'] : 'N/A'; ?></p>
-                    <p>Last Win Date: <?php echo isset($performance['last_win_date']) ? $performance['last_win_date'] : 'N/A'; ?></p>
-
-                    <!-- Performance Analysis Charts -->
-                    <div class="row">
-                        <div class="col-md-6">
-                            <canvas id="revenueChart" style="max-width: 100%; height: 400px;"></canvas>
-                        </div>
-                        <div class="col-md-6">
-                            <canvas id="winLossChart" style="max-width: 100%; height: 400px;"></canvas>
-                        </div>
-                    </div>
-                    <?php endif; ?>
 
                 </div>
                 <!-- /.container-fluid -->
@@ -189,74 +194,19 @@ if ($selected_customer_id) {
         <i class="fas fa-angle-up"></i>
     </a>
 
-    <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-
-    <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
-
-    <!-- DataTables JS -->
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-
     <!-- Initialize DataTables -->
     <script>
         $(document).ready(function() {
-            $('#customersTable').DataTable({
+            $('#winReportTable').DataTable({
                 "paging": true,       // Enable pagination
-                "pageLength": 5,      // Display 5 rows at a time
+                "pageLength": 10,     // Display 10 rows at a time
                 "searching": true,    // Enable search/filter functionality
                 "ordering": true,     // Enable column sorting
                 "info": true,         // Show table information
-                "lengthChange": false // Disable ability to change rows per page
+                "lengthChange": true  // Enable the ability to change rows per page
             });
         });
     </script>
-
-    <!-- Charts Script -->
-    <?php if (isset($customer)): ?>
-    <script>
-        // Line Chart for Revenue
-        var ctxRevenue = document.getElementById('revenueChart').getContext('2d');
-        var revenueChart = new Chart(ctxRevenue, {
-            type: 'line',
-            data: {
-                labels: <?php echo json_encode($sales_dates); ?>,
-                datasets: [{
-                    label: 'Total Revenue',
-                    data: <?php echo json_encode($sales_history); ?>,
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-
-        // Bar Chart for Win/Loss Ratio
-        var ctxWinLoss = document.getElementById('winLossChart').getContext('2d');
-        var winLossChart = new Chart(ctxWinLoss, {
-            type: 'bar',
-            data: {
-                labels: ['Wins', 'Losses'],
-                datasets: [{
-                    data: [<?php echo $performance['total_wins']; ?>, <?php echo $performance['total_losses']; ?>],
-                    backgroundColor: ['#28a745', '#dc3545'],
-                    borderWidth: 1
-                }]
-            }
-        });
-    </script>
-    <?php endif; ?>
 
 </body>
 
