@@ -10,6 +10,18 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+// Redirect to login page if the user is not logged in
+if (!isset($_SESSION['admin'])) {
+    header("Location: index.php");
+    exit;
+}
+
+// Ensure the user is a super_admin
+if ($_SESSION['access_level'] !== 'super_admin') {
+    echo "<script>alert('You must be a super admin to access this page.'); window.location.href='index.php';</script>";
+    exit;
+}
+
 // Fetch winning records
 try {
     $stmt = $conn->query("SELECT * FROM winning_record ORDER BY winning_date DESC");

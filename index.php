@@ -3,6 +3,8 @@ session_start();
 include('config/database.php'); // Include your database connection
 include('config/utilities.php'); // Include your database connection
 
+
+
 // Process login request (your existing PHP login code stays here)
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $login_id = $_POST['login_id'];
@@ -32,8 +34,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
+// Redirect to login page if the user is not logged in
+if (!isset($_SESSION['admin'])) {
+  header("Location: index.php");
+  exit;
+}
+
 // Assuming you have verified the user login and set the user session
-$user_id = $_SESSION['user_id']; // The logged-in user's ID
+$user_id = $_SESSION['agent_id']; // The logged-in user's ID
 $ip_address = getUserIP();
 $user_agent = $_SERVER['HTTP_USER_AGENT']; // Optional to store browser/device info
 
@@ -42,7 +50,7 @@ $stmt = $conn->prepare("
     INSERT INTO user_activity_log (user_id, activity_type, ip_address, login_time, user_agent)
     VALUES (:user_id, 'login', :ip_address, NOW(), :user_agent)
 ");
-$stmt->bindParam(':user_id', $user_id);
+$stmt->bindParam(':user_id', $agent_id);
 $stmt->bindParam(':ip_address', $ip_address);
 $stmt->bindParam(':user_agent', $user_agent);
 $stmt->execute();
