@@ -107,7 +107,7 @@ $winning_customers = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <h1 class="h3 mb-4 text-gray-800">Customer Win Report</h1>
 
                     <!-- Filter Form -->
-                    <form method="POST" action="customer_win_report.php" class="mb-4">
+                    <form method="POST" action="customer_analysis.php" class="mb-4">
                         <div class="form-row">
                             <div class="col-md-3">
                                 <label for="customer_name">Customer Name</label>
