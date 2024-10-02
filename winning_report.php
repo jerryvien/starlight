@@ -252,7 +252,7 @@ function generate_combinations($number) {
                             <tr>
                                 <th>Winning Number</th>
                                 <th>Winning Game</th>
-                                <th>Winning Period</th>
+                                
                                 <th>Winning Date</th>
                                 <th>Total Payout</th>
                                 <th>Actions</th>
@@ -263,7 +263,7 @@ function generate_combinations($number) {
                             <tr>
                                 <td><?php echo $record['winning_number']; ?></td>
                                 <td><?php echo $record['winning_game']; ?></td>
-                                <td><?php echo $record['winning_period']; ?></td>
+                                
                                 <td><?php echo $record['winning_date']; ?></td>
                                 <td><?php echo $record['winning_total_payout']; ?></td>
                                 <td>
