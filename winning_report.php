@@ -353,7 +353,7 @@ function generate_combinations($number) {
                                                 </tr>
                                             </tfoot>
                                         </table>
-                                        <button type="submit" name="finalize_winning" class="btn btn-Warning" onclick="return confirm('Are you sure you want to finalize the winning entries?');">Finalize Winning</button>
+                                        <button type="submit" name="finalize_winning" class="btn btn-warning" onclick="return confirm('Are you sure you want to finalize the winning entries?');">Finalize Winning</button>
                                     </form>
                                 </div>
                             </div>
