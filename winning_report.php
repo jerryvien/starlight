@@ -264,7 +264,7 @@ function generate_combinations($number) {
                                 <td><?php echo $record['winning_number']; ?></td>
                                 <td><?php echo $record['winning_game']; ?></td>
                                 
-                                <td><?php echo date('d/M/Y', strtotime($record['winning_date'])); ?></td>
+                                <td><?php echo date('d-M-Y', strtotime($record['winning_date'])); ?></td>
                                 <td>$$ <?php echo $record['winning_total_payout']; ?></td>
                                 <td>
                                 <form method="POST">
