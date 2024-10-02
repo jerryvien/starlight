@@ -14,8 +14,18 @@ $agent_id = $_SESSION['agent_id'];
 // Get the last customer ID from the database
 $query = $conn->query("SELECT customer_id FROM customer_details ORDER BY created_at DESC LIMIT 1");
 $last_customer = $query->fetch(PDO::FETCH_ASSOC);
-$last_customer_id = $last_customer ? intval(substr($last_customer['customer_id'], 4)) : 0;
+
+// Check if the result is valid and if the customer_id has the "CUST" prefix
+if ($last_customer && strpos($last_customer['customer_id'], 'CUST') === 0) {
+    // Extract the numeric part after the "CUST" prefix
+    $last_customer_id = intval(substr($last_customer['customer_id'], 4));
+} else {
+    $last_customer_id = 0; // Default to 0 if no valid customer_id is found
+}
+
+// Increment and format the new customer ID
 $new_customer_id = "CUST" . str_pad($last_customer_id + 1, 3, "0", STR_PAD_LEFT);
+
 
 $success = '';
 $error = '';
