@@ -3,6 +3,12 @@
 include('config/database.php'); // Optional: Include DB connection if necessary
 include('config/utilities.php'); // Optional: Include DB connection if necessary
 
+if (isset($_SESSION['agent_id'])) {
+    echo "Agent ID: " . $_SESSION['agent_id'];
+} else {
+    echo "No Agent ID found in session.";
+}
+
 // Check if the agent is logged in
 if (isset($_SESSION['agent_id'])) {
     $user_id = $_SESSION['agent_id']; // Get the agent's user ID
