@@ -13,70 +13,88 @@ if (!isset($_SESSION['admin'])) {
     exit;
 }
 
-// Fetch customer data, sales data, and analysis data here
+// Determine access level
+$access_level = $_SESSION['access_level'];
+$agent_id = $_SESSION['agent_id'];
 
-// Example: fetching customer data (modify the query based on your need)
-$customer_id = isset($_GET['customer_id']) ? $_GET['customer_id'] : 1;
-$customer_stmt = $conn->prepare("
-    SELECT c.*, a.agent_name 
-    FROM customer_details c
-    LEFT JOIN admin_access a ON c.agent_id = a.agent_id
-    WHERE c.customer_id = :customer_id
-");
-$customer_stmt->bindParam(':customer_id', $customer_id);
-$customer_stmt->execute();
-$customer = $customer_stmt->fetch(PDO::FETCH_ASSOC);
+// Fetch customer data based on access level (super_admin sees all, agent sees their own customers)
+$customers_query = $access_level === 'super_admin' ? 
+    "SELECT c.*, a.agent_name FROM customer_details c LEFT JOIN admin_access a ON c.agent_id = a.agent_id" : 
+    "SELECT c.*, a.agent_name FROM customer_details c LEFT JOIN admin_access a ON c.agent_id = a.agent_id WHERE c.agent_id = :agent_id";
 
-// Fetch performance, sales, and win/loss data here, as in the previous code
-$performance_stmt = $conn->prepare("
-    SELECT 
-        COUNT(CASE WHEN result = 'Win' THEN 1 END) AS total_wins,
-        COUNT(CASE WHEN result = 'Loss' THEN 1 END) AS total_losses,
-        SUM(purchase_amount) AS total_revenue,
-        COUNT(*) AS total_transactions,
-        MAX(DATE(purchase_datetime)) AS last_purchase_date,
-        MAX(CASE WHEN result = 'Win' THEN DATE(purchase_datetime) END) AS last_win_date
-    FROM purchase_entries
-    WHERE customer_id = :customer_id
-");
-$performance_stmt->bindParam(':customer_id', $customer_id);
-$performance_stmt->execute();
-$performance = $performance_stmt->fetch(PDO::FETCH_ASSOC);
+$customers_stmt = $conn->prepare($customers_query);
+if ($access_level !== 'super_admin') {
+    $customers_stmt->bindParam(':agent_id', $agent_id);
+}
+$customers_stmt->execute();
+$customers = $customers_stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$win_rate = $performance['total_wins'] / max($performance['total_transactions'], 1) * 100;
-$loss_rate = $performance['total_losses'] / max($performance['total_transactions'], 1) * 100;
-$active_ratio = $performance['total_transactions'] / 100;
+// If a customer is selected from the table
+$selected_customer_id = isset($_GET['customer_id']) ? $_GET['customer_id'] : null;
 
-// Prepare data for charts
-$sales_dates = [];
-$sales_amounts = [];
-$wins = [];
-$losses = [];
+if ($selected_customer_id) {
+    // Fetch the selected customer's data
+    $customer_stmt = $conn->prepare("
+        SELECT c.*, a.agent_name 
+        FROM customer_details c
+        LEFT JOIN admin_access a ON c.agent_id = a.agent_id
+        WHERE c.customer_id = :customer_id
+    ");
+    $customer_stmt->bindParam(':customer_id', $selected_customer_id);
+    $customer_stmt->execute();
+    $customer = $customer_stmt->fetch(PDO::FETCH_ASSOC);
 
-// Fetch history data for line chart
-$history_stmt = $conn->prepare("
-    SELECT DATE(purchase_datetime) AS date, purchase_amount, result 
-    FROM purchase_entries
-    WHERE customer_id = :customer_id
-    ORDER BY purchase_datetime ASC
-");
-$history_stmt->bindParam(':customer_id', $customer_id);
-$history_stmt->execute();
-$history_data = $history_stmt->fetchAll(PDO::FETCH_ASSOC);
+    // Fetch performance, sales, and win/loss data for the selected customer
+    $performance_stmt = $conn->prepare("
+        SELECT 
+            COUNT(CASE WHEN result = 'Win' THEN 1 END) AS total_wins,
+            COUNT(CASE WHEN result = 'Loss' THEN 1 END) AS total_losses,
+            SUM(purchase_amount) AS total_revenue,
+            COUNT(*) AS total_transactions,
+            MAX(DATE(purchase_datetime)) AS last_purchase_date,
+            MAX(CASE WHEN result = 'Win' THEN DATE(purchase_datetime) END) AS last_win_date
+        FROM purchase_entries
+        WHERE customer_id = :customer_id
+    ");
+    $performance_stmt->bindParam(':customer_id', $selected_customer_id);
+    $performance_stmt->execute();
+    $performance = $performance_stmt->fetch(PDO::FETCH_ASSOC);
 
-foreach ($history_data as $history) {
-    $sales_dates[] = $history['date'];
-    $sales_amounts[] = $history['purchase_amount'];
+    $win_rate = $performance['total_wins'] / max($performance['total_transactions'], 1) * 100;
+    $loss_rate = $performance['total_losses'] / max($performance['total_transactions'], 1) * 100;
+    $active_ratio = $performance['total_transactions'] / 100;
 
-    if ($history['result'] === 'Win') {
-        $wins[] = $history['purchase_amount'];
-        $losses[] = 0;
-    } elseif ($history['result'] === 'Loss') {
-        $losses[] = $history['purchase_amount'];
-        $wins[] = 0;
-    } else {
-        $wins[] = 0;
-        $losses[] = 0;
+    // Prepare data for charts
+    $sales_dates = [];
+    $sales_amounts = [];
+    $wins = [];
+    $losses = [];
+
+    // Fetch history data for line chart
+    $history_stmt = $conn->prepare("
+        SELECT DATE(purchase_datetime) AS date, purchase_amount, result 
+        FROM purchase_entries
+        WHERE customer_id = :customer_id
+        ORDER BY purchase_datetime ASC
+    ");
+    $history_stmt->bindParam(':customer_id', $selected_customer_id);
+    $history_stmt->execute();
+    $history_data = $history_stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    foreach ($history_data as $history) {
+        $sales_dates[] = $history['date'];
+        $sales_amounts[] = $history['purchase_amount'];
+
+        if ($history['result'] === 'Win') {
+            $wins[] = $history['purchase_amount'];
+            $losses[] = 0;
+        } elseif ($history['result'] === 'Loss') {
+            $losses[] = $history['purchase_amount'];
+            $wins[] = 0;
+        } else {
+            $wins[] = 0;
+            $losses[] = 0;
+        }
     }
 }
 ?>
@@ -96,7 +114,8 @@ foreach ($history_data as $history) {
 
     <!-- Custom styles for this template -->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 </head>
 
 <body id="page-top">
@@ -120,27 +139,56 @@ foreach ($history_data as $history) {
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-4 text-gray-800">Customer Performance Dashboard</h1>
+                    <h1 class="h3 mb-4 text-gray-800">Customer Dashboard</h1>
 
-                    <!-- Customer Details Section -->
-                    <h2>Customer Overview</h2>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <p><strong>Customer Name:</strong> <?php echo $customer['customer_name']; ?></p>
-                            <p><strong>Customer Age:</strong> <?php echo $customer['age']; ?> years</p>
-                            <p><strong>Agent:</strong> <?php echo $customer['agent_name']; ?></p>
-                            <p><strong>Last Purchase:</strong> <?php echo $performance['last_purchase_date']; ?></p>
-                            <p><strong>Last Win:</strong> <?php echo $performance['last_win_date'] ? $performance['last_win_date'] : 'No Wins'; ?></p>
+                    <!-- Customer Data Table -->
+                    <h2>Customer List</h2>
+                    <table id="customerTable" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Customer ID</th>
+                                <th>Customer Name</th>
+                                <th>Agent Name</th>
+                                <th>Total Sales</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($customers as $customer): ?>
+                                <tr>
+                                    <td><?php echo $customer['customer_id']; ?></td>
+                                    <td><?php echo $customer['customer_name']; ?></td>
+                                    <td><?php echo $customer['agent_name']; ?></td>
+                                    <td><?php echo number_format($customer['total_sales'], 2); ?></td>
+                                    <td>
+                                        <a href="?customer_id=<?php echo $customer['customer_id']; ?>" class="btn btn-primary">Select</a>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+
+                    <!-- Customer Analysis Section (only if a customer is selected) -->
+                    <?php if (isset($customer)): ?>
+                        <h2>Customer Overview</h2>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Customer Name:</strong> <?php echo $customer['customer_name']; ?></p>
+                                <p><strong>Customer Age:</strong> <?php echo $customer['age']; ?> years</p>
+                                <p><strong>Agent:</strong> <?php echo $customer['agent_name']; ?></p>
+                                <p><strong>Last Purchase:</strong> <?php echo $performance['last_purchase_date']; ?></p>
+                                <p><strong>Last Win:</strong> <?php echo $performance['last_win_date'] ? $performance['last_win_date'] : 'No Wins'; ?></p>
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- Performance Analysis (Radar Chart) -->
-                    <h2>Customer Performance Analysis</h2>
-                    <canvas id="performanceRadarChart"></canvas>
+                        <!-- Performance Analysis (Radar Chart) -->
+                        <h2>Customer Performance Analysis</h2>
+                        <canvas id="performanceRadarChart"></canvas>
 
-                    <!-- Sales and Win/Loss History (Line Chart) -->
-                    <h2>Sales and Win/Loss History</h2>
-                    <canvas id="salesHistoryChart"></canvas>
+                        <!-- Sales and Win/Loss History (Line Chart) -->
+                        <h2>Sales and Win/Loss History</h2>
+                        <canvas id="salesHistoryChart"></canvas>
+                    <?php endif; ?>
 
                 </div>
                 <!-- /.container-fluid -->
@@ -179,62 +227,85 @@ foreach ($history_data as $history) {
     <!-- Custom scripts for all pages-->
     <script src="js/sb-admin-2.min.js"></script>
 
+    <!-- DataTables initialization -->
     <script>
-        // Radar Chart Data
-        var performanceRadarCtx = document.getElementById('performanceRadarChart').getContext('2d');
-        var performanceRadarChart = new Chart(performanceRadarCtx, {
-            type: 'radar',
-            data: {
-                labels: ['Revenue', 'Win Rate', 'Loss Rate', 'Active Ratio'],
-                datasets: [{
-                    label: 'Customer Performance',
-                    data: [<?php echo $performance['total_revenue']; ?>, <?php echo $win_rate; ?>, <?php echo $loss_rate; ?>, <?php echo $active_ratio; ?>],
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scale: {
-                    ticks: { beginAtZero: true }
-                }
-            }
+        $(document).ready(function() {
+            $('#customerTable').DataTable();
         });
+    </script>
 
-        // Line Chart Data
-        var salesHistoryCtx = document.getElementById('salesHistoryChart').getContext('2d');
-        var salesHistoryChart = new Chart(salesHistoryCtx, {
-            type: 'line',
-            data: {
-                labels: <?php echo json_encode($sales_dates); ?>,
-                datasets: [
-                    {
-                        label: 'Sales',
-                        data: <?php echo json_encode($sales_amounts); ?>,
-                        borderColor: 'blue',
-                        fill: false
-                    },
-                    {
-                        label: 'Wins',
-                        data: <?php echo json_encode($wins); ?>,
-                        borderColor: 'green',
-                        fill: false
-                    },
-                    {
-                        label: 'Losses',
-                        data: <?php echo json_encode($losses); ?>,
-                        borderColor: 'red',
-                        fill: false
-                    }
-                ]
-            },
+    <?php if (isset($customer)): ?>
+    <!-- Chart.js for radar and line charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Radar Chart for Customer Performance -->
+    <script>
+        const performanceData = {
+            labels: ['Total Wins', 'Total Losses', 'Total Revenue', 'Active Ratio'],
+            datasets: [{
+                label: 'Performance',
+                data: [<?php echo $performance['total_wins']; ?>, <?php echo $performance['total_losses']; ?>, <?php echo $performance['total_revenue']; ?>, <?php echo $active_ratio; ?>],
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        };
+
+        const performanceRadarChart = new Chart(document.getElementById('performanceRadarChart'), {
+            type: 'radar',
+            data: performanceData,
             options: {
                 scales: {
-                    y: { beginAtZero: true }
+                    r: {
+                        beginAtZero: true
+                    }
                 }
             }
         });
     </script>
+
+    <!-- Line Chart for Sales History -->
+    <script>
+        const salesHistoryData = {
+            labels: <?php echo json_encode($sales_dates); ?>,
+            datasets: [
+                {
+                    label: 'Sales Amount',
+                    data: <?php echo json_encode($sales_amounts); ?>,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Wins',
+                    data: <?php echo json_encode($wins); ?>,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Losses',
+                    data: <?php echo json_encode($losses); ?>,
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                }
+            ]
+        };
+
+        const salesHistoryChart = new Chart(document.getElementById('salesHistoryChart'), {
+            type: 'line',
+            data: salesHistoryData,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+    <?php endif; ?>
 
 </body>
 
