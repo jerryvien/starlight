@@ -105,7 +105,7 @@ foreach ($history_data as $history) {
     <div id="wrapper">
 
         <!-- Sidebar -->
-        <?php include('sidebar.php'); ?> <!-- Include your sidebar here -->
+        <?php include('config/sidebar.php'); ?> <!-- Include your sidebar here -->
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
@@ -114,7 +114,7 @@ foreach ($history_data as $history) {
             <div id="content">
 
                 <!-- Topbar -->
-                <?php include('topbar.php'); ?> <!-- Include your topbar here -->
+                <?php include('config/topbar.php'); ?> <!-- Include your topbar here -->
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
