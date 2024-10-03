@@ -109,37 +109,6 @@ $total_purchases = $win_count + $loss_count;
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
     <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-    <style>
-    /* Set a fixed height for the table container and enable scrolling */
-    .table-responsive {
-        max-height: 400px;
-        overflow-y: auto;
-    }
-
-    /* Ensure that cards take up the full height of the column */
-    .card {
-        height: 100%; /* Stretch the card to fill the container */
-    }
-
-    /* Control the layout of the right-side containers */
-    #customer-info {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }
-
-    /* Control the chart area */
-    #chart-container {
-        max-height: 400px;
-    }
-
-    /* Control chart dimensions */
-    canvas {
-        max-width: 100%;
-        height: 300px; /* Adjust the chart height */
-    }
-
-</style>
 </head>
 <body>
 
