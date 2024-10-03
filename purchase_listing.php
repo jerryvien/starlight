@@ -214,10 +214,10 @@ $bar_chart_data = json_encode(array_values($sales_by_customer));
                             </div>
 
                             <div class="col-md-1 mb-3 ">
-                                <button type="submit" class="btn btn-success mb-1">Search All</button>
+                                <button type="submit" class="btn btn-success">Search All</button>
                             </div>
                             <div class="col-md-2 mb-3">
-                                <button type="reset" class="btn btn-warning mb-1">Clear All</button>
+                                <button type="reset" class="btn btn-warning">Clear All</button>
                             </div>
                         </div>
                     </form>
