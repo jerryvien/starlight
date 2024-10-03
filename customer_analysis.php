@@ -98,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['select_customer'])) {
             <div class="container-fluid">
                 <div class="row">
                     <!-- Customer Data Table (left side, with ml-4) -->
-                    <div class="col-md-7 ml-2" style="border-right: 1px solid #ddd; min-height: 400px;">
+                    <div class="col-md-4 ml-6">
                         <h1 class="h3 mb-2 text-gray-800">Customer Data</h1>
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
@@ -138,7 +138,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['select_customer'])) {
                     </div>
 
                     <!-- Customer Information (right side, with mr-8) -->
-                    <div class="col-md-5 mr-8 d-flex flex-column" style="min-height: 400px;">
+                    <div class="col-md-4 ml-6">
                         <?php if ($selected_customer): ?>
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
@@ -158,7 +158,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['select_customer'])) {
                         </div>
                         <?php endif; ?>
                     </div>
-
                 </div>
 
                 <!-- Combined Purchase and Win/Loss Records Table -->
