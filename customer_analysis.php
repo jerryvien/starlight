@@ -111,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['select_customer'])) {
                                             <thead>
                                                 <tr>
                                                     <th>Customer Name</th>
-                                                    <th>Agent Name</th>
+                                                    
                                                     <th>Total Sales</th>
                                                     <th>Action</th>
                                                 </tr>
@@ -120,7 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['select_customer'])) {
                                                 <?php foreach ($customers as $customer): ?>
                                                     <tr>
                                                         <td><?php echo $customer['customer_name']; ?></td>
-                                                        <td><?php echo $customer['agent_name'] ?? 'N/A'; ?></td>
+                                                        
                                                         <td>$<?php echo number_format($customer['total_sales'], 2); ?></td>
                                                         <td>
                                                             <button type="submit" name="select_customer" value="<?php echo $customer['customer_id']; ?>" class="btn btn-<?php echo isset($selected_customer) && $selected_customer['customer_id'] === $customer['customer_id'] ? 'warning' : 'primary'; ?>">
@@ -138,7 +138,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['select_customer'])) {
                     </div>
 
                     <!-- Customer Information (right side, with mr-8) -->
-                    <div class="col-md-8 mr-8">
+                    <div class="col-md-6 ml-6">
                         <?php if ($selected_customer): ?>
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
