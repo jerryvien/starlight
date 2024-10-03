@@ -287,17 +287,7 @@ $bar_chart_data = json_encode(array_values($sales_by_customer));
                         </div>
                     </div>
 
-                        <script>
-                            $(document).ready(function() {
-                                $('#purchaseListTable').DataTable({
-                                    "paging": true,       // Enable pagination
-                                    "searching": true,    // Enable search/filter functionality
-                                    "ordering": true,     // Enable column sorting
-                                    "info": true,         // Show table information
-                                    "lengthChange": true  // Enable the ability to change the number of records per page
-                                });
-                            });
-                        </script>
+                    
 
                     
                 </div>
