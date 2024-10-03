@@ -177,7 +177,7 @@ $bar_chart_data = json_encode(array_values($sales_by_customer));
                                 href="https://datatables.net">official DataTables documentation</a>.</p>
 
                     <!-- Filter Form -->
-                    <form method="POST" action="purchase_listing.php" class="card shadow mb-4">
+                    <form method="POST" action="purchase_listing.php" class="card">
                         <div class="form-row">
                             <div class="col-md-3">
                                 <label for="from_date">From Date</label>
