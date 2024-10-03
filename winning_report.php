@@ -359,7 +359,7 @@ function generate_combinations($number) {
                                                     // Calculate the winning amount based on the factor
                                                     $winning_amount = $winning_factor * $purchase['purchase_amount'];
                                                 ?>
-                                            <?php endforeach; ?>
+                                            
                                                 <tr>
                                                     <td><?php echo $purchase['customer_name'] ?? 'N/A'; ?></td>
                                                     <td><?php echo $purchase['purchase_no']; ?></td>
