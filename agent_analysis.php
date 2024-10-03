@@ -308,38 +308,40 @@ $total_sales = $selected_agent['win_count'] + $selected_agent['loss_count'];
 
         // Initialize Pie Chart (Win/Loss Ratio)
         var winLossData = {
-                    labels: ['Win', 'Loss'],
-                    datasets: [{
-                        data: [
-                            <?php echo ($selected_agent['loss_count'] / $total_sales) * 100; ?>, 
-                            <?php echo ($selected_agent['win_count'] / $total_sales) * 100; ?>
-                        ],
-                        backgroundColor: ['#4e73df', '#FFD700'],
-                    }],
-                };
+            labels: ['Win', 'Loss'],
+            datasets: [{
+                data: [
+                    <?php echo ($loss_count / $total_purchases) * 100; ?>, 
+                    <?php echo ($win_count / $total_purchases) * 100; ?>
+                ],
+                backgroundColor: ['#FFD700', '#4e73df'],
+            }],
+        };
 
-                var winLossCtx = document.getElementById('winLossChart').getContext('2d');
-                new Chart(winLossCtx, {
-                    type: 'pie',
-                    data: winLossData,
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            legend: {
-                                position: 'top',
-                            },
-                            tooltip: {
-                                callbacks: {
-                                    label: function(tooltipItem, data) {
-                                        var label = data.labels[tooltipItem.dataIndex];
-                                        var value = data.datasets[0].data[tooltipItem.dataIndex];
-                                        return label + ': ' + value.toFixed(2) + '%';
-                                    }
-                                }
+        var winLossCtx = document.getElementById('winLossChart').getContext('2d');
+        new Chart(winLossCtx, {
+            type: 'pie',
+            data: winLossData,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                var label = context.label || '';
+                                var value = context.raw || 0;
+                                var total = context.dataset.data.reduce((sum, val) => sum + val, 0);
+                                var percentage = (value / total * 100).toFixed(2);
+                                return label + ': ' + percentage + '%';
                             }
                         }
                     }
-                });
+                }
+            }
+        });
 
         // Initialize Line Chart (Sales and Winning Trends)
         var trendData = {
