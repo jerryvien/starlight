@@ -314,8 +314,8 @@ $total_sales = $selected_agent['win_count'] + $selected_agent['loss_count'];
                     labels: ['Win', 'Loss'],
                     datasets: [{
                         data: [
-                            <?php echo ($selected_agent['loss_count'] / $total_sales) * 100; ?>, 
-                            <?php echo ($selected_agent['win_count'] / $total_sales) * 100; ?>
+                            $selected_agent['loss_count'], 
+                            $selected_agent['win_count']
                         ],
                         backgroundColor: ['#FFD700', '#4e73df'],
                     }],
