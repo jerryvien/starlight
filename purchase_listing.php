@@ -178,7 +178,7 @@ $bar_chart_data = json_encode(array_values($sales_by_customer));
 
                     <!-- Filter Form -->
                     <form method="POST" action="purchase_listing.php" class="card">
-                        <div class="form-row mt-2">
+                        <div class="form-row shadow mt-2">
                             <div class="col-md-3 mb-3 ml-2">
                                 <label for="from_date">From Date</label>
                                 <input type="date" class="form-control" id="from_date" name="from_date" value="<?php echo isset($from_date) ? $from_date : ''; ?>">
