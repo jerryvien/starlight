@@ -2,7 +2,8 @@
 session_start();
 include('config/database.php');
 
-
+// Set time zone to Kuala Lumpur (GMT +8)
+date_default_timezone_set('Asia/Kuala_Lumpur');
 
 // Error reporting for debugging
 ini_set('display_errors', 1);
@@ -215,7 +216,64 @@ $total_purchases = $win_count + $loss_count;
                         <?php endif; ?>
                     </div>
                 </div>
+
+                <!-- Combined Purchase and Win/Loss Records Table -->
+                <?php if (!empty($related_purchases)): ?>
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Purchase Entries and Win/Loss Records</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="purchaseEntriesTable" class="table table-bordered" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Purchase No</th>
+                                        <th>Purchase Amount</th>
+                                        <th>Purchase Date</th>
+                                        <th>Agent Name</th>
+                                        <th>Result</th>
+                                        <th>Winning Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php 
+                                    $subtotal_purchase_amount = 0;
+                                    $subtotal_winning_amount = 0;
+                                    ?>
+                                    <?php foreach ($related_purchases as $purchase): ?>
+                                        <?php 
+                                        $subtotal_purchase_amount += $purchase['purchase_amount']; 
+                                        $subtotal_winning_amount += $purchase['winning_amount'] ?? 0;
+                                        ?>
+                                        <tr>
+                                            <td><?php echo $purchase['purchase_no']; ?></td>
+                                            <td>$<?php echo number_format($purchase['purchase_amount'], 2); ?></td>
+                                            <td><?php echo date('d-M-Y', strtotime($purchase['purchase_datetime'])); ?></td>
+                                            <td><?php echo $purchase['agent_name'] ?? 'N/A'; ?></td>
+                                            <td><?php echo $purchase['result']; ?></td>
+                                            <td>$<?php echo number_format($purchase['winning_amount'] ?? 0, 2); ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="5" class="text-right"><strong>Subtotal Purchase Amount:</strong></td>
+                                        <td><strong>$<?php echo number_format($subtotal_purchase_amount, 2); ?></strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5" class="text-right"><strong>Subtotal Winning Amount:</strong></td>
+                                        <td><strong>$<?php echo number_format($subtotal_winning_amount, 2); ?></strong></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <?php endif; ?>
+
             </div>
+            <!-- End of Content -->
 
             <!-- Footer -->
             <?php include('config/footer.php'); ?>
@@ -258,6 +316,14 @@ $total_purchases = $win_count + $loss_count;
         new Chart(winLossCtx, {
             type: 'pie',
             data: winLossData,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top', // Display legend inside the chart
+                    }
+                }
+            }
         });
 
         // Initialize Line Chart (Trends)
