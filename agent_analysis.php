@@ -118,6 +118,9 @@ $total_sales = $selected_agent['win_count'] + $selected_agent['loss_count'];
 
             <div class="container-fluid">
             <h1 class="h3 mb-2 ml-4 text-gray-800">Agent Analysis Report</h1>
+                    <p class="mb-4 ml-4">DataTables is a third party plugin that is used to generate the demo table below.
+                        For more information about DataTables, please visit the <a target="_blank"
+                            href="https://datatables.net">official DataTables documentation</a>.</p>
                 <div class="row">
                     <!-- Agent Data Table (left side, with ml-4) -->
                     <div class="col-md-5 ml-4">
