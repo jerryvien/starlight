@@ -138,7 +138,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['select_customer'])) {
                     </div>
 
                     <!-- Customer Information (right side, with mr-8) -->
-                    <div class="col-md-5 mr-4 d-flex flex-column" style="min-height: 400px;">
+                    <div class="col-md-5 mr-8 d-flex flex-column" style="min-height: 400px;">
                         <?php if ($selected_customer): ?>
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
