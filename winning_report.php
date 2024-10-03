@@ -339,12 +339,27 @@ function generate_combinations($number) {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <?php foreach ($matching_purchases as $purchase): ?>
+                                            <?php foreach ($matching_purchases as $purchase): ?>
                                                 <?php
+                                                    // Set default winning category and factor
                                                     $winning_category = $winning_record['winning_game'] ?? 'Unknown';
-                                                    $winning_factor = ($winning_category === 'Box') ? 1 : 2;
+
+                                                    // Check the winning game type (2-D or 3-D)
+                                                    if ($winning_category === '2-D') {
+                                                        // 2-D logic: Box factor is 5, Straight factor is 10
+                                                        $winning_factor = ($purchase['purchase_category'] === 'Box') ? 5 : 10;
+                                                    } elseif ($winning_category === '3-D') {
+                                                        // 3-D logic: Box factor is 1, Straight factor is 2
+                                                        $winning_factor = ($purchase['purchase_category'] === 'Box') ? 1 : 2;
+                                                    } else {
+                                                        // Default case for unknown winning category
+                                                        $winning_factor = 1;
+                                                    }
+
+                                                    // Calculate the winning amount based on the factor
                                                     $winning_amount = $winning_factor * $purchase['purchase_amount'];
                                                 ?>
+                                            <?php endforeach; ?>
                                                 <tr>
                                                     <td><?php echo $purchase['customer_name'] ?? 'N/A'; ?></td>
                                                     <td><?php echo $purchase['purchase_no']; ?></td>
