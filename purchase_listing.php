@@ -179,8 +179,6 @@ $bar_chart_data = json_encode(array_values($sales_by_customer));
                                 <label for="purchase_no">Purchase No</label>
                                 <input type="text" class="form-control" id="purchase_no" name="purchase_no" placeholder="Search by purchase no" value="<?php echo isset($purchase_no) ? $purchase_no : ''; ?>">
                             </div>
-                        </div>
-                        <div class="form-row mt-3">
                             <?php if ($access_level === 'super_admin'): ?>
                             <div class="col-md-4">
                                 <label for="agent_filter">Agent</label>
@@ -197,6 +195,9 @@ $bar_chart_data = json_encode(array_values($sales_by_customer));
                             <div class="col-md-2">
                                 <button type="submit" class="btn btn-primary mt-4">Filter</button>
                             </div>
+                        </div>
+                        <div class="form-row mt-3">
+                            
                         </div>
                     </form>
 
