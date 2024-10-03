@@ -1,5 +1,5 @@
 <?php
-session_start();
+
 include('config/database.php');
 
 // Set time zone to Kuala Lumpur (GMT +8)
