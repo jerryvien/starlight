@@ -158,10 +158,14 @@ $bar_chart_data = json_encode(array_values($sales_by_customer));
                 <?php include('config/topbar.php'); ?>
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-                    <h1 class="h3 mb-4 text-gray-800">Purchase Listing</h1>
+                      <!-- Page Heading -->
+                      <h1 class="h3 mb-2 text-gray-800">Purchase Listing</h1>
+                        <p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below.
+                            For more information about DataTables, please visit the <a target="_blank"
+                                href="https://datatables.net">official DataTables documentation</a>.</p>
 
                     <!-- Filter Form -->
-                    <form method="POST" action="purchase_listing.php" class="mb-4">
+                    <form method="POST" action="purchase_listing.php" class="card shadow mb-4">
                         <div class="form-row">
                             <div class="col-md-3">
                                 <label for="from_date">From Date</label>
@@ -219,6 +223,7 @@ $bar_chart_data = json_encode(array_values($sales_by_customer));
                             <canvas id="salesBarChart"></canvas>
                         </div>
                     </div>
+                    
 
                     <!-- Purchase List Table -->
                     <!-- DataTables CSS -->
@@ -230,44 +235,52 @@ $bar_chart_data = json_encode(array_values($sales_by_customer));
                     <!-- DataTables JS -->
                     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 
-                    <!-- Purchase List Table -->
-                        <div class="table-responsive ">
-                            <table id="purchaseListTable" class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>Customer Name</th>
-                                        <th>Purchase No</th>
-                                        <th>Purchase Amount</th>
-                                        <th>Purchase Date</th>
-                                        <th>Agent Name</th>
-                                        <th>Agent ID</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php if (count($purchases) > 0): ?>
-                                        <?php foreach ($purchases as $purchase): ?>
-                                            <tr>
-                                                <td><?php echo $purchase['customer_name']; ?></td>
-                                                <td><?php echo $purchase['purchase_no']; ?></td>
-                                                <td><?php echo number_format($purchase['purchase_amount'], 2); ?></td>
-                                                <td><?php echo $purchase['purchase_date']; ?></td>
-                                                <td><?php echo $purchase['agent_name']; ?></td>
-                                                <td><?php echo $purchase['agent_id']; ?></td>
-                                            </tr>
-                                        <?php endforeach; ?>
-                                        <!-- Grand Total Row -->
-                                        <tr>
-                                            <td colspan="2" class="text-right font-weight-bold">Grand Total:</td>
-                                            <td colspan="4" class="font-weight-bold"><?php echo number_format($grand_total, 2); ?></td>
-                                        </tr>
-                                    <?php else: ?>
-                                        <tr>
-                                            <td colspan="6" class="text-center">No records found for the applied filters</td>
-                                        </tr>
-                                    <?php endif; ?>
-                                </tbody>
-                            </table>
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Purchase DataTables</h6>
                         </div>
+                        <div class="card-body">
+                             <!-- Purchase List Table -->
+                            <div class="table-responsive ">
+                                <table id="purchaseListTable" class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Customer Name</th>
+                                            <th>Purchase No</th>
+                                            <th>Purchase Amount</th>
+                                            <th>Purchase Date</th>
+                                            <th>Agent Name</th>
+                                            <th>Agent ID</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php if (count($purchases) > 0): ?>
+                                            <?php foreach ($purchases as $purchase): ?>
+                                                <tr>
+                                                    <td><?php echo $purchase['customer_name']; ?></td>
+                                                    <td><?php echo $purchase['purchase_no']; ?></td>
+                                                    <td><?php echo number_format($purchase['purchase_amount'], 2); ?></td>
+                                                    <td><?php echo $purchase['purchase_date']; ?></td>
+                                                    <td><?php echo $purchase['agent_name']; ?></td>
+                                                    <td><?php echo $purchase['agent_id']; ?></td>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                            <!-- Grand Total Row -->
+                                            <tr>
+                                                <td colspan="2" class="text-right font-weight-bold">Grand Total:</td>
+                                                <td colspan="4" class="font-weight-bold"><?php echo number_format($grand_total, 2); ?></td>
+                                            </tr>
+                                        <?php else: ?>
+                                            <tr>
+                                                <td colspan="6" class="text-center">No records found for the applied filters</td>
+                                            </tr>
+                                        <?php endif; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
 
                         <script>
                             $(document).ready(function() {
