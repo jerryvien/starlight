@@ -161,7 +161,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['select_customer'])) {
 
                      <!-- Combined Purchase and Win/Loss Records Table -->
                      <?php if (!empty($related_purchases)): ?>
-                        <div class="col-md-8 ml-6">
+                        <div class="col-md-8 ml-10">
                             <div class="card-header py-3">
                                 <h6 class="m-0 font-weight-bold text-primary">Purchase Entries and Win/Loss Records</h6>
                             </div>
