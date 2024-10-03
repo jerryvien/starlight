@@ -316,38 +316,38 @@ $total_purchases = $win_count + $loss_count;
 
         // Initialize Pie Chart (Win/Loss Ratio)
         var winLossData = {
-            labels: ['Win', 'Loss'],
-            datasets: [{
-                data: [
-                    <?php echo ($win_count / $total_purchases) * 100; ?>, 
-                    <?php echo ($loss_count / $total_purchases) * 100; ?>
-                ],
-                backgroundColor: ['#4e73df', '#e74a3b'],
-            }],
-        };
+                    labels: ['Win', 'Loss'],
+                    datasets: [{
+                        data: [
+                            <?php echo ($win_count / $total_purchases) * 100; ?>, 
+                            <?php echo ($loss_count / $total_purchases) * 100; ?>
+                        ],
+                        backgroundColor: ['#4e73df', '#e74a3b'],
+                    }],
+                };
 
-        var winLossCtx = document.getElementById('winLossChart').getContext('2d');
-        new Chart(winLossCtx, {
-            type: 'pie',
-            data: winLossData,
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(tooltipItem, data) {
-                                var label = data.labels[tooltipItem.dataIndex];
-                                var value = data.datasets[0].data[tooltipItem.dataIndex];
-                                return label + ': ' + value.toFixed(2) + '%';
+                var winLossCtx = document.getElementById('winLossChart').getContext('2d');
+                new Chart(winLossCtx, {
+                    type: 'pie',
+                    data: winLossData,
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(tooltipItem, data) {
+                                        var label = data.labels[tooltipItem.dataIndex];
+                                        var value = data.datasets[0].data[tooltipItem.dataIndex];
+                                        return label + ': ' + value.toFixed(2) + '%';
+                                    }
+                                }
                             }
                         }
                     }
-                }
-            }
-        });
+                });
 
         // Initialize Line Chart (Trends)
         var trendData = {
