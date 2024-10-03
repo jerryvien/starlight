@@ -24,7 +24,7 @@ if ($_SESSION['access_level'] !== 'super_admin') {
 
 // Fetch customer data (with at least 1 purchase or created in the last 365 days)
 try {
-    $stmt = $conn->query("SELECT * FROM customer_details WHERE purchase_history_count > 0 OR created_at > NOW() - INTERVAL 365 DAY ORDER BY created_at DESC");
+    $stmt = $conn->query("SELECT * FROM customer_details WHERE purchase_history_count > 0 AND created_at > NOW() - INTERVAL 365 DAY ORDER BY created_at DESC");
     $customers = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (Exception $e) {
     die("Error fetching customer data: " . $e->getMessage());
