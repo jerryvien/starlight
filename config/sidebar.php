@@ -41,6 +41,7 @@
                 <h6 class="collapse-header">Customer Operations:</h6>
                 <a class="collapse-item" href="customer_register.php">Create Customer</a>
                 <a class="collapse-item" href="customer_listing.php">Customer Listing</a>
+                <a class="collapse-item" href="customer_analysis.php">Customer Analysis</a>
             </div>
         </div>
     </li>
