@@ -203,7 +203,7 @@ $bar_chart_data = json_encode(array_values($sales_by_customer));
                             <?php endif; ?>
                             
                         </div>
-                        <div class="form-row mt-3">
+                        <div class="form-row mt-2">
                         <div class="col-md-3 mb-3">
                                 <label for="customer_name">Customer Name</label>
                                 <input type="text" class="form-control" id="customer_name" name="customer_name" placeholder="Search by customer name" value="<?php echo isset($customer_name) ? $customer_name : ''; ?>">
