@@ -159,36 +159,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['select_customer'])) {
                         <?php endif; ?>
                     </div>
 
-                    <!-- Purchase Entries Table with Constrained Height -->
-                    <div class="card shadow mb-4" style="max-height: 300px; overflow-y: auto;">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Purchase Entries</h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table id="purchaseEntriesTable" class="table table-bordered" width="100%" cellspacing="0">
-                                    <thead>
-                                        <tr>
-                                            <th>Purchase No</th>
-                                            <th>Purchase Amount</th>
-                                            <th>Purchase Date</th>
-                                            <th>Winning Amount</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php foreach ($purchase_entries as $entry): ?>
-                                            <tr>
-                                                <td><?php echo $entry['purchase_no']; ?></td>
-                                                <td>$<?php echo number_format($entry['purchase_amount'], 2); ?></td>
-                                                <td><?php echo date('d-M-Y', strtotime($entry['purchase_datetime'])); ?></td>
-                                                <td>$<?php echo number_format($entry['winning_amount'], 2); ?></td>
-                                            </tr>
-                                        <?php endforeach; ?>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
                 <!-- Combined Purchase and Win/Loss Records Table -->
