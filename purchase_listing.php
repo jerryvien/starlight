@@ -248,7 +248,7 @@ $bar_chart_data = json_encode(array_values($sales_by_customer));
                         <div class="card-body">
                              <!-- Purchase List Table -->
                             <div class="table-responsive ">
-                                <table id="purchaseListTable" class="table table-bordered">
+                                <table id="datatable" class="table table-bordered" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
                                             <th>Customer Name</th>
