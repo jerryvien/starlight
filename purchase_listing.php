@@ -183,13 +183,13 @@ $bar_chart_data = json_encode(array_values($sales_by_customer));
                                 <label for="from_date">From Date</label>
                                 <input type="date" class="form-control" id="from_date" name="from_date" value="<?php echo isset($from_date) ? $from_date : ''; ?>">
                             </div>
-                            <div class="col-md-3 mb-3">
+                            <div class="col-md-3 mb-3 ml-2">
                                 <label for="to_date">To Date</label>
                                 <input type="date" class="form-control" id="to_date" name="to_date" value="<?php echo isset($to_date) ? $to_date : ''; ?>">
                             </div>
                             
                             <?php if ($access_level === 'super_admin'): ?>
-                            <div class="col-md-3 mb-3">
+                            <div class="col-md-3 mb-3 ml-2">
                                 <label for="agent_filter">Agent</label>
                                 <select class="form-control" id="agent_filter" name="agent_filter">
                                     <option value="">All Agents</option>
@@ -208,15 +208,15 @@ $bar_chart_data = json_encode(array_values($sales_by_customer));
                                 <label for="customer_name">Customer Name</label>
                                 <input type="text" class="form-control" id="customer_name" name="customer_name" placeholder="Search by customer name" value="<?php echo isset($customer_name) ? $customer_name : ''; ?>">
                             </div>
-                            <div class="col-md-3 mb-3">
+                            <div class="col-md-3 mb-3 ml-2">
                                 <label for="purchase_no">Purchase No</label>
                                 <input type="text" class="form-control" id="purchase_no" name="purchase_no" placeholder="Search by purchase no" value="<?php echo isset($purchase_no) ? $purchase_no : ''; ?>">
                             </div>
 
-                            <div class="col-md-1 mb-3 ">
+                            <div class="col-md-1 mb-3 ml-2">
                                 <button type="submit" class="btn btn-success mt-4">Search All</button>
                             </div>
-                            <div class="col-md-2 mb-3">
+                            <div class="col-md-2 mb-3 ml-2">
                                 <button type="reset" class="btn btn-warning mt-4">Clear All</button>
                             </div>
                         </div>
