@@ -380,7 +380,7 @@ function generate_combinations($number) {
                                                     <td><?php echo $purchase['purchase_amount']; ?></td>
                                                     <td><?php echo $purchase['purchase_datetime']; ?></td>
                                                     <td><?php echo $purchase['agent_name'] ?? 'N/A'; ?></td>
-                                                    <td><?php echo $purchase['purchase_category']; ?></td>
+                                                    <td><?php echo $winning_category | $purchase['purchase_category']; ?></td>
                                                     <td><?php echo $winning_amount; ?></td>
                                                 </tr>
                                                 <?php endforeach; ?>
