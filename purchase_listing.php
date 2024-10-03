@@ -190,17 +190,17 @@ $bar_chart_data = json_encode(array_values($sales_by_customer));
                         <div class="form-row mt-3">
                         <div class="col-md-3">
                                 <label for="customer_name">Customer Name</label>
-                                <input type="text" class="form-control" id="customer_name" name="customer_name" placeholder="Search by customer name" value="<?php echo isset($customer_name) ? $customer_name : ''; ?> "onchange="this.form.submit()">
+                                <input type="text" class="form-control" id="customer_name" name="customer_name" placeholder="Search by customer name" value="<?php echo isset($customer_name) ? $customer_name : ''; ?> ">
                             </div>
                             <div class="col-md-3">
                                 <label for="purchase_no">Purchase No</label>
                                 <input type="text" class="form-control" id="purchase_no" name="purchase_no" placeholder="Search by purchase no" value="<?php echo isset($purchase_no) ? $purchase_no : ''; ?>">
                             </div>
 
-                            <div class="col-md-3">
+                            <div class="col-md-1">
                                 <button type="submit" class="btn btn-success mt-4">Search All</button>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <button type="reset" class="btn btn-warning mt-4">Clear All</button>
                             </div>
                         </div>
