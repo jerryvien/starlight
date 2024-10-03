@@ -229,7 +229,7 @@ $total_purchases = $win_count + $loss_count;
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table id="purchaseEntriesTable" class="table table-bordered" width="100%" cellspacing="0">
+                            <table id="purchaseEntriesTable" class="table table-bordered" width="80%" cellspacing="0">
                                 <thead>
                                     <tr>
                                         <th>Purchase No</th>
