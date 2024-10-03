@@ -148,8 +148,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['select_customer'])) {
                             </div>
                         </div>
                         <?php endif; ?>
-                    </div>
-                    <!-- Purchase Entries Table -->
+
+                        <!-- Purchase Entries Table -->
                         <?php if (!empty($related_purchases)): ?>
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
@@ -181,6 +181,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['select_customer'])) {
                             </div>
                         </div>
                         <?php endif; ?>
+                    </div>
+                    
                 </div>
 
                 
