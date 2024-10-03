@@ -171,14 +171,7 @@ $bar_chart_data = json_encode(array_values($sales_by_customer));
                                 <label for="to_date">To Date</label>
                                 <input type="date" class="form-control" id="to_date" name="to_date" value="<?php echo isset($to_date) ? $to_date : ''; ?>">
                             </div>
-                            <div class="col-md-3">
-                                <label for="customer_name">Customer Name</label>
-                                <input type="text" class="form-control" id="customer_name" name="customer_name" placeholder="Search by customer name" value="<?php echo isset($customer_name) ? $customer_name : ''; ?>">
-                            </div>
-                            <div class="col-md-3">
-                                <label for="purchase_no">Purchase No</label>
-                                <input type="text" class="form-control" id="purchase_no" name="purchase_no" placeholder="Search by purchase no" value="<?php echo isset($purchase_no) ? $purchase_no : ''; ?>">
-                            </div>
+                            
                             <?php if ($access_level === 'super_admin'): ?>
                             <div class="col-md-4">
                                 <label for="agent_filter">Agent</label>
@@ -197,7 +190,14 @@ $bar_chart_data = json_encode(array_values($sales_by_customer));
                             </div>
                         </div>
                         <div class="form-row mt-3">
-                            
+                        <div class="col-md-3">
+                                <label for="customer_name">Customer Name</label>
+                                <input type="text" class="form-control" id="customer_name" name="customer_name" placeholder="Search by customer name" value="<?php echo isset($customer_name) ? $customer_name : ''; ?>">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="purchase_no">Purchase No</label>
+                                <input type="text" class="form-control" id="purchase_no" name="purchase_no" placeholder="Search by purchase no" value="<?php echo isset($purchase_no) ? $purchase_no : ''; ?>">
+                            </div>
                         </div>
                     </form>
 
