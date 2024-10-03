@@ -192,7 +192,7 @@ $bar_chart_data = json_encode(array_values($sales_by_customer));
                                 </select>
                             </div>
                             <?php endif; ?>
-                            <div class="col-md-2">
+                            <div class="col-md-3">
                                 <button type="submit" class="btn btn-primary mt-4">Filter</button>
                             </div>
                         </div>
