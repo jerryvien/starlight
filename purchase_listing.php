@@ -185,9 +185,7 @@ $bar_chart_data = json_encode(array_values($sales_by_customer));
                                 </select>
                             </div>
                             <?php endif; ?>
-                            <div class="col-md-3">
-                                <button type="submit" class="btn btn-primary mt-4">Filter</button>
-                            </div>
+                            
                         </div>
                         <div class="form-row mt-3">
                         <div class="col-md-3">
@@ -197,6 +195,10 @@ $bar_chart_data = json_encode(array_values($sales_by_customer));
                             <div class="col-md-3">
                                 <label for="purchase_no">Purchase No</label>
                                 <input type="text" class="form-control" id="purchase_no" name="purchase_no" placeholder="Search by purchase no" value="<?php echo isset($purchase_no) ? $purchase_no : ''; ?>">
+                            </div>
+
+                            <div class="col-md-3">
+                                <button type="submit" class="btn btn-primary mt-4">Filter</button>
                             </div>
                         </div>
                     </form>
