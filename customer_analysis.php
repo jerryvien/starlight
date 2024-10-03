@@ -98,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['select_customer'])) {
             <div class="container-fluid">
                 <div class="row">
                     <!-- Customer Data Table (left side, with ml-4) -->
-                    <div class="col-md-4 ml-4">
+                    <div class="col-md-4 ml-6">
                         <h1 class="h3 mb-2 text-gray-800">Customer Data</h1>
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
@@ -138,7 +138,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['select_customer'])) {
                     </div>
 
                     <!-- Customer Information (right side, with mr-8) -->
-                    <div class="col-md-6 ml-6">
+                    <div class="col-md-4 ml-6">
                         <?php if ($selected_customer): ?>
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
@@ -158,62 +158,62 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['select_customer'])) {
                         </div>
                         <?php endif; ?>
                     </div>
-                </div>
 
-                <!-- Combined Purchase and Win/Loss Records Table -->
-                <?php if (!empty($related_purchases)): ?>
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Purchase Entries and Win/Loss Records</h6>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table id="purchaseEntriesTable" class="table table-bordered" width="100%" cellspacing="0">
-                                <thead>
-                                    <tr>
-                                        <th>Purchase No</th>
-                                        <th>Purchase Amount</th>
-                                        <th>Purchase Date</th>
-                                        <th>Agent Name</th>
-                                        <th>Result</th>
-                                        <th>Winning Amount</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php 
-                                    $subtotal_purchase_amount = 0;
-                                    $subtotal_winning_amount = 0;
-                                    ?>
-                                    <?php foreach ($related_purchases as $purchase): ?>
-                                        <?php 
-                                        $subtotal_purchase_amount += $purchase['purchase_amount']; 
-                                        $subtotal_winning_amount += $purchase['winning_amount'] ?? 0;
-                                        ?>
-                                        <tr>
-                                            <td><?php echo $purchase['purchase_no']; ?></td>
-                                            <td>$<?php echo number_format($purchase['purchase_amount'], 2); ?></td>
-                                            <td><?php echo date('d-M-Y', strtotime($purchase['purchase_datetime'])); ?></td>
-                                            <td><?php echo $purchase['agent_name'] ?? 'N/A'; ?></td>
-                                            <td><?php echo $purchase['result']; ?></td>
-                                            <td>$<?php echo number_format($purchase['winning_amount'] ?? 0, 2); ?></td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td colspan="5" class="text-right"><strong>Subtotal Purchase Amount:</strong></td>
-                                        <td><strong>$<?php echo number_format($subtotal_purchase_amount, 2); ?></strong></td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="5" class="text-right"><strong>Subtotal Winning Amount:</strong></td>
-                                        <td><strong>$<?php echo number_format($subtotal_winning_amount, 2); ?></strong></td>
-                                    </tr>
-                                </tfoot>
-                            </table>
+                    <!-- Combined Purchase and Win/Loss Records Table -->
+                        <?php if (!empty($related_purchases)): ?>
+                        <div class="col-md-4 ml-6">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Purchase Entries and Win/Loss Records</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table id="purchaseEntriesTable" class="table table-bordered" width="100%" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th>Purchase No</th>
+                                                <th>Purchase Amount</th>
+                                                <th>Purchase Date</th>
+                                                <th>Agent Name</th>
+                                                <th>Result</th>
+                                                <th>Winning Amount</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php 
+                                            $subtotal_purchase_amount = 0;
+                                            $subtotal_winning_amount = 0;
+                                            ?>
+                                            <?php foreach ($related_purchases as $purchase): ?>
+                                                <?php 
+                                                $subtotal_purchase_amount += $purchase['purchase_amount']; 
+                                                $subtotal_winning_amount += $purchase['winning_amount'] ?? 0;
+                                                ?>
+                                                <tr>
+                                                    <td><?php echo $purchase['purchase_no']; ?></td>
+                                                    <td>$<?php echo number_format($purchase['purchase_amount'], 2); ?></td>
+                                                    <td><?php echo date('d-M-Y', strtotime($purchase['purchase_datetime'])); ?></td>
+                                                    <td><?php echo $purchase['agent_name'] ?? 'N/A'; ?></td>
+                                                    <td><?php echo $purchase['result']; ?></td>
+                                                    <td>$<?php echo number_format($purchase['winning_amount'] ?? 0, 2); ?></td>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td colspan="5" class="text-right"><strong>Subtotal Purchase Amount:</strong></td>
+                                                <td><strong>$<?php echo number_format($subtotal_purchase_amount, 2); ?></strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="5" class="text-right"><strong>Subtotal Winning Amount:</strong></td>
+                                                <td><strong>$<?php echo number_format($subtotal_winning_amount, 2); ?></strong></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                        <?php endif; ?>
                 </div>
-                <?php endif; ?>
 
             </div>
             <!-- End of Content -->
