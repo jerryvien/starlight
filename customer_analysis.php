@@ -98,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['select_customer'])) {
             <div class="container-fluid">
                 <div class="row">
                     <!-- Customer Data Table (left side, with ml-4) -->
-                    <div class="col-md-4 ml-8">
+                    <div class="col-md-7 ml-4" style="border-right: 1px solid #ddd; min-height: 400px;">
                         <h1 class="h3 mb-2 text-gray-800">Customer Data</h1>
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
@@ -138,7 +138,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['select_customer'])) {
                     </div>
 
                     <!-- Customer Information (right side, with mr-8) -->
-                    <div class="col-md-4 ml-6">
+                    <div class="col-md-5 mr-4 d-flex flex-column" style="min-height: 400px;">
                         <?php if ($selected_customer): ?>
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
@@ -157,6 +157,37 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['select_customer'])) {
                             </div>
                         </div>
                         <?php endif; ?>
+                    </div>
+
+                    <!-- Purchase Entries Table with Constrained Height -->
+                    <div class="card shadow mb-4" style="max-height: 300px; overflow-y: auto;">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Purchase Entries</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="purchaseEntriesTable" class="table table-bordered" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Purchase No</th>
+                                            <th>Purchase Amount</th>
+                                            <th>Purchase Date</th>
+                                            <th>Winning Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($purchase_entries as $entry): ?>
+                                            <tr>
+                                                <td><?php echo $entry['purchase_no']; ?></td>
+                                                <td>$<?php echo number_format($entry['purchase_amount'], 2); ?></td>
+                                                <td><?php echo date('d-M-Y', strtotime($entry['purchase_datetime'])); ?></td>
+                                                <td>$<?php echo number_format($entry['winning_amount'], 2); ?></td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
