@@ -223,7 +223,7 @@ $total_purchases = $win_count + $loss_count;
 
                 <!-- Combined Purchase and Win/Loss Records Table -->
                 <?php if (!empty($related_purchases)): ?>
-                <div class="card shadow mb-4">
+                <div class="card shadow mb-4 ml-4">
                     <div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold text-primary">Purchase Entries and Win/Loss Records</h6>
                     </div>
