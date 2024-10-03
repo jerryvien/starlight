@@ -258,7 +258,7 @@ function generate_combinations($number) {
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table id="winningRecordsTable" class="table table-bordered">
+                                    <table id="winningRecordsTable" class="table table-bordered" width="100%" cellspacing="0">
                                         <thead>
                                             <tr>
                                                 <th>Winning Number</th>
