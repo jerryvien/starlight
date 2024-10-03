@@ -321,7 +321,7 @@ function generate_combinations($number) {
                                     <form method="POST">
                                         <input type="hidden" name="winning_record_id" value="<?php echo $winning_id; ?>">
                                         <input type="hidden" name="matching_purchases" value="<?php echo $serialized_purchases; ?>">
-                                        <table id="matchedPurchasesTable" class="table table-bordered">
+                                        <table id="matchedPurchasesTable" class="table table-bordered" width="100%" cellspacing="0">
                                             <thead>
                                                 <tr>
                                                     <th>Customer Name</th>
@@ -399,7 +399,7 @@ function generate_combinations($number) {
 
     <!-- Custom scripts for all pages-->
     <script src="js/sb-admin-2.min.js"></script>
-    
+
             <!-- Page level plugins -->
     <script src="vendor/datatables/jquery.dataTables.min.js"></script>
     <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
