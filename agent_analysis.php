@@ -314,7 +314,7 @@ $total_sales = $selected_agent['win_count'] + $selected_agent['loss_count'];
                             <?php echo ($selected_agent['loss_count'] / $total_sales) * 100; ?>, 
                             <?php echo ($selected_agent['win_count'] / $total_sales) * 100; ?>
                         ],
-                        backgroundColor: ['#4e73df', '#e74a3b'],
+                        backgroundColor: ['#4e73df', '#FFD700'],
                     }],
                 };
 

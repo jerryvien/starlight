@@ -326,7 +326,7 @@ $total_purchases = $win_count + $loss_count;
                             <?php echo ($win_count / $total_purchases) * 100; ?>, 
                             <?php echo ($loss_count / $total_purchases) * 100; ?>
                         ],
-                        backgroundColor: ['#4e73df', '#e74a3b'],
+                        backgroundColor: ['#4e73df', '#FFD700'],
                     }],
                 };
 
