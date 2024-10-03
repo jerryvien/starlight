@@ -149,40 +149,41 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['select_customer'])) {
                         </div>
                         <?php endif; ?>
                     </div>
+                    <!-- Purchase Entries Table -->
+                        <?php if (!empty($related_purchases)): ?>
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Purchase Entries</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table id="purchaseEntriesTable" class="table table-bordered" width="100%" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th>Purchase No</th>
+                                                <th>Purchase Amount</th>
+                                                <th>Purchase Date</th>
+                                                <th>Agent Name</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach ($related_purchases as $purchase): ?>
+                                            <tr>
+                                                <td><?php echo $purchase['purchase_no']; ?></td>
+                                                <td><?php echo number_format($purchase['purchase_amount'], 2); ?></td>
+                                                <td><?php echo date('d-M-Y', strtotime($purchase['purchase_datetime'])); ?></td>
+                                                <td><?php echo $purchase['agent_name']; ?></td>
+                                            </tr>
+                                            <?php endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <?php endif; ?>
                 </div>
 
-                <!-- Purchase Entries Table -->
-                <?php if (!empty($related_purchases)): ?>
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Purchase Entries</h6>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table id="purchaseEntriesTable" class="table table-bordered" width="100%" cellspacing="0">
-                                <thead>
-                                    <tr>
-                                        <th>Purchase No</th>
-                                        <th>Purchase Amount</th>
-                                        <th>Purchase Date</th>
-                                        <th>Agent Name</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach ($related_purchases as $purchase): ?>
-                                    <tr>
-                                        <td><?php echo $purchase['purchase_no']; ?></td>
-                                        <td><?php echo number_format($purchase['purchase_amount'], 2); ?></td>
-                                        <td><?php echo date('d-M-Y', strtotime($purchase['purchase_datetime'])); ?></td>
-                                        <td><?php echo $purchase['agent_name']; ?></td>
-                                    </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <?php endif; ?>
+                
 
             </div>
             <!-- End of Page Content -->
