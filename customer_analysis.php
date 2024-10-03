@@ -163,7 +163,7 @@ $total_purchases = $win_count + $loss_count;
                         </div>
                     </div>
 
-                    <!-- Customer Information and Charts (right side, with mr-8) -->
+                    <!-- Customer Information and Charts (right side, with mr-4) -->
                     <div class="col-md-6 mr-4">
                         <?php if ($selected_customer): ?>
                         <div class="row">
@@ -301,13 +301,27 @@ $total_purchases = $win_count + $loss_count;
 
     <script>
     $(document).ready(function() {
-        $('#customerTable').DataTable();
+        $('#customerTable').DataTable({
+            "paging": true,
+            "searching": true,
+            "ordering": true,
+            "pageLength": 10
+        });
+        $('#purchaseEntriesTable').DataTable({
+            "paging": true,
+            "searching": true,
+            "ordering": true,
+            "pageLength": 10
+        });
 
         // Initialize Pie Chart (Win/Loss Ratio)
         var winLossData = {
             labels: ['Win', 'Loss'],
             datasets: [{
-                data: [<?php echo $win_count; ?>, <?php echo $loss_count; ?>],
+                data: [
+                    <?php echo ($win_count / $total_purchases) * 100; ?>, 
+                    <?php echo ($loss_count / $total_purchases) * 100; ?>
+                ],
                 backgroundColor: ['#4e73df', '#e74a3b'],
             }],
         };
@@ -320,7 +334,16 @@ $total_purchases = $win_count + $loss_count;
                 responsive: true,
                 plugins: {
                     legend: {
-                        position: 'top', // Display legend inside the chart
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem, data) {
+                                var label = data.labels[tooltipItem.dataIndex];
+                                var value = data.datasets[0].data[tooltipItem.dataIndex];
+                                return label + ': ' + value.toFixed(2) + '%';
+                            }
+                        }
                     }
                 }
             }
