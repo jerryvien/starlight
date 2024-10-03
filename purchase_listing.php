@@ -213,11 +213,11 @@ $bar_chart_data = json_encode(array_values($sales_by_customer));
                                 <input type="text" class="form-control" id="purchase_no" name="purchase_no" placeholder="Search by purchase no" value="<?php echo isset($purchase_no) ? $purchase_no : ''; ?>">
                             </div>
 
-                            <div class="col-md-1 mt-2 ">
-                                <button type="submit" class="btn btn-success mt-6">Search All</button>
+                            <div class="col-md-1 mb-3 ">
+                                <button type="submit" class="btn btn-success mt-1">Search All</button>
                             </div>
-                            <div class="col-md-2 mt-2">
-                                <button type="reset" class="btn btn-warning mt-6">Clear All</button>
+                            <div class="col-md-2 mb-3">
+                                <button type="reset" class="btn btn-warning mt-1">Clear All</button>
                             </div>
                         </div>
                     </form>
