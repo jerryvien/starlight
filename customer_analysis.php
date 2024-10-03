@@ -227,9 +227,9 @@ $total_purchases = $win_count + $loss_count;
                     <div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold text-primary">Purchase Entries and Win/Loss Records</h6>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body mr-8">
                         <div class="table-responsive">
-                            <table id="purchaseEntriesTable" class="table table-bordered" width="80%" cellspacing="0">
+                            <table id="purchaseEntriesTable" class="table table-bordered" width="100%" cellspacing="0">
                                 <thead>
                                     <tr>
                                         <th>Purchase No</th>
