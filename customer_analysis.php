@@ -98,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['select_customer'])) {
             <div class="container-fluid">
                 <div class="row">
                     <!-- Customer Data Table (left side, with ml-4) -->
-                    <div class="col-md-4 ml-6">
+                    <div class="col-md-4 ml-8">
                         <h1 class="h3 mb-2 text-gray-800">Customer Data</h1>
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
