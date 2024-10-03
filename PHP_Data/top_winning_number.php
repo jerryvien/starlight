@@ -2,9 +2,6 @@
 
 include('config/database.php');
 
-// Set time zone to Kuala Lumpur (GMT +8)
-date_default_timezone_set('Asia/Kuala_Lumpur');
-
 // Error reporting for debugging
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
@@ -16,11 +13,6 @@ if (!isset($_SESSION['admin'])) {
     exit;
 }
 
-// Ensure the user is a super_admin
-if ($_SESSION['access_level'] !== 'super_admin') {
-    echo "<script>alert('You must be a super admin to access this page.'); window.location.href='dashboard.php';</script>";
-    exit;
-}
 
 // Query the top winning numbers from the past 14 days
 try {
@@ -47,15 +39,7 @@ foreach ($winning_numbers as $row) {
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Top Winning Numbers</title>
-    
-</head>
-<body>
+<
 
 <div class="container">
     <h2>Top Winning Numbers in the Past 14 Days</h2>
@@ -94,6 +78,3 @@ foreach ($winning_numbers as $row) {
         }
     });
 </script>
-
-</body>
-</html>
