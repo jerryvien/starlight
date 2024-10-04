@@ -188,7 +188,7 @@ $sales_by_month = $sales_by_month_stmt->fetchAll(PDO::FETCH_ASSOC);
                     </div>
 
                     <!-- Sales by Agent (Right) -->
-                    <div class="col-md-3">
+                    <div class="col-md-6">
                         <div class="chart-container">
                             <canvas id="salesByAgentChart"></canvas>
                         </div>
@@ -204,7 +204,7 @@ $sales_by_month = $sales_by_month_stmt->fetchAll(PDO::FETCH_ASSOC);
                     </div>
 
                     <!-- Sales by Month (New Chart) (Right) -->
-                    <div class="col-md-3">
+                    <div class="col-md-6">
                         <div class="chart-container">
                             <canvas id="salesByMonthChart"></canvas>
                         </div>
