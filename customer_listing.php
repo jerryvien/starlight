@@ -195,7 +195,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 
     <!-- jQuery -->
     <script src="vendor/jquery/jquery.min.js"></script>
-    
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script> <!-- DataTables JS -->
 
     <script>
         $(document).ready(function() {
