@@ -303,39 +303,34 @@ $(document).ready(function() {
             data: salesByAgentData,
             options: {
                 responsive: true,
-                maintainAspectRatio: false,  // Allow the chart to be responsive
+                maintainAspectRatio: false,
                 scales: {
                     y: {
-                        beginAtZero: true, // Y-axis starts at zero
+                        beginAtZero: true, // Ensure Y-axis starts at zero
                         ticks: {
-                            stepSize: 500,  // Y-axis increments
-                            callback: function(value) {
-                                return '$' + value.toLocaleString();  // Format Y-axis values with '$' and commas
+                            stepSize: 500,  // Adjust step size of Y-axis to control increments
+                            callback: function(value, index, values) {
+                                return '$' + value;  // Add '$' sign to Y-axis labels
                             }
                         }
                     },
                     x: {
                         ticks: {
-                            autoSkip: false, // Do not skip agent labels
-                            maxRotation: 45, // Rotate labels for better fit
+                            autoSkip: false, // Show all agent names, no skipping
+                            maxRotation: 45, // Rotate the labels if agent names are too long
                             minRotation: 45
                         }
                     }
                 },
                 plugins: {
                     legend: {
-                        display: true,  // Ensure the legend is displayed
-                        position: 'top',  // Legend at the top
-                        labels: {
-                            font: {
-                                size: 14  // Adjust font size for the legend
-                            }
-                        }
+                        display: true,
+                        position: 'top' // Legend displayed at the top
                     },
                     tooltip: {
                         callbacks: {
                             label: function(tooltipItem) {
-                                return '$' + tooltipItem.raw.toLocaleString(); // Format tooltips with '$' and commas
+                                return '$' + tooltipItem.raw.toLocaleString(); // Display formatted sales amount in tooltip
                             }
                         }
                     }
@@ -345,12 +340,12 @@ $(document).ready(function() {
                         left: 10,
                         right: 10,
                         top: 10,
-                        bottom: 0  // Adjust bottom padding
+                        bottom: 0 // Reduce bottom padding for tighter layout
                     }
                 },
                 elements: {
                     bar: {
-                        borderRadius: 5  // Rounded edges for the bars
+                        borderRadius: 5 // Rounded bar edges for a polished look
                     }
                 }
             }
