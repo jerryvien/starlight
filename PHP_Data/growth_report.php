@@ -57,16 +57,7 @@ try {
 <div class="container-fluid">
     <h2 class="h4 mb-4 text-gray-800">Customer Growth, Sales, and Transactions</h2>
 
-    <!-- Dropdown for selecting the year -->
-    <div class="form-group">
-        
-        <select id="yearSelect" class="form-control" style="width: 150px;">
-            <option value="">Last 12 Months</option>
-            <?php foreach ($available_years as $year): ?>
-                <option value="<?php echo $year['year']; ?>"><?php echo $year['year']; ?></option>
-            <?php endforeach; ?>
-        </select>
-    </div>
+
 
     <canvas id="customerGrowthSalesChart"></canvas>
 </div>
