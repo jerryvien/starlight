@@ -219,7 +219,7 @@ $total_sales = $selected_agent['win_count'] + $selected_agent['loss_count'];
                         <h6 class="m-0 font-weight-bold text-primary">Sales Entries and Win/Loss Records</h6>
                     </div>
                     <div class="card-body">
-                        <div class="table-responsive">
+                        <div class="">
                             <table id="salesEntriesTable" class="table table-bordered" width="100%" cellspacing="0">
                                 <thead>
                                     <tr>
