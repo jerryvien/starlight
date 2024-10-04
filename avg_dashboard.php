@@ -18,19 +18,20 @@ if (!isset($_SESSION['admin'])) {
 
 // Fetch Customer Revenue Contribution Data (Pareto Chart)
 $customer_contribution_stmt = $conn->query("
-    SELECT customer_name, SUM(purchase_amount) AS total_sales
-    FROM purchase_entries
-    JOIN customer_details ON purchase_entries.customer_id = customer_details.customer_id
-    GROUP BY customer_name
+    SELECT cd.customer_name, SUM(pe.purchase_amount) AS total_sales
+    FROM purchase_entries pe
+    JOIN customer_details cd ON pe.customer_id = cd.customer_id
+    GROUP BY cd.customer_name
     ORDER BY total_sales DESC
 ");
 $customer_contribution = $customer_contribution_stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Fetch Top Customers Data (Bar Chart)
 $top_customers_stmt = $conn->query("
-    SELECT customer_name, SUM(purchase_amount) AS total_sales
-    FROM purchase_entries
-    GROUP BY customer_name
+    SELECT cd.customer_name, SUM(pe.purchase_amount) AS total_sales
+    FROM purchase_entries pe
+    JOIN customer_details cd ON pe.customer_id = cd.customer_id
+    GROUP BY cd.customer_name
     ORDER BY total_sales DESC
     LIMIT 10
 ");
@@ -38,19 +39,21 @@ $top_customers = $top_customers_stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Fetch Win/Loss Ratio by Customer Data (Pie Chart)
 $win_loss_ratio_stmt = $conn->query("
-    SELECT customer_name, 
-           SUM(CASE WHEN result = 'Win' THEN 1 ELSE 0 END) AS wins, 
-           SUM(CASE WHEN result = 'Loss' THEN 1 ELSE 0 END) AS losses
-    FROM purchase_entries
-    GROUP BY customer_name
+    SELECT cd.customer_name, 
+           SUM(CASE WHEN pe.result = 'Win' THEN 1 ELSE 0 END) AS wins, 
+           SUM(CASE WHEN pe.result = 'Loss' THEN 1 ELSE 0 END) AS losses
+    FROM purchase_entries pe
+    JOIN customer_details cd ON pe.customer_id = cd.customer_id
+    GROUP BY cd.customer_name
 ");
 $win_loss_ratio = $win_loss_ratio_stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Fetch Average Order Value by Customer Data (Bar Chart)
 $average_order_value_stmt = $conn->query("
-    SELECT customer_name, AVG(purchase_amount) AS average_order_value
-    FROM purchase_entries
-    GROUP BY customer_name
+    SELECT cd.customer_name, AVG(pe.purchase_amount) AS average_order_value
+    FROM purchase_entries pe
+    JOIN customer_details cd ON pe.customer_id = cd.customer_id
+    GROUP BY cd.customer_name
 ");
 $average_order_value = $average_order_value_stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
