@@ -388,10 +388,10 @@ try {
 
                 
 
-                    <!-- Include DataTables CSS and JS 
-                    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
+                    <!-- Include DataTables CSS and JS -->
+                    
                     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-                    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>-->
+                    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
 
                     <!-- Recent Purchases (Table) -->
                     <div class="container-fluid d-none d-md-block">
