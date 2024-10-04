@@ -86,7 +86,7 @@ $sales_by_month = $sales_by_month_stmt->fetchAll(PDO::FETCH_ASSOC);
         .chart-container {
             width: 700px;
             height: 500px;
-            margin-bottom: 30px;
+            margin-bottom: 10px;
         }
     </style>
 </head>
