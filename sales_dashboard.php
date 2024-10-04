@@ -26,56 +26,51 @@ $total_winnings = $total_winnings_stmt->fetch(PDO::FETCH_ASSOC)['total_winnings'
 $total_customers_stmt = $conn->query("SELECT COUNT(DISTINCT customer_id) as total_customers FROM customer_details");
 $total_customers = $total_customers_stmt->fetch(PDO::FETCH_ASSOC)['total_customers'];
 
-$top_customer_stmt = $conn->query("
-    SELECT cd.customer_name, SUM(pe.purchase_amount) as total_sales
-    FROM purchase_entries pe
-    JOIN customer_details cd ON pe.customer_id = cd.customer_id
-    GROUP BY cd.customer_name
+$top_agent_stmt = $conn->query("
+    SELECT a.agent_name, SUM(p.purchase_amount) as total_sales
+    FROM purchase_entries p
+    JOIN admin_access a ON p.agent_id = a.agent_id
+    GROUP BY a.agent_name
     ORDER BY total_sales DESC
     LIMIT 1
 ");
-$top_customer = $top_customer_stmt->fetch(PDO::FETCH_ASSOC);
+$top_agent = $top_agent_stmt->fetch(PDO::FETCH_ASSOC);
 
-// Fetch Customer Revenue Contribution Data (Pareto Chart)
-$customer_contribution_stmt = $conn->query("
-    SELECT cd.customer_name, SUM(pe.purchase_amount) AS total_sales
-    FROM purchase_entries pe
-    JOIN customer_details cd ON pe.customer_id = cd.customer_id
-    GROUP BY cd.customer_name
+// Fetch total sales over time
+$sales_over_time_stmt = $conn->query("
+    SELECT DATE(purchase_datetime) as sale_date, SUM(purchase_amount) as total_sales
+    FROM purchase_entries
+    GROUP BY sale_date
+    ORDER BY sale_date ASC
+");
+$sales_over_time = $sales_over_time_stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Fetch sales by agent
+$sales_by_agent_stmt = $conn->query("
+    SELECT a.agent_name, SUM(p.purchase_amount) as total_sales
+    FROM purchase_entries p
+    JOIN admin_access a ON p.agent_id = a.agent_id
+    GROUP BY a.agent_name
     ORDER BY total_sales DESC
 ");
-$customer_contribution = $customer_contribution_stmt->fetchAll(PDO::FETCH_ASSOC);
+$sales_by_agent = $sales_by_agent_stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Fetch Top Customers Data (Bar Chart)
-$top_customers_stmt = $conn->query("
-    SELECT cd.customer_name, SUM(pe.purchase_amount) AS total_sales
-    FROM purchase_entries pe
-    JOIN customer_details cd ON pe.customer_id = cd.customer_id
-    GROUP BY cd.customer_name
-    ORDER BY total_sales DESC
-    LIMIT 10
+// Fetch sales by category
+$sales_by_category_stmt = $conn->query("
+    SELECT purchase_category, SUM(purchase_amount) as total_sales
+    FROM purchase_entries
+    GROUP BY purchase_category
 ");
-$top_customers = $top_customers_stmt->fetchAll(PDO::FETCH_ASSOC);
+$sales_by_category = $sales_by_category_stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Fetch Win/Loss Ratio by Customer Data (Pie Chart)
-$win_loss_ratio_stmt = $conn->query("
-    SELECT cd.customer_name, 
-           SUM(CASE WHEN pe.result = 'Win' THEN 1 ELSE 0 END) AS wins, 
-           SUM(CASE WHEN pe.result = 'Loss' THEN 1 ELSE 0 END) AS losses
-    FROM purchase_entries pe
-    JOIN customer_details cd ON pe.customer_id = cd.customer_id
-    GROUP BY cd.customer_name
+// New Chart: Fetch sales by month
+$sales_by_month_stmt = $conn->query("
+    SELECT MONTHNAME(purchase_datetime) as sale_month, SUM(purchase_amount) as total_sales
+    FROM purchase_entries
+    GROUP BY sale_month
+    ORDER BY MONTH(purchase_datetime)
 ");
-$win_loss_ratio = $win_loss_ratio_stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// Fetch Average Order Value by Customer Data (Bar Chart)
-$average_order_value_stmt = $conn->query("
-    SELECT cd.customer_name, AVG(pe.purchase_amount) AS average_order_value
-    FROM purchase_entries pe
-    JOIN customer_details cd ON pe.customer_id = cd.customer_id
-    GROUP BY cd.customer_name
-");
-$average_order_value = $average_order_value_stmt->fetchAll(PDO::FETCH_ASSOC);
+$sales_by_month = $sales_by_month_stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -83,7 +78,7 @@ $average_order_value = $average_order_value_stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customer Performance Dashboard</title>
+    <title>Sales Performance Dashboard</title>
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
     <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
@@ -110,7 +105,7 @@ $average_order_value = $average_order_value_stmt->fetchAll(PDO::FETCH_ASSOC);
 
             <!-- Page Content -->
             <div class="container-fluid mx-auto px-4">
-                <h1 class="h3 mb-2 text-gray-800">Customer Performance Dashboard</h1>
+                <h1 class="h3 mb-2 text-gray-800">Sales Performance Dashboard</h1>
 
                 <!-- Top KPI Cards -->
                 <div class="row justify-content-center">
@@ -148,17 +143,17 @@ $average_order_value = $average_order_value_stmt->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                     </div>
 
-                    <!-- Top Customer -->
+                    <!-- Top Agent -->
                     <div class="col-xl-3 col-md-6 mb-4">
                         <div class="card border-left-info shadow h-100 py-2">
                             <div class="card-body">
                                 <div class="row no-gutters align-items-center">
                                     <div class="col mr-2">
-                                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Top Customer</div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $top_customer['customer_name']; ?></div>
+                                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Top Agent</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $top_agent['agent_name']; ?></div>
                                     </div>
                                     <div class="col-auto">
-                                        <i class="fas fa-user fa-2x text-gray-300"></i>
+                                        <i class="fas fa-user-tie fa-2x text-gray-300"></i>
                                     </div>
                                 </div>
                             </div>
@@ -185,33 +180,33 @@ $average_order_value = $average_order_value_stmt->fetchAll(PDO::FETCH_ASSOC);
 
                 <!-- Chart Containers -->
                 <div class="row">
-                    <!-- Customer Revenue Contribution (Pareto Chart) -->
+                    <!-- Total Sales Over Time (Left) -->
                     <div class="col-md-6">
                         <div class="chart-container">
-                            <canvas id="customerContributionChart"></canvas>
+                            <canvas id="salesOverTimeChart"></canvas>
                         </div>
                     </div>
 
-                    <!-- Top Customers (Bar Chart) -->
+                    <!-- Sales by Agent (Right) -->
                     <div class="col-md-6">
                         <div class="chart-container">
-                            <canvas id="topCustomersChart"></canvas>
+                            <canvas id="salesByAgentChart"></canvas>
                         </div>
                     </div>
                 </div>
 
                 <div class="row">
-                    <!-- Win/Loss Ratio by Customer (Pie Chart) -->
+                    <!-- Sales by Category (Left) -->
                     <div class="col-md-6">
                         <div class="chart-container">
-                            <canvas id="winLossRatioChart"></canvas>
+                            <canvas id="salesByCategoryChart"></canvas>
                         </div>
                     </div>
 
-                    <!-- Average Order Value by Customer (Bar Chart) -->
+                    <!-- Sales by Month (New Chart) (Right) -->
                     <div class="col-md-6">
                         <div class="chart-container">
-                            <canvas id="averageOrderValueChart"></canvas>
+                            <canvas id="salesByMonthChart"></canvas>
                         </div>
                     </div>
                 </div>
@@ -233,89 +228,264 @@ $average_order_value = $average_order_value_stmt->fetchAll(PDO::FETCH_ASSOC);
 <!-- Core plugin JavaScript-->
 <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 
+
+
 <!-- Chart.js for pie and line charts -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 
 <script>
 $(document).ready(function() {
-    // Customer Revenue Contribution (Pareto Chart)
-    var customerContributionCtx = document.getElementById('customerContributionChart').getContext('2d');
-    var customerContributionData = {
-        labels: <?php echo json_encode(array_column($customer_contribution, 'customer_name')); ?>,
-        datasets: [{
-            label: 'Total Sales',
-            data: <?php echo json_encode(array_column($customer_contribution, 'total_sales')); ?>,
-            borderColor: 'rgba(75, 192, 192, 1)',
-            backgroundColor: 'rgba(75, 192, 192, 0.5)',
-            fill: false
-        }, {
-            label: 'Cumulative Percentage',
-            data: <?php
-                $total_sales = array_sum(array_column($customer_contribution, 'total_sales'));
-                $running_total = 0;
-                $cumulative_percentage = [];
-                foreach ($customer_contribution as $customer) {
-                    $running_total += $customer['total_sales'];
-                    $cumulative_percentage[] = ($running_total / $total_sales) * 100;
-                }
-                echo json_encode($cumulative_percentage);
-            ?>,
+    // Total Sales Over Time
+        var salesOverTimeCtx = document.getElementById('salesOverTimeChart').getContext('2d');
+        var salesOverTimeData = {
+            labels: <?php echo json_encode(array_column($sales_over_time, 'sale_date')); ?>,
+            datasets: [{
+                label: 'Total Sales',
+                data: <?php echo json_encode(array_column($sales_over_time, 'total_sales')); ?>,
+                borderColor: '#4e73df',
+                backgroundColor: 'rgba(78, 115, 223, 0.05)',
+                pointBackgroundColor: '#4e73df',
+                pointBorderColor: '#4e73df',
+                fill: true
+            }]
+        };
+        new Chart(salesOverTimeCtx, {
             type: 'line',
-            borderColor: 'rgba(255, 99, 132, 1)',
-            fill: false
-        }]
-    };
-    new Chart(customerContributionCtx, {
-        data: customerContributionData,
-    });
+            data: salesOverTimeData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                layout: {
+                    padding: {
+                        bottom: 0, // Reduce bottom margin
+                        top: 10,   // Adjust top margin if necessary
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: {
+                            maxRotation: 0, // Ensure x-axis labels do not rotate
+                            autoSkip: true  // Automatically skip some labels to avoid clutter
+                        }
+                    },
+                    y: {
+                        beginAtZero: true, // Ensure y-axis starts at zero
+                        ticks: {
+                            padding: 5 // Reduce padding between labels and chart
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top' // Adjust legend placement if necessary
+                    }
+                }
+            }
+        });
 
-    // Top Customers (Bar Chart)
-    var topCustomersCtx = document.getElementById('topCustomersChart').getContext('2d');
-    var topCustomersData = {
-        labels: <?php echo json_encode(array_column($top_customers, 'customer_name')); ?>,
-        datasets: [{
-            label: 'Total Sales',
-            data: <?php echo json_encode(array_column($top_customers, 'total_sales')); ?>,
-            backgroundColor: 'rgba(75, 192, 192, 0.5)',
-            borderColor: 'rgba(75, 192, 192, 1)',
-            borderWidth: 1
-        }]
-    };
-    new Chart(topCustomersCtx, {
-        type: 'bar',
-        data: topCustomersData,
-    });
+    // Sales by Agent
+        var salesByAgentCtx = document.getElementById('salesByAgentChart').getContext('2d');
+        var salesByAgentData = {
+            labels: <?php echo json_encode(array_column($sales_by_agent, 'agent_name')); ?>,
+            datasets: [{
+                label: 'Total Sales',
+                data: <?php echo json_encode(array_column($sales_by_agent, 'total_sales')); ?>,
+                backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        };
 
-    // Win/Loss Ratio by Customer (Pie Chart)
-    var winLossRatioCtx = document.getElementById('winLossRatioChart').getContext('2d');
-    var winLossRatioData = {
-        labels: ['Wins', 'Losses'],
-        datasets: [{
-            data: [<?php echo $win_loss_ratio[0]['wins']; ?>, <?php echo $win_loss_ratio[0]['losses']; ?>],
-            backgroundColor: ['#4e73df', '#e74a3b']
-        }]
-    };
-    new Chart(winLossRatioCtx, {
-        type: 'pie',
-        data: winLossRatioData,
-    });
+        new Chart(salesByAgentCtx, {
+            type: 'bar',
+            data: salesByAgentData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true, // Ensure Y-axis starts at zero
+                        ticks: {
+                            stepSize: 500,  // Adjust step size of Y-axis to control increments
+                            callback: function(value, index, values) {
+                                return '$' + value;  // Add '$' sign to Y-axis labels
+                            }
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            autoSkip: false, // Show all agent names, no skipping
+                            maxRotation: 45, // Rotate the labels if agent names are too long
+                            minRotation: 45
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top' // Legend displayed at the top
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return '$' + tooltipItem.raw.toLocaleString(); // Display formatted sales amount in tooltip
+                            }
+                        }
+                    }
+                },
+                layout: {
+                    padding: {
+                        left: 10,
+                        right: 10,
+                        top: 10,
+                        bottom: 0 // Reduce bottom padding for tighter layout
+                    }
+                },
+                elements: {
+                    bar: {
+                        borderRadius: 5 // Rounded bar edges for a polished look
+                    }
+                }
+            }
+        });
 
-    // Average Order Value by Customer (Bar Chart)
-    var averageOrderValueCtx = document.getElementById('averageOrderValueChart').getContext('2d');
-    var averageOrderValueData = {
-        labels: <?php echo json_encode(array_column($average_order_value, 'customer_name')); ?>,
-        datasets: [{
-            label: 'Average Order Value',
-            data: <?php echo json_encode(array_column($average_order_value, 'average_order_value')); ?>,
-            backgroundColor: 'rgba(153, 102, 255, 0.5)',
-            borderColor: 'rgba(153, 102, 255, 1)',
-            borderWidth: 1
-        }]
-    };
-    new Chart(averageOrderValueCtx, {
-        type: 'bar',
-        data: averageOrderValueData,
-    });
+    // Sales by Category (Bar Chart)
+        var salesByCategoryCtx = document.getElementById('salesByCategoryChart').getContext('2d');
+        var salesByCategoryData = {
+            labels: <?php echo json_encode(array_column($sales_by_category, 'purchase_category')); ?>,
+            datasets: [{
+                label: 'Total Sales',
+                data: <?php echo json_encode(array_column($sales_by_category, 'total_sales')); ?>,
+                backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        };
+
+        new Chart(salesByCategoryCtx, {
+            type: 'bar',
+            data: salesByCategoryData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false, // Adjusts chart to fit better in the container
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return '$' + value.toLocaleString(); // Format y-axis values as currency
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return '$' + tooltipItem.raw.toLocaleString(); // Format tooltip as currency
+                            }
+                        }
+                    },
+                    // This plugin adds the values directly above the bars
+                    datalabels: {
+                        display: true,
+                        align: 'end',
+                        anchor: 'end',
+                        formatter: function(value) {
+                            return '$' + value.toLocaleString(); // Show formatted value above bars
+                        }
+                    }
+                },
+                layout: {
+                    padding: {
+                        left: 10,
+                        right: 10,
+                        top: 10,
+                        bottom: 0
+                    }
+                },
+                elements: {
+                    bar: {
+                        borderRadius: 5 // Optional: rounded bar edges for a polished look
+                    }
+                }
+            },
+            plugins: [ChartDataLabels] // This plugin is necessary for showing values on top of bars
+        });
+
+    // Sales by Month (New Chart)
+        var salesByMonthCtx = document.getElementById('salesByMonthChart').getContext('2d');
+        var salesByMonthData = {
+            labels: <?php echo json_encode(array_column($sales_by_month, 'sale_month')); ?>,
+            datasets: [{
+                label: 'Total Sales',
+                data: <?php echo json_encode(array_column($sales_by_month, 'total_sales')); ?>,
+                backgroundColor: 'rgba(255, 206, 86, 0.5)',
+                borderColor: 'rgba(255, 206, 86, 1)',
+                borderWidth: 1
+            }]
+        };
+
+        new Chart(salesByMonthCtx, {
+            type: 'bar',
+            data: salesByMonthData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false, // Let the chart resize responsively
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return '$' + value.toLocaleString(); // Format Y-axis values as currency
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return '$' + tooltipItem.raw.toLocaleString(); // Format tooltip values as currency
+                            }
+                        }
+                    },
+                    // Show value labels directly on the bars
+                    datalabels: {
+                        display: true,
+                        align: 'end',
+                        anchor: 'end',
+                        formatter: function(value) {
+                            return '$' + value.toLocaleString(); // Show formatted value above bars
+                        }
+                    }
+                },
+                layout: {
+                    padding: {
+                        left: 10,
+                        right: 10,
+                        top: 10,
+                        bottom: 0
+                    }
+                },
+                elements: {
+                    bar: {
+                        borderRadius: 5 // Optional: Rounded edges for a smoother look
+                    }
+                }
+            },
+            plugins: [ChartDataLabels] // This plugin is necessary for showing values on top of bars
+        });
 });
 </script>
 
