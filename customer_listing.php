@@ -150,21 +150,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                 <div class="container-fluid">
                     <h1 class="h3 mb-4 text-gray-800">Customer Listing</h1>
 
-                    <!-- Customer Listing Table -->
-                    <div class="table-responsive">
-                        <table id="myTable" class="display">
-                            <thead>
-                                <tr>
-                                    <th>Customer ID</th>
-                                    <th>Customer Name</th>
-                                    <th>Agent Name</th>
-                                    <th>Credit Limit (RM)</th>
-                                    <th>VIP Status</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
+                       <!-- Customer Data Table (left side, with ml-4) -->
+                       <div class="col-md-5 ml-4">
+                        
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Customers</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                     <!-- Customer Listing Table -->
+                                    
+                                        <table id="myTable" class="display">
+                                            <thead>
+                                                <tr>
+                                                    <th>Customer ID</th>
+                                                    <th>Customer Name</th>
+                                                    <th>Agent Name</th>
+                                                    <th>Credit Limit (RM)</th>
+                                                    <th>VIP Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
+                   
 
                 </div>
                 <!-- /.container-fluid -->
