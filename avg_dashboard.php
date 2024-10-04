@@ -16,6 +16,16 @@ if (!isset($_SESSION['admin'])) {
     exit;
 }
 
+// Fetch data for summary cards
+$total_sales_stmt = $conn->query("SELECT SUM(purchase_amount) AS total_sales FROM purchase_entries");
+$total_sales = $total_sales_stmt->fetch(PDO::FETCH_ASSOC)['total_sales'];
+
+$total_wins_stmt = $conn->query("SELECT SUM(winning_amount) AS total_wins FROM purchase_entries WHERE result = 'Win'");
+$total_wins = $total_wins_stmt->fetch(PDO::FETCH_ASSOC)['total_wins'];
+
+$total_customers_stmt = $conn->query("SELECT COUNT(*) AS total_customers FROM customer_details");
+$total_customers = $total_customers_stmt->fetch(PDO::FETCH_ASSOC)['total_customers'];
+
 // Fetch Customer Revenue Contribution Data (Pareto Chart)
 $customer_contribution_stmt = $conn->query("
     SELECT cd.customer_name, SUM(pe.purchase_amount) AS total_sales
@@ -67,6 +77,21 @@ $average_order_value = $average_order_value_stmt->fetchAll(PDO::FETCH_ASSOC);
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
     <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <style>
+        .chart-container {
+            height: 300px;
+            width: 100%;
+        }
+        .card-summary {
+            width: 22%;
+        }
+        .dashboard-row {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
 
@@ -85,43 +110,80 @@ $average_order_value = $average_order_value_stmt->fetchAll(PDO::FETCH_ASSOC);
             <div class="container-fluid">
                 <h1 class="h3 mb-2 text-gray-800">Customer Performance Dashboard</h1>
 
-                <!-- Customer Revenue Contribution (Pareto Chart) -->
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Customer Revenue Contribution (Pareto Chart)</h6>
+                <!-- Summary Cards Row -->
+                <div class="dashboard-row">
+                    <div class="card card-summary shadow-sm mb-4">
+                        <div class="card-body">
+                            <h5>Total Sales</h5>
+                            <h4>$<?php echo number_format($total_sales, 2); ?></h4>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <canvas id="customerContributionChart"></canvas>
+
+                    <div class="card card-summary shadow-sm mb-4">
+                        <div class="card-body">
+                            <h5>Total Winnings</h5>
+                            <h4>$<?php echo number_format($total_wins, 2); ?></h4>
+                        </div>
+                    </div>
+
+                    <div class="card card-summary shadow-sm mb-4">
+                        <div class="card-body">
+                            <h5>Total Customers</h5>
+                            <h4><?php echo $total_customers; ?></h4>
+                        </div>
+                    </div>
+
+                    <div class="card card-summary shadow-sm mb-4">
+                        <div class="card-body">
+                            <h5>Top Customer</h5>
+                            <h4><?php echo $customer_contribution[0]['customer_name']; ?></h4>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Top Customers (Bar Chart) -->
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Top Customers (Bar Chart)</h6>
+                <!-- 4 Chart Layout Row 1 -->
+                <div class="dashboard-row">
+                    <!-- Customer Revenue Contribution (Pareto Chart) -->
+                    <div class="card shadow-sm mb-4 chart-container">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Customer Revenue Contribution</h6>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="customerContributionChart"></canvas>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <canvas id="topCustomersChart"></canvas>
+
+                    <!-- Top Customers (Bar Chart) -->
+                    <div class="card shadow-sm mb-4 chart-container">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Top Customers</h6>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="topCustomersChart"></canvas>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Win/Loss Ratio by Customer (Pie Chart) -->
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Win/Loss Ratio by Customer (Pie Chart)</h6>
+                <!-- 4 Chart Layout Row 2 -->
+                <div class="dashboard-row">
+                    <!-- Win/Loss Ratio by Customer (Pie Chart) -->
+                    <div class="card shadow-sm mb-4 chart-container">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Win/Loss Ratio by Customer</h6>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="winLossRatioChart"></canvas>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <canvas id="winLossRatioChart"></canvas>
-                    </div>
-                </div>
 
-                <!-- Average Order Value by Customer (Bar Chart) -->
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Average Order Value by Customer (Bar Chart)</h6>
-                    </div>
-                    <div class="card-body">
-                        <canvas id="averageOrderValueChart"></canvas>
+                    <!-- Average Order Value by Customer (Bar Chart) -->
+                    <div class="card shadow-sm mb-4 chart-container">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Average Order Value by Customer</h6>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="averageOrderValueChart"></canvas>
+                        </div>
                     </div>
                 </div>
 
@@ -174,24 +236,15 @@ var customerContributionData = {
             }
             echo json_encode($cumulative_percentage);
         ?>,
-        backgroundColor: 'rgba(255, 99, 132, 0.5)',
         borderColor: 'rgba(255, 99, 132, 1)',
         fill: false
     }]
 };
 new Chart(customerContributionCtx, {
-    type: 'bar',
     data: customerContributionData,
-    options: {
-        scales: {
-            y: {
-                beginAtZero: true
-            }
-        }
-    }
 });
 
-// Top Customers Bar Chart
+// Top Customers (Bar Chart)
 var topCustomersCtx = document.getElementById('topCustomersChart').getContext('2d');
 var topCustomersData = {
     labels: <?php echo json_encode(array_column($top_customers, 'customer_name')); ?>,
@@ -206,33 +259,23 @@ var topCustomersData = {
 new Chart(topCustomersCtx, {
     type: 'bar',
     data: topCustomersData,
-    options: {
-        scales: {
-            y: {
-                beginAtZero: true
-            }
-        }
-    }
 });
 
-// Win/Loss Ratio Pie Chart
+// Win/Loss Ratio (Pie Chart)
 var winLossRatioCtx = document.getElementById('winLossRatioChart').getContext('2d');
 var winLossRatioData = {
     labels: ['Wins', 'Losses'],
     datasets: [{
-        data: [
-            <?php echo array_sum(array_column($win_loss_ratio, 'wins')); ?>,
-            <?php echo array_sum(array_column($win_loss_ratio, 'losses')); ?>
-        ],
-        backgroundColor: ['#4e73df', '#e74a3b'],
+        data: [<?php echo $win_loss_ratio[0]['wins']; ?>, <?php echo $win_loss_ratio[0]['losses']; ?>],
+        backgroundColor: ['#4e73df', '#e74a3b']
     }]
 };
 new Chart(winLossRatioCtx, {
     type: 'pie',
-    data: winLossRatioData
+    data: winLossRatioData,
 });
 
-// Average Order Value by Customer (Bar Chart)
+// Average Order Value (Bar Chart)
 var averageOrderValueCtx = document.getElementById('averageOrderValueChart').getContext('2d');
 var averageOrderValueData = {
     labels: <?php echo json_encode(array_column($average_order_value, 'customer_name')); ?>,
@@ -247,13 +290,6 @@ var averageOrderValueData = {
 new Chart(averageOrderValueCtx, {
     type: 'bar',
     data: averageOrderValueData,
-    options: {
-        scales: {
-            y: {
-                beginAtZero: true
-            }
-        }
-    }
 });
 </script>
 
