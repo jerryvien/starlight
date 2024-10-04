@@ -1,18 +1,5 @@
 <?php
-
-include('config/database.php');
-
-// Error reporting for debugging
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
-// Redirect to login page if the user is not logged in
-if (!isset($_SESSION['admin'])) {
-    header("Location: index.php");
-    exit;
-}
-
+// Assuming you have a valid database connection `$conn`
 
 // Query the top winning numbers from the past 14 days
 try {
@@ -39,13 +26,13 @@ foreach ($winning_numbers as $row) {
 }
 ?>
 
-<
+<!-- Include Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<div class="container">
-    <h2>Top Winning Numbers in the Past 14 Days</h2>
-    <canvas id="winningNumbersChart" width="400" height="200"></canvas>
-</div>
+<!-- Chart Container -->
+<canvas id="winningNumbersChart" width="400" height="200"></canvas>
 
+<!-- Chart.js Script -->
 <script>
     var ctx = document.getElementById('winningNumbersChart').getContext('2d');
     var chart = new Chart(ctx, {
