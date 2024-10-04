@@ -1,83 +1,3 @@
-<?php
-session_start();
-include('config/database.php');
-
-// Set time zone
-date_default_timezone_set('Asia/Kuala_Lumpur');
-
-// Error reporting for debugging
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
-// Redirect to login page if the user is not logged in
-if (!isset($_SESSION['admin'])) {
-    header("Location: index.php");
-    exit;
-}
-
-// Fetch KPIs
-$total_sales_stmt = $conn->query("SELECT SUM(purchase_amount) as total_sales FROM purchase_entries");
-$total_sales = $total_sales_stmt->fetch(PDO::FETCH_ASSOC)['total_sales'];
-
-$total_winnings_stmt = $conn->query("SELECT SUM(winning_amount) as total_winnings FROM purchase_entries WHERE result = 'Win'");
-$total_winnings = $total_winnings_stmt->fetch(PDO::FETCH_ASSOC)['total_winnings'];
-
-$total_customers_stmt = $conn->query("SELECT COUNT(DISTINCT customer_id) as total_customers FROM customer_details");
-$total_customers = $total_customers_stmt->fetch(PDO::FETCH_ASSOC)['total_customers'];
-
-$top_customer_stmt = $conn->query("
-    SELECT cd.customer_name, SUM(pe.purchase_amount) as total_sales
-    FROM purchase_entries pe
-    JOIN customer_details cd ON pe.customer_id = cd.customer_id
-    GROUP BY cd.customer_name
-    ORDER BY total_sales DESC
-    LIMIT 1
-");
-$top_customer = $top_customer_stmt->fetch(PDO::FETCH_ASSOC);
-
-// Fetch Customer Revenue Contribution Data (Pareto Chart)
-$customer_contribution_stmt = $conn->query("
-    SELECT cd.customer_name, SUM(pe.purchase_amount) AS total_sales
-    FROM purchase_entries pe
-    JOIN customer_details cd ON pe.customer_id = cd.customer_id
-    GROUP BY cd.customer_name
-    ORDER BY total_sales DESC
-");
-$customer_contribution = $customer_contribution_stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// Fetch Top Customers Data (Bar Chart)
-$top_customers_stmt = $conn->query("
-    SELECT cd.customer_name, SUM(pe.purchase_amount) AS total_sales
-    FROM purchase_entries pe
-    JOIN customer_details cd ON pe.customer_id = cd.customer_id
-    GROUP BY cd.customer_name
-    ORDER BY total_sales DESC
-    LIMIT 10
-");
-$top_customers = $top_customers_stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// Fetch Win/Loss Ratio by Customer Data (Pie Chart)
-$win_loss_ratio_stmt = $conn->query("
-    SELECT cd.customer_name, 
-           SUM(CASE WHEN pe.result = 'Win' THEN 1 ELSE 0 END) AS wins, 
-           SUM(CASE WHEN pe.result = 'Loss' THEN 1 ELSE 0 END) AS losses
-    FROM purchase_entries pe
-    JOIN customer_details cd ON pe.customer_id = cd.customer_id
-    GROUP BY cd.customer_name
-");
-$win_loss_ratio = $win_loss_ratio_stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// Fetch Average Order Value by Customer Data (Bar Chart)
-$average_order_value_stmt = $conn->query("
-    SELECT cd.customer_name, AVG(pe.purchase_amount) AS average_order_value
-    FROM purchase_entries pe
-    JOIN customer_details cd ON pe.customer_id = cd.customer_id
-    GROUP BY cd.customer_name
-");
-$average_order_value = $average_order_value_stmt->fetchAll(PDO::FETCH_ASSOC);
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -238,7 +158,11 @@ $average_order_value = $average_order_value_stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <script>
 $(document).ready(function() {
-    // Customer Revenue Contribution (Pareto Chart)
+    // Debugging output
+    console.log(<?php echo json_encode(array_column($customer_contribution, 'customer_name')); ?>);
+    console.log(<?php echo json_encode(array_column($top_customers, 'total_sales')); ?>);
+
+    // Pareto Chart
     var customerContributionCtx = document.getElementById('customerContributionChart').getContext('2d');
     var customerContributionData = {
         labels: <?php echo json_encode(array_column($customer_contribution, 'customer_name')); ?>,
@@ -269,53 +193,7 @@ $(document).ready(function() {
         data: customerContributionData,
     });
 
-    // Top Customers (Bar Chart)
-    var topCustomersCtx = document.getElementById('topCustomersChart').getContext('2d');
-    var topCustomersData = {
-        labels: <?php echo json_encode(array_column($top_customers, 'customer_name')); ?>,
-        datasets: [{
-            label: 'Total Sales',
-            data: <?php echo json_encode(array_column($top_customers, 'total_sales')); ?>,
-            backgroundColor: 'rgba(75, 192, 192, 0.5)',
-            borderColor: 'rgba(75, 192, 192, 1)',
-            borderWidth: 1
-        }]
-    };
-    new Chart(topCustomersCtx, {
-        type: 'bar',
-        data: topCustomersData,
-    });
-
-    // Win/Loss Ratio by Customer (Pie Chart)
-    var winLossRatioCtx = document.getElementById('winLossRatioChart').getContext('2d');
-    var winLossRatioData = {
-        labels: ['Wins', 'Losses'],
-        datasets: [{
-            data: [<?php echo $win_loss_ratio[0]['wins']; ?>, <?php echo $win_loss_ratio[0]['losses']; ?>],
-            backgroundColor: ['#4e73df', '#e74a3b']
-        }]
-    };
-    new Chart(winLossRatioCtx, {
-        type: 'pie',
-        data: winLossRatioData,
-    });
-
-    // Average Order Value by Customer (Bar Chart)
-    var averageOrderValueCtx = document.getElementById('averageOrderValueChart').getContext('2d');
-    var averageOrderValueData = {
-        labels: <?php echo json_encode(array_column($average_order_value, 'customer_name')); ?>,
-        datasets: [{
-            label: 'Average Order Value',
-            data: <?php echo json_encode(array_column($average_order_value, 'average_order_value')); ?>,
-            backgroundColor: 'rgba(153, 102, 255, 0.5)',
-            borderColor: 'rgba(153, 102, 255, 1)',
-            borderWidth: 1
-        }]
-    };
-    new Chart(averageOrderValueCtx, {
-        type: 'bar',
-        data: averageOrderValueData,
-    });
+    // Other chart code here...
 });
 </script>
 
