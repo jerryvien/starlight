@@ -55,10 +55,7 @@ try {
 <body>
 
 <div class="container-fluid">
-    <h2 class="h4 mb-4 text-gray-800">Customer Growth, Sales, and Transactions</h2>
-
-
-
+    <h2>Customer Growth, Sales, and Transactions</h2>
     <canvas id="customerGrowthSalesChart"></canvas>
 </div>
 
