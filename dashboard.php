@@ -360,7 +360,7 @@ try {
                                         <?php include('PHP_Data/top_winning_number.php'); ?>
                                     </div>
                                     <div class="col-md-6">
-                                        <?php include('PHP_Data/sales_compare_chart.php'); ?>
+                                        
                                     </div>
                                 </div>
                             </div>
