@@ -104,11 +104,11 @@ $sales_by_month = $sales_by_month_stmt->fetchAll(PDO::FETCH_ASSOC);
             <?php include('config/topbar.php'); ?>
 
             <!-- Page Content -->
-            <div class="container-fluid" class="d-flex flex-column">
+            <div class="container-fluid mx-auto px-4">
                 <h1 class="h3 mb-2 text-gray-800">Sales Performance Dashboard</h1>
 
                 <!-- Top KPI Cards -->
-                <div class="row">
+                <div class="row justify-content-center">
                     <!-- Total Sales -->
                     <div class="col-xl-3 col-md-6 mb-4">
                         <div class="card border-left-primary shadow h-100 py-2">
