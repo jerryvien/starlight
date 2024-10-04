@@ -115,7 +115,7 @@ $avg_order_value = $avg_order_value_stmt->fetchAll(PDO::FETCH_ASSOC);
                 <!-- Top KPI Cards -->
                 <div class="row justify-content-center">
                     <!-- Total Sales -->
-                    <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="col-xl-4 col-md-6 mb-4">
                         <div class="card border-left-primary shadow h-100 py-2">
                             <div class="card-body">
                                 <div class="row no-gutters align-items-center">
@@ -132,7 +132,7 @@ $avg_order_value = $avg_order_value_stmt->fetchAll(PDO::FETCH_ASSOC);
                     </div>
 
                     <!-- Total Winnings -->
-                    <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="col-xl-4 col-md-6 mb-4">
                         <div class="card border-left-success shadow h-100 py-2">
                             <div class="card-body">
                                 <div class="row no-gutters align-items-center">
@@ -149,7 +149,7 @@ $avg_order_value = $avg_order_value_stmt->fetchAll(PDO::FETCH_ASSOC);
                     </div>
 
                     <!-- Top Customer -->
-                    <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="col-xl-4 col-md-6 mb-4">
                         <div class="card border-left-info shadow h-100 py-2">
                             <div class="card-body">
                                 <div class="row no-gutters align-items-center">
@@ -166,7 +166,7 @@ $avg_order_value = $avg_order_value_stmt->fetchAll(PDO::FETCH_ASSOC);
                     </div>
 
                     <!-- Total Customers -->
-                    <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="col-xl-4 col-md-6 mb-4">
                         <div class="card border-left-warning shadow h-100 py-2">
                             <div class="card-body">
                                 <div class="row no-gutters align-items-center">
@@ -325,42 +325,53 @@ $avg_order_value = $avg_order_value_stmt->fetchAll(PDO::FETCH_ASSOC);
             plugins: [ChartDataLabels]
         });
 
-        // Win/Loss Ratio (Pie Chart)
-        var winLossCtx = document.getElementById('winLossChart').getContext('2d');
-        var winLossData = {
-            labels: ['Win', 'Loss'],
-            datasets: [{
-                data: [
-                    <?php echo $win_loss['win_count']; ?>, 
-                    <?php echo $win_loss['loss_count']; ?>
-                ],
-                backgroundColor: ['#4e73df', '#e74a3b'],
-            }]
-        };
-        new Chart(winLossCtx, {
-            type: 'pie',
-            data: winLossData,
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'top',
+    
+        // Win/Loss Ratio (Bar Chart)
+            var winLossCtx = document.getElementById('winLossChart').getContext('2d');
+            var winLossData = {
+                labels: ['Win', 'Loss'],
+                datasets: [{
+                    label: 'Count',
+                    data: [
+                        <?php echo $win_loss['win_count']; ?>, 
+                        <?php echo $win_loss['loss_count']; ?>
+                    ],
+                    backgroundColor: ['#4e73df', '#e74a3b'],
+                    borderColor: ['#4e73df', '#e74a3b'],
+                    borderWidth: 1
+                }]
+            };
+
+            new Chart(winLossCtx, {
+                type: 'bar',  // Changed from 'pie' to 'bar'
+                data: winLossData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
                     },
-                    tooltip: {
-                        callbacks: {
-                            label: function(tooltipItem, data) {
-                                var label = data.labels[tooltipItem.dataIndex];
-                                var value = data.datasets[0].data[tooltipItem.dataIndex];
-                                var total = data.datasets[0].data.reduce((acc, cur) => acc + cur, 0);
-                                var percentage = (value / total * 100).toFixed(2);
-                                return label + ': ' + percentage + '%';
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(tooltipItem, data) {
+                                    var label = data.labels[tooltipItem.dataIndex];
+                                    var value = data.datasets[0].data[tooltipItem.dataIndex];
+                                    var total = data.datasets[0].data.reduce((acc, cur) => acc + cur, 0);
+                                    var percentage = (value / total * 100).toFixed(2);
+                                    return label + ': ' + percentage + '%';
+                                }
                             }
                         }
                     }
                 }
-            }
-        });
+            });
 
         // Average Order Value by Customer (Bar Chart)
         var avgOrderValueCtx = document.getElementById('avgOrderValueChart').getContext('2d');
@@ -397,7 +408,7 @@ $avg_order_value = $avg_order_value_stmt->fetchAll(PDO::FETCH_ASSOC);
                         align: 'end',
                         anchor: 'end',
                         formatter: function(value) {
-                            return '$' + value.toLocaleString(); // Show formatted value above bars
+                            return '$' + value.toFixed(2).toLocaleString(); // Show formatted value with 2 decimal places above bars
                         }
                     }
                 }
