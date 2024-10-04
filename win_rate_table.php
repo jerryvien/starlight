@@ -40,12 +40,12 @@ $stats_stmt = $conn->query("
             ((COUNT(CASE WHEN pe_sub.result = 'Win' THEN 1 END) / COUNT(*)) * 100) - 
             (SELECT ((COUNT(CASE WHEN pe_prev.result = 'Win' THEN 1 END) / COUNT(*)) * 100)
              FROM purchase_entries pe_prev
-             WHERE pe_prev.customer_id = cd.customer_id 
+             WHERE pe_prev.customer_id = pe.customer_id 
              AND MONTH(pe_prev.purchase_datetime) = MONTH(CURRENT_DATE()) - 1
             ) 
          FROM 
             purchase_entries pe_sub
-         WHERE pe_sub.customer_id = cd.customer_id 
+         WHERE pe_sub.customer_id = pe.customer_id 
          AND MONTH(pe_sub.purchase_datetime) = MONTH(CURRENT_DATE())
         ) AS win_rate_change,
         -- Subquery to calculate predicted win chances for the next 5 purchases
@@ -53,7 +53,7 @@ $stats_stmt = $conn->query("
             (COUNT(CASE WHEN pe_sub.result = 'Win' THEN 1 END) / 5) * 100
          FROM 
             (SELECT * FROM purchase_entries pe_sub 
-             WHERE pe_sub.customer_id = cd.customer_id 
+             WHERE pe_sub.customer_id = pe.customer_id 
              ORDER BY pe_sub.purchase_datetime DESC LIMIT 5) AS last_5_transactions
         ) AS predicted_win_chance
     FROM 
