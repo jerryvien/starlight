@@ -232,6 +232,7 @@ $sales_by_month = $sales_by_month_stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <!-- Chart.js for pie and line charts -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
 
 <script>
 $(document).ready(function() {
@@ -271,7 +272,7 @@ $(document).ready(function() {
         data: salesByAgentData,
     });
 
-    // Sales by Category (Bar Chart)
+   // Sales by Category (Bar Chart with Labels)
     var salesByCategoryCtx = document.getElementById('salesByCategoryChart').getContext('2d');
     var salesByCategoryData = {
         labels: <?php echo json_encode(array_column($sales_by_category, 'purchase_category')); ?>,
@@ -283,16 +284,33 @@ $(document).ready(function() {
             borderWidth: 1
         }]
     };
+
     new Chart(salesByCategoryCtx, {
-        type: 'bar', // Change the chart type from 'pie' to 'bar'
+        type: 'bar', // Bar chart
         data: salesByCategoryData,
         options: {
             scales: {
                 y: {
                     beginAtZero: true // Ensure y-axis starts at zero
                 }
+            },
+            plugins: {
+                datalabels: {
+                    display: true, // Enable data labels to be displayed on the bars
+                    anchor: 'end',
+                    align: 'start',
+                    color: '#000', // Set label color
+                    font: {
+                        weight: 'bold',
+                        size: 12 // Adjust the size of the labels
+                    },
+                    formatter: function(value) {
+                        return value.toFixed(2); // Display the value directly on the bars
+                    }
+                }
             }
-        }
+        },
+        plugins: [ChartDataLabels] // Register the datalabels plugin
     });
 
     // Sales by Month (New Chart)
