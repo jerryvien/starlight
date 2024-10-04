@@ -148,11 +148,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-                    <h1 class="h3 mb-4 text-gray-800">Customer Listing</h1>
+                    
 
                        <!-- Customer Data Table (left side, with ml-4) -->
-                       <div class="col-md-5 ml-4">
-                        
+                       <div class="col-md-5">
+                       <h1 class="h3 mb-4 text-gray-800">Customer Listing</h1>
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
                                 <h6 class="m-0 font-weight-bold text-primary">Customers</h6>
