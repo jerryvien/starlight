@@ -342,7 +342,19 @@ try {
                             <div class="tab-pane fade" id="top-winner" role="tabpanel" aria-labelledby="top-winner-tab">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        
+                                        <?php include('PHP_Data/growth_report.php'); ?>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <?php include('PHP_Data/sales_compare_chart.php'); ?>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Third Tab: Winning Report -->
+                            <div class="tab-pane fade" id="top-number" role="tabpanel" aria-labelledby="top-number-tab">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <?php include('PHP_Data/top_winning_number.php'); ?>
                                     </div>
                                     <div class="col-md-6">
                                         <?php include('PHP_Data/sales_compare_chart.php'); ?>
