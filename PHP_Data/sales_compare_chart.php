@@ -71,7 +71,7 @@ foreach ($sales_data as $sale) {
 
 <div class="container">
     <h2>Daily Sales, Payouts, and Transaction Count</h2>
-    <canvas id="salesPayoutChart"></canvas>
+    <canvas id="salesPayoutChart" width="400" height="300"></canvas>
 </div>
 
 <script>

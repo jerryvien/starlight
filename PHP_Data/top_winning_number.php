@@ -29,9 +29,9 @@ foreach ($winning_numbers as $row) {
 <!-- Include Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <div class="container">
-    <h2>Top Winning Number</h2>
+    <h2>Top Winning Number - (Past 14 Days)</h2>
     <!-- Chart Container -->
-    <canvas id="winningNumbersChart" width="400" height="200"></canvas>
+    <canvas id="winningNumbersChart" width="400" height="300"></canvas>
 </div>
 
 

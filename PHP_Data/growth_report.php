@@ -56,7 +56,7 @@ try {
 
 <div class="container-fluid">
     <h2>Customer Growth, Sales, and Transactions</h2>
-    <canvas id="customerGrowthSalesChart"></canvas>
+    <canvas id="customerGrowthSalesChart" width="400" height="300"></canvas>
 </div>
 
 <script>
