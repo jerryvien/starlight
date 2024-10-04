@@ -22,7 +22,7 @@
         <a class="nav-link" href="sales_dashboard.php">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Sales Dashboard</span></a>
-        <a class="nav-link" href="sales_dashboard.php">
+        <a class="nav-link" href="avg_dashboard.php">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Agent Dashboard</span></a>
     </li>
