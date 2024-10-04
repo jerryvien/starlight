@@ -271,34 +271,25 @@ $(document).ready(function() {
         data: salesByAgentData,
     });
 
-    // Sales by Category (Radar Chart)
+    // Sales by Category (Bar Chart)
     var salesByCategoryCtx = document.getElementById('salesByCategoryChart').getContext('2d');
     var salesByCategoryData = {
         labels: <?php echo json_encode(array_column($sales_by_category, 'purchase_category')); ?>,
         datasets: [{
             label: 'Total Sales',
             data: <?php echo json_encode(array_column($sales_by_category, 'total_sales')); ?>,
-            backgroundColor: 'rgba(54, 162, 235, 0.2)',
-            borderColor: 'rgba(54, 162, 235, 1)',
-            pointBackgroundColor: 'rgba(54, 162, 235, 1)',
-            pointBorderColor: '#fff',
-            pointHoverBackgroundColor: '#fff',
-            pointHoverBorderColor: 'rgba(54, 162, 235, 1)'
+            backgroundColor: 'rgba(75, 192, 192, 0.5)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1
         }]
     };
-
     new Chart(salesByCategoryCtx, {
-        type: 'radar', // Change the chart type to 'radar'
+        type: 'bar', // Change the chart type from 'pie' to 'bar'
         data: salesByCategoryData,
         options: {
-            elements: {
-                line: {
-                    tension: 0.2 // Adjust the curve/smoothness of the lines
-                }
-            },
             scales: {
-                r: {
-                    beginAtZero: true // Ensure the radar chart starts from zero
+                y: {
+                    beginAtZero: true // Ensure y-axis starts at zero
                 }
             }
         }
