@@ -272,7 +272,7 @@ $(document).ready(function() {
         data: salesByAgentData,
     });
 
-   // Sales by Category (Bar Chart with Labels)
+    // Sales by Category (Bar Chart)
     var salesByCategoryCtx = document.getElementById('salesByCategoryChart').getContext('2d');
     var salesByCategoryData = {
         labels: <?php echo json_encode(array_column($sales_by_category, 'purchase_category')); ?>,
@@ -284,33 +284,16 @@ $(document).ready(function() {
             borderWidth: 1
         }]
     };
-
     new Chart(salesByCategoryCtx, {
-        type: 'bar', // Bar chart
+        type: 'bar', // Change the chart type from 'pie' to 'bar'
         data: salesByCategoryData,
         options: {
             scales: {
                 y: {
                     beginAtZero: true // Ensure y-axis starts at zero
                 }
-            },
-            plugins: {
-                datalabels: {
-                    display: true, // Enable data labels to be displayed on the bars
-                    anchor: 'end',
-                    align: 'start',
-                    color: '#000', // Set label color
-                    font: {
-                        weight: 'bold',
-                        size: 12 // Adjust the size of the labels
-                    },
-                    formatter: function(value) {
-                        return value.toFixed(2); // Display the value directly on the bars
-                    }
-                }
             }
-        },
-        plugins: [ChartDataLabels] // Register the datalabels plugin
+        }
     });
 
     // Sales by Month (New Chart)
