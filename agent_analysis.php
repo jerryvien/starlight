@@ -129,7 +129,7 @@ $total_sales = $selected_agent['win_count'] + $selected_agent['loss_count'];
                                 <h6 class="m-0 font-weight-bold text-primary">Agents</h6>
                             </div>
                             <div class="card-body">
-                                <div class="table-responsive" width="100%">
+                                <div class="">
                                     <form method="POST">
                                         <table id="agentTable" class="table table-bordered" width="100%" cellspacing="0">
                                             <thead>
