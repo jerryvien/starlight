@@ -30,7 +30,7 @@ foreach ($winning_numbers as $row) {
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <!-- Chart Container -->
-<canvas id="winningNumbersChart" width="400" height="200"></canvas>
+<canvas id="winningNumbersChart" width="300" height="200"></canvas>
 
 <!-- Chart.js Script -->
 <script>
