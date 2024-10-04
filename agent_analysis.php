@@ -101,7 +101,7 @@ $total_sales = $selected_agent['win_count'] + $selected_agent['loss_count'];
     <title>Agent Analysis</title>
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
-    <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    
 </head>
 <body>
 
