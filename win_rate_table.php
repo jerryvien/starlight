@@ -16,37 +16,23 @@ if (!isset($_SESSION['admin'])) {
     exit;
 }
 
-// Fetch the statistics from customer_details table
-$stats_stmt = $conn->query("
-    SELECT 
-        cd.customer_name, 
-        a.agent_name, 
-        cd.win_count,
-        cd.loss_count,
-        cd.total_sales,
-        cd.win_amount,
-        cd.loss_amount,
-        (cd.win_count / NULLIF(cd.loss_count, 0)) AS win_loss_ratio,
-        (cd.win_count / (cd.win_count + cd.loss_count)) * 100 AS win_rate,
-        (cd.win_amount / NULLIF(cd.win_count, 0)) AS avg_win_amount_per_transaction,
-        (cd.loss_amount / NULLIF(cd.loss_count, 0)) AS avg_loss_amount_per_transaction,
-        (cd.win_count + cd.loss_count) AS total_transactions,
-        (cd.win_amount + cd.total_sales) AS customer_lifetime_value,
-        -- Assuming win rate change needs comparison (last month vs current month)
-        (SELECT 
-            ((SUM(CASE WHEN pe.result = 'Win' THEN 1 END) / COUNT(*)) * 100) 
-         FROM purchase_entries pe 
-         WHERE pe.customer_id = cd.customer_id 
-         AND MONTH(pe.purchase_datetime) = MONTH(CURRENT_DATE()) - 1
-        ) AS win_rate_change,
-        -- Predicted win chance for next 5 purchases based on historical data
-        (cd.win_count / 5) * 100 AS predicted_win_chance
-    FROM 
-        customer_details cd
-    LEFT JOIN 
-        admin_access a ON cd.agent_id = a.agent_id
-");
-$stats = $stats_stmt->fetchAll(PDO::FETCH_ASSOC);
+// Fetch data for the win/loss statistics table
+$query = "
+    SELECT cd.customer_name, a.agent_name, cd.win_count, cd.loss_count, 
+           cd.total_sales, cd.win_amount, cd.loss_amount,
+           (cd.win_amount / cd.win_count) AS avg_win_amount,
+           (cd.loss_amount / cd.loss_count) AS avg_loss_amount,
+           (cd.win_count + cd.loss_count) AS total_transactions,
+           (cd.win_count / (cd.win_count + cd.loss_count)) * 100 AS win_rate_percentage,
+           (cd.win_count / cd.loss_count) AS win_loss_ratio,
+           ((cd.win_count / (cd.win_count + cd.loss_count)) * 100) + 5 AS predicted_win_rate -- Example prediction logic
+    FROM customer_details cd
+    LEFT JOIN admin_access a ON cd.agent_id = a.agent_id
+    WHERE cd.win_count > 0 OR cd.loss_count > 0
+    ORDER BY cd.customer_name ASC
+";
+$stmt = $conn->query($query);
+$customers = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -54,9 +40,10 @@ $stats = $stats_stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customer Analysis Report</title>
+    <title>Win Rate Table</title>
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 </head>
 <body>
 
@@ -73,12 +60,12 @@ $stats = $stats_stmt->fetchAll(PDO::FETCH_ASSOC);
 
             <!-- Page Content -->
             <div class="container-fluid">
-                <h1 class="h3 mb-2 text-gray-800">Customer Analysis Report</h1>
-                
-                <!-- Statistics Table -->
+                <h1 class="h3 mb-2 text-gray-800">Win Rate Statistics</h1>
+
+                <!-- DataTable -->
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Customer Performance Analysis</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">Win/Loss Analysis</h6>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -92,34 +79,26 @@ $stats = $stats_stmt->fetchAll(PDO::FETCH_ASSOC);
                                         <th>Total Sales</th>
                                         <th>Total Win Amount</th>
                                         <th>Total Loss Amount</th>
-                                        <th>Avg Win Amount/Transaction</th>
-                                        <th>Avg Loss Amount/Transaction</th>
-                                        <th>Total Transactions</th>
-                                        <th>Customer Lifetime Value (CLV)</th>
+                                        <th>Avg Transaction Count</th>
                                         <th>Win Rate (%)</th>
                                         <th>Win/Loss Ratio</th>
-                                        <th>Win Rate Change (%)</th>
-                                        <th>Predicted Win Chance (Next 5)</th>
+                                        <th>Predicted Win Rate (%)</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php foreach ($stats as $row): ?>
+                                    <?php foreach ($customers as $customer): ?>
                                     <tr>
-                                        <td><?= $row['customer_name']; ?></td>
-                                        <td><?= $row['agent_name']; ?></td>
-                                        <td><?= $row['win_count']; ?></td>
-                                        <td><?= $row['loss_count']; ?></td>
-                                        <td>$<?= number_format($row['total_sales'], 2); ?></td>
-                                        <td>$<?= number_format($row['win_amount'], 2); ?></td>
-                                        <td>$<?= number_format($row['loss_amount'], 2); ?></td>
-                                        <td>$<?= number_format($row['avg_win_amount_per_transaction'], 2); ?></td>
-                                        <td>$<?= number_format($row['avg_loss_amount_per_transaction'], 2); ?></td>
-                                        <td><?= $row['total_transactions']; ?></td>
-                                        <td>$<?= number_format($row['customer_lifetime_value'], 2); ?></td>
-                                        <td><?= number_format($row['win_rate'], 2); ?>%</td>
-                                        <td><?= number_format($row['win_loss_ratio'], 2); ?></td>
-                                        <td><?= number_format($row['win_rate_change'], 2); ?>%</td>
-                                        <td><?= number_format($row['predicted_win_chance'], 2); ?>%</td>
+                                        <td><?php echo $customer['customer_name']; ?></td>
+                                        <td><?php echo $customer['agent_name']; ?></td>
+                                        <td><?php echo isset($customer['win_count']) && $customer['win_count'] !== null ? $customer['win_count'] : '0'; ?></td>
+                                        <td><?php echo isset($customer['loss_count']) && $customer['loss_count'] !== null ? $customer['loss_count'] : '0'; ?></td>
+                                        <td><?php echo '$' . (isset($customer['total_sales']) && $customer['total_sales'] !== null ? number_format($customer['total_sales'], 2) : 'N/A'); ?></td>
+                                        <td><?php echo '$' . (isset($customer['win_amount']) && $customer['win_amount'] !== null ? number_format($customer['win_amount'], 2) : 'N/A'); ?></td>
+                                        <td><?php echo '$' . (isset($customer['loss_amount']) && $customer['loss_amount'] !== null ? number_format($customer['loss_amount'], 2) : 'N/A'); ?></td>
+                                        <td><?php echo isset($customer['avg_transaction_count']) && $customer['avg_transaction_count'] !== null ? number_format($customer['avg_transaction_count'], 2) : 'N/A'; ?></td>
+                                        <td><?php echo isset($customer['win_rate_percentage']) && $customer['win_rate_percentage'] !== null ? number_format($customer['win_rate_percentage'], 2) . '%' : '0.00%'; ?></td>
+                                        <td><?php echo isset($customer['win_loss_ratio']) && $customer['win_loss_ratio'] !== null ? number_format($customer['win_loss_ratio'], 2) : '0.00'; ?></td>
+                                        <td><?php echo isset($customer['predicted_win_rate']) && $customer['predicted_win_rate'] !== null ? number_format($customer['predicted_win_rate'], 2) . '%' : '0.00%'; ?></td>
                                     </tr>
                                     <?php endforeach; ?>
                                 </tbody>
@@ -129,7 +108,7 @@ $stats = $stats_stmt->fetchAll(PDO::FETCH_ASSOC);
                 </div>
             </div>
         </div>
-        <!-- End of Main Content -->
+        <!-- End of Content -->
 
         <!-- Footer -->
         <?php include('config/footer.php'); ?>
