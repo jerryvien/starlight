@@ -322,6 +322,9 @@ try {
                             <li class="nav-item">
                                 <a class="nav-link" id="top-winner-tab" data-toggle="tab" href="#top-winner" role="tab" aria-controls="top-winner" aria-selected="false">Top Winner</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="top-number-tab" data-toggle="tab" href="#top-number" role="tab" aria-controls="top-number" aria-selected="false">Top Number</a>
+                            </li>
                         </ul>
 
                         <!-- Tab Panes -->
