@@ -221,7 +221,7 @@ function generate_combinations($number) {
     
     
     <!--Custom styles for this page -->
-    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="vendor/chart.js/Chart.min.js"></script>
     <link href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
@@ -431,8 +431,7 @@ function generate_combinations($number) {
     <!-- Core plugin JavaScript-->
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 
-    <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
+    
 
             <!-- Page level plugins -->
     <script src="vendor/datatables/jquery.dataTables.min.js"></script>
