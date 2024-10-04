@@ -236,71 +236,120 @@ $sales_by_month = $sales_by_month_stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <script>
 $(document).ready(function() {
-   // Total Sales Over Time
-    var salesOverTimeCtx = document.getElementById('salesOverTimeChart').getContext('2d');
-    var salesOverTimeData = {
-        labels: <?php echo json_encode(array_column($sales_over_time, 'sale_date')); ?>,
-        datasets: [{
-            label: 'Total Sales',
-            data: <?php echo json_encode(array_column($sales_over_time, 'total_sales')); ?>,
-            borderColor: '#4e73df',
-            backgroundColor: 'rgba(78, 115, 223, 0.05)',
-            pointBackgroundColor: '#4e73df',
-            pointBorderColor: '#4e73df',
-            fill: true
-        }]
-    };
-    new Chart(salesOverTimeCtx, {
-        type: 'line',
-        data: salesOverTimeData,
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            layout: {
-                padding: {
-                    bottom: 0, // Reduce bottom margin
-                    top: 10,   // Adjust top margin if necessary
-                }
-            },
-            scales: {
-                x: {
-                    ticks: {
-                        maxRotation: 0, // Ensure x-axis labels do not rotate
-                        autoSkip: true  // Automatically skip some labels to avoid clutter
+    // Total Sales Over Time
+        var salesOverTimeCtx = document.getElementById('salesOverTimeChart').getContext('2d');
+        var salesOverTimeData = {
+            labels: <?php echo json_encode(array_column($sales_over_time, 'sale_date')); ?>,
+            datasets: [{
+                label: 'Total Sales',
+                data: <?php echo json_encode(array_column($sales_over_time, 'total_sales')); ?>,
+                borderColor: '#4e73df',
+                backgroundColor: 'rgba(78, 115, 223, 0.05)',
+                pointBackgroundColor: '#4e73df',
+                pointBorderColor: '#4e73df',
+                fill: true
+            }]
+        };
+        new Chart(salesOverTimeCtx, {
+            type: 'line',
+            data: salesOverTimeData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                layout: {
+                    padding: {
+                        bottom: 0, // Reduce bottom margin
+                        top: 10,   // Adjust top margin if necessary
                     }
                 },
-                y: {
-                    beginAtZero: true, // Ensure y-axis starts at zero
-                    ticks: {
-                        padding: 5 // Reduce padding between labels and chart
+                scales: {
+                    x: {
+                        ticks: {
+                            maxRotation: 0, // Ensure x-axis labels do not rotate
+                            autoSkip: true  // Automatically skip some labels to avoid clutter
+                        }
+                    },
+                    y: {
+                        beginAtZero: true, // Ensure y-axis starts at zero
+                        ticks: {
+                            padding: 5 // Reduce padding between labels and chart
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top' // Adjust legend placement if necessary
                     }
                 }
-            },
-            plugins: {
-                legend: {
-                    display: true,
-                    position: 'top' // Adjust legend placement if necessary
-                }
             }
-        }
-    });
+        });
 
     // Sales by Agent
-    var salesByAgentCtx = document.getElementById('salesByAgentChart').getContext('2d');
-    var salesByAgentData = {
-        labels: <?php echo json_encode(array_column($sales_by_agent, 'agent_name')); ?>,
-        datasets: [{
-            label: 'Total Sales',
-            data: <?php echo json_encode(array_column($sales_by_agent, 'total_sales')); ?>,
-            backgroundColor: 'rgba(54, 162, 235, 0.5)',
-            borderColor: 'rgba(54, 162, 235, 1)',
-            borderWidth: 1
-        }]
-    };
-    new Chart(salesByAgentCtx, {
-        type: 'bar',
-        data: salesByAgentData,
-    });
+        var salesByAgentCtx = document.getElementById('salesByAgentChart').getContext('2d');
+        var salesByAgentData = {
+            labels: <?php echo json_encode(array_column($sales_by_agent, 'agent_name')); ?>,
+            datasets: [{
+                label: 'Total Sales',
+                data: <?php echo json_encode(array_column($sales_by_agent, 'total_sales')); ?>,
+                backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        };
+
+        new Chart(salesByAgentCtx, {
+            type: 'bar',
+            data: salesByAgentData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true, // Ensure Y-axis starts at zero
+                        ticks: {
+                            stepSize: 500,  // Adjust step size of Y-axis to control increments
+                            callback: function(value, index, values) {
+                                return '$' + value;  // Add '$' sign to Y-axis labels
+                            }
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            autoSkip: false, // Show all agent names, no skipping
+                            maxRotation: 45, // Rotate the labels if agent names are too long
+                            minRotation: 45
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top' // Legend displayed at the top
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return '$' + tooltipItem.raw.toLocaleString(); // Display formatted sales amount in tooltip
+                            }
+                        }
+                    }
+                },
+                layout: {
+                    padding: {
+                        left: 10,
+                        right: 10,
+                        top: 10,
+                        bottom: 0 // Reduce bottom padding for tighter layout
+                    }
+                },
+                elements: {
+                    bar: {
+                        borderRadius: 5 // Rounded bar edges for a polished look
+                    }
+                }
+            }
+        });
 
     // Sales by Category (Bar Chart)
     var salesByCategoryCtx = document.getElementById('salesByCategoryChart').getContext('2d');
