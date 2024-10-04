@@ -374,6 +374,7 @@ $avg_order_value = $avg_order_value_stmt->fetchAll(PDO::FETCH_ASSOC);
                 borderWidth: 1
             }]
         };
+
         new Chart(avgOrderValueCtx, {
             type: 'bar',
             data: avgOrderValueData,
@@ -397,14 +398,14 @@ $avg_order_value = $avg_order_value_stmt->fetchAll(PDO::FETCH_ASSOC);
                         align: 'end',
                         anchor: 'end',
                         formatter: function(value) {
-                            return '$' + value.toFixed(2).toLocaleString(); // Show formatted value with 2 decimal places above bars
+                            return '$' + parseFloat(value).toFixed(2).toLocaleString(); // Show formatted value with 2 decimal places
                         }
                     }
                 }
             },
-            plugins: [ChartDataLabels]
+            plugins: [ChartDataLabels] // Ensure the plugin is included
         });
-    });
+        });
     </script>
 
     </body>
