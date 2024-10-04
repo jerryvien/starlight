@@ -373,7 +373,7 @@ $avg_order_value = $avg_order_value_stmt->fetchAll(PDO::FETCH_ASSOC);
                 }
             });
 
-        // Average Order Value by Customer (Bar Chart)
+    // Average Order Value by Customer (Bar Chart)
         var avgOrderValueCtx = document.getElementById('avgOrderValueChart').getContext('2d');
         var avgOrderValueData = {
             labels: <?php echo json_encode(array_column($avg_order_value, 'customer_name')); ?>,
