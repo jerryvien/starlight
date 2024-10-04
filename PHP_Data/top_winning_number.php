@@ -26,8 +26,8 @@ foreach ($winning_numbers as $row) {
 }
 ?>
 
-<!-- Include Chart.js 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>-->
+<!-- Include Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <!-- Chart Container -->
 <canvas id="winningNumbersChart" width="400" height="200"></canvas>
