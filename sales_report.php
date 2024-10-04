@@ -236,7 +236,7 @@ $sales_by_month = $sales_by_month_stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <script>
 $(document).ready(function() {
-    // Total Sales Over Time
+   // Total Sales Over Time
     var salesOverTimeCtx = document.getElementById('salesOverTimeChart').getContext('2d');
     var salesOverTimeData = {
         labels: <?php echo json_encode(array_column($sales_over_time, 'sale_date')); ?>,
@@ -253,6 +253,36 @@ $(document).ready(function() {
     new Chart(salesOverTimeCtx, {
         type: 'line',
         data: salesOverTimeData,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            layout: {
+                padding: {
+                    bottom: 0, // Reduce bottom margin
+                    top: 10,   // Adjust top margin if necessary
+                }
+            },
+            scales: {
+                x: {
+                    ticks: {
+                        maxRotation: 0, // Ensure x-axis labels do not rotate
+                        autoSkip: true  // Automatically skip some labels to avoid clutter
+                    }
+                },
+                y: {
+                    beginAtZero: true, // Ensure y-axis starts at zero
+                    ticks: {
+                        padding: 5 // Reduce padding between labels and chart
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top' // Adjust legend placement if necessary
+                }
+            }
+        }
     });
 
     // Sales by Agent
