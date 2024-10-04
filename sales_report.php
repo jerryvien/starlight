@@ -181,7 +181,7 @@ $sales_by_month = $sales_by_month_stmt->fetchAll(PDO::FETCH_ASSOC);
                 <!-- Chart Containers -->
                 <div class="row">
                     <!-- Total Sales Over Time (Left) -->
-                    <div class="col-md-3">
+                    <div class="col-md-6">
                         <div class="chart-container">
                             <canvas id="salesOverTimeChart"></canvas>
                         </div>
@@ -197,7 +197,7 @@ $sales_by_month = $sales_by_month_stmt->fetchAll(PDO::FETCH_ASSOC);
 
                 <div class="row">
                     <!-- Sales by Category (Left) -->
-                    <div class="col-md-3">
+                    <div class="col-md-6">
                         <div class="chart-container">
                             <canvas id="salesByCategoryChart"></canvas>
                         </div>
