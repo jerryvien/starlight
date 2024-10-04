@@ -84,8 +84,8 @@ $sales_by_month = $sales_by_month_stmt->fetchAll(PDO::FETCH_ASSOC);
     <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
     <style>
         .chart-container {
-            width: 500px;
-            height: 400px;
+            width: 800px;
+            height: 600px;
             margin-bottom: 30px;
         }
     </style>
@@ -181,14 +181,14 @@ $sales_by_month = $sales_by_month_stmt->fetchAll(PDO::FETCH_ASSOC);
                 <!-- Chart Containers -->
                 <div class="row">
                     <!-- Total Sales Over Time (Left) -->
-                    <div class="col-md-6 ml-2">
+                    <div class="col-md-6">
                         <div class="chart-container">
                             <canvas id="salesOverTimeChart"></canvas>
                         </div>
                     </div>
 
                     <!-- Sales by Agent (Right) -->
-                    <div class="col-md-6 ml-2">
+                    <div class="col-md-6">
                         <div class="chart-container">
                             <canvas id="salesByAgentChart"></canvas>
                         </div>
@@ -197,14 +197,14 @@ $sales_by_month = $sales_by_month_stmt->fetchAll(PDO::FETCH_ASSOC);
 
                 <div class="row">
                     <!-- Sales by Category (Left) -->
-                    <div class="col-md-6 ml-2">
+                    <div class="col-md-6">
                         <div class="chart-container">
                             <canvas id="salesByCategoryChart"></canvas>
                         </div>
                     </div>
 
                     <!-- Sales by Month (New Chart) (Right) -->
-                    <div class="col-md-6 ml-2">
+                    <div class="col-md-6">
                         <div class="chart-container">
                             <canvas id="salesByMonthChart"></canvas>
                         </div>
