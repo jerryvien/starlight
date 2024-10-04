@@ -262,7 +262,7 @@ function generate_combinations($number) {
                                 <h6 class="m-0 font-weight-bold text-primary">Winning Record Entries</h6>
                             </div>
                             <div class="card-body">
-                                <div class="table-responsive">
+                                <div class="">
                                     <table id="winningRecordsTable" class="table table-bordered" width="100%" cellspacing="0">
                                         <thead>
                                             <tr>
