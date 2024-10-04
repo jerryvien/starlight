@@ -19,6 +19,12 @@
         <a class="nav-link" href="dashboard.php">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
+        <a class="nav-link" href="PHP_Data/sales_dashboard.php">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Sales Dashboard</span></a>
+        <a class="nav-link" href="PHP_Data/sales_dashboard.php">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Agent Dashboard</span></a>
     </li>
 
     <!-- Divider -->
