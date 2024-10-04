@@ -333,10 +333,10 @@ try {
                             <div class="tab-pane fade show active" id="top-spend" role="tabpanel" aria-labelledby="top-spend-tab">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <canvas id="topSpendCustomersChart"></canvas>
+                                        <canvas id="topSpendCustomersChart" width="400" height="300"></canvas>
                                     </div>
                                     <div class="col-md-6">
-                                        <canvas id="topWinnerCustomersChart"></canvas>
+                                        <canvas id="topWinnerCustomersChart" width="400" height="300"></canvas>
                                     </div>
                                 </div>
                             </div>
@@ -388,10 +388,10 @@ try {
 
                 
 
-                    <!-- Include DataTables CSS and JS -->
+                    <!-- Include DataTables CSS and JS 
                     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
                     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-                    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
+                    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>-->
 
                     <!-- Recent Purchases (Table) -->
                     <div class="container-fluid d-none d-md-block">
