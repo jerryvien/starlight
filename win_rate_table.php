@@ -16,54 +16,35 @@ if (!isset($_SESSION['admin'])) {
     exit;
 }
 
-// Fetch the statistics
+// Fetch the statistics from customer_details table
 $stats_stmt = $conn->query("
     SELECT 
         cd.customer_name, 
         a.agent_name, 
-        COUNT(CASE WHEN pe.result = 'Win' THEN 1 END) AS total_win_count,
-        COUNT(CASE WHEN pe.result = 'Loss' THEN 1 END) AS total_loss_count,
-        SUM(pe.purchase_amount) AS total_sales,
-        SUM(CASE WHEN pe.result = 'Win' THEN pe.winning_amount ELSE 0 END) AS total_win_amount,
-        SUM(CASE WHEN pe.result = 'Loss' THEN pe.purchase_amount ELSE 0 END) AS total_loss_amount,
-        (COUNT(CASE WHEN pe.result = 'Win' THEN 1 END) / COUNT(CASE WHEN pe.result = 'Loss' THEN 1 END)) AS win_loss_ratio,
-        (COUNT(CASE WHEN pe.result = 'Win' THEN 1 END) / COUNT(*)) * 100 AS win_rate,
-        -- Calculating average win and loss amounts
-        (SUM(CASE WHEN pe.result = 'Win' THEN pe.winning_amount ELSE 0 END) / NULLIF(COUNT(CASE WHEN pe.result = 'Win' THEN 1 END), 0)) AS avg_win_amount_per_transaction,
-        (SUM(CASE WHEN pe.result = 'Loss' THEN pe.purchase_amount ELSE 0 END) / NULLIF(COUNT(CASE WHEN pe.result = 'Loss' THEN 1 END), 0)) AS avg_loss_amount_per_transaction,
-        -- Total transactions (wins + losses)
-        COUNT(*) AS total_transactions,
-        -- Customer Lifetime Value (CLV) = Total Win Amount + Total Sales
-        (SUM(CASE WHEN pe.result = 'Win' THEN pe.winning_amount ELSE 0 END) + SUM(pe.purchase_amount)) AS customer_lifetime_value,
-        -- Win rate change over time (Compare this month's win rate with the last month)
+        cd.win_count,
+        cd.loss_count,
+        cd.total_sales,
+        cd.win_amount,
+        cd.loss_amount,
+        (cd.win_count / NULLIF(cd.loss_count, 0)) AS win_loss_ratio,
+        (cd.win_count / (cd.win_count + cd.loss_count)) * 100 AS win_rate,
+        (cd.win_amount / NULLIF(cd.win_count, 0)) AS avg_win_amount_per_transaction,
+        (cd.loss_amount / NULLIF(cd.loss_count, 0)) AS avg_loss_amount_per_transaction,
+        (cd.win_count + cd.loss_count) AS total_transactions,
+        (cd.win_amount + cd.total_sales) AS customer_lifetime_value,
+        -- Assuming win rate change needs comparison (last month vs current month)
         (SELECT 
-            ((COUNT(CASE WHEN pe_sub.result = 'Win' THEN 1 END) / COUNT(*)) * 100) - 
-            (SELECT ((COUNT(CASE WHEN pe_prev.result = 'Win' THEN 1 END) / COUNT(*)) * 100)
-             FROM purchase_entries pe_prev
-             WHERE pe_prev.customer_id = pe.customer_id 
-             AND MONTH(pe_prev.purchase_datetime) = MONTH(CURRENT_DATE()) - 1
-            ) 
-         FROM 
-            purchase_entries pe_sub
-         WHERE pe_sub.customer_id = pe.customer_id 
-         AND MONTH(pe_sub.purchase_datetime) = MONTH(CURRENT_DATE())
+            ((SUM(CASE WHEN pe.result = 'Win' THEN 1 END) / COUNT(*)) * 100) 
+         FROM purchase_entries pe 
+         WHERE pe.customer_id = cd.customer_id 
+         AND MONTH(pe.purchase_datetime) = MONTH(CURRENT_DATE()) - 1
         ) AS win_rate_change,
-        -- Subquery to calculate predicted win chances for the next 5 purchases
-        (SELECT 
-            (COUNT(CASE WHEN pe_sub.result = 'Win' THEN 1 END) / 5) * 100
-         FROM 
-            (SELECT * FROM purchase_entries pe_sub 
-             WHERE pe_sub.customer_id = pe.customer_id 
-             ORDER BY pe_sub.purchase_datetime DESC LIMIT 5) AS last_5_transactions
-        ) AS predicted_win_chance
+        -- Predicted win chance for next 5 purchases based on historical data
+        (cd.win_count / 5) * 100 AS predicted_win_chance
     FROM 
-        purchase_entries pe
-    JOIN 
-        customer_details cd ON pe.customer_id = cd.customer_id
-    JOIN 
-        admin_access a ON pe.agent_id = a.agent_id
-    GROUP BY 
-        cd.customer_name, a.agent_name
+        customer_details cd
+    LEFT JOIN 
+        admin_access a ON cd.agent_id = a.agent_id
 ");
 $stats = $stats_stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -126,11 +107,11 @@ $stats = $stats_stmt->fetchAll(PDO::FETCH_ASSOC);
                                     <tr>
                                         <td><?= $row['customer_name']; ?></td>
                                         <td><?= $row['agent_name']; ?></td>
-                                        <td><?= $row['total_win_count']; ?></td>
-                                        <td><?= $row['total_loss_count']; ?></td>
+                                        <td><?= $row['win_count']; ?></td>
+                                        <td><?= $row['loss_count']; ?></td>
                                         <td>$<?= number_format($row['total_sales'], 2); ?></td>
-                                        <td>$<?= number_format($row['total_win_amount'], 2); ?></td>
-                                        <td>$<?= number_format($row['total_loss_amount'], 2); ?></td>
+                                        <td>$<?= number_format($row['win_amount'], 2); ?></td>
+                                        <td>$<?= number_format($row['loss_amount'], 2); ?></td>
                                         <td>$<?= number_format($row['avg_win_amount_per_transaction'], 2); ?></td>
                                         <td>$<?= number_format($row['avg_loss_amount_per_transaction'], 2); ?></td>
                                         <td><?= $row['total_transactions']; ?></td>
