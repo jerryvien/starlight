@@ -325,55 +325,44 @@ $avg_order_value = $avg_order_value_stmt->fetchAll(PDO::FETCH_ASSOC);
             plugins: [ChartDataLabels]
         });
 
-    
-        // Win/Loss Ratio (Bar Chart)
-            var winLossCtx = document.getElementById('winLossChart').getContext('2d');
-            var winLossData = {
-                labels: ['Win', 'Loss'],
-                datasets: [{
-                    label: 'Count',
-                    data: [
-                        <?php echo $win_loss['win_count']; ?>, 
-                        <?php echo $win_loss['loss_count']; ?>
-                    ],
-                    backgroundColor: ['#4e73df', '#e74a3b'],
-                    borderColor: ['#4e73df', '#e74a3b'],
-                    borderWidth: 1
-                }]
-            };
-
-            new Chart(winLossCtx, {
-                type: 'bar',  // Changed from 'pie' to 'bar'
-                data: winLossData,
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
+        // Win/Loss Ratio (Pie Chart)
+        var winLossCtx = document.getElementById('winLossChart').getContext('2d');
+        var winLossData = {
+            labels: ['Win', 'Loss'],
+            datasets: [{
+                data: [
+                    <?php echo $win_loss['win_count']; ?>, 
+                    <?php echo $win_loss['loss_count']; ?>
+                ],
+                backgroundColor: ['#4e73df', '#e74a3b'],
+            }]
+        };
+        new Chart(winLossCtx, {
+            type: 'pie',
+            data: winLossData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
                     },
-                    plugins: {
-                        legend: {
-                            display: true,
-                            position: 'top',
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(tooltipItem, data) {
-                                    var label = data.labels[tooltipItem.dataIndex];
-                                    var value = data.datasets[0].data[tooltipItem.dataIndex];
-                                    var total = data.datasets[0].data.reduce((acc, cur) => acc + cur, 0);
-                                    var percentage = (value / total * 100).toFixed(2);
-                                    return label + ': ' + percentage + '%';
-                                }
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem, data) {
+                                var label = data.labels[tooltipItem.dataIndex];
+                                var value = data.datasets[0].data[tooltipItem.dataIndex];
+                                var total = data.datasets[0].data.reduce((acc, cur) => acc + cur, 0);
+                                var percentage = (value / total * 100).toFixed(2);
+                                return label + ': ' + percentage + '%';
                             }
                         }
                     }
                 }
-            });
+            }
+        });
 
-    // Average Order Value by Customer (Bar Chart)
+        // Average Order Value by Customer (Bar Chart)
         var avgOrderValueCtx = document.getElementById('avgOrderValueChart').getContext('2d');
         var avgOrderValueData = {
             labels: <?php echo json_encode(array_column($avg_order_value, 'customer_name')); ?>,
