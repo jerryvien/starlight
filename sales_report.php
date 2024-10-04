@@ -232,7 +232,7 @@ $sales_by_month = $sales_by_month_stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <!-- Chart.js for pie and line charts -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 
 <script>
 $(document).ready(function() {
@@ -352,45 +352,140 @@ $(document).ready(function() {
         });
 
     // Sales by Category (Bar Chart)
-    var salesByCategoryCtx = document.getElementById('salesByCategoryChart').getContext('2d');
-    var salesByCategoryData = {
-        labels: <?php echo json_encode(array_column($sales_by_category, 'purchase_category')); ?>,
-        datasets: [{
-            label: 'Total Sales',
-            data: <?php echo json_encode(array_column($sales_by_category, 'total_sales')); ?>,
-            backgroundColor: 'rgba(75, 192, 192, 0.5)',
-            borderColor: 'rgba(75, 192, 192, 1)',
-            borderWidth: 1
-        }]
-    };
-    new Chart(salesByCategoryCtx, {
-        type: 'bar', // Change the chart type from 'pie' to 'bar'
-        data: salesByCategoryData,
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true // Ensure y-axis starts at zero
+        var salesByCategoryCtx = document.getElementById('salesByCategoryChart').getContext('2d');
+        var salesByCategoryData = {
+            labels: <?php echo json_encode(array_column($sales_by_category, 'purchase_category')); ?>,
+            datasets: [{
+                label: 'Total Sales',
+                data: <?php echo json_encode(array_column($sales_by_category, 'total_sales')); ?>,
+                backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        };
+
+        new Chart(salesByCategoryCtx, {
+            type: 'bar',
+            data: salesByCategoryData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false, // Adjusts chart to fit better in the container
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return '$' + value.toLocaleString(); // Format y-axis values as currency
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return '$' + tooltipItem.raw.toLocaleString(); // Format tooltip as currency
+                            }
+                        }
+                    },
+                    // This plugin adds the values directly above the bars
+                    datalabels: {
+                        display: true,
+                        align: 'end',
+                        anchor: 'end',
+                        formatter: function(value) {
+                            return '$' + value.toLocaleString(); // Show formatted value above bars
+                        }
+                    }
+                },
+                layout: {
+                    padding: {
+                        left: 10,
+                        right: 10,
+                        top: 10,
+                        bottom: 0
+                    }
+                },
+                elements: {
+                    bar: {
+                        borderRadius: 5 // Optional: rounded bar edges for a polished look
+                    }
                 }
-            }
-        }
-    });
+            },
+            plugins: [ChartDataLabels] // This plugin is necessary for showing values on top of bars
+        });
 
     // Sales by Month (New Chart)
-    var salesByMonthCtx = document.getElementById('salesByMonthChart').getContext('2d');
-    var salesByMonthData = {
-        labels: <?php echo json_encode(array_column($sales_by_month, 'sale_month')); ?>,
-        datasets: [{
-            label: 'Total Sales',
-            data: <?php echo json_encode(array_column($sales_by_month, 'total_sales')); ?>,
-            backgroundColor: 'rgba(255, 206, 86, 0.5)',
-            borderColor: 'rgba(255, 206, 86, 1)',
-            borderWidth: 1
-        }]
-    };
-    new Chart(salesByMonthCtx, {
-        type: 'bar',
-        data: salesByMonthData,
-    });
+        var salesByMonthCtx = document.getElementById('salesByMonthChart').getContext('2d');
+        var salesByMonthData = {
+            labels: <?php echo json_encode(array_column($sales_by_month, 'sale_month')); ?>,
+            datasets: [{
+                label: 'Total Sales',
+                data: <?php echo json_encode(array_column($sales_by_month, 'total_sales')); ?>,
+                backgroundColor: 'rgba(255, 206, 86, 0.5)',
+                borderColor: 'rgba(255, 206, 86, 1)',
+                borderWidth: 1
+            }]
+        };
+
+        new Chart(salesByMonthCtx, {
+            type: 'bar',
+            data: salesByMonthData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false, // Let the chart resize responsively
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return '$' + value.toLocaleString(); // Format Y-axis values as currency
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return '$' + tooltipItem.raw.toLocaleString(); // Format tooltip values as currency
+                            }
+                        }
+                    },
+                    // Show value labels directly on the bars
+                    datalabels: {
+                        display: true,
+                        align: 'end',
+                        anchor: 'end',
+                        formatter: function(value) {
+                            return '$' + value.toLocaleString(); // Show formatted value above bars
+                        }
+                    }
+                },
+                layout: {
+                    padding: {
+                        left: 10,
+                        right: 10,
+                        top: 10,
+                        bottom: 0
+                    }
+                },
+                elements: {
+                    bar: {
+                        borderRadius: 5 // Optional: Rounded edges for a smoother look
+                    }
+                }
+            },
+            plugins: [ChartDataLabels] // This plugin is necessary for showing values on top of bars
+        });
 });
 </script>
 
