@@ -84,8 +84,8 @@ $sales_by_month = $sales_by_month_stmt->fetchAll(PDO::FETCH_ASSOC);
     <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
     <style>
         .chart-container {
-            width: 800px;
-            height: 600px;
+            width: 700px;
+            height: 500px;
             margin-bottom: 30px;
         }
     </style>
@@ -104,7 +104,7 @@ $sales_by_month = $sales_by_month_stmt->fetchAll(PDO::FETCH_ASSOC);
             <?php include('config/topbar.php'); ?>
 
             <!-- Page Content -->
-            <div class="container-fluid">
+            <div class="container-fluid" class="d-flex flex-column">
                 <h1 class="h3 mb-2 text-gray-800">Sales Performance Dashboard</h1>
 
                 <!-- Top KPI Cards -->
