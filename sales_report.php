@@ -80,7 +80,7 @@ $sales_by_month = $sales_by_month_stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sales Performance Dashboard</title>
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    
+    <link href="css/sb-admin-2.min.css" rel="stylesheet">
     <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
     <style>
         .chart-container {
@@ -181,14 +181,14 @@ $sales_by_month = $sales_by_month_stmt->fetchAll(PDO::FETCH_ASSOC);
                 <!-- Chart Containers -->
                 <div class="row">
                     <!-- Total Sales Over Time (Left) -->
-                    <div class="col-md-6">
+                    <div class="col-md-6 ml-4">
                         <div class="chart-container">
                             <canvas id="salesOverTimeChart"></canvas>
                         </div>
                     </div>
 
                     <!-- Sales by Agent (Right) -->
-                    <div class="col-md-6">
+                    <div class="col-md-6 ml-4">
                         <div class="chart-container">
                             <canvas id="salesByAgentChart"></canvas>
                         </div>
@@ -197,14 +197,14 @@ $sales_by_month = $sales_by_month_stmt->fetchAll(PDO::FETCH_ASSOC);
 
                 <div class="row">
                     <!-- Sales by Category (Left) -->
-                    <div class="col-md-6">
+                    <div class="col-md-6 ml-4">
                         <div class="chart-container">
                             <canvas id="salesByCategoryChart"></canvas>
                         </div>
                     </div>
 
                     <!-- Sales by Month (New Chart) (Right) -->
-                    <div class="col-md-6">
+                    <div class="col-md-6 ml-4">
                         <div class="chart-container">
                             <canvas id="salesByMonthChart"></canvas>
                         </div>
