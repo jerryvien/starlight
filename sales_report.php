@@ -62,6 +62,15 @@ $sales_by_category_stmt = $conn->query("
     GROUP BY purchase_category
 ");
 $sales_by_category = $sales_by_category_stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// New Chart: Fetch sales by month
+$sales_by_month_stmt = $conn->query("
+    SELECT MONTHNAME(purchase_datetime) as sale_month, SUM(purchase_amount) as total_sales
+    FROM purchase_entries
+    GROUP BY sale_month
+    ORDER BY MONTH(purchase_datetime)
+");
+$sales_by_month = $sales_by_month_stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -73,6 +82,13 @@ $sales_by_category = $sales_by_category_stmt->fetchAll(PDO::FETCH_ASSOC);
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
     <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <style>
+        .chart-container {
+            width: 400px;
+            height: 300px;
+            margin-bottom: 30px;
+        }
+    </style>
 </head>
 <body>
 
@@ -162,33 +178,36 @@ $sales_by_category = $sales_by_category_stmt->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                 </div>
 
-                <!-- Total Sales Over Time Chart -->
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Total Sales Over Time</h6>
+                <!-- Chart Containers -->
+                <div class="row">
+                    <!-- Total Sales Over Time (Left) -->
+                    <div class="col-md-6">
+                        <div class="chart-container">
+                            <canvas id="salesOverTimeChart"></canvas>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <canvas id="salesOverTimeChart"></canvas>
+
+                    <!-- Sales by Agent (Right) -->
+                    <div class="col-md-6">
+                        <div class="chart-container">
+                            <canvas id="salesByAgentChart"></canvas>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Sales by Agent Chart -->
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Sales by Agent</h6>
+                <div class="row">
+                    <!-- Sales by Category (Left) -->
+                    <div class="col-md-6">
+                        <div class="chart-container">
+                            <canvas id="salesByCategoryChart"></canvas>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <canvas id="salesByAgentChart"></canvas>
-                    </div>
-                </div>
 
-                <!-- Sales by Category Chart -->
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Sales by Category</h6>
-                    </div>
-                    <div class="card-body">
-                        <canvas id="salesByCategoryChart"></canvas>
+                    <!-- Sales by Month (New Chart) (Right) -->
+                    <div class="col-md-6">
+                        <div class="chart-container">
+                            <canvas id="salesByMonthChart"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -265,6 +284,23 @@ $(document).ready(function() {
     new Chart(salesByCategoryCtx, {
         type: 'pie',
         data: salesByCategoryData,
+    });
+
+    // Sales by Month (New Chart)
+    var salesByMonthCtx = document.getElementById('salesByMonthChart').getContext('2d');
+    var salesByMonthData = {
+        labels: <?php echo json_encode(array_column($sales_by_month, 'sale_month')); ?>,
+        datasets: [{
+            label: 'Total Sales',
+            data: <?php echo json_encode(array_column($sales_by_month, 'total_sales')); ?>,
+            backgroundColor: 'rgba(255, 206, 86, 0.5)',
+            borderColor: 'rgba(255, 206, 86, 1)',
+            borderWidth: 1
+        }]
+    };
+    new Chart(salesByMonthCtx, {
+        type: 'bar',
+        data: salesByMonthData,
     });
 });
 </script>
