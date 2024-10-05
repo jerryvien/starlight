@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Index - Day Bootstrap Template</title>
+  <title>Ken Group - ERP</title>
   <meta name="description" content="">
   <meta name="keywords" content="">
 
@@ -81,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <div class="topbar d-flex align-items-center">
       <div class="container d-flex justify-content-center justify-content-md-between">
         <div class="contact-info d-flex align-items-center">
-          <i class="bi bi-envelope d-flex align-items-center"><a href="mailto:contact@example.com">contact@example.com</a></i>
+          <i class="bi bi-envelope d-flex align-items-center"><a href="mailto:contact@example.com">sales@navbright.tech</a></i>
           <i class="bi bi-phone d-flex align-items-center ms-4"><span>+1 5589 55488 55</span></i>
         </div>
         <div class="social-links d-none d-md-flex align-items-center">
@@ -130,7 +130,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       <div class="container" data-aos="fade-up" data-aos-delay="100">
         <div class="row justify-content-start">
           <div class="col-lg-8">
-            <h2>Welcome to Day</h2>
+            <h2>Welcome to Ken Group</h2>
             <p>We are team of talented designers making websites with Bootstrap</p>
             <a href="#about" class="btn-get-started">Get Started</a>
           </div>
