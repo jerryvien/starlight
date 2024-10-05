@@ -246,49 +246,6 @@ function generate_combinations($number) {
             </div>
             <?php endif; ?>
 
-            <!-- Winning Records Table -->
-            <div class="container-fluid">
-                <h1 class="h3 mb-2 text-gray-800">Winning Report</h1>
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Winning Record Entries</h6>
-                    </div>
-                    <div class="card-body">
-                        <table id="winningRecordsTable" class="table table-bordered" width="100%" cellspacing="0">
-                            <thead>
-                                <tr>
-                                    <th>Winning Number</th>
-                                    <th>Winning Game</th>
-                                    <th>Winning Date</th>
-                                    <th>Total Payout</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($winning_records as $record): ?>
-                                <tr>
-                                    <td><?php echo $record['winning_number']; ?></td>
-                                    <td><?php echo $record['winning_game']; ?></td>
-                                    <td><?php echo date('d-M-Y', strtotime($record['winning_date'])); ?></td>
-                                    <td><?php echo $record['winning_total_payout'] ? '$' . $record['winning_total_payout'] : 'N/A'; ?></td>
-                                    <td>
-                                    <form method="POST">
-                                        <?php if ($record['winning_listing']): ?>
-                                            <!-- If winning_listing is true, show the Settled button -->
-                                            <button class="btn btn-danger" disabled>Settled</button>
-                                        <?php else: ?>
-                                            <!-- If not settled, show the normal Select button -->
-                                            <button type="submit" name="select_winning_record" value="<?php echo $record['id']; ?>" class="btn btn-warning">Select</button>
-                                        <?php endif; ?>
-                                    </form>
-                                    </td>
-                                </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
 
             <!-- Matching Purchases Table (always displayed) -->
             <?php if ($winning_record): ?>
@@ -363,6 +320,52 @@ function generate_combinations($number) {
                 $('#matchedPurchasesTable').DataTable();
             });
             </script>
+
+            <!-- Winning Records Table -->
+            <div class="container-fluid">
+                <h1 class="h3 mb-2 text-gray-800">Winning Report</h1>
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Winning Record Entries</h6>
+                    </div>
+                    <div class="card-body">
+                        <table id="winningRecordsTable" class="table table-bordered" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Winning Number</th>
+                                    <th>Winning Game</th>
+                                    <th>Winning Date</th>
+                                    <th>Total Payout</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($winning_records as $record): ?>
+                                <tr>
+                                    <td><?php echo $record['winning_number']; ?></td>
+                                    <td><?php echo $record['winning_game']; ?></td>
+                                    <td><?php echo date('d-M-Y', strtotime($record['winning_date'])); ?></td>
+                                    <td><?php echo $record['winning_total_payout'] ? '$' . $record['winning_total_payout'] : 'N/A'; ?></td>
+                                    <td>
+                                    <form method="POST">
+                                        <?php if ($record['winning_listing']): ?>
+                                            <!-- If winning_listing is true, show the Settled button -->
+                                            <button class="btn btn-danger" disabled>Settled</button>
+                                        <?php else: ?>
+                                            <!-- If not settled, show the normal Select button -->
+                                            <button type="submit" name="select_winning_record" value="<?php echo $record['id']; ?>" class="btn btn-warning">Select</button>
+                                        <?php endif; ?>
+                                    </form>
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            
         </div>
     </div>
 </div>
