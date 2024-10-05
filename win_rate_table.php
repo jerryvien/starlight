@@ -190,9 +190,12 @@ if ($total_transactions > 0) {
                             <tbody>
                                 <?php foreach ($customers as $customer): ?>
                                 <tr>
-                                    <td> <a href="customer_analysis.php?customer_id=<?php echo $customer['customer_id']; ?>">
-                                        <?php echo $customer['customer_name']; ?>
-                                    </a></td>
+                                     <!-- Make the customer name a hyperlink, but it will just display as the name itself -->
+                                    <td>
+                                        <a href="customer_analysis.php?customer_id=<?php echo $customer['customer_id']; ?>" style="text-decoration: none; color: inherit;">
+                                            <?php echo $customer['customer_name']; ?>
+                                        </a>
+                                    </td>
                                     <td><?php echo $customer['agent_name']; ?></td>
                                     <td><?php echo $customer['win_count']; ?></td>
                                     <td><?php echo $customer['loss_count']; ?></td>
