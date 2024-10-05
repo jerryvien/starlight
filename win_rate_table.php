@@ -20,8 +20,8 @@ if (!isset($_SESSION['admin'])) {
 $query = "
     SELECT cd.customer_name, a.agent_name, cd.win_count, cd.loss_count, 
            cd.total_sales, cd.win_amount, cd.loss_amount,
-           (cd.win_amount / cd.win_count) AS avg_win_amount,
-           (cd.loss_amount / cd.loss_count) AS avg_loss_amount,
+           IF(cd.win_count > 0, (cd.win_amount / cd.win_count), NULL) AS avg_win_amount,
+           IF(cd.loss_count > 0, (cd.loss_amount / cd.loss_count), NULL) AS avg_loss_amount,
            (cd.win_count + cd.loss_count) AS total_transactions,
            (cd.win_count / (cd.win_count + cd.loss_count)) * 100 AS win_rate_percentage,
            (cd.win_count / cd.loss_count) AS win_loss_ratio,
@@ -57,10 +57,12 @@ if ($total_transactions > 0) {
     $avg_win_rate = ($subtotal['win_count'] / $total_transactions) * 100;
     $loss_rate = ($subtotal['loss_count'] / $total_transactions) * 100;
     $payout_over_sales = ($subtotal['win_amount'] / $subtotal['total_sales']) * 100;
+    $transaction_success_rate = ($subtotal['total_sales'] / $total_transactions) * 100;
 } else {
     $avg_win_rate = 0;
     $loss_rate = 0;
     $payout_over_sales = 0;
+    $transaction_success_rate = 0;
 }
 ?>
 
@@ -72,7 +74,7 @@ if ($total_transactions > 0) {
     <title>Win Rate Table with Overall Statistics</title>
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
-    <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    
 </head>
 <body>
 
@@ -143,6 +145,23 @@ if ($total_transactions > 0) {
                             </div>
                         </div>
                     </div>
+
+                    <!-- New Card: Transaction Success Rate -->
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-info shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Transaction Success Rate</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo number_format($transaction_success_rate, 2); ?>%</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-chart-line fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- DataTable -->
@@ -151,55 +170,94 @@ if ($total_transactions > 0) {
                         <h6 class="m-0 font-weight-bold text-primary">Win/Loss Analysis</h6>
                     </div>
                     <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                <thead>
-                                    <tr>
-                                        <th>Customer Name</th>
-                                        <th>Agent Name</th>
-                                        <th>Total Win Count</th>
-                                        <th>Total Loss Count</th>
-                                        <th>Total Sales</th>
-                                        <th>Total Win Amount</th>
-                                        <th>Total Loss Amount</th>
-                                        <th>Avg Transaction Count</th>
-                                        <th>Win Rate (%)</th>
-                                        <th>Win/Loss Ratio</th>
-                                        <th>Predicted Win Rate (%)</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach ($customers as $customer): ?>
-                                    <tr>
-                                        <td><?php echo $customer['customer_name']; ?></td>
-                                        <td><?php echo $customer['agent_name']; ?></td>
-                                        <td><?php echo isset($customer['win_count']) ? $customer['win_count'] : '0'; ?></td>
-                                        <td><?php echo isset($customer['loss_count']) ? $customer['loss_count'] : '0'; ?></td>
-                                        <td><?php echo '$' . (isset($customer['total_sales']) ? number_format($customer['total_sales'], 2) : 'N/A'); ?></td>
-                                        <td><?php echo '$' . (isset($customer['win_amount']) ? number_format($customer['win_amount'], 2) : 'N/A'); ?></td>
-                                        <td><?php echo '$' . (isset($customer['loss_amount']) ? number_format($customer['loss_amount'], 2) : 'N/A'); ?></td>
-                                        <td><?php echo isset($customer['avg_transaction_count']) ? number_format($customer['avg_transaction_count'], 2) : 'N/A'; ?></td>
-                                        <td><?php echo isset($customer['win_rate_percentage']) ? number_format($customer['win_rate_percentage'], 2) . '%' : '0.00%'; ?></td>
-                                        <td><?php echo isset($customer['win_loss_ratio']) ? number_format($customer['win_loss_ratio'], 2) : '0.00'; ?></td>
-                                        <td><?php echo isset($customer['predicted_win_rate']) ? number_format($customer['predicted_win_rate'], 2) . '%' : '0.00%'; ?></td>
-                                    </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <th colspan="2">Subtotal</th>
-                                        <th><?php echo $subtotal['win_count']; ?></th>
-                                        <th><?php echo $subtotal['loss_count']; ?></th>
-                                        <th><?php echo '$' . number_format($subtotal['total_sales'], 2); ?></th>
-                                        <th><?php echo '$' . number_format($subtotal['win_amount'], 2); ?></th>
-                                        <th><?php echo '$' . number_format($subtotal['loss_amount'], 2); ?></th>
-                                        <th>N/A</th>
-                                        <th><?php echo number_format($avg_win_rate, 2); ?>%</th>
-                                        <th>N/A</th>
-                                        <th>N/A</th>
-                                    </tr>
-                                </tfoot>
-                            </table>
+                        <div class="">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Customer Name</th>
+                                    <th>Agent Name</th>
+                                    <th>Total Win Count</th>
+                                    <th>Total Loss Count</th>
+                                    <th>Total Sales</th>
+                                    <th>Total Win Amount</th>
+                                    <th>Total Loss Amount</th>
+                                    <th>Avg Transaction Count</th>
+                                    <th>Win Rate (%)</th>
+                                    <th>Win/Loss Ratio</th>
+                                    <th>Predicted Win Rate (%)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($customers as $customer): ?>
+                                <tr>
+                                    <td><?php echo $customer['customer_name']; ?></td>
+                                    <td><?php echo $customer['agent_name']; ?></td>
+                                    <td><?php echo $customer['win_count']; ?></td>
+                                    <td><?php echo $customer['loss_count']; ?></td>
+                                    <td><?php echo '$' . number_format($customer['total_sales'], 2); ?></td>
+                                    <td><?php echo '$' . number_format($customer['win_amount'], 2); ?></td>
+                                    <td><?php echo '$' . number_format($customer['loss_amount'], 2); ?></td>
+                                    <td>
+                                        <?php
+                                        $avg_transaction = $customer['total_transactions'] > 0 ? ($customer['total_sales'] / $customer['total_transactions']) : 'N/A';
+                                        echo is_numeric($avg_transaction) ? '$' . number_format($avg_transaction, 2) : 'N/A';
+                                        ?>
+                                    </td>
+                                    <td><?php echo number_format($customer['win_rate_percentage'], 2); ?>%</td>
+                                    <td><?php echo number_format($customer['win_loss_ratio'], 2); ?></td>
+                                    <td><?php echo number_format($customer['predicted_win_rate'], 2); ?>%</td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="2">Subtotal</th>
+                                    <th>0</th> <!-- Total Win Count -->
+                                    <th>0</th> <!-- Total Loss Count -->
+                                    <th>$0.00</th> <!-- Total Sales -->
+                                    <th>$0.00</th> <!-- Total Win Amount -->
+                                    <th>$0.00</th> <!-- Total Loss Amount -->
+                                    <th>N/A</th> <!-- Avg Transaction Count -->
+                                    <th>N/A</th> <!-- Win Rate -->
+                                    <th>N/A</th> <!-- Win/Loss Ratio -->
+                                    <th>N/A</th> <!-- Predicted Win Rate -->
+                                </tr>
+                            </tfoot>
+                        </table>
+                            <script>
+                                $(document).ready(function() {
+                                    var table = $('#dataTable').DataTable({
+                                        paging: true,
+                                        searching: true,
+                                        ordering: true,
+                                        responsive: true,
+                                        footerCallback: function (row, data, start, end, display) {
+                                            var api = this.api();
+                                            var totalWinCount = 0;
+                                            var totalLossCount = 0;
+                                            var totalSales = 0;
+                                            var totalWinAmount = 0;
+                                            var totalLossAmount = 0;
+
+                                            // Loop through filtered data to calculate the subtotal
+                                            api.rows({ search: 'applied' }).data().each(function(rowData) {
+                                                totalWinCount += parseInt(rowData[2], 10) || 0; // Win Count
+                                                totalLossCount += parseInt(rowData[3], 10) || 0; // Loss Count
+                                                totalSales += parseFloat(rowData[4].replace('$', '').replace(',', '')) || 0; // Total Sales
+                                                totalWinAmount += parseFloat(rowData[5].replace('$', '').replace(',', '')) || 0; // Win Amount
+                                                totalLossAmount += parseFloat(rowData[6].replace('$', '').replace(',', '')) || 0; // Loss Amount
+                                            });
+
+                                            // Update the footer with the subtotal
+                                            $(api.column(2).footer()).html(totalWinCount);
+                                            $(api.column(3).footer()).html(totalLossCount);
+                                            $(api.column(4).footer()).html('$' + totalSales.toFixed(2));
+                                            $(api.column(5).footer()).html('$' + totalWinAmount.toFixed(2));
+                                            $(api.column(6).footer()).html('$' + totalLossAmount.toFixed(2));
+                                        }
+                                    });
+                                });
+                                </script>
                         </div>
                     </div>
                 </div>
