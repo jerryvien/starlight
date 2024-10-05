@@ -252,11 +252,7 @@ function generate_combinations($number) {
             <div class="container-fluid">
                 <h1 class="h3 mb-2 text-gray-800">Winning Report</h1>
                 <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Winning Record Entries</h6>
-                    </div>
-                    <div class="card-body">
-                        <!-- Matching Purchases Table (always displayed) -->
+                                         <!-- Matching Purchases Table (always displayed) -->
             <?php if ($winning_record): ?>
             <div class="container-fluid">
                 <div class="card shadow mb-4">
@@ -329,7 +325,10 @@ function generate_combinations($number) {
                 $('#matchedPurchasesTable').DataTable();
             });
             </script>
-
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Winning Record Entries</h6>
+                    </div>
+                    <div class="card-body">
                         <table id="winningRecordsTable" class="table table-bordered" width="100%" cellspacing="0">
                             <thead>
                                 <tr>
