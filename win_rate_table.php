@@ -57,7 +57,7 @@ if ($total_transactions > 0) {
     $avg_win_rate = ($subtotal['win_count'] / $total_transactions) * 100;
     $loss_rate = ($subtotal['loss_count'] / $total_transactions) * 100;
     $payout_over_sales = ($subtotal['win_amount'] / $subtotal['total_sales']) * 100;
-    $transaction_success_rate = ($subtotal['total_sales'] / $total_transactions) * 100;
+    $transaction_success_rate = ($subtotal['total_sales'] / $total_transactions) / 100;
 } else {
     $avg_win_rate = 0;
     $loss_rate = 0;
