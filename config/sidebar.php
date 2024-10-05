@@ -32,7 +32,7 @@
 
     <!-- Heading -->
     <div class="sidebar-heading">
-        Interface
+       Members Interface
     </div>
 
     <!-- Nav Item - Customer Management Collapse Menu -->
@@ -87,8 +87,9 @@
 
     <!-- Divider -->
     <hr class="sidebar-divider">
-
-    
+    <div class="sidebar-heading">
+       Admin Interface
+    </div>
 
     <!-- Nav Item - Customer Management Collapse Menu -->
         <li class="nav-item">
@@ -107,10 +108,12 @@
         </div>
     </li>
 
-    <!-- Sidebar Toggler (Sidebar) -->
-    <div class="text-center d-none d-md-inline">
-        <button class="rounded-circle border-0" id="sidebarToggle"></button>
-    </div>
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+        <!-- Sidebar Toggler (Sidebar) -->
+        <div class="text-center d-none d-md-inline">
+            <button class="rounded-circle border-0" id="sidebarToggle"></button>
+        </div>
 
 </ul>
 <!-- End of Sidebar -->
