@@ -224,40 +224,75 @@ if ($total_transactions > 0) {
                                 </tr>
                             </tfoot>
                         </table>
-                            <script>
-                                $(document).ready(function() {
-                                    var table = $('#dataTable').DataTable({
-                                        paging: true,
-                                        searching: true,
-                                        ordering: true,
-                                        responsive: true,
-                                        footerCallback: function (row, data, start, end, display) {
-                                            var api = this.api();
-                                            var totalWinCount = 0;
-                                            var totalLossCount = 0;
-                                            var totalSales = 0;
-                                            var totalWinAmount = 0;
-                                            var totalLossAmount = 0;
+                        <script>
+                            $(document).ready(function() {
+                                var table = $('#dataTable').DataTable({
+                                    paging: true,
+                                    searching: true,
+                                    ordering: true,
+                                    responsive: true,
+                                    footerCallback: function (row, data, start, end, display) {
+                                        var api = this.api();
+                                        var totalWinCount = 0;
+                                        var totalLossCount = 0;
+                                        var totalSales = 0;
+                                        var totalWinAmount = 0;
+                                        var totalLossAmount = 0;
+                                        var avgTransactionSum = 0;
+                                        var winRateSum = 0;
+                                        var winLossRatioSum = 0;
+                                        var predictedWinRateSum = 0;
+                                        var visibleRows = 0;
 
-                                            // Loop through filtered data to calculate the subtotal
-                                            api.rows({ search: 'applied' }).data().each(function(rowData) {
-                                                totalWinCount += parseInt(rowData[2], 10) || 0; // Win Count
-                                                totalLossCount += parseInt(rowData[3], 10) || 0; // Loss Count
-                                                totalSales += parseFloat(rowData[4].replace('$', '').replace(',', '')) || 0; // Total Sales
-                                                totalWinAmount += parseFloat(rowData[5].replace('$', '').replace(',', '')) || 0; // Win Amount
-                                                totalLossAmount += parseFloat(rowData[6].replace('$', '').replace(',', '')) || 0; // Loss Amount
-                                            });
+                                        // Loop through filtered data to calculate the subtotal
+                                        api.rows({ search: 'applied' }).data().each(function(rowData) {
+                                            totalWinCount += parseInt(rowData[2], 10) || 0; // Win Count
+                                            totalLossCount += parseInt(rowData[3], 10) || 0; // Loss Count
+                                            totalSales += parseFloat(rowData[4].replace('$', '').replace(',', '')) || 0; // Total Sales
+                                            totalWinAmount += parseFloat(rowData[5].replace('$', '').replace(',', '')) || 0; // Total Win Amount
+                                            totalLossAmount += parseFloat(rowData[6].replace('$', '').replace(',', '')) || 0; // Total Loss Amount
 
-                                            // Update the footer with the subtotal
-                                            $(api.column(2).footer()).html(totalWinCount);
-                                            $(api.column(3).footer()).html(totalLossCount);
-                                            $(api.column(4).footer()).html('$' + totalSales.toFixed(2));
-                                            $(api.column(5).footer()).html('$' + totalWinAmount.toFixed(2));
-                                            $(api.column(6).footer()).html('$' + totalLossAmount.toFixed(2));
-                                        }
-                                    });
+                                            // Avg Transaction Count
+                                            var avgTransaction = parseFloat(rowData[7].replace('$', '').replace(',', '')) || 0;
+                                            avgTransactionSum += avgTransaction;
+                                            
+                                            // Win Rate
+                                            var winRate = parseFloat(rowData[8].replace('%', '')) || 0;
+                                            winRateSum += winRate;
+
+                                            // Win/Loss Ratio
+                                            var winLossRatio = parseFloat(rowData[9]) || 0;
+                                            winLossRatioSum += winLossRatio;
+
+                                            // Predicted Win Rate
+                                            var predictedWinRate = parseFloat(rowData[10].replace('%', '')) || 0;
+                                            predictedWinRateSum += predictedWinRate;
+
+                                            visibleRows++;
+                                        });
+
+                                        // Calculate the averages
+                                        var avgTransaction = visibleRows > 0 ? avgTransactionSum / visibleRows : 'N/A';
+                                        var avgWinRate = visibleRows > 0 ? winRateSum / visibleRows : 'N/A';
+                                        var avgWinLossRatio = visibleRows > 0 ? winLossRatioSum / visibleRows : 'N/A';
+                                        var avgPredictedWinRate = visibleRows > 0 ? predictedWinRateSum / visibleRows : 'N/A';
+
+                                        // Update the footer with the subtotal
+                                        $(api.column(2).footer()).html(totalWinCount);
+                                        $(api.column(3).footer()).html(totalLossCount);
+                                        $(api.column(4).footer()).html('$' + totalSales.toFixed(2));
+                                        $(api.column(5).footer()).html('$' + totalWinAmount.toFixed(2));
+                                        $(api.column(6).footer()).html('$' + totalLossAmount.toFixed(2));
+
+                                        // Update the footer with the averages
+                                        $(api.column(7).footer()).html(isNaN(avgTransaction) ? 'N/A' : '$' + avgTransaction.toFixed(2));
+                                        $(api.column(8).footer()).html(isNaN(avgWinRate) ? 'N/A' : avgWinRate.toFixed(2) + '%');
+                                        $(api.column(9).footer()).html(isNaN(avgWinLossRatio) ? 'N/A' : avgWinLossRatio.toFixed(2));
+                                        $(api.column(10).footer()).html(isNaN(avgPredictedWinRate) ? 'N/A' : avgPredictedWinRate.toFixed(2) + '%');
+                                    }
                                 });
-                                </script>
+                            });
+                            </script>
                         </div>
                     </div>
                 </div>
