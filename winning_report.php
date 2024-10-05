@@ -124,7 +124,7 @@ if (isset($_POST['finalize_winning'])) {
         $update_stmt->execute();
     }
 
-    // Update unmatched entries to 'Loss'
+    // Update unmatched entries to 'Loss' regardless of whether there were matches
     update_loss_status($winning_record, $conn);
 
     // Update total payout for the winning record
@@ -142,6 +142,7 @@ if (isset($_POST['finalize_winning'])) {
     // Success message
     $success_message = "Winning results have been updated successfully!";
 }
+
 // Utility function to update unmatched records to 'Loss'
 function update_loss_status($winning_record, $conn) {
     try {
@@ -220,221 +221,152 @@ function generate_combinations($number) {
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
     
     
-    <!--Custom styles for this page -->
+    <!-- Custom styles for this page -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="vendor/chart.js/Chart.min.js"></script>
-    
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-     
-    
 </head>
 <body>
 
 <div id="wrapper">
-        <!-- Sidebar -->
-        <?php include('config/sidebar.php'); ?>
+    <!-- Sidebar -->
+    <?php include('config/sidebar.php'); ?>
 
-        <!-- Content Wrapper -->
-        <div id="content-wrapper" class="d-flex flex-column">
-            <!-- Main Content -->
-            <div id="content">
-                <!-- Topbar -->
-                <?php include('config/topbar.php'); ?>
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+        <!-- Main Content -->
+        <div id="content">
+            <!-- Topbar -->
+            <?php include('config/topbar.php'); ?>
 
-                <!-- Success Message -->
-                    <?php if (!empty($success_message)): ?>
-                    <div class="alert alert-success" role="alert">
-                        <?php echo $success_message; ?>
+            <!-- Success Message -->
+            <?php if (!empty($success_message)): ?>
+            <div class="alert alert-success" role="alert">
+                <?php echo $success_message; ?>
+            </div>
+            <?php endif; ?>
+
+            <!-- Winning Records Table -->
+            <div class="container-fluid">
+                <h1 class="h3 mb-2 text-gray-800">Winning Report</h1>
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Winning Record Entries</h6>
                     </div>
-                    <?php endif; ?>
-
-                
-
-
-                <!-- Winning Records Table -->
-                <div class="container-fluid">
-                    <h1 class="h3 mb-2 text-gray-800">Winning Report</h1>
-                    <p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below.
-                        For more information about DataTables, please visit the <a target="_blank"
-                            href="https://datatables.net">official DataTables documentation</a>.</p>
-                    <div class="card shadow mb-4">
-                            <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary">Winning Record Entries</h6>
-                            </div>
-                            <div class="card-body">
-                                <div class="">
-                                    <table id="winningRecordsTable" class="table table-bordered" width="100%" cellspacing="0">
-                                        <thead>
-                                            <tr>
-                                                <th>Winning Number</th>
-                                                <th>Winning Game</th>
-                                                
-                                                <th>Winning Date</th>
-                                                <th>Total Payout</th>
-                                                <th>Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php foreach ($winning_records as $record): ?>
-                                            <tr>
-                                                <td><?php echo $record['winning_number']; ?></td>
-                                                <td><?php echo $record['winning_game']; ?></td>
-                                                
-                                                <td><?php echo date('d-M-Y', strtotime($record['winning_date'])); ?></td>
-                                                <td>$$ <?php echo $record['winning_total_payout']; ?></td>
-                                                <td>
-                                                <form method="POST">
-                                                    <?php if ($record['winning_listing']): ?>
-                                                        <button class="btn btn-danger" disabled>Settled</button>
-                                                    <?php else: ?>
-                                                        <button type="submit" name="select_winning_record" value="<?php echo $record['id']; ?>" class="btn btn-warning">Huat!!</button>
-                                                    <?php endif; ?>
-                                                </form>
-                                                </td>
-                                            </tr>
-                                            <?php endforeach; ?>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="card-body">
+                        <table id="winningRecordsTable" class="table table-bordered" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Winning Number</th>
+                                    <th>Winning Game</th>
+                                    <th>Winning Date</th>
+                                    <th>Total Payout</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($winning_records as $record): ?>
+                                <tr>
+                                    <td><?php echo $record['winning_number']; ?></td>
+                                    <td><?php echo $record['winning_game']; ?></td>
+                                    <td><?php echo date('d-M-Y', strtotime($record['winning_date'])); ?></td>
+                                    <td><?php echo $record['winning_total_payout'] ? '$' . $record['winning_total_payout'] : 'N/A'; ?></td>
+                                    <td>
+                                        <form method="POST">
+                                            <button type="submit" name="select_winning_record" value="<?php echo $record['id']; ?>" class="btn btn-warning">Select</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                
-
-                <?php
-                    // Calculate the total sum of the winning amounts for the matched records
-                    $subtotal_winning_amount = 0;
-                    foreach ($matching_purchases as $purchase) {
-                        // Set default winning category and factor
-                        $winning_category = $winning_record['winning_game'] ?? 'Unknown';
-
-                        // Check the winning game type (2-D or 3-D)
-                        if ($winning_category === '2-D') {
-                            // 2-D logic: Box factor is 5, Straight factor is 10
-                            $winning_factor = ($purchase['purchase_category'] === 'Box') ? 5 : 10;
-                        } elseif ($winning_category === '3-D') {
-                            // 3-D logic: Box factor is 1, Straight factor is 2
-                            $winning_factor = ($purchase['purchase_category'] === 'Box') ? 1 : 2;
-                        } else {
-                            // Default case for unknown winning category
-                            $winning_factor = 1;
-                        }
-
-                        // Calculate the winning amount based on the factor
-                        $winning_amount = $winning_factor * $purchase['purchase_amount'];
-                        $subtotal_winning_amount += $winning_amount;
-                    }
-                ?>
-
-                <!-- Matching Purchases Table -->
-                <?php if (!empty($matching_purchases)): ?>
-
-                <!-- Winning Records Table -->
-                <div class="container-fluid">
-                    <div class="card shadow mb-4">
-                            <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary">Matched Purchase Entries</h6>
-                            </div>
-                            <div class="card-body">
-                                <div class="">
-                                    <form method="POST">
-                                        <input type="hidden" name="winning_record_id" value="<?php echo $winning_id; ?>">
-                                        <input type="hidden" name="matching_purchases" value="<?php echo $serialized_purchases; ?>">
-                                        <table id="matchedPurchasesTable" class="table table-bordered" width="100%" cellspacing="0">
-                                            <thead>
-                                                <tr>
-                                                    <th>Customer Name</th>
-                                                    <th>Purchase No</th>
-                                                    <th>Purchase Amount</th>
-                                                    <th>Purchase Date</th>
-                                                    <th>Agent Name</th>
-                                                    <th>Winning Category</th>
-                                                    <th>Winning Amount</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                            <?php foreach ($matching_purchases as $purchase): ?>
-                                                <?php
-                                                    // Set default winning category and factor
-                                                    $winning_category = $winning_record['winning_game'] ?? 'Unknown';
-
-                                                    // Check the winning game type (2-D or 3-D)
-                                                    if ($winning_category === '2-D') {
-                                                        // 2-D logic: Box factor is 5, Straight factor is 10
-                                                        $winning_factor = ($purchase['purchase_category'] === 'Box') ? 5 : 10;
-                                                    } elseif ($winning_category === '3-D') {
-                                                        // 3-D logic: Box factor is 1, Straight factor is 2
-                                                        $winning_factor = ($purchase['purchase_category'] === 'Box') ? 1 : 2;
-                                                    } else {
-                                                        // Default case for unknown winning category
-                                                        $winning_factor = 1;
-                                                    }
-
-                                                    // Calculate the winning amount based on the factor
-                                                    $winning_amount = $winning_factor * $purchase['purchase_amount'];
-                                                ?>
-                                            
-                                                <tr>
-                                                    <td><?php echo $purchase['customer_name'] ?? 'N/A'; ?></td>
-                                                    <td><?php echo $purchase['purchase_no']; ?></td>
-                                                    <td><?php echo $purchase['purchase_amount']; ?></td>
-                                                    <td><?php echo $purchase['purchase_datetime']; ?></td>
-                                                    <td><?php echo $purchase['agent_name'] ?? 'N/A'; ?></td>
-                                                    <td><?php echo $winning_category; ?> | <?php echo $purchase['purchase_category']; ?></td>
-                                                    <td><?php echo $winning_amount; ?></td>
-                                                </tr>
-                                                <?php endforeach; ?>
-                                            </tbody>
-                                            <!-- Subtotal Row -->
-                                            <tfoot>
-                                                <tr>
-                                                    <td colspan="6" class="text-right"><strong>Subtotal Winning Amount:</strong></td>
-                                                    <td><strong><?php echo $subtotal_winning_amount; ?></strong></td>
-                                                </tr>
-                                            </tfoot>
-                                        </table>
-                                        <button type="submit" name="finalize_winning" class="btn btn-warning" onclick="return confirm('Are you sure you want to finalize the winning entries?');">Finalize Winning</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                </div>
-                <?php endif; ?>
-
-                <!-- Initialize DataTable -->
-                <script>
-                $(document).ready(function() {
-                    $('#winningRecordsTable').DataTable();
-                    $('#matchedPurchasesTable').DataTable();
-                });
-                </script>
-
-            </div>
-                <!-- End of Page Content -->
-
-                <!-- Footer -->
-                <?php include('config/footer.php'); ?>
             </div>
 
-             <!-- Scroll to Top Button-->
-                <a class="scroll-to-top rounded" href="#page-top">
-                    <i class="fas fa-angle-up"></i>
-                </a>
-            <!-- End of Content Wrapper -->
+            <!-- Matching Purchases Table (always displayed) -->
+            <?php if ($winning_record): ?>
+            <div class="container-fluid">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Matched Purchase Entries</h6>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST">
+                            <input type="hidden" name="winning_record_id" value="<?php echo $winning_record['id']; ?>">
+                            <input type="hidden" name="matching_purchases" value="<?php echo $serialized_purchases; ?>">
+                            <table id="matchedPurchasesTable" class="table table-bordered" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Customer Name</th>
+                                        <th>Purchase No</th>
+                                        <th>Purchase Amount</th>
+                                        <th>Purchase Date</th>
+                                        <th>Agent Name</th>
+                                        <th>Winning Category</th>
+                                        <th>Winning Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                <?php if (!empty($matching_purchases)): ?>
+                                    <?php foreach ($matching_purchases as $purchase): ?>
+                                    <?php
+                                        // Set default winning category and factor
+                                        $winning_category = $winning_record['winning_game'] ?? 'Unknown';
+
+                                        // Check the winning game type (2-D or 3-D)
+                                        if ($winning_category === '2-D') {
+                                            $winning_factor = ($purchase['purchase_category'] === 'Box') ? 5 : 10;
+                                        } elseif ($winning_category === '3-D') {
+                                            $winning_factor = ($purchase['purchase_category'] === 'Box') ? 1 : 2;
+                                        } else {
+                                            $winning_factor = 1;
+                                        }
+
+                                        // Calculate the winning amount based on the factor
+                                        $winning_amount = $winning_factor * $purchase['purchase_amount'];
+                                    ?>
+                                    <tr>
+                                        <td><?php echo $purchase['customer_name']; ?></td>
+                                        <td><?php echo $purchase['purchase_no']; ?></td>
+                                        <td><?php echo $purchase['purchase_amount']; ?></td>
+                                        <td><?php echo $purchase['purchase_datetime']; ?></td>
+                                        <td><?php echo $purchase['agent_name']; ?></td>
+                                        <td><?php echo $winning_category; ?></td>
+                                        <td><?php echo $winning_amount; ?></td>
+                                    </tr>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <tr>
+                                        <td colspan="7" class="text-center">No matching purchase entries found.</td>
+                                    </tr>
+                                <?php endif; ?>
+                                </tbody>
+                            </table>
+                            <button type="submit" name="finalize_winning" class="btn btn-warning" onclick="return confirm('Are you sure you want to finalize the winning entries?');">Finalize Winning</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <?php endif; ?>
+
+            <!-- Initialize DataTable -->
+            <script>
+            $(document).ready(function() {
+                $('#winningRecordsTable').DataTable();
+                $('#matchedPurchasesTable').DataTable();
+            });
+            </script>
         </div>
-        <!-- End of Wrapper -->
+    </div>
+</div>
 
+<!-- Bootstrap core JavaScript-->
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+<script src="vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
-
-    
-
-            <!-- Page level plugins -->
-    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
-    <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
-
-    <!-- Page level custom scripts -->
-    <script src="js/demo/datatables-demo.js"></script>
-    </body>
-    
+</body>
 </html>
-
