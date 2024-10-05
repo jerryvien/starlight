@@ -113,7 +113,7 @@
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseReport"
             aria-expanded="true" aria-controls="collapseTwo">
             <i class="fas fa-id-card"></i>
-            <span>Agents</span>
+            <span>Reports</span>
         </a>
         <div id="collapseReport" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
