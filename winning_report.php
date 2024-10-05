@@ -272,9 +272,15 @@ function generate_combinations($number) {
                                     <td><?php echo date('d-M-Y', strtotime($record['winning_date'])); ?></td>
                                     <td><?php echo $record['winning_total_payout'] ? '$' . $record['winning_total_payout'] : 'N/A'; ?></td>
                                     <td>
-                                        <form method="POST">
+                                    <form method="POST">
+                                        <?php if ($record['winning_listing']): ?>
+                                            <!-- If winning_listing is true, show the Settled button -->
+                                            <button class="btn btn-danger" disabled>Settled</button>
+                                        <?php else: ?>
+                                            <!-- If not settled, show the normal Select button -->
                                             <button type="submit" name="select_winning_record" value="<?php echo $record['id']; ?>" class="btn btn-warning">Select</button>
-                                        </form>
+                                        <?php endif; ?>
+                                    </form>
                                     </td>
                                 </tr>
                                 <?php endforeach; ?>
