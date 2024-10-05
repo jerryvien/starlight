@@ -19,12 +19,6 @@
         <a class="nav-link" href="dashboard.php">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
-        <a class="nav-link" href="sales_dashboard.php">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Sales Dashboard</span></a>
-        <a class="nav-link" href="avg_dashboard.php">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Agent Dashboard</span></a>
     </li>
 
     <!-- Divider -->
@@ -119,8 +113,8 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Analaysis Report:</h6>
                 <a class="collapse-item" href="win_rate_table.php">Win/Loss Ratio Report</a>
-                <a class="collapse-item" href="customer_listing.php">Agent Listing</a>
-                <a class="collapse-item" href="agent_analysis.php">Agent Analysis</a>
+                <a class="collapse-item" href="sales_dashboard.php">Sales Avg Report</a>
+                <a class="collapse-item" href="avg_dashboard.php">Agent Avg Report</a>
             </div>
         </div>
     </li>
