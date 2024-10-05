@@ -108,6 +108,23 @@
         </div>
     </li>
 
+      <!-- Nav Item - Report Management Collapse Menu -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseReport"
+            aria-expanded="true" aria-controls="collapseTwo">
+            <i class="fas fa-id-card"></i>
+            <span>Agents</span>
+        </a>
+        <div id="collapseReport" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Analaysis Report:</h6>
+                <a class="collapse-item" href="win_rate_table.php">Win/Loss Ratio Report</a>
+                <a class="collapse-item" href="customer_listing.php">Agent Listing</a>
+                <a class="collapse-item" href="agent_analysis.php">Agent Analysis</a>
+            </div>
+        </div>
+    </li>
+
     <!-- Divider -->
     <hr class="sidebar-divider">
         <!-- Sidebar Toggler (Sidebar) -->
