@@ -33,6 +33,35 @@ $query = "
 ";
 $stmt = $conn->query($query);
 $customers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Calculate Totals and Averages
+$subtotal = [
+    'total_sales' => 0,
+    'win_amount' => 0,
+    'loss_amount' => 0,
+    'win_count' => 0,
+    'loss_count' => 0,
+    'win_rate_percentage' => 0,
+];
+
+foreach ($customers as $customer) {
+    $subtotal['total_sales'] += $customer['total_sales'] ?? 0;
+    $subtotal['win_amount'] += $customer['win_amount'] ?? 0;
+    $subtotal['loss_amount'] += $customer['loss_amount'] ?? 0;
+    $subtotal['win_count'] += $customer['win_count'] ?? 0;
+    $subtotal['loss_count'] += $customer['loss_count'] ?? 0;
+}
+
+$total_transactions = $subtotal['win_count'] + $subtotal['loss_count'];
+if ($total_transactions > 0) {
+    $avg_win_rate = ($subtotal['win_count'] / $total_transactions) * 100;
+    $loss_rate = ($subtotal['loss_count'] / $total_transactions) * 100;
+    $payout_over_sales = ($subtotal['win_amount'] / $subtotal['total_sales']) * 100;
+} else {
+    $avg_win_rate = 0;
+    $loss_rate = 0;
+    $payout_over_sales = 0;
+}
 ?>
 
 <!DOCTYPE html>
@@ -40,7 +69,7 @@ $customers = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Win Rate Table</title>
+    <title>Win Rate Table with Overall Statistics</title>
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
     <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
@@ -61,6 +90,60 @@ $customers = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <!-- Page Content -->
             <div class="container-fluid">
                 <h1 class="h3 mb-2 text-gray-800">Win Rate Statistics</h1>
+
+                <!-- Top Cards -->
+                <div class="row justify-content-center">
+                    <!-- Avg Win Rate -->
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-primary shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Avg Win Rate</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo number_format($avg_win_rate, 2); ?>%</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-percentage fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Loss Rate -->
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-danger shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Loss Rate</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo number_format($loss_rate, 2); ?>%</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-exclamation-triangle fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payout Over Sales -->
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-success shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Payout Over Sales</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo number_format($payout_over_sales, 2); ?>%</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- DataTable -->
                 <div class="card shadow mb-4">
@@ -90,22 +173,37 @@ $customers = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     <tr>
                                         <td><?php echo $customer['customer_name']; ?></td>
                                         <td><?php echo $customer['agent_name']; ?></td>
-                                        <td><?php echo isset($customer['win_count']) && $customer['win_count'] !== null ? $customer['win_count'] : '0'; ?></td>
-                                        <td><?php echo isset($customer['loss_count']) && $customer['loss_count'] !== null ? $customer['loss_count'] : '0'; ?></td>
-                                        <td><?php echo '$' . (isset($customer['total_sales']) && $customer['total_sales'] !== null ? number_format($customer['total_sales'], 2) : 'N/A'); ?></td>
-                                        <td><?php echo '$' . (isset($customer['win_amount']) && $customer['win_amount'] !== null ? number_format($customer['win_amount'], 2) : 'N/A'); ?></td>
-                                        <td><?php echo '$' . (isset($customer['loss_amount']) && $customer['loss_amount'] !== null ? number_format($customer['loss_amount'], 2) : 'N/A'); ?></td>
-                                        <td><?php echo isset($customer['avg_transaction_count']) && $customer['avg_transaction_count'] !== null ? number_format($customer['avg_transaction_count'], 2) : 'N/A'; ?></td>
-                                        <td><?php echo isset($customer['win_rate_percentage']) && $customer['win_rate_percentage'] !== null ? number_format($customer['win_rate_percentage'], 2) . '%' : '0.00%'; ?></td>
-                                        <td><?php echo isset($customer['win_loss_ratio']) && $customer['win_loss_ratio'] !== null ? number_format($customer['win_loss_ratio'], 2) : '0.00'; ?></td>
-                                        <td><?php echo isset($customer['predicted_win_rate']) && $customer['predicted_win_rate'] !== null ? number_format($customer['predicted_win_rate'], 2) . '%' : '0.00%'; ?></td>
+                                        <td><?php echo isset($customer['win_count']) ? $customer['win_count'] : '0'; ?></td>
+                                        <td><?php echo isset($customer['loss_count']) ? $customer['loss_count'] : '0'; ?></td>
+                                        <td><?php echo '$' . (isset($customer['total_sales']) ? number_format($customer['total_sales'], 2) : 'N/A'); ?></td>
+                                        <td><?php echo '$' . (isset($customer['win_amount']) ? number_format($customer['win_amount'], 2) : 'N/A'); ?></td>
+                                        <td><?php echo '$' . (isset($customer['loss_amount']) ? number_format($customer['loss_amount'], 2) : 'N/A'); ?></td>
+                                        <td><?php echo isset($customer['avg_transaction_count']) ? number_format($customer['avg_transaction_count'], 2) : 'N/A'; ?></td>
+                                        <td><?php echo isset($customer['win_rate_percentage']) ? number_format($customer['win_rate_percentage'], 2) . '%' : '0.00%'; ?></td>
+                                        <td><?php echo isset($customer['win_loss_ratio']) ? number_format($customer['win_loss_ratio'], 2) : '0.00'; ?></td>
+                                        <td><?php echo isset($customer['predicted_win_rate']) ? number_format($customer['predicted_win_rate'], 2) . '%' : '0.00%'; ?></td>
                                     </tr>
                                     <?php endforeach; ?>
                                 </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th colspan="2">Subtotal</th>
+                                        <th><?php echo $subtotal['win_count']; ?></th>
+                                        <th><?php echo $subtotal['loss_count']; ?></th>
+                                        <th><?php echo '$' . number_format($subtotal['total_sales'], 2); ?></th>
+                                        <th><?php echo '$' . number_format($subtotal['win_amount'], 2); ?></th>
+                                        <th><?php echo '$' . number_format($subtotal['loss_amount'], 2); ?></th>
+                                        <th>N/A</th>
+                                        <th><?php echo number_format($avg_win_rate, 2); ?>%</th>
+                                        <th>N/A</th>
+                                        <th>N/A</th>
+                                    </tr>
+                                </tfoot>
                             </table>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
         <!-- End of Content -->
@@ -127,11 +225,11 @@ $customers = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <!-- Custom scripts for all pages-->
 <script src="js/sb-admin-2.min.js"></script>
 
-<!-- Page level plugins -->
+<!-- DataTables -->
 <script src="vendor/datatables/jquery.dataTables.min.js"></script>
 <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
-<!-- Page level custom scripts -->
+<!-- Custom scripts for DataTables -->
 <script src="js/demo/datatables-demo.js"></script>
 
 </body>
