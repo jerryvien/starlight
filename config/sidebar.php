@@ -95,8 +95,8 @@
         <div id="collapseAgent" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Agent Operations:</h6>
-                <a class="collapse-item" href="customer_register.php">Create Agent</a>
-                <a class="collapse-item" href="customer_listing.php">Agent Listing</a>
+                <a class="collapse-item" href="agent_register.php">Create Agent</a>
+                <a class="collapse-item" href="agent_listing.php">Agent Listing</a>
                 <a class="collapse-item" href="agent_analysis.php">Agent Analysis</a>
             </div>
         </div>
