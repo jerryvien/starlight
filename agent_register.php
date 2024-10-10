@@ -2,8 +2,8 @@
 session_start();
 include('config/database.php'); // Include database connection
 
-// Redirect to login page if the user is not logged in
-if (!isset($_SESSION['admin'])) {
+// Check if the user is logged in and has a valid admin ID
+if (!isset($_SESSION['admin']) || !isset($_SESSION['admin_id'])) {
     header("Location: index.php");
     exit;
 }
@@ -101,12 +101,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                         <div class="form-group">
                             <label for="admin_id">Created By (Admin ID)</label>
-                            <input type="text" class="form-control" id="admin_id" name="admin_id" value="<?php echo $admin_id; ?>" readonly>
+                            <input type="text" class="form-control" id="admin_id" name="admin_id" value="<?php echo htmlspecialchars($admin_id); ?>" readonly>
                         </div>
 
                         <div class="form-group">
                             <label for="agent_id">Agent ID (Auto-Generated)</label>
-                            <input type="text" class="form-control" id="agent_id" name="agent_id" value="<?php echo $new_agent_id; ?>" readonly>
+                            <input type="text" class="form-control" id="agent_id" name="agent_id" value="<?php echo htmlspecialchars($new_agent_id); ?>" readonly>
                         </div>
 
                         <div class="form-group">
