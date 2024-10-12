@@ -8,6 +8,55 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+
+// Set default timezone to ensure consistency
+date_default_timezone_set('Asia/Singapore'); // GMT +8 timezone
+
+// Get current hour and minute in HH:MM format
+$current_time = date('H:i');
+
+// Define start and cutoff times
+$start_time = '00:00';
+$cutoff_time = '18:55';
+
+// Check if the current time is within the allowed range
+if ($current_time < $start_time || $current_time > $cutoff_time) {
+    // Deny access outside of allowed times
+    echo "<style>
+        .warning-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #ffdddd;
+            border: 2px solid #f44336;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            font-family: Arial, sans-serif;
+            text-align: center;
+            width: 80%;
+            max-width: 400px;
+            z-index: 1000;
+        }
+        .warning-popup h3 {
+            color: #f44336;
+            margin-bottom: 15px;
+        }
+        .warning-popup p {
+            color: #333;
+            font-size: 14px;
+        }
+    </style>
+    <div class='warning-popup'>
+        <h3>Access Denied</h3>
+        <p>The system is currently closed for transactions as the results are being populated.<br>
+        Page accessibility is available every day from 00:00 until 18:55.<br>
+        The current system time is: $current_time.<br>
+        The system time is final, and no exceptions will be accepted. Any record found with fraud or timezone manipulation will result in termination of agent rights, and the transaction will be void.</p>
+    </div>";
+    exit(); // Stop script execution after showing the message
+}
+
 // Redirect to login page if the user is not logged in
 if (!isset($_SESSION['admin'])) {
     header("Location: index.php");
