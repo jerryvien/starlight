@@ -17,7 +17,7 @@ $current_time = date('H:i');
 
 // Define start and cutoff times
 $start_time = '00:00';
-$cutoff_time = '10:55';
+$cutoff_time = '18:55';
 
 // Check if the current time is within the allowed range
 if ($current_time < $start_time || $current_time > $cutoff_time) {
