@@ -19,51 +19,15 @@ $current_time = date('H:i');
 $start_time = '00:00';
 $cutoff_time = '18:55';
 
-// Check if the current time is within the allowed range
-// Check if the current time is within the allowed range
+// Variable to determine if access is allowed
+$access_allowed = true;
+
 if ($current_time < $start_time || $current_time > $cutoff_time) {
-    // Deny access outside of allowed times
-    echo "<style>
-        .warning-popup {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #ffdddd;
-            border: 2px solid #f44336;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.5);
-            font-family: Arial, sans-serif;
-            text-align: center;
-            width: 80%;
-            max-width: 400px;
-            z-index: 1000;
-        }
-        .warning-popup h3 {
-            color: #f44336;
-            margin-bottom: 15px;
-        }
-        .warning-popup p {
-            color: #333;
-            font-size: 14px;
-            text-align: justify;
-        }
-        .warning-popup .footer {
-            margin-top: 15px;
-            font-size: 12px;
-            color: #777;
-        }
-    </style>
-    <div class='warning-popup'>
-        <h3>Access Denied</h3>
-        <p>The system is currently closed for transactions as the results are being populated.<br>
-        Page accessibility is available every day from <b>00:00</b> until <b>18:55</b>.<br>
-        The current system time is: <b>$current_time</b>.<br>
-        The system time is final, and no exceptions will be accepted. Any record found with fraud or timezone manipulation will result in termination of agent rights, and the transaction will be void.</p>
-        <div class='footer'>All rights reserved © 2024</div>
-    </div>";
-    exit(); // Stop script execution after showing the message
+    $access_allowed = false;
 }
+
+// Check if the current time is within the allowed range
+
 
 // Redirect to login page if the user is not logged in
 if (!isset($_SESSION['admin'])) {
@@ -211,95 +175,134 @@ function calculatePermutationFactor($purchase_no) {
             <div id="content">
                 <?php include('config/topbar.php'); ?>
 
-                <div class="container-fluid">
-                    <h1 class="h3 mb-4 text-gray-800">Purchase Record Entry</h1>
-                    
-                         <!-- Display success message if it exists -->
-                        <?php if (isset($_SESSION['success_message'])): ?>
-                        <div class="alert alert-success">
-                            <?php echo $_SESSION['success_message']; ?>
-                            <?php unset($_SESSION['success_message']); // Clear message after displaying ?>
-                        </div>
-                        <?php endif; ?>
-
-                    <!-- Customer Search and Display -->
-                    <form method="POST" action="purchase_entry.php">
-                        <div class="form-group">
-                            <label for="customer_search">Search Customer</label>
-                            <input type="text" class="form-control" id="customer_search" placeholder="Start typing to search..." onkeyup="filterCustomers()">
-                            <ul id="customer_list" class="list-group mt-2"></ul>
-                        </div>
-
-                        <!-- Agent Dropdown (only for super_admin) -->
-                        <?php if ($_SESSION['access_level'] === 'super_admin'): ?>
-                        <div class="form-group">
-                            <label for="agent_dropdown">Agent</label>
-                            <select id="agent_dropdown" class="form-control" name="agent_id" required>
-                                <option value="">Select Agent</option>
-                                <?php foreach ($agents as $agent): ?>
-                                    <option value="<?php echo $agent['agent_id']; ?>"><?php echo $agent['agent_name']; ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                        <?php endif; ?>
-
-                        <!-- Dynamic Purchase Entry Count Selection -->
-                        <div class="form-group">
-                            <label for="purchase_count">Number of Purchases</label>
-                            <select id="purchase_count" class="form-control" onchange="populatePurchaseEntries()" required>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                                <option value="7">7</option>
-                                <option value="8">8</option>
-                                <option value="9">9</option>
-                                <option value="10">10</option>
-                            </select>
-                        </div>
-
-                        <!-- Dynamic Purchase Entries -->
-                        <div id="purchase_entries_wrapper">
-                            <!-- Initially display 1 row by default -->
-                            <div class="form-group row">
-                                <div class="col-md-3">
-                                    <label for="purchase_no_0">Purchase Number</label>
-                                    <input type="text" class="form-control" name="purchase_no[]" id="purchase_no_0" pattern="\d{2,3}" title="Please enter a number with 2 or 3 digits" required>
-                                </div>
-                                <div class="col-md-2">
-                                    <label for="purchase_category_0">Category</label>
-                                    <select class="form-control" name="purchase_category[]" id="purchase_category_0" onchange="calculateTotalPrice(0)">
-                                        <option value="Box">Box</option>
-                                        <option value="Straight">Straight</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-3">
-                                    <label for="purchase_amount_0">Amount</label>
-                                    <input type="number" class="form-control" name="purchase_amount[]" id="purchase_amount_0" oninput="calculateTotalPrice(0)" required>
-                                </div>
-                                <div class="col-md-2">
-                                    <label for="total_price_0">Total Price</label>
-                                    <input type="text" class="form-control" name="total_price[]" id="total_price_0" readonly>
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="purchase_date_0">Purchase Date</label>
-                                    <input type="date" class="form-control" name="purchase_date[]" id="purchase_date_0" required>
-                                </div>
-
-                                <script>
-                                // Set the default date to today for the initial column
-                                const today = new Date().toISOString().split('T')[0];
-                                document.getElementById('purchase_date_0').value = today;
-                                </script>
+                <?php if (!$access_allowed): ?>
+                    <style>
+                        .warning-popup {
+                            margin: 50px auto;
+                            background-color: #ffdddd;
+                            border: 2px solid #f44336;
+                            padding: 20px;
+                            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+                            font-family: Arial, sans-serif;
+                            text-align: center;
+                            max-width: 600px;
+                            z-index: 1000;
+                        }
+                        .warning-popup h3 {
+                            color: #f44336;
+                            margin-bottom: 15px;
+                        }
+                        .warning-popup p {
+                            color: #333;
+                            font-size: 14px;
+                            text-align: justify;
+                        }
+                        .warning-popup .footer {
+                            margin-top: 15px;
+                            font-size: 12px;
+                            color: #777;
+                        }
+                    </style>
+                    <div class='warning-popup'>
+                        <h3>Access Denied</h3>
+                        <p>The system is currently closed for transactions as the results are being populated.<br>
+                        Page accessibility is available every day from <b>00:00</b> until <b>18:55</b>.<br>
+                        The current system time is: <b><?php echo $current_time; ?></b>.<br>
+                        The system time is final, and no exceptions will be accepted. Any record found with fraud or timezone manipulation will result in termination of agent rights, and the transaction will be void.</p>
+                        <div class='footer'>All rights reserved © 2024</div>
+                    </div>
+                
+                <?php else: ?>
+                    <div class="container-fluid">
+                        <h1 class="h3 mb-4 text-gray-800">Purchase Record Entry</h1>
+                        
+                            <!-- Display success message if it exists -->
+                            <?php if (isset($_SESSION['success_message'])): ?>
+                            <div class="alert alert-success">
+                                <?php echo $_SESSION['success_message']; ?>
+                                <?php unset($_SESSION['success_message']); // Clear message after displaying ?>
                             </div>
-                        </div>
+                            <?php endif; ?>
 
-                        <!-- Submit Button -->
-                        <button type="submit" class="btn btn-success mt-3">Submit Purchase Entry</button>
-                    </form>
-                </div>
+                        <!-- Customer Search and Display -->
+                        <form method="POST" action="purchase_entry.php">
+                            <div class="form-group">
+                                <label for="customer_search">Search Customer</label>
+                                <input type="text" class="form-control" id="customer_search" placeholder="Start typing to search..." onkeyup="filterCustomers()">
+                                <ul id="customer_list" class="list-group mt-2"></ul>
+                            </div>
+
+                            <!-- Agent Dropdown (only for super_admin) -->
+                            <?php if ($_SESSION['access_level'] === 'super_admin'): ?>
+                            <div class="form-group">
+                                <label for="agent_dropdown">Agent</label>
+                                <select id="agent_dropdown" class="form-control" name="agent_id" required>
+                                    <option value="">Select Agent</option>
+                                    <?php foreach ($agents as $agent): ?>
+                                        <option value="<?php echo $agent['agent_id']; ?>"><?php echo $agent['agent_name']; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <?php endif; ?>
+
+                            <!-- Dynamic Purchase Entry Count Selection -->
+                            <div class="form-group">
+                                <label for="purchase_count">Number of Purchases</label>
+                                <select id="purchase_count" class="form-control" onchange="populatePurchaseEntries()" required>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                </select>
+                            </div>
+
+                            <!-- Dynamic Purchase Entries -->
+                            <div id="purchase_entries_wrapper">
+                                <!-- Initially display 1 row by default -->
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <label for="purchase_no_0">Purchase Number</label>
+                                        <input type="text" class="form-control" name="purchase_no[]" id="purchase_no_0" pattern="\d{2,3}" title="Please enter a number with 2 or 3 digits" required>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label for="purchase_category_0">Category</label>
+                                        <select class="form-control" name="purchase_category[]" id="purchase_category_0" onchange="calculateTotalPrice(0)">
+                                            <option value="Box">Box</option>
+                                            <option value="Straight">Straight</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="purchase_amount_0">Amount</label>
+                                        <input type="number" class="form-control" name="purchase_amount[]" id="purchase_amount_0" oninput="calculateTotalPrice(0)" required>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label for="total_price_0">Total Price</label>
+                                        <input type="text" class="form-control" name="total_price[]" id="total_price_0" readonly>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="purchase_date_0">Purchase Date</label>
+                                        <input type="date" class="form-control" name="purchase_date[]" id="purchase_date_0" required>
+                                    </div>
+
+                                    <script>
+                                    // Set the default date to today for the initial column
+                                    const today = new Date().toISOString().split('T')[0];
+                                    document.getElementById('purchase_date_0').value = today;
+                                    </script>
+                                </div>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <button type="submit" class="btn btn-success mt-3">Submit Purchase Entry</button>
+                        </form>
+                    </div>
+                <?php endif; ?>
             </div>
 
             <?php include('config/footer.php'); ?>
