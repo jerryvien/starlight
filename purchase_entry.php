@@ -20,6 +20,7 @@ $start_time = '00:00';
 $cutoff_time = '18:55';
 
 // Check if the current time is within the allowed range
+// Check if the current time is within the allowed range
 if ($current_time < $start_time || $current_time > $cutoff_time) {
     // Deny access outside of allowed times
     echo "<style>
@@ -45,14 +46,21 @@ if ($current_time < $start_time || $current_time > $cutoff_time) {
         .warning-popup p {
             color: #333;
             font-size: 14px;
+            text-align: justify;
+        }
+        .warning-popup .footer {
+            margin-top: 15px;
+            font-size: 12px;
+            color: #777;
         }
     </style>
     <div class='warning-popup'>
         <h3>Access Denied</h3>
         <p>The system is currently closed for transactions as the results are being populated.<br>
-        Page accessibility is available every day from 00:00 until 18:55.<br>
-        The current system time is: $current_time.<br>
+        Page accessibility is available every day from <b>00:00</b> until <b>18:55</b>.<br>
+        The current system time is: <b>$current_time</b>.<br>
         The system time is final, and no exceptions will be accepted. Any record found with fraud or timezone manipulation will result in termination of agent rights, and the transaction will be void.</p>
+        <div class='footer'>All rights reserved © 2024</div>
     </div>";
     exit(); // Stop script execution after showing the message
 }
