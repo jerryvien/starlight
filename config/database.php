@@ -10,7 +10,10 @@ try {
     $conn = new PDO("mysql:host=$host;dbname=$db", $user, $pass);
     // Set the PDO error mode to exception
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    
+
+    // Set the time zone for the current session to Malaysia time (GMT+8)
+    $conn->exec("SET time_zone = '+08:00'");
+
     // Optional: Uncomment the following line to debug successful connection
     // echo "Connected successfully";
 } catch (PDOException $e) {
