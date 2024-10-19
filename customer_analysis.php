@@ -137,7 +137,7 @@ $total_purchases = $win_count + $loss_count;
                                 <h6 class="m-0 font-weight-bold text-primary">Customers</h6>
                             </div>
                             <div class="card-body">
-                                <div class="">
+                                <div class="table-responsive">
                                     <form method="POST">
                                         <table id="customerTable" class="table table-bordered" width="100%" cellspacing="0">
                                             <thead>
