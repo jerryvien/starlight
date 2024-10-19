@@ -170,7 +170,7 @@ if ($total_transactions > 0) {
                         <h6 class="m-0 font-weight-bold text-primary">Win/Loss Analysis</h6>
                     </div>
                     <div class="card-body">
-                        <div class="">
+                        <div class="table-responsive">
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                             <thead>
                                 <tr>
