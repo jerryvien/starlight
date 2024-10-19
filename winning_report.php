@@ -328,7 +328,7 @@ function generate_combinations($number) {
                     <div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold text-primary">Winning Record Entries</h6>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body table-responsive">
                         <table id="winningRecordsTable" class="table table-bordered" width="100%" cellspacing="0">
                             <thead>
                                 <tr>
