@@ -259,7 +259,7 @@ function generate_combinations($number) {
                     <div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold text-primary">Matched Purchase Entries</h6>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body table-responsive">
                         <form method="POST">
                             <input type="hidden" name="winning_record_id" value="<?php echo $winning_record['id']; ?>">
                             <input type="hidden" name="matching_purchases" value="<?php echo $serialized_purchases; ?>">
