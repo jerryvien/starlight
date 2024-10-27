@@ -58,6 +58,14 @@ if ($_SESSION['access_level'] === 'super_admin') {
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $customer_id = $_POST['customer_id'];
+    $customer_name = '';
+    foreach ($customers as $customer) {
+        if ($customer['customer_id'] == $customer_id) {
+            $customer_name = $customer['customer_name'];
+            break;
+        }
+    }
+
     $purchase_entries = $_POST['purchase_no'];
     $purchase_category = $_POST['purchase_category'];
     $purchase_amount = $_POST['purchase_amount'];
@@ -65,6 +73,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Set agent ID based on access level
     $agent_id_to_save = ($_SESSION['access_level'] === 'super_admin') ? $_POST['agent_id'] : $_SESSION['agent_id'];
+    $agent_name = '';
+    foreach ($agents as $agent) {
+        if ($agent['agent_id'] == $agent_id_to_save) {
+            $agent_name = $agent['agent_name'];
+            break;
+        }
+    }
 
     $purchaseDetails = [];
     $subtotal = 0;
@@ -137,7 +152,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $_SESSION['success_message'] = "Purchase entries added successfully with serial number: $serial_number";
 
     // Call the generateReceiptPopup function to show the receipt
-    generateReceiptPopup($customers[0]['customer_name'], $purchaseDetails, $subtotal, $_SESSION['admin'], $serial_number);
+    generateReceiptPopup($customer_name, $purchaseDetails, $subtotal, $agent_name, $serial_number);
 }
 
 // Function to calculate permutation factor for "Box"
