@@ -29,11 +29,12 @@ function getUserIP() {
 function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agentName, $serialNumber) {
     $transactionDateTime = date('Y-m-d H:i:s');
 
-    // Start building the receipt HTML content
+    // Build the receipt HTML content
     $receiptContent = "
         <html>
         <head>
             <title>Receipt</title>
+            <script src='https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js'></script>
             <style>
                 body {
                     font-family: Arial, sans-serif;
@@ -78,15 +79,15 @@ function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agent
             </style>
         </head>
         <body>
-            <div class=\"receipt-container\">
-                <div class=\"header\">Receipt</div>
-                <div class=\"content\">
+            <div class='receipt-container'>
+                <div class='header'>Receipt</div>
+                <div class='content'>
                     <strong>Customer Name:</strong> {$customerName}<br>
                     <strong>Agent Name:</strong> {$agentName}<br>
                     <strong>Serial Number:</strong> {$serialNumber}<br>
                     <strong>Transaction Date and Time:</strong> {$transactionDateTime}<br>
                 </div>
-                <table>
+                <table id='receiptTable'>
                     <thead>
                         <tr>
                             <th>Purchase Number</th>
@@ -98,7 +99,7 @@ function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agent
                     <tbody>
     ";
 
-    // Loop through purchase details to add rows to the table
+    // Add purchase details rows
     foreach ($purchaseDetails as $detail) {
         $receiptContent .= "
             <tr>
@@ -110,18 +111,45 @@ function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agent
         ";
     }
 
-    // Add the subtotal and footer to the receipt
+    // Add the subtotal and footer
     $receiptContent .= "
                     </tbody>
                 </table>
-                <div class=\"content\">
+                <div class='content'>
                     <strong>Subtotal:</strong> $" . number_format($subtotal, 2) . "
                 </div>
-                <div class=\"footer\">
+                <div class='footer'>
                     All rights reserved © 2024
                 </div>
             </div>
-        </body>
+            <script>
+                window.onload = function() {
+                    // Use HTML2Canvas to capture the table and convert it to JPG
+                    html2canvas(document.getElementById('receiptTable')).then(function(canvas) {
+                        // Convert canvas to data URL in JPEG format
+                        var imgData = canvas.toDataURL('image/jpeg', 0.8);
+                        
+                        // Prepare data to send to the server
+                        var formData = new FormData();
+                        formData.append('img', imgData);
+                        formData.append('serial', '<?php echo $serialNumber; ?>');
+                        formData.append('agent', '<?php echo $agentName; ?>');
+                        formData.append('customer', '<?php echo $customerName; ?>');
+                        formData.append('purchase_date', '<?php echo date("Ymd", strtotime($transactionDateTime)); ?>');
+
+                        // Send the image to the server
+                        var xhr = new XMLHttpRequest();
+                        xhr.open('POST', 'save_image.php', true);
+                        xhr.onreadystatechange = function() {
+                            if (xhr.readyState == 4 && xhr.status == 200) {
+                                alert('Receipt table saved as a JPG image!');
+                            }
+                        };
+                        xhr.send(formData);
+                    });
+                };
+            </script>
+
         </html>
     ";
 
