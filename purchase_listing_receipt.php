@@ -22,7 +22,9 @@ $agent_filter = ($_SESSION['access_level'] === 'agent') ? $_SESSION['agent_id'] 
 
 // Fetch purchase entries grouped by serial number
 try {
-    $query = "SELECT serial_number, customer_id, agent_id, purchase_datetime, GROUP_CONCAT(purchase_no SEPARATOR ', ') as purchase_details, SUM(purchase_amount) as subtotal FROM purchase_entries";
+    $query = "SELECT serial_number, customer_id, agent_id, purchase_datetime, 
+              GROUP_CONCAT(purchase_no SEPARATOR ', ') as purchase_details, 
+              SUM(purchase_amount) as subtotal FROM purchase_entries";
     if ($agent_filter) {
         $query .= " WHERE agent_id = :agent_id";
     }
@@ -143,7 +145,12 @@ try {
                                             <td><?php echo htmlspecialchars($entry['purchase_details']); ?></td>
                                             <td>$<?php echo number_format($entry['subtotal'], 2); ?></td>
                                             <td>
-                                                <button type="button" class="btn btn-info" onclick="showReceiptPopup('<?php echo addslashes($entry['customer_id']); ?>', '<?php echo addslashes($entry['purchase_details']); ?>', '<?php echo number_format($entry['subtotal'], 2); ?>', '<?php echo addslashes($entry['agent_id']); ?>', '<?php echo addslashes($entry['serial_number']); ?>')">Reprint Receipt</button>
+                                                <button type="button" class="btn btn-info" 
+                                                        onclick="showReceiptPopup('<?php echo addslashes($entry['customer_id']); ?>', 
+                                                                                  '<?php echo addslashes($entry['purchase_details']); ?>', 
+                                                                                  '<?php echo number_format($entry['subtotal'], 2); ?>', 
+                                                                                  '<?php echo addslashes($entry['agent_id']); ?>', 
+                                                                                  '<?php echo addslashes($entry['serial_number']); ?>')">Reprint Receipt</button>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
@@ -153,7 +160,6 @@ try {
                     </div>
                 </div>
             </div>
-            <!-- End of Content -->
 
             <!-- Footer -->
             <?php include('config/footer.php'); ?>
@@ -205,9 +211,57 @@ try {
             });
         });
 
+        // Function to show receipt popup
         function showReceiptPopup(customerName, purchaseDetails, subtotal, agentName, serialNumber) {
-            // Call the utility function to generate the receipt popup
             generateReceiptPopup(customerName, purchaseDetails, subtotal, agentName, serialNumber);
+        }
+
+        // Generate the receipt popup
+        function generateReceiptPopup(customerName, purchaseDetails, subtotal, agentName, serialNumber) {
+            const receiptContent = `
+                <div class="modal fade" id="receiptModal" tabindex="-1" role="dialog" aria-labelledby="receiptModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="receiptModalLabel">Receipt for Serial Number: ${serialNumber}</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p><strong>Customer Name:</strong> ${customerName}</p>
+                                <p><strong>Agent Name:</strong> ${agentName}</p>
+                                <p><strong>Purchase Details:</strong> ${purchaseDetails}</p>
+                                <p><strong>Subtotal:</strong> $${subtotal}</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary" onclick="downloadReceipt('${serialNumber}')">Download Receipt</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Append the modal to the body and show it
+            $('body').append(receiptContent);
+            $('#receiptModal').modal('show');
+
+            // Remove the modal from the DOM after hiding it to avoid duplicates
+            $('#receiptModal').on('hidden.bs.modal', function() {
+                $(this).remove();
+            });
+        }
+
+        // Function to download the receipt as a text file
+        function downloadReceipt(serialNumber) {
+            const receiptText = `Receipt for Serial Number: ${serialNumber}\n\nCustomer Name: ${customerName}\nAgent Name: ${agentName}\nPurchase Details: ${purchaseDetails}\nSubtotal: $${subtotal}`;
+            
+            const blob = new Blob([receiptText], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = `Receipt_${serialNumber}.txt`;
+            link.click();
         }
     </script>
 </body>
