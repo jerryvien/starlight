@@ -135,7 +135,7 @@ function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agent
                         formData.append('serial', '<?php echo $serialNumber; ?>');
                         formData.append('agent', '<?php echo $agentName; ?>');
                         formData.append('customer', '<?php echo $customerName; ?>');
-                        formData.append('purchase_date', '<?php echo date("Ymd", strtotime($transactionDateTime)); ?>');
+                        formData.append('purchase_date', '<?php echo date('Ymd', strtotime($transactionDateTime)); ?>');
 
                         // Send the image to the server
                         var xhr = new XMLHttpRequest();
