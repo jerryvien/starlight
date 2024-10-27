@@ -20,15 +20,44 @@ if (!isset($_SESSION['admin'])) {
 // Fetch agent filter if the user is an agent
 $agent_filter = ($_SESSION['access_level'] === 'agent') ? $_SESSION['agent_id'] : null;
 
-// Fetch purchase entries grouped by serial number
-try {
-    $query = "SELECT serial_number, customer_id, agent_id, purchase_datetime, 
-              GROUP_CONCAT(purchase_no SEPARATOR ', ') as purchase_details, 
-              SUM(purchase_amount) as subtotal FROM purchase_entries";
-    if ($agent_filter) {
-        $query .= " WHERE agent_id = :agent_id";
+// Handle AJAX request to generate receipt
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'generate_receipt') {
+    $customerName = $_POST['customer_name'];
+    $purchaseDetails = explode(', ', $_POST['purchase_details']);
+    $subtotal = $_POST['subtotal'];
+    $agentName = $_POST['agent_name'];
+    $serialNumber = $_POST['serial_number'];
+
+    // Format purchase details as an array of arrays for the receipt table
+    $purchaseDetailsFormatted = [];
+    foreach ($purchaseDetails as $detail) {
+        $purchaseDetailsFormatted[] = [
+            'number' => $detail,
+            'category' => 'N/A', // Add appropriate category here
+            'date' => 'N/A', // Add purchase date here
+            'amount' => 'N/A' // Add amount here
+        ];
     }
-    $query .= " GROUP BY serial_number ORDER BY purchase_datetime DESC";
+
+    // Call the function to generate the receipt popup
+    generateReceiptPopup($customerName, $purchaseDetailsFormatted, $subtotal, $agentName, $serialNumber);
+    exit; // End the script after generating the receipt
+}
+
+// Fetch purchase entries with customer and agent names
+try {
+    $query = "
+        SELECT pe.serial_number, c.customer_name, aa.agent_name, pe.purchase_datetime,
+               GROUP_CONCAT(pe.purchase_no SEPARATOR ', ') as purchase_details,
+               SUM(pe.purchase_amount) as subtotal
+        FROM purchase_entries pe
+        JOIN customers c ON pe.customer_id = c.customer_id
+        JOIN admin_access aa ON pe.agent_id = aa.agent_id
+    ";
+    if ($agent_filter) {
+        $query .= " WHERE pe.agent_id = :agent_id";
+    }
+    $query .= " GROUP BY pe.serial_number ORDER BY pe.purchase_datetime DESC";
 
     $stmt = $conn->prepare($query);
     if ($agent_filter) {
@@ -38,6 +67,115 @@ try {
     $purchase_entries = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (Exception $e) {
     die("Error fetching purchase entries: " . $e->getMessage());
+}
+
+// Function to generate the receipt popup
+function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agentName, $serialNumber) {
+    $transactionDateTime = date('Y-m-d H:i:s');
+
+    // Start building the receipt HTML content
+    $receiptContent = "
+        <html>
+        <head>
+            <title>Receipt</title>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    line-height: 1.6;
+                    margin: 20px;
+                }
+                .receipt-container {
+                    max-width: 500px;
+                    margin: auto;
+                    padding: 20px;
+                    border: 1px solid #ddd;
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                }
+                .header {
+                    text-align: center;
+                    font-weight: bold;
+                    font-size: 18px;
+                    margin-bottom: 20px;
+                }
+                .content {
+                    margin-bottom: 15px;
+                }
+                .footer {
+                    text-align: center;
+                    margin-top: 20px;
+                    font-size: 12px;
+                    color: #777;
+                }
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin-bottom: 15px;
+                }
+                table, th, td {
+                    border: 1px solid #ddd;
+                    padding: 8px;
+                }
+                th {
+                    background-color: #f4f4f4;
+                    text-align: left;
+                }
+            </style>
+        </head>
+        <body>
+            <div class=\"receipt-container\">
+                <div class=\"header\">Receipt</div>
+                <div class=\"content\">
+                    <strong>Customer Name:</strong> {$customerName}<br>
+                    <strong>Agent Name:</strong> {$agentName}<br>
+                    <strong>Serial Number:</strong> {$serialNumber}<br>
+                    <strong>Transaction Date and Time:</strong> {$transactionDateTime}<br>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Purchase Number</th>
+                            <th>Category</th>
+                            <th>Purchase Date</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+    ";
+
+    // Loop through purchase details to add rows to the table
+    foreach ($purchaseDetails as $detail) {
+        $receiptContent .= "
+            <tr>
+                <td>{$detail['number']}</td>
+                <td>{$detail['category']}</td>
+                <td>{$detail['date']}</td>
+                <td>$" . number_format($detail['amount'], 2) . "</td>
+            </tr>
+        ";
+    }
+
+    // Add the subtotal and footer to the receipt
+    $receiptContent .= "
+                    </tbody>
+                </table>
+                <div class=\"content\">
+                    <strong>Subtotal:</strong> $" . number_format($subtotal, 2) . "
+                </div>
+                <div class=\"footer\">
+                    All rights reserved © 2024
+                </div>
+            </div>
+        </body>
+        </html>
+    ";
+
+    // Generate the popup script
+    echo "<script type='text/javascript'>
+        var popupWindow = window.open('', 'Receipt', 'width=600,height=700');
+        popupWindow.document.open();
+        popupWindow.document.write(`" . addslashes($receiptContent) . "`);
+        popupWindow.document.close();
+    </script>";
 }
 ?>
 
@@ -56,9 +194,6 @@ try {
     <script src="js/sb-admin-2.min.js"></script>
     <script src="vendor/datatables/jquery.dataTables.min.js"></script>
     <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" rel="stylesheet" type="text/css">
-    <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 </head>
 <body>
 <div id="wrapper">
@@ -75,48 +210,6 @@ try {
             <div class="container-fluid">
                 <h1 class="h3 mb-4 text-gray-800">Purchase Entries Grouped by Serial Number</h1>
 
-                <!-- Filters -->
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <h6 class="m-0 font-weight-bold text-primary">Filters</h6>
-                    </div>
-                    <div class="card-body">
-                        <form id="filterForm">
-                            <div class="row">
-                                <?php if ($_SESSION['access_level'] === 'super_admin'): ?>
-                                    <div class="col-md-4">
-                                        <label for="agentFilter">Agent</label>
-                                        <select id="agentFilter" class="form-control" name="agent_id">
-                                            <option value="">All Agents</option>
-                                            <?php
-                                            // Fetch agents for filter
-                                            $stmt = $conn->query("SELECT agent_id, agent_name FROM admin_access");
-                                            $agents = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                                            foreach ($agents as $agent) {
-                                                echo '<option value="' . $agent['agent_id'] . '">' . htmlspecialchars($agent['agent_name']) . '</option>';
-                                            }
-                                            ?>
-                                        </select>
-                                    </div>
-                                <?php endif; ?>
-                                <div class="col-md-4">
-                                    <label for="purchaseDateFilter">Purchase Date</label>
-                                    <input type="text" id="purchaseDateFilter" class="form-control" name="purchase_date" placeholder="Select Date Range">
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="purchaseNumberFilter">Purchase Number</label>
-                                    <input type="text" id="purchaseNumberFilter" class="form-control" name="purchase_number" placeholder="Enter Purchase Number">
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-12 text-right">
-                                    <button type="button" id="applyFilter" class="btn btn-primary">Apply Filters</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold text-primary">Purchase Entries</h6>
@@ -127,8 +220,8 @@ try {
                                 <thead>
                                     <tr>
                                         <th>Serial Number</th>
-                                        <th>Customer ID</th>
-                                        <th>Agent ID</th>
+                                        <th>Customer Name</th>
+                                        <th>Agent Name</th>
                                         <th>Purchase Date</th>
                                         <th>Purchase Details</th>
                                         <th>Subtotal</th>
@@ -139,18 +232,18 @@ try {
                                     <?php foreach ($purchase_entries as $entry): ?>
                                         <tr>
                                             <td><?php echo htmlspecialchars($entry['serial_number']); ?></td>
-                                            <td><?php echo htmlspecialchars($entry['customer_id']); ?></td>
-                                            <td><?php echo htmlspecialchars($entry['agent_id']); ?></td>
+                                            <td><?php echo htmlspecialchars($entry['customer_name']); ?></td>
+                                            <td><?php echo htmlspecialchars($entry['agent_name']); ?></td>
                                             <td><?php echo date('d-M-Y', strtotime($entry['purchase_datetime'])); ?></td>
                                             <td><?php echo htmlspecialchars($entry['purchase_details']); ?></td>
                                             <td>$<?php echo number_format($entry['subtotal'], 2); ?></td>
                                             <td>
                                                 <button type="button" class="btn btn-info" 
-                                                        onclick="showReceiptPopup('<?php echo addslashes($entry['customer_id']); ?>', 
-                                                                                  '<?php echo addslashes($entry['purchase_details']); ?>', 
-                                                                                  '<?php echo number_format($entry['subtotal'], 2); ?>', 
-                                                                                  '<?php echo addslashes($entry['agent_id']); ?>', 
-                                                                                  '<?php echo addslashes($entry['serial_number']); ?>')">Reprint Receipt</button>
+                                                        onclick="reprintReceipt('<?php echo addslashes($entry['customer_name']); ?>', 
+                                                                                 '<?php echo addslashes($entry['purchase_details']); ?>', 
+                                                                                 '<?php echo number_format($entry['subtotal'], 2); ?>', 
+                                                                                 '<?php echo addslashes($entry['agent_name']); ?>', 
+                                                                                 '<?php echo addslashes($entry['serial_number']); ?>')">Reprint Receipt</button>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
@@ -164,104 +257,29 @@ try {
             <!-- Footer -->
             <?php include('config/footer.php'); ?>
         </div>
-        <!-- End of Content Wrapper -->
     </div>
-    <!-- End of Wrapper -->
 
     <script>
-        $(document).ready(function() {
-            $('#dataTable').DataTable({
-                "paging": true,
-                "searching": true,
-                "ordering": true,
-                "pageLength": 10
-            });
-
-            $('#purchaseDateFilter').daterangepicker({
-                locale: {
-                    format: 'YYYY-MM-DD'
+        // AJAX call to generate the receipt
+        function reprintReceipt(customerName, purchaseDetails, subtotal, agentName, serialNumber) {
+            $.ajax({
+                url: '',
+                type: 'POST',
+                data: {
+                    action: 'generate_receipt',
+                    customer_name: customerName,
+                    purchase_details: purchaseDetails,
+                    subtotal: subtotal,
+                    agent_name: agentName,
+                    serial_number: serialNumber
                 },
-                autoUpdateInput: false
+                success: function(response) {
+                    $('body').append(response);
+                },
+                error: function(xhr, status, error) {
+                    alert('Error: ' + error);
+                }
             });
-
-            $('#purchaseDateFilter').on('apply.daterangepicker', function(ev, picker) {
-                $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
-            });
-
-            $('#applyFilter').on('click', function() {
-                const agentId = $('#agentFilter').val();
-                const purchaseDate = $('#purchaseDateFilter').val();
-                const purchaseNumber = $('#purchaseNumberFilter').val();
-
-                $.ajax({
-                    url: 'fetch_filtered_data.php',
-                    type: 'POST',
-                    data: {
-                        agent_id: agentId,
-                        purchase_date: purchaseDate,
-                        purchase_number: purchaseNumber
-                    },
-                    success: function(response) {
-                        $('#dataBody').html(response);
-                    },
-                    error: function(xhr, status, error) {
-                        alert('Error: ' + error);
-                    }
-                });
-            });
-        });
-
-        // Function to show receipt popup
-        function showReceiptPopup(customerName, purchaseDetails, subtotal, agentName, serialNumber) {
-            generateReceiptPopup(customerName, purchaseDetails, subtotal, agentName, serialNumber);
-        }
-
-        // Generate the receipt popup
-        function generateReceiptPopup(customerName, purchaseDetails, subtotal, agentName, serialNumber) {
-            const receiptContent = `
-                <div class="modal fade" id="receiptModal" tabindex="-1" role="dialog" aria-labelledby="receiptModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="receiptModalLabel">Receipt for Serial Number: ${serialNumber}</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <p><strong>Customer Name:</strong> ${customerName}</p>
-                                <p><strong>Agent Name:</strong> ${agentName}</p>
-                                <p><strong>Purchase Details:</strong> ${purchaseDetails}</p>
-                                <p><strong>Subtotal:</strong> $${subtotal}</p>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary" onclick="downloadReceipt('${serialNumber}')">Download Receipt</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            // Append the modal to the body and show it
-            $('body').append(receiptContent);
-            $('#receiptModal').modal('show');
-
-            // Remove the modal from the DOM after hiding it to avoid duplicates
-            $('#receiptModal').on('hidden.bs.modal', function() {
-                $(this).remove();
-            });
-        }
-
-        // Function to download the receipt as a text file
-        function downloadReceipt(serialNumber) {
-            const receiptText = `Receipt for Serial Number: ${serialNumber}\n\nCustomer Name: ${customerName}\nAgent Name: ${agentName}\nPurchase Details: ${purchaseDetails}\nSubtotal: $${subtotal}`;
-            
-            const blob = new Blob([receiptText], { type: 'text/plain' });
-            const link = document.createElement('a');
-            link.href = window.URL.createObjectURL(blob);
-            link.download = `Receipt_${serialNumber}.txt`;
-            link.click();
         }
     </script>
 </body>
