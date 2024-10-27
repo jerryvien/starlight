@@ -273,7 +273,7 @@ function calculatePermutationFactor($purchase_no) {
                                 <div class="form-group row">
                                     <div class="col-md-3">
                                         <label for="purchase_no_0">Purchase Number</label>
-                                        <input type="text" class="form-control" name="purchase_no[]" id="purchase_no_0" pattern="\d{2,3}" title="Please enter a number with 2 or 3 digits" required>
+                                        <input type="text" class="form-control" name="purchase_no[]" id="purchase_no_0" " title="Please enter a number with 2 or 3 digits" required>
                                     </div>
                                     <div class="col-md-2">
                                         <label for="purchase_category_0">Category</label>
@@ -363,7 +363,7 @@ function calculatePermutationFactor($purchase_no) {
                 col1.classList.add('col-md-3');
                 col1.innerHTML = `
                     <label for="purchase_no_${i}">Purchase Number</label>
-                    <input type="text" class="form-control" name="purchase_no[]" id="purchase_no_${i}" pattern="\d{2,3}" title="Please enter a number with 2 or 3 digits" required>
+                    <input type="text" class="form-control" name="purchase_no[]" id="purchase_no_${i}" " title="Please enter a number with 2 or 3 digits" required>
                 `;
                 
                 // Purchase Category Field
