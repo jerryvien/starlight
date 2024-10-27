@@ -82,7 +82,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         $subtotal += $total_price;
-        $purchaseDetails[] = [ 'number' => $purchase_entries[$i], 'amount' => $total_price ];
+        $purchaseDetails[] = [
+            'number' => $purchase_entries[$i], 
+            'category' => $purchase_category[$i],
+            'amount' => $total_price,
+            'date' => $purchase_date[$i]
+        ];
 
         $sql = "INSERT INTO purchase_entries (customer_id, agent_id, purchase_no, purchase_category, purchase_amount, purchase_datetime, serial_number) 
                 VALUES (:customer_id, :agent_id, :purchase_no, :purchase_category, :purchase_amount, :purchase_datetime, :serial_number)";
@@ -132,7 +137,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $_SESSION['success_message'] = "Purchase entries added successfully with serial number: $serial_number";
 
     // Call the generateReceiptPopup function to show the receipt
-    generateReceiptPopup($customers[0]['customer_name'], $purchaseDetails, $subtotal, $_SESSION['admin'], $serial_number, date('Y-m-d'));
+    generateReceiptPopup($customers[0]['customer_name'], $purchaseDetails, $subtotal, $_SESSION['admin'], $serial_number);
 }
 
 // Function to calculate permutation factor for "Box"
@@ -466,7 +471,7 @@ function calculatePermutationFactor($purchase_no) {
 </html>
 
 <?php
-function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agentName, $serialNumber, $purchaseDate) {
+function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agentName, $serialNumber) {
     $transactionDateTime = date('Y-m-d H:i:s');
 
     // Start building the receipt HTML content
@@ -524,13 +529,14 @@ function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agent
                     <strong>Customer Name:</strong> {$customerName}<br>
                     <strong>Agent Name:</strong> {$agentName}<br>
                     <strong>Serial Number:</strong> {$serialNumber}<br>
-                    <strong>Purchase Date:</strong> {$purchaseDate}<br>
                     <strong>Transaction Date and Time:</strong> {$transactionDateTime}<br>
                 </div>
                 <table>
                     <thead>
                         <tr>
                             <th>Purchase Number</th>
+                            <th>Category</th>
+                            <th>Purchase Date</th>
                             <th>Amount</th>
                         </tr>
                     </thead>
@@ -542,6 +548,8 @@ function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agent
         $receiptContent .= "
             <tr>
                 <td>{$detail['number']}</td>
+                <td>{$detail['category']}</td>
+                <td>{$detail['date']}</td>
                 <td>$" . number_format($detail['amount'], 2) . "</td>
             </tr>
         ";
