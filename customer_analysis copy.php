@@ -50,13 +50,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['select_customer'])) {
 }
 
 // Fetch selected customer details with total win and loss amount
-$stmt = $conn->prepare("SELECT cd.*, a.agent_name, MAX(pe.purchase_datetime) AS last_purchase, MAX(CASE WHEN pe.result = 'Win' THEN pe.purchase_datetime ELSE NULL END) AS last_win, SUM(CASE WHEN pe.result = 'Win' THEN pe.winning_amount ELSE 0 END) AS total_win_amount, SUM(CASE WHEN pe.result = 'Loss' THEN pe.purchase_amount ELSE 0 END) AS total_loss_amount FROM customer_details cd LEFT JOIN purchase_entries pe ON cd.customer_id = pe.customer_id LEFT JOIN admin_access a ON a.agent_id = cd.agent_id WHERE cd.customer_id = :customer_id GROUP BY cd.customer_id");
+$stmt = $conn->prepare("
+    SELECT cd.*, a.agent_name, 
+           MAX(pe.purchase_datetime) AS last_purchase, 
+           MAX(CASE WHEN pe.result = 'Win' THEN pe.purchase_datetime ELSE NULL END) AS last_win, 
+           SUM(CASE WHEN pe.result = 'Win' THEN pe.winning_amount ELSE 0 END) AS total_win_amount, 
+           SUM(CASE WHEN pe.result = 'Loss' THEN pe.purchase_amount ELSE 0 END) AS total_loss_amount 
+    FROM customer_details cd 
+    LEFT JOIN purchase_entries pe ON cd.customer_id = pe.customer_id 
+    LEFT JOIN admin_access a ON a.agent_id = cd.agent_id 
+    WHERE cd.customer_id = :customer_id 
+    GROUP BY cd.customer_id
+");
 $stmt->bindParam(':customer_id', $customer_id);
 $stmt->execute();
 $selected_customer = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Fetch related purchase entries
-$stmt = $conn->prepare("SELECT pe.*, a.agent_name FROM purchase_entries pe LEFT JOIN admin_access a ON a.agent_id = pe.agent_id WHERE pe.customer_id = :customer_id");
+$stmt = $conn->prepare("
+    SELECT pe.*, a.agent_name 
+    FROM purchase_entries pe
+    LEFT JOIN admin_access a ON a.agent_id = pe.agent_id
+    WHERE pe.customer_id = :customer_id
+");
 $stmt->bindParam(':customer_id', $customer_id);
 $stmt->execute();
 $related_purchases = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -222,7 +238,6 @@ $total_purchases = $win_count + $loss_count;
                                         <th>Agent Name</th>
                                         <th>Result</th>
                                         <th>Winning Amount</th>
-                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -242,9 +257,6 @@ $total_purchases = $win_count + $loss_count;
                                             <td><?php echo $purchase['agent_name'] ?? 'N/A'; ?></td>
                                             <td><?php echo $purchase['result']; ?></td>
                                             <td>$<?php echo number_format($purchase['winning_amount'] ?? 0, 2); ?></td>
-                                            <td>
-                                                <button type="button" class="btn btn-info" onclick="generateReceiptPopup(<?php echo htmlspecialchars(json_encode($purchase)); ?>)">Reprint Receipt</button>
-                                            </td>
                                         </tr>
                                     <?php endforeach; ?>
                                 </tbody>
@@ -366,27 +378,6 @@ $total_purchases = $win_count + $loss_count;
             data: trendData,
         });
     });
-
-    function generateReceiptPopup(purchase) {
-        var receiptWindow = window.open('', '_blank', 'width=600,height=400');
-        receiptWindow.document.write('<html><head><title>Receipt</title>');
-        receiptWindow.document.write('<link rel="stylesheet" href="css/sb-admin-2.min.css">');
-        receiptWindow.document.write('</head><body>');
-        receiptWindow.document.write('<div class="container mt-4">');
-        receiptWindow.document.write('<h3 class="text-center">Receipt</h3>');
-        receiptWindow.document.write('<ul class="list-group">');
-        receiptWindow.document.write('<li class="list-group-item"><strong>Customer Name: </strong>' + purchase.customer_name + '</li>');
-        receiptWindow.document.write('<li class="list-group-item"><strong>Agent Name: </strong>' + purchase.agent_name + '</li>');
-        receiptWindow.document.write('<li class="list-group-item"><strong>Purchase No: </strong>' + purchase.purchase_no + '</li>');
-        receiptWindow.document.write('<li class="list-group-item"><strong>Purchase Amount: </strong>$' + parseFloat(purchase.purchase_amount).toFixed(2) + '</li>');
-        receiptWindow.document.write('<li class="list-group-item"><strong>Purchase Date: </strong>' + new Date(purchase.purchase_datetime).toLocaleDateString() + '</li>');
-        receiptWindow.document.write('<li class="list-group-item"><strong>Result: </strong>' + purchase.result + '</li>');
-        receiptWindow.document.write('<li class="list-group-item"><strong>Winning Amount: </strong>$' + parseFloat(purchase.winning_amount ?? 0).toFixed(2) + '</li>');
-        receiptWindow.document.write('</ul>');
-        receiptWindow.document.write('</div>');
-        receiptWindow.document.write('</body></html>');
-        receiptWindow.document.close();
-    }
     </script>
 </body>
 </html>
