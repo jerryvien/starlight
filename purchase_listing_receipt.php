@@ -54,6 +54,9 @@ try {
     <script src="js/sb-admin-2.min.js"></script>
     <script src="vendor/datatables/jquery.dataTables.min.js"></script>
     <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" rel="stylesheet" type="text/css">
+    <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 </head>
 <body>
 <div id="wrapper">
@@ -69,6 +72,49 @@ try {
 
             <div class="container-fluid">
                 <h1 class="h3 mb-4 text-gray-800">Purchase Entries Grouped by Serial Number</h1>
+
+                <!-- Filters -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h6 class="m-0 font-weight-bold text-primary">Filters</h6>
+                    </div>
+                    <div class="card-body">
+                        <form id="filterForm">
+                            <div class="row">
+                                <?php if ($_SESSION['access_level'] === 'super_admin'): ?>
+                                    <div class="col-md-4">
+                                        <label for="agentFilter">Agent</label>
+                                        <select id="agentFilter" class="form-control" name="agent_id">
+                                            <option value="">All Agents</option>
+                                            <?php
+                                            // Fetch agents for filter
+                                            $stmt = $conn->query("SELECT agent_id, agent_name FROM admin_access");
+                                            $agents = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                                            foreach ($agents as $agent) {
+                                                echo '<option value="' . $agent['agent_id'] . '">' . htmlspecialchars($agent['agent_name']) . '</option>';
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                <?php endif; ?>
+                                <div class="col-md-4">
+                                    <label for="purchaseDateFilter">Purchase Date</label>
+                                    <input type="text" id="purchaseDateFilter" class="form-control" name="purchase_date" placeholder="Select Date Range">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="purchaseNumberFilter">Purchase Number</label>
+                                    <input type="text" id="purchaseNumberFilter" class="form-control" name="purchase_number" placeholder="Enter Purchase Number">
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-12 text-right">
+                                    <button type="button" id="applyFilter" class="btn btn-primary">Apply Filters</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold text-primary">Purchase Entries</h6>
@@ -97,7 +143,7 @@ try {
                                             <td><?php echo htmlspecialchars($entry['purchase_details']); ?></td>
                                             <td>$<?php echo number_format($entry['subtotal'], 2); ?></td>
                                             <td>
-                                                <button type="button" class="btn btn-info" onclick="generateReceiptPopup('<?php echo htmlspecialchars($entry['customer_id']); ?>', '<?php echo htmlspecialchars($entry['purchase_details']); ?>', '<?php echo number_format($entry['subtotal'], 2); ?>', '<?php echo htmlspecialchars($entry['agent_id']); ?>', '<?php echo htmlspecialchars($entry['serial_number']); ?>')">Reprint Receipt</button>
+                                                <button type="button" class="btn btn-info" onclick="showReceiptPopup('<?php echo addslashes($entry['customer_id']); ?>', '<?php echo addslashes($entry['purchase_details']); ?>', '<?php echo number_format($entry['subtotal'], 2); ?>', '<?php echo addslashes($entry['agent_id']); ?>', '<?php echo addslashes($entry['serial_number']); ?>')">Reprint Receipt</button>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
@@ -124,9 +170,28 @@ try {
                 "ordering": true,
                 "pageLength": 10
             });
+
+            $('#purchaseDateFilter').daterangepicker({
+                locale: {
+                    format: 'YYYY-MM-DD'
+                },
+                autoUpdateInput: false
+            });
+
+            $('#purchaseDateFilter').on('apply.daterangepicker', function(ev, picker) {
+                $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+            });
+
+            $('#applyFilter').on('click', function() {
+                // Apply the filter logic here
+                // This part will depend on your backend implementation
+                // You can use AJAX to re-fetch filtered data and update the table
+                alert('Filter function is not yet implemented. Please implement AJAX to refresh the data table.');
+            });
         });
 
-        function generateReceiptPopup(customerName, purchaseDetails, subtotal, agentName, serialNumber) {
+        function showReceiptPopup(customerName, purchaseDetails, subtotal, agentName, serialNumber) {
+            // Call the utility function to generate the receipt popup
             generateReceiptPopup(customerName, purchaseDetails, subtotal, agentName, serialNumber);
         }
     </script>
