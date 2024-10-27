@@ -8,6 +8,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+
 // Set default timezone to ensure consistency
 date_default_timezone_set('Asia/Singapore'); // GMT +8 timezone
 
@@ -24,6 +25,9 @@ $access_allowed = true;
 if ($current_time < $start_time || $current_time > $cutoff_time) {
     $access_allowed = false;
 }
+
+// Check if the current time is within the allowed range
+
 
 // Redirect to login page if the user is not logged in
 if (!isset($_SESSION['admin'])) {
@@ -66,9 +70,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Set agent ID based on access level
     $agent_id_to_save = ($_SESSION['access_level'] === 'super_admin') ? $_POST['agent_id'] : $_SESSION['agent_id'];
 
-    $purchaseDetails = [];
-    $subtotal = 0;
-
     // Insert each purchase entry into the database
     for ($i = 0; $i < count($purchase_entries); $i++) {
         $total_price = 0;
@@ -80,9 +81,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         } else if ($purchase_category[$i] === 'Straight') {
             $total_price = $purchase_amount[$i]; // Straight amount stays the same
         }
-
-        $subtotal += $total_price;
-        $purchaseDetails[] = [ 'number' => $purchase_entries[$i], 'amount' => $total_price ];
 
         $sql = "INSERT INTO purchase_entries (customer_id, agent_id, purchase_no, purchase_category, purchase_amount, purchase_datetime, serial_number) 
                 VALUES (:customer_id, :agent_id, :purchase_no, :purchase_category, :purchase_amount, :purchase_datetime, :serial_number)";
@@ -131,8 +129,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Store the success message in session
     $_SESSION['success_message'] = "Purchase entries added successfully with serial number: $serial_number";
 
-    // Call the generateReceiptPopup function to show the receipt
-    generateReceiptPopup($customers[0]['customer_name'], $purchaseDetails, $subtotal, $_SESSION['admin'], $serial_number, date('Y-m-d'));
+    // Redirect to the same page to show the message
+    header("Location: ".$_SERVER['PHP_SELF']);
+    exit;
+    //echo "<div class='alert alert-success'>Purchase entries added successfully with serial number: $serial_number</div>";
 }
 
 // Function to calculate permutation factor for "Box"
@@ -358,7 +358,7 @@ function calculatePermutationFactor($purchase_no) {
                 col1.classList.add('col-md-3');
                 col1.innerHTML = `
                     <label for="purchase_no_${i}">Purchase Number</label>
-                    <input type="text" class="form-control" name="purchase_no[]" id="purchase_no_${i}" pattern="\d{2,3}" title="Please enter a number with 2 or 3 digits" required>
+                    <input type="text" class="form-control" name="purchase_no[]" id="purchase_no_${i}" pattern="\\d{2,3}" title="Please enter a number with 2 or 3 digits" required>
                 `;
                 
                 // Purchase Category Field
@@ -465,109 +465,3 @@ function calculatePermutationFactor($purchase_no) {
 
 </html>
 
-<?php
-function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agentName, $serialNumber, $purchaseDate) {
-    $transactionDateTime = date('Y-m-d H:i:s');
-
-    // Start building the receipt HTML content
-    $receiptContent = "
-        <html>
-        <head>
-            <title>Receipt</title>
-            <style>
-                body {
-                    font-family: Arial, sans-serif;
-                    line-height: 1.6;
-                    margin: 20px;
-                }
-                .receipt-container {
-                    max-width: 500px;
-                    margin: auto;
-                    padding: 20px;
-                    border: 1px solid #ddd;
-                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-                }
-                .header {
-                    text-align: center;
-                    font-weight: bold;
-                    font-size: 18px;
-                    margin-bottom: 20px;
-                }
-                .content {
-                    margin-bottom: 15px;
-                }
-                .footer {
-                    text-align: center;
-                    margin-top: 20px;
-                    font-size: 12px;
-                    color: #777;
-                }
-                table {
-                    width: 100%;
-                    border-collapse: collapse;
-                    margin-bottom: 15px;
-                }
-                table, th, td {
-                    border: 1px solid #ddd;
-                    padding: 8px;
-                }
-                th {
-                    background-color: #f4f4f4;
-                    text-align: left;
-                }
-            </style>
-        </head>
-        <body>
-            <div class=\"receipt-container\">
-                <div class=\"header\">Receipt</div>
-                <div class=\"content\">
-                    <strong>Customer Name:</strong> {$customerName}<br>
-                    <strong>Agent Name:</strong> {$agentName}<br>
-                    <strong>Serial Number:</strong> {$serialNumber}<br>
-                    <strong>Purchase Date:</strong> {$purchaseDate}<br>
-                    <strong>Transaction Date and Time:</strong> {$transactionDateTime}<br>
-                </div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Purchase Number</th>
-                            <th>Amount</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-    ";
-
-    // Loop through purchase details to add rows to the table
-    foreach ($purchaseDetails as $detail) {
-        $receiptContent .= "
-            <tr>
-                <td>{$detail['number']}</td>
-                <td>$" . number_format($detail['amount'], 2) . "</td>
-            </tr>
-        ";
-    }
-
-    // Add the subtotal and footer to the receipt
-    $receiptContent .= "
-                    </tbody>
-                </table>
-                <div class=\"content\">
-                    <strong>Subtotal:</strong> $" . number_format($subtotal, 2) . "
-                </div>
-                <div class=\"footer\">
-                    All rights reserved © 2024
-                </div>
-            </div>
-        </body>
-        </html>
-    ";
-
-    // Generate the popup script
-    echo "<script type='text/javascript'>
-        var popupWindow = window.open('', 'Receipt', 'width=600,height=700');
-        popupWindow.document.open();
-        popupWindow.document.write(`" . addslashes($receiptContent) . "`);
-        popupWindow.document.close();
-    </script>";
-}
-?>
