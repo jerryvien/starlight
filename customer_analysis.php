@@ -1,6 +1,7 @@
 <?php
 session_start();
 include('config/database.php');
+include('config/utilities.php');
 
 // Set time zone to Kuala Lumpur (GMT +8)
 date_default_timezone_set('Asia/Kuala_Lumpur');
@@ -56,7 +57,7 @@ $stmt->execute();
 $selected_customer = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Fetch related purchase entries
-$stmt = $conn->prepare("SELECT pe.*, a.agent_name FROM purchase_entries pe LEFT JOIN admin_access a ON a.agent_id = pe.agent_id WHERE pe.customer_id = :customer_id");
+$stmt = $conn->prepare("SELECT pe.*, a.agent_name FROM purchase_entries pe LEFT JOIN admin_access a ON a.agent_id = pe.agent_id WHERE pe.customer_id = :customer_id GROUP BY pe.serial_number");
 $stmt->bindParam(':customer_id', $customer_id);
 $stmt->execute();
 $related_purchases = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -216,6 +217,7 @@ $total_purchases = $win_count + $loss_count;
                             <table id="purchaseEntriesTable" class="table table-bordered" width="100%" cellspacing="0">
                                 <thead>
                                     <tr>
+                                        <th>Serial Number</th>
                                         <th>Purchase No</th>
                                         <th>Purchase Amount</th>
                                         <th>Purchase Date</th>
@@ -236,6 +238,7 @@ $total_purchases = $win_count + $loss_count;
                                         $subtotal_winning_amount += $purchase['winning_amount'] ?? 0;
                                         ?>
                                         <tr>
+                                            <td><?php echo $purchase['serial_number']; ?></td>
                                             <td><?php echo $purchase['purchase_no']; ?></td>
                                             <td>$<?php echo number_format($purchase['purchase_amount'], 2); ?></td>
                                             <td><?php echo date('d-M-Y', strtotime($purchase['purchase_datetime'])); ?></td>
@@ -243,18 +246,18 @@ $total_purchases = $win_count + $loss_count;
                                             <td><?php echo $purchase['result']; ?></td>
                                             <td>$<?php echo number_format($purchase['winning_amount'] ?? 0, 2); ?></td>
                                             <td>
-                                                <button type="button" class="btn btn-info" onclick="generateReceiptPopup(<?php echo htmlspecialchars(json_encode($purchase)); ?>)">Reprint Receipt</button>
+                                                <button type="button" class="btn btn-info" onclick="generateReceiptPopup('<?php echo $purchase['customer_name']; ?>', '<?php echo htmlspecialchars(json_encode($purchase)); ?>', '<?php echo $subtotal_purchase_amount; ?>', '<?php echo $purchase['agent_name']; ?>', '<?php echo $purchase['serial_number']; ?>')">Reprint Receipt</button>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <td colspan="5" class="text-right"><strong>Subtotal Purchase Amount:</strong></td>
+                                        <td colspan="6" class="text-right"><strong>Subtotal Purchase Amount:</strong></td>
                                         <td><strong>$<?php echo number_format($subtotal_purchase_amount, 2); ?></strong></td>
                                     </tr>
                                     <tr>
-                                        <td colspan="5" class="text-right"><strong>Subtotal Winning Amount:</strong></td>
+                                        <td colspan="6" class="text-right"><strong>Subtotal Winning Amount:</strong></td>
                                         <td><strong>$<?php echo number_format($subtotal_winning_amount, 2); ?></strong></td>
                                     </tr>
                                 </tfoot>
@@ -367,25 +370,9 @@ $total_purchases = $win_count + $loss_count;
         });
     });
 
-    function generateReceiptPopup(purchase) {
-        var receiptWindow = window.open('', '_blank', 'width=600,height=400');
-        receiptWindow.document.write('<html><head><title>Receipt</title>');
-        receiptWindow.document.write('<link rel="stylesheet" href="css/sb-admin-2.min.css">');
-        receiptWindow.document.write('</head><body>');
-        receiptWindow.document.write('<div class="container mt-4">');
-        receiptWindow.document.write('<h3 class="text-center">Receipt</h3>');
-        receiptWindow.document.write('<ul class="list-group">');
-        receiptWindow.document.write('<li class="list-group-item"><strong>Customer Name: </strong>' + purchase.customer_name + '</li>');
-        receiptWindow.document.write('<li class="list-group-item"><strong>Agent Name: </strong>' + purchase.agent_name + '</li>');
-        receiptWindow.document.write('<li class="list-group-item"><strong>Purchase No: </strong>' + purchase.purchase_no + '</li>');
-        receiptWindow.document.write('<li class="list-group-item"><strong>Purchase Amount: </strong>$' + parseFloat(purchase.purchase_amount).toFixed(2) + '</li>');
-        receiptWindow.document.write('<li class="list-group-item"><strong>Purchase Date: </strong>' + new Date(purchase.purchase_datetime).toLocaleDateString() + '</li>');
-        receiptWindow.document.write('<li class="list-group-item"><strong>Result: </strong>' + purchase.result + '</li>');
-        receiptWindow.document.write('<li class="list-group-item"><strong>Winning Amount: </strong>$' + parseFloat(purchase.winning_amount ?? 0).toFixed(2) + '</li>');
-        receiptWindow.document.write('</ul>');
-        receiptWindow.document.write('</div>');
-        receiptWindow.document.write('</body></html>');
-        receiptWindow.document.close();
+    function generateReceiptPopup(customerName, purchaseDetails, subtotal, agentName, serialNumber) {
+        const purchase = JSON.parse(purchaseDetails);
+        generateReceiptPopup(customerName, purchase, subtotal, agentName, serialNumber);
     }
     </script>
 </body>
