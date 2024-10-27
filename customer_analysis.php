@@ -1,7 +1,6 @@
 <?php
 session_start();
 include('config/database.php');
-include('config/utilities.php');
 
 // Set time zone to Kuala Lumpur (GMT +8)
 date_default_timezone_set('Asia/Kuala_Lumpur');
@@ -51,13 +50,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['select_customer'])) {
 }
 
 // Fetch selected customer details with total win and loss amount
-$stmt = $conn->prepare("SELECT cd.*, a.agent_name, MAX(pe.purchase_datetime) AS last_purchase, MAX(CASE WHEN pe.result = 'Win' THEN pe.purchase_datetime ELSE NULL END) AS last_win, SUM(CASE WHEN pe.result = 'Win' THEN pe.winning_amount ELSE 0 END) AS total_win_amount, SUM(CASE WHEN pe.result = 'Loss' THEN pe.purchase_amount ELSE 0 END) AS total_loss_amount FROM customer_details cd LEFT JOIN purchase_entries pe ON cd.customer_id = pe.customer_id LEFT JOIN admin_access a ON a.agent_id = cd.agent_id WHERE cd.customer_id = :customer_id GROUP BY cd.customer_id");
+$stmt = $conn->prepare("
+    SELECT cd.*, a.agent_name, 
+           MAX(pe.purchase_datetime) AS last_purchase, 
+           MAX(CASE WHEN pe.result = 'Win' THEN pe.purchase_datetime ELSE NULL END) AS last_win, 
+           SUM(CASE WHEN pe.result = 'Win' THEN pe.winning_amount ELSE 0 END) AS total_win_amount, 
+           SUM(CASE WHEN pe.result = 'Loss' THEN pe.purchase_amount ELSE 0 END) AS total_loss_amount 
+    FROM customer_details cd 
+    LEFT JOIN purchase_entries pe ON cd.customer_id = pe.customer_id 
+    LEFT JOIN admin_access a ON a.agent_id = cd.agent_id 
+    WHERE cd.customer_id = :customer_id 
+    GROUP BY cd.customer_id
+");
 $stmt->bindParam(':customer_id', $customer_id);
 $stmt->execute();
 $selected_customer = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Fetch related purchase entries
-$stmt = $conn->prepare("SELECT pe.*, a.agent_name FROM purchase_entries pe LEFT JOIN admin_access a ON a.agent_id = pe.agent_id WHERE pe.customer_id = :customer_id GROUP BY pe.serial_number");
+$stmt = $conn->prepare("
+    SELECT pe.*, a.agent_name 
+    FROM purchase_entries pe
+    LEFT JOIN admin_access a ON a.agent_id = pe.agent_id
+    WHERE pe.customer_id = :customer_id
+");
 $stmt->bindParam(':customer_id', $customer_id);
 $stmt->execute();
 $related_purchases = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -217,14 +232,12 @@ $total_purchases = $win_count + $loss_count;
                             <table id="purchaseEntriesTable" class="table table-bordered" width="100%" cellspacing="0">
                                 <thead>
                                     <tr>
-                                        <th>Serial Number</th>
                                         <th>Purchase No</th>
                                         <th>Purchase Amount</th>
                                         <th>Purchase Date</th>
                                         <th>Agent Name</th>
                                         <th>Result</th>
                                         <th>Winning Amount</th>
-                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -238,26 +251,22 @@ $total_purchases = $win_count + $loss_count;
                                         $subtotal_winning_amount += $purchase['winning_amount'] ?? 0;
                                         ?>
                                         <tr>
-                                            <td><?php echo $purchase['serial_number']; ?></td>
                                             <td><?php echo $purchase['purchase_no']; ?></td>
                                             <td>$<?php echo number_format($purchase['purchase_amount'], 2); ?></td>
                                             <td><?php echo date('d-M-Y', strtotime($purchase['purchase_datetime'])); ?></td>
                                             <td><?php echo $purchase['agent_name'] ?? 'N/A'; ?></td>
                                             <td><?php echo $purchase['result']; ?></td>
                                             <td>$<?php echo number_format($purchase['winning_amount'] ?? 0, 2); ?></td>
-                                            <td>
-                                                <button type="button" class="btn btn-info" onclick="generateReceiptPopup('<?php echo $purchase['customer_name']; ?>', '<?php echo htmlspecialchars(json_encode($purchase)); ?>', '<?php echo $subtotal_purchase_amount; ?>', '<?php echo $purchase['agent_name']; ?>', '<?php echo $purchase['serial_number']; ?>')">Reprint Receipt</button>
-                                            </td>
                                         </tr>
                                     <?php endforeach; ?>
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <td colspan="6" class="text-right"><strong>Subtotal Purchase Amount:</strong></td>
+                                        <td colspan="5" class="text-right"><strong>Subtotal Purchase Amount:</strong></td>
                                         <td><strong>$<?php echo number_format($subtotal_purchase_amount, 2); ?></strong></td>
                                     </tr>
                                     <tr>
-                                        <td colspan="6" class="text-right"><strong>Subtotal Winning Amount:</strong></td>
+                                        <td colspan="5" class="text-right"><strong>Subtotal Winning Amount:</strong></td>
                                         <td><strong>$<?php echo number_format($subtotal_winning_amount, 2); ?></strong></td>
                                     </tr>
                                 </tfoot>
@@ -369,11 +378,6 @@ $total_purchases = $win_count + $loss_count;
             data: trendData,
         });
     });
-
-    function generateReceiptPopup(customerName, purchaseDetails, subtotal, agentName, serialNumber) {
-        const purchase = JSON.parse(purchaseDetails);
-        generateReceiptPopup(customerName, purchase, subtotal, agentName, serialNumber);
-    }
     </script>
 </body>
 </html>
