@@ -133,7 +133,7 @@ try {
                                         <th>Action</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="dataBody">
                                     <?php foreach ($purchase_entries as $entry): ?>
                                         <tr>
                                             <td><?php echo htmlspecialchars($entry['serial_number']); ?></td>
@@ -183,10 +183,25 @@ try {
             });
 
             $('#applyFilter').on('click', function() {
-                // Apply the filter logic here
-                // This part will depend on your backend implementation
-                // You can use AJAX to re-fetch filtered data and update the table
-                alert('Filter function is not yet implemented. Please implement AJAX to refresh the data table.');
+                const agentId = $('#agentFilter').val();
+                const purchaseDate = $('#purchaseDateFilter').val();
+                const purchaseNumber = $('#purchaseNumberFilter').val();
+
+                $.ajax({
+                    url: 'fetch_filtered_data.php',
+                    type: 'POST',
+                    data: {
+                        agent_id: agentId,
+                        purchase_date: purchaseDate,
+                        purchase_number: purchaseNumber
+                    },
+                    success: function(response) {
+                        $('#dataBody').html(response);
+                    },
+                    error: function(xhr, status, error) {
+                        alert('Error: ' + error);
+                    }
+                });
             });
         });
 
