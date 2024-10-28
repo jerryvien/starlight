@@ -32,7 +32,7 @@ if (!isset($_SESSION['admin'])) {
 }
 
 // Check for form resubmission using session flag
-if (isset($_SESSION['form_submitted']) && $_SESSION['form_submitted'] === true) {
+if (isset($_SESSION['form_submitted']) && $_SESSION['form_submitted'] === false) {
     session_unset(); // Clear session
     session_destroy(); // Destroy session
     header('Location: index.php'); // Redirect to login or another page
@@ -364,7 +364,7 @@ function calculatePermutationFactor($purchase_no) {
             window.history.replaceState(null, null, window.location.href);
         }
 
-        
+
         const customers = <?php echo json_encode($customers); ?>;
 
         // Filter and display customer list
