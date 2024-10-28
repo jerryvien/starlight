@@ -173,12 +173,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Store the success message in session
     $_SESSION['success_message'] = "Purchase entries added successfully with serial number: $serial_number";
 
- 
-
     // Call the generateReceiptPopup function to show the receipt
     generateReceiptPopup($customer_name, $purchaseDetails, $subtotal, $agent_name, $serial_number);
-
- 
 }
 
 // Function to calculate permutation factor for "Box"
