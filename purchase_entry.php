@@ -31,6 +31,20 @@ if (!isset($_SESSION['admin'])) {
     exit;
 }
 
+// Check for form resubmission using session flag
+if (isset($_SESSION['form_submitted']) && $_SESSION['form_submitted'] === true) {
+    session_unset(); // Clear session
+    session_destroy(); // Destroy session
+    header('Location: index.php'); // Redirect to login or another page
+    exit();
+}
+
+// Generate CSRF token
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
+
 // Generate a unique serial number based on computer ID and current datetime
 $serial_number = generateSerialNumber();
 
@@ -57,6 +71,11 @@ if ($_SESSION['access_level'] === 'super_admin') {
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Verify CSRF token
+    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+        die('Invalid CSRF token.');
+    }
+
     $customer_id = $_POST['customer_id'];
     $customer_name = '';
     foreach ($customers as $customer) {
@@ -148,11 +167,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         
     }
 
+    // Mark form as submitted
+    $_SESSION['form_submitted'] = true;
+
     // Store the success message in session
     $_SESSION['success_message'] = "Purchase entries added successfully with serial number: $serial_number";
 
     // Call the generateReceiptPopup function to show the receipt
     generateReceiptPopup($customer_name, $purchaseDetails, $subtotal, $agent_name, $serial_number);
+
+    // Redirect to avoid form resubmission
+    header('Location: ' . $_SERVER['PHP_SELF']);
+    exit();
 }
 
 // Function to calculate permutation factor for "Box"
@@ -246,6 +272,9 @@ function calculatePermutationFactor($purchase_no) {
 
                         <!-- Customer Search and Display -->
                         <form method="POST" action="purchase_entry.php">
+                            <!-- CSRF Token -->
+                            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+
                             <div class="form-group">
                                 <label for="customer_search">Search Customer</label>
                                 <input type="text" class="form-control" id="customer_search" placeholder="Start typing to search..." onkeyup="filterCustomers()">
@@ -330,6 +359,12 @@ function calculatePermutationFactor($purchase_no) {
     </div>
 
     <script>
+         // Prevent form resubmission using PRG
+         if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
+        }
+
+        
         const customers = <?php echo json_encode($customers); ?>;
 
         // Filter and display customer list
