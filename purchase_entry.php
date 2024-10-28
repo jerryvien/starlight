@@ -173,12 +173,42 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Store the success message in session
     $_SESSION['success_message'] = "Purchase entries added successfully with serial number: $serial_number";
 
-    // Call the generateReceiptPopup function to show the receipt
-    generateReceiptPopup($customer_name, $purchaseDetails, $subtotal, $agent_name, $serial_number);
+     // Generate the receipt content
+     $receiptContent = generateReceiptPopup($customer_name, $purchaseDetails, $subtotal, $agent_name, $serial_number);
 
-    // Redirect to avoid form resubmission
-    header('Location: ' . $_SERVER['PHP_SELF']);
-    exit();
+     // Output JavaScript for pop-up handling
+     echo "
+     <script>
+         var receiptContent = `" . addslashes($receiptContent) . "`;
+         
+         // Open a pop-up window for the receipt
+         var popupWindow = window.open('', 'Receipt', 'width=600,height=700');
+         
+         if (popupWindow) {
+             // Load the receipt content into the pop-up
+             popupWindow.document.open();
+             popupWindow.document.write(receiptContent);
+             popupWindow.document.close();
+ 
+             // Wait until the pop-up is closed before redirecting
+             var checkPopupInterval = setInterval(function() {
+                 if (popupWindow.closed) {
+                     clearInterval(checkPopupInterval);
+                     window.location.href = '" . $_SERVER['PHP_SELF'] . "';
+                 }
+             }, 500);
+         } else {
+             alert('Please allow pop-ups for this website.');
+             window.location.href = '" . $_SERVER['PHP_SELF'] . "';
+         }
+     </script>
+     ";
+     exit();
+
+    // Call the generateReceiptPopup function to show the receipt
+    //generateReceiptPopup($customer_name, $purchaseDetails, $subtotal, $agent_name, $serial_number);
+
+ 
 }
 
 // Function to calculate permutation factor for "Box"
