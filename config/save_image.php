@@ -1,5 +1,5 @@
 <?php
-include('utilities.php');
+include('config/utilities.php');
 
 // Example data for testing
 $customerName = "Elizabeth Davis";
@@ -11,7 +11,7 @@ $agentName = "Dragon";
 $serialNumber = "18B0776D5CA9";
 
 // Generate the receipt HTML
-$receiptHTML = generateReceiptHTML($customerName, $purchaseDetails, $subtotal, $agentName, $serialNumber);
+$receiptHTML = generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agentName, $serialNumber);
 ?>
 
 <!DOCTYPE html>
