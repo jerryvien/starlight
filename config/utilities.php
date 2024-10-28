@@ -125,7 +125,13 @@ function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agent
         </html>
     ";
 
-
+    // Generate the popup script
+    echo "<script type='text/javascript'>
+        var popupWindow = window.open('', 'Receipt', 'width=600,height=700');
+        popupWindow.document.open();
+        popupWindow.document.write(`" . addslashes($receiptContent) . "`);
+        popupWindow.document.close();
+    </script>";
 }
 
 ?>
