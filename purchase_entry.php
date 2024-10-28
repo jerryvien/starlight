@@ -179,7 +179,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
      // Output JavaScript for pop-up handling
      echo "
      <script>
-         var receiptContent = `" . addslashes($receiptContent) . "`;
+         var receiptContent = `" . addslashes($receiptContent ?? '') . "`;
          
          // Open a pop-up window for the receipt
          var popupWindow = window.open('', 'Receipt', 'width=600,height=700');
