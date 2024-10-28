@@ -76,12 +76,11 @@ function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agent
                     text-align: left;
                 }
             </style>
-            <script src='https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'></script>
         </head>
         <body>
-            <div class='receipt-container' id='receipt'>
-                <div class='header'>Receipt</div>
-                <div class='content'>
+            <div class=\"receipt-container\">
+                <div class=\"header\">Receipt</div>
+                <div class=\"content\">
                     <strong>Customer Name:</strong> {$customerName}<br>
                     <strong>Agent Name:</strong> {$agentName}<br>
                     <strong>Serial Number:</strong> {$serialNumber}<br>
@@ -122,34 +121,12 @@ function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agent
                     All rights reserved © 2024
                 </div>
             </div>
-            <!-- Button to Copy the Receipt as an Image -->
-            <button onclick='copyReceiptAsImage()'>Copy as Image</button>
-
-            <script>
-                function copyReceiptAsImage() {
-                    const receiptElement = document.getElementById('receipt');
-                    html2canvas(receiptElement).then(canvas => {
-                        canvas.toBlob(blob => {
-                            // Create a clipboard item with the image blob
-                            const item = new ClipboardItem({ 'image/png': blob });
-                            
-                            // Write the image to the clipboard
-                            navigator.clipboard.write([item]).then(() => {
-                                alert('Receipt copied to clipboard as an image!');
-                            }).catch(err => {
-                                alert('Failed to copy the image: ' + err);
-                            });
-                        });
-                    });
-                }
-            </script>
         </body>
         </html>
     ";
 
     // Send the email with the receipt content
     $to = "sales@navbright.tech"; // Replace with your backup email address
- 
     $subject = "Purchase Receipt Backup - Serial No: $serialNumber | $transactionDateTime";
     $headers = "MIME-Version: 1.0" . "\r\n";
     $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
