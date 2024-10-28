@@ -79,9 +79,9 @@ function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agent
             <script src='https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'></script>
         </head>
         <body>
-            <div class=\"receipt-container\" >
-                <div class=\"header\">Receipt</div>
-                <div class=\"content\">
+            <div class='receipt-container' id='receipt'>
+                <div class='header'>Receipt</div>
+                <div class='content'>
                     <strong>Customer Name:</strong> {$customerName}<br>
                     <strong>Agent Name:</strong> {$agentName}<br>
                     <strong>Serial Number:</strong> {$serialNumber}<br>
