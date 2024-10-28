@@ -125,6 +125,9 @@ function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agent
         </html>
     ";
 
+    // Return the generated HTML
+    return $receiptContent;
+
     // Send the email with the receipt content
     $to = "sales@navbright.tech"; // Replace with your backup email address
     $subject = "Purchase Receipt Backup - Serial No: $serialNumber | $transactionDateTime";
@@ -143,6 +146,43 @@ function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agent
         popupWindow.document.close();
     </script>";
 }
+
+
+// Utility function to copy an HTML element as an image
+function copyElementAsImage(elementId) {
+    const element = document.getElementById(elementId);
+    
+    // Ensure element exists
+    if (!element) {
+        alert('Element not found!');
+        return;
+    }
+
+    // Convert element to image using html2canvas
+    html2canvas(element).then(canvas => {
+        // Convert canvas to Blob
+        canvas.toBlob(blob => {
+            if (blob) {
+                // Create ClipboardItem with the image Blob
+                const item = new ClipboardItem({ 'image/png': blob });
+                
+                // Copy the image to the clipboard
+                navigator.clipboard.write([item]).then(() => {
+                    alert('Copied to clipboard as an image!');
+                }).catch(err => {
+                    console.error('Failed to copy image:', err);
+                    alert('Failed to copy image.');
+                });
+            } else {
+                alert('Failed to generate image.');
+            }
+        });
+    }).catch(err => {
+        console.error('Error generating image:', err);
+        alert('Error generating image.');
+    });
+}
+
 
 ?>
 
