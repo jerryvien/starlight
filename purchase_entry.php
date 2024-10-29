@@ -167,16 +167,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         
     }
 
-    
+    // Mark form as submitted
+    $_SESSION['form_submitted'] = true;
 
     // Store the success message in session
     $_SESSION['success_message'] = "Purchase entries added successfully with serial number: $serial_number";
 
     // Call the generateReceiptPopup function to show the receipt
     $receiptHTML = generateReceiptPopup($customer_name, $purchaseDetails, $subtotal, $agent_name, $serial_number);
-
-    // Mark form as submitted
-    $_SESSION['form_submitted'] = true;
 }
 
 // Function to calculate permutation factor for "Box"
@@ -487,9 +485,9 @@ function calculatePermutationFactor($purchase_no) {
                                             submitBtn.textContent = "Processing...";
 
                                             // Add a slight delay to ensure the form doesn't submit before the button is disabled
-                                            setTimeout(() => {
-                                                form.submit(); // Ensure the form submits
-                                            }, 100);
+                                        setTimeout(() => {
+                                            form.submit(); // Ensure the form submits
+                                        }, 100);
                                         });
                                     }
                                 });
