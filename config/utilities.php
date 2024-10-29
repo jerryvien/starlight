@@ -45,19 +45,7 @@ function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agent
             align-self: flex-start; /* Aligns the container to the left */
         }
 
-        /* Add the background image */
-        .receipt-background {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('/img/about.jpg'); /* Replace with your image path */
-            background-size: cover;
-            background-position: center;
-            opacity: 0.3; /* Set opacity to 30% */
-            z-index: -1; /* Set behind the content */
-        }
+        
 
         .receipt-content {
             position: relative; /* Ensure text appears above the background image */
