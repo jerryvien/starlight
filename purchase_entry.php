@@ -167,14 +167,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         
     }
 
-    // Mark form as submitted
-    $_SESSION['form_submitted'] = false;
+    
 
     // Store the success message in session
     $_SESSION['success_message'] = "Purchase entries added successfully with serial number: $serial_number";
 
     // Call the generateReceiptPopup function to show the receipt
     $receiptHTML = generateReceiptPopup($customer_name, $purchaseDetails, $subtotal, $agent_name, $serial_number);
+
+    // Mark form as submitted
+    $_SESSION['form_submitted'] = false;
 }
 
 // Function to calculate permutation factor for "Box"
