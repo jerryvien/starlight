@@ -283,7 +283,7 @@ function calculatePermutationFactor($purchase_no) {
                                             <i class="fas fa-copy"></i>
                                         </button>
                                         <!-- Copy Notification -->
-                                        <div id="copy-notification" class="alert alert-success" style="display: none; position: fixed; top: 200px; left: 50%; transform: translateX(-50%); z-index: 1000; opacity: 0.9; background-color: rgba(72, 187, 120, 0.5); color: #fff; padding: 10px 20px; border-radius: 5px;">
+                                        <div id="copy-notification" class="alert alert-success" style="display: none; position: fixed; top: 400px; left: 50%; transform: translateX(-50%); z-index: 1000; opacity: 0.9; background-color: rgba(72, 187, 120, 0.5); color: #fff; padding: 10px 20px; border-radius: 5px;">
                                             Receipt copied to clipboard as an image!
                                         </div>
                                     </div>
