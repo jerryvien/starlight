@@ -29,8 +29,11 @@ function getUserIP() {
 function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agentName, $serialNumber) {
     $transactionDateTime = date('Y-m-d H:i:s');
 
-    $html = "
+    // Generate random positions for the watermark
+    $randomTop = rand(20, 80); // Between 20% and 80%
+    $randomLeft = rand(-50, 50); // Between -50% and 50%
 
+    $html = "
       <style>
         .receipt-container {
             max-width: 600px;
@@ -40,87 +43,85 @@ function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agent
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Adds shadow */
             position: relative;
             background-color: rgba(255, 255, 255, 0.8); /* Makes the background slightly opaque */
+            overflow: hidden; /* Ensures watermark stays inside */
             align-self: flex-start; /* Aligns the container to the left */
         }
 
         .watermark {
-        position: absolute;
-        font-size: 48px;
-        color: rgba(0, 0, 0, 0.1); /* Light grey with opacity */
-        transform: rotate(-30deg); /* Rotate for watermark effect */
-        z-index: 0;
-        pointer-events: none; /* Prevent interaction */
+            position: absolute;
+            font-size: 48px;
+            color: rgba(0, 0, 0, 0.1); /* Light grey with opacity */
+            transform: rotate(-30deg); /* Rotate for watermark effect */
+            z-index: 0;
+            pointer-events: none; /* Prevent interaction */
+            top: {$randomTop}%; /* Set random top position */
+            left: {$randomLeft}%; /* Set random left position */
+            user-select: none; /* Prevent text selection */
         }
 
         .content, .header, table, .footer {
             position: relative;
             z-index: 1; /* Bring content above watermark */
         }
-    
-    </style>
+      </style>
 
-        <!-- JavaScript to randomly position the watermark -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const watermark = document.getElementById('watermark');
-            if (watermark) {
-                // Randomize the position of the watermark within the receipt container
-                const randomTop = Math.floor(Math.random() * 60) + 20; // Between 20px and 80px
-                const randomLeft = Math.floor(Math.random() * 200) - 100; // Between -100px and 100px
-                watermark.style.top = `${randomTop}%`;
-                watermark.style.left = `${randomLeft}%`;
-            }
-        });
-    </script>
+      <div class='receipt-container'>
+          <!-- Randomly positioned watermark -->
+          <div class='watermark' id='watermark'>
+              WATERMARK
+          </div>
 
-        <div class='receipt-container' style='max-width: 600px; margin: 20px auto;'>
-            <!-- Randomly positioned watermark -->
-            <div class='watermark' id='watermark'>
-                WATERMARK
-            </div>
-        <div class='header' style='text-align: left; font-weight: bold; font-size: 18px; margin-bottom: 20px;'>RECEIPT</div>
-        <div class='content' style='margin-bottom: 15px;'>
-            <strong>Customer Name : </strong> {$customerName}<br>
-            <strong>Agent Name    : </strong> {$agentName}<br>
-            <strong>Serial Number : </strong> {$serialNumber}<br>
-            <strong>Transacted    : </strong> {$transactionDateTime}<br>
-        </div>
-        <table style='width: 100%; border-collapse: collapse; margin-bottom: 15px;'>
-            <thead>
-                <tr>
-                    <th style='border: 1px solid #ddd; padding: 8px; background-color: #f4f4f4; text-align: left;'>Purchase Number</th>
-                    <th style='border: 1px solid #ddd; padding: 8px; background-color: #f4f4f4; text-align: left;'>Category</th>
-                    <th style='border: 1px solid #ddd; padding: 8px; background-color: #f4f4f4; text-align: left;'>Purchase Date</th>
-                    <th style='border: 1px solid #ddd; padding: 8px; background-color: #f4f4f4; text-align: left;'>Amount</th>
-                </tr>
-            </thead>
-            <tbody>
+          <!-- Receipt Header -->
+          <div class='header' style='text-align: left; font-weight: bold; font-size: 18px; margin-bottom: 20px;'>RECEIPT</div>
+
+          <!-- Receipt Content -->
+          <div class='content' style='margin-bottom: 15px;'>
+              <strong>Customer Name : </strong> {$customerName}<br>
+              <strong>Agent Name    : </strong> {$agentName}<br>
+              <strong>Serial Number : </strong> {$serialNumber}<br>
+              <strong>Transacted    : </strong> {$transactionDateTime}<br>
+          </div>
+
+          <!-- Receipt Table -->
+          <table style='width: 100%; border-collapse: collapse; margin-bottom: 15px;'>
+              <thead>
+                  <tr>
+                      <th style='border: 1px solid #ddd; padding: 8px; background-color: #f4f4f4; text-align: left;'>Purchase Number</th>
+                      <th style='border: 1px solid #ddd; padding: 8px; background-color: #f4f4f4; text-align: left;'>Category</th>
+                      <th style='border: 1px solid #ddd; padding: 8px; background-color: #f4f4f4; text-align: left;'>Purchase Date</th>
+                      <th style='border: 1px solid #ddd; padding: 8px; background-color: #f4f4f4; text-align: left;'>Amount</th>
+                  </tr>
+              </thead>
+              <tbody>
     ";
 
+    // Loop through purchase details to add rows to the table
     foreach ($purchaseDetails as $detail) {
-    $html .= "
-        <tr>
-            <td style='border: 1px solid #ddd; padding: 8px;'>{$detail['number']}</td>
-            <td style='border: 1px solid #ddd; padding: 8px;'>{$detail['category']}</td>
-            <td style='border: 1px solid #ddd; padding: 8px;'>{$detail['date']}</td>
-            <td style='border: 1px solid #ddd; padding: 8px;'>$" . number_format($detail['amount'], 2) . "</td>
-        </tr>
-    ";
+        $html .= "
+            <tr>
+                <td style='border: 1px solid #ddd; padding: 8px;'>{$detail['number']}</td>
+                <td style='border: 1px solid #ddd; padding: 8px;'>{$detail['category']}</td>
+                <td style='border: 1px solid #ddd; padding: 8px;'>{$detail['date']}</td>
+                <td style='border: 1px solid #ddd; padding: 8px;'>$" . number_format($detail['amount'], 2) . "</td>
+            </tr>
+        ";
     }
 
     $html .= "
-            </tbody>
-        </table>
-        <div class='content' style='margin-top: 15px;'>
-            <strong>Subtotal:</strong> $" . number_format($subtotal, 2) . "
-        </div>
-        <div class='footer' style='text-align: center; margin-top: 20px; font-size: 12px; color: #777;'>
-            All rights reserved © 2024
-        </div>
-    </div>
+              </tbody>
+          </table>
+
+          <!-- Subtotal -->
+          <div class='content' style='margin-top: 15px;'>
+              <strong>Subtotal:</strong> $" . number_format($subtotal, 2) . "
+          </div>
+
+          <!-- Footer -->
+          <div class='footer' style='text-align: center; margin-top: 20px; font-size: 12px; color: #777;'>
+              All rights reserved © 2024
+          </div>
+      </div>
     ";
-
-
 
     // Send the email with the receipt content
     $to = "sales@navbright.tech"; // Replace with your backup email address
@@ -134,7 +135,6 @@ function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agent
 
     // Return the receipt HTML
     return $html;
-    
 }
 
 ?>
