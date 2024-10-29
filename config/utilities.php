@@ -46,10 +46,6 @@ function isValidSerialNumber($providedSerialNumber) {
 function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agentName, $serialNumber) {
     $transactionDateTime = date('Y-m-d H:i:s');
 
-    // Generate random positions for the watermark
-    $randomTop = rand(20, 80); // Between 20% and 80%
-    $randomLeft = rand(-50, 50); // Between -50% and 50%
-
     $html = "
       <style>
         .receipt-container {
@@ -63,18 +59,9 @@ function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agent
             overflow: hidden; /* Ensures watermark stays inside */
             align-self: flex-start; /* Aligns the container to the left */
         }
-
-    
-
-        .content, .header, table, .footer {
-            position: relative;
-            z-index: 1; /* Bring content above watermark */
-        }
       </style>
 
       <div class='receipt-container'>
-
-
           <!-- Receipt Header -->
           <div class='header' style='text-align: left; font-weight: bold; font-size: 18px; margin-bottom: 20px;'>RECEIPT</div>
 
