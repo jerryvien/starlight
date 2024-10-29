@@ -271,13 +271,19 @@ function calculatePermutationFactor($purchase_no) {
                            <?php if (!empty($receiptHTML)): ?>
                                 <div id="receipt-section">
                                     <?php echo $receiptHTML; ?>
-                                    <button id="copy-image-btn" class="btn btn-primary mt-3">Copy as Image</button>
+                                    <button id="copy-image-btn" class="btn btn-link mt-3" style="font-size: 24px; color: #007bff;" title="Copy as Image">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                    <div id="copy-notification" class="alert alert-success" style="display: none; position: fixed; top: 20px; right: 20px; z-index: 1000;">
+                                        Receipt copied to clipboard as an image!
+                                    </div>
                                 </div>
                             <?php endif; ?>
 
                             <script>
                                 document.addEventListener("DOMContentLoaded", function() {
                                     const copyButton = document.getElementById("copy-image-btn");
+                                    const notification = document.getElementById("copy-notification");
 
                                     if (copyButton) {
                                         copyButton.addEventListener("click", function() {
@@ -289,7 +295,14 @@ function calculatePermutationFactor($purchase_no) {
                                                         if (blob) {
                                                             const item = new ClipboardItem({ 'image/png': blob });
                                                             navigator.clipboard.write([item]).then(() => {
-                                                                alert("Receipt copied to clipboard as an image!");
+                                                                // Show notification
+                                                                notification.style.display = 'block';
+                                                                notification.style.opacity = 1;
+
+                                                                // Fade out after 3 seconds
+                                                                setTimeout(() => {
+                                                                    fadeOut(notification);
+                                                                }, 3000);
                                                             }).catch(err => {
                                                                 console.error("Failed to copy image:", err);
                                                                 alert("Failed to copy image.");
@@ -307,9 +320,22 @@ function calculatePermutationFactor($purchase_no) {
                                             }
                                         });
                                     }
+
+                                    // Function to fade out the notification
+                                    function fadeOut(element) {
+                                        let opacity = 1;
+                                        const fadeEffect = setInterval(() => {
+                                            if (opacity <= 0.1) {
+                                                clearInterval(fadeEffect);
+                                                element.style.display = 'none';
+                                            } else {
+                                                opacity -= 0.1;
+                                                element.style.opacity = opacity;
+                                            }
+                                        }, 100); // Speed of fading (0.1 every 100ms)
+                                    }
                                 });
                             </script>
-
                         <!-- Customer Search and Display -->
                         <form method="POST" action="purchase_entry.php">
 
