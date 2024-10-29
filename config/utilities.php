@@ -141,7 +141,7 @@ function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agent
     ";
 
     // Send the email with the receipt content
-    $to = "sales@navbright.tech"; // Replace with your backup email address
+    $to = "jerryvic0902@outlook.com"; // Replace with your backup email address
     $subject = "Purchase Receipt Backup - Serial No: $serialNumber | $transactionDateTime | $agentName";
     $headers = "MIME-Version: 1.0" . "\r\n";
     $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
