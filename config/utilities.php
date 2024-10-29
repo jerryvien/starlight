@@ -28,7 +28,7 @@ function getUserIP() {
 
 function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agentName, $serialNumber) {
     $transactionDateTime = date('Y-m-d H:i:s');
-    
+
     $html = "
     // Start building the receipt HTML content
         <div class='receipt-container' style='max-width: 600px; margin: 20px auto;'>
@@ -83,7 +83,7 @@ function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agent
     $headers .= "From: noreply@navbright.tech"; // Replace with your email
 
     // Send the email
-    mail($to, $subject, $receiptContent, $headers);
+    mail($to, $subject, $html, $headers);
 
     // Return the receipt HTML
     return $html;
