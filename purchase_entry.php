@@ -267,12 +267,7 @@ function calculatePermutationFactor($purchase_no) {
                             </div>
                             <?php endif; ?>
 
-                            <!-- Display the receipt if generated -->
-                            <?php if (!empty($receiptHTML)): ?>
-                                <div id="receipt-section">
-                                    <?php echo $receiptHTML; ?>
-                                </div>
-                            <?php endif; ?>
+                         
 
                         <!-- Customer Search and Display -->
                         <form method="POST" action="purchase_entry.php">
