@@ -29,6 +29,10 @@ function getUserIP() {
 function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agentName, $serialNumber) {
     $transactionDateTime = date('Y-m-d H:i:s');
 
+    
+
+    $html = "
+
     <style>
         .receipt-container {
             max-width: 500px;
@@ -60,8 +64,6 @@ function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agent
             z-index: 1;
         }
     </style>
-
-    $html = "
     
         <div class='receipt-container' style='max-width: 600px; margin: 20px auto;'>
         <div class='header' style='text-align: left; font-weight: bold; font-size: 18px; margin-bottom: 20px;'>RECEIPT</div>
