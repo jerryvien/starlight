@@ -31,11 +31,17 @@ if (!isset($_SESSION['admin'])) {
     exit;
 }
 
-// Check for form resubmission using session flag
-if (isset($_SESSION['form_submitted']) && $_SESSION['form_submitted'] === false) {
-    session_unset(); // Clear session
-    session_destroy(); // Destroy session
-    header('Location: index.php'); // Redirect to login or another page
+
+// Initialize necessary session variables
+if (!isset($_SESSION['form_submitted'])) {
+    $_SESSION['form_submitted'] = false; // Set to false initially
+}
+
+// Check if the form was submitted in the previous request
+if ($_SESSION['form_submitted'] === true) {
+    // Reset the form submission flag to allow fresh submission
+    $_SESSION['form_submitted'] = false;
+    header('Location: ' . $_SERVER['PHP_SELF']); // Redirect to avoid resubmission
     exit();
 }
 
@@ -104,6 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $subtotal = 0;
 
     // Insert each purchase entry into the database
+    $success = true; // Flag to track database insertion success
     for ($i = 0; $i < count($purchase_entries); $i++) {
         $total_price = 0;
 
@@ -134,6 +141,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->bindParam(':purchase_datetime', $purchase_date[$i]);
         $stmt->bindParam(':serial_number', $serial_number);
         $stmt->execute();
+
+        // Execute the insert and check success
+        if (!$stmt->execute()) {
+            $success = false; // Set flag to false if any insert fails
+            break;
+        }
 
         // Update the updated_at field in customer_details table
         try {
@@ -167,16 +180,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         
     }
 
-    
+      // If successful, mark form as submitted
+      if ($success) {
+        $_SESSION['form_submitted'] = true; // Set to true after successful submission
+
+        // Store the success message
+        $_SESSION['success_message'] = "Purchase entries added successfully.";
+
+        // Call the generateReceiptPopup function to show the receipt
+        $receiptHTML = generateReceiptPopup($customer_name, $purchaseDetails, $subtotal, $agent_name, $serial_number);
+        // Delay execution by 10 seconds
+        sleep(10);
+
+        // Redirect to avoid duplicate submissions
+        header('Location: ' . $_SERVER['PHP_SELF']);
+        exit();
+    } else {
+        $_SESSION['error_message'] = "Error inserting purchase entries.";
+    }
 
     // Store the success message in session
-    $_SESSION['success_message'] = "Purchase entries added successfully with serial number: $serial_number";
+    //$_SESSION['success_message'] = "Purchase entries added successfully with serial number: $serial_number";
 
-    // Call the generateReceiptPopup function to show the receipt
-    $receiptHTML = generateReceiptPopup($customer_name, $purchaseDetails, $subtotal, $agent_name, $serial_number);
 
-    // Mark form as submitted
-    $_SESSION['form_submitted'] = false;
 }
 
 // Function to calculate permutation factor for "Box"
