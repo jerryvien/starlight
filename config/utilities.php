@@ -45,10 +45,27 @@ function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agent
             align-self: flex-start; /* Aligns the container to the left */
         }
 
+        .watermark {
+        position: absolute;
+        font-size: 48px;
+        color: rgba(0, 0, 0, 0.1); /* Light grey with opacity */
+        transform: rotate(-30deg); /* Rotate for watermark effect */
+        z-index: 0;
+        pointer-events: none; /* Prevent interaction */
+        }
+
+        .content, .header, table, .footer {
+            position: relative;
+            z-index: 1; /* Bring content above watermark */
+        }
     
     </style>
 
         <div class='receipt-container' style='max-width: 600px; margin: 20px auto;'>
+            <!-- Randomly positioned watermark -->
+            <div class='watermark' id='watermark'>
+                WATERMARK
+            </div>
         <div class='header' style='text-align: left; font-weight: bold; font-size: 18px; margin-bottom: 20px;'>RECEIPT</div>
         <div class='content' style='margin-bottom: 15px;'>
             <strong>Customer Name : </strong> {$customerName}<br>
