@@ -282,9 +282,15 @@ function calculatePermutationFactor($purchase_no) {
                                         <button id="copy-image-btn" class="btn btn-link" style="font-size: 24px; color: #007bff;" title="Copy as Image">
                                             <i class="fas fa-copy"></i>
                                         </button>
+                                        <button id="download-image-btn" class="btn btn-link ml-2" style="font-size: 24px; color: #007bff;" title="Download as Image">
+                                            <i class="fas fa-download"></i>
+                                        </button>
                                         <!-- Copy Notification -->
                                         <div id="copy-notification" class="alert alert-success" style="display: none; position: fixed; top: 400px; left: 50%; transform: translateX(-50%); z-index: 1000; opacity: 0.9; background-color: rgba(72, 187, 120, 0.5); color: #fff; padding: 10px 20px; border-radius: 5px;">
                                             Receipt copied to clipboard as an image!
+                                        </div>
+                                        <div id="download-notification" class="alert alert-success" style="display: none; position: fixed; top: 20px; right: 20px; z-index: 1000; opacity: 0.8; background: rgba(0, 128, 0, 0.5); color: white; padding: 10px; border-radius: 5px;">
+                                            Receipt saved as an image!
                                         </div>
                                     </div>
                                 </div>
@@ -348,6 +354,41 @@ function calculatePermutationFactor($purchase_no) {
                                                 element.style.opacity = opacity;
                                             }
                                         }, 100); // Adjust speed of fading (0.1 decrease every 100ms)
+                                    }
+                                });
+
+                                document.addEventListener("DOMContentLoaded", function() {
+                                    const downloadButton = document.getElementById("download-image-btn");
+
+                                    if (downloadButton) {
+                                        downloadButton.addEventListener("click", function() {
+                                            const receiptElement = document.querySelector(".receipt-container");
+
+                                            if (receiptElement) {
+                                                // Convert the receipt to an image using html2canvas
+                                                html2canvas(receiptElement).then(canvas => {
+                                                    // Create a temporary link to download the image
+                                                    const link = document.createElement('a');
+                                                    link.href = canvas.toDataURL("image/png");
+                                                    link.download = "receipt.png";  // Name of the image file
+                                                    link.click();
+
+                                                    // Show temporary notification
+                                                    const notification = document.getElementById("download-notification");
+                                                    if (notification) {
+                                                        notification.style.display = "block";
+                                                        setTimeout(() => {
+                                                            notification.style.display = "none";
+                                                        }, 3000); // 3-second fade out
+                                                    }
+                                                }).catch(err => {
+                                                    console.error("Error generating image:", err);
+                                                    alert("Error generating image.");
+                                                });
+                                            } else {
+                                                alert("Receipt element not found.");
+                                            }
+                                        });
                                     }
                                 });
                             </script>
