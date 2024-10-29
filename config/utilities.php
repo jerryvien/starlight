@@ -29,8 +29,6 @@ function getUserIP() {
 function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agentName, $serialNumber) {
     $transactionDateTime = date('Y-m-d H:i:s');
 
-    
-
     $html = "
 
       <style>
@@ -60,6 +58,20 @@ function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agent
         }
     
     </style>
+
+        <!-- JavaScript to randomly position the watermark -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const watermark = document.getElementById('watermark');
+            if (watermark) {
+                // Randomize the position of the watermark within the receipt container
+                const randomTop = Math.floor(Math.random() * 60) + 20; // Between 20px and 80px
+                const randomLeft = Math.floor(Math.random() * 200) - 100; // Between -100px and 100px
+                watermark.style.top = `${randomTop}%`;
+                watermark.style.left = `${randomLeft}%`;
+            }
+        });
+    </script>
 
         <div class='receipt-container' style='max-width: 600px; margin: 20px auto;'>
             <!-- Randomly positioned watermark -->
@@ -107,6 +119,7 @@ function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agent
         </div>
     </div>
     ";
+
 
 
     // Send the email with the receipt content
