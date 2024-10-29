@@ -62,12 +62,25 @@ function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agent
           <div class='header' style='text-align: left; font-weight: bold; font-size: 18px; margin-bottom: 20px;'>RECEIPT</div>
 
           <!-- Receipt Content -->
-          <div class='content' style='margin-bottom: 15px;'>
-              <strong>Customer Name : </strong> {$customerName}<br>
-              <strong>Agent Name    : </strong> {$agentName}<br>
-              <strong>Serial Number : </strong> {$serialNumber}<br>
-              <strong>Transacted    : </strong> {$transactionDateTime}<br>
-          </div>
+            <div class='content' style='margin-bottom: 15px; display: flex; flex-direction: column;'>
+                <!-- Use a wrapper to align labels and values -->
+                <div style='display: flex; align-items: baseline; margin-bottom: 5px;'>
+                    <span style='width: 150px; font-weight: bold;'>Customer Name:</span>
+                    <span>{$customerName}</span>
+                </div>
+                <div style='display: flex; align-items: baseline; margin-bottom: 5px;'>
+                    <span style='width: 150px; font-weight: bold;'>Agent Name:</span>
+                    <span>{$agentName}</span>
+                </div>
+                <div style='display: flex; align-items: baseline; margin-bottom: 5px;'>
+                    <span style='width: 150px; font-weight: bold;'>Serial Number:</span>
+                    <span>{$serialNumber}</span>
+                </div>
+                <div style='display: flex; align-items: baseline;'>
+                    <span style='width: 150px; font-weight: bold;'>Transacted:</span>
+                    <span>{$transactionDateTime}</span>
+                </div>
+            </div>
 
           <!-- Receipt Table -->
           <table style='width: 100%; border-collapse: collapse; margin-bottom: 15px;'>
