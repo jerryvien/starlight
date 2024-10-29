@@ -472,7 +472,21 @@ function calculatePermutationFactor($purchase_no) {
                             </div>
 
                             <!-- Submit Button -->
-                            <button type="submit" class="btn btn-success mt-3">Submit Purchase Entry</button>
+                            <button type="submit" id="submitBtn" class="btn btn-success mt-3">Submit Purchase Entry</button>
+                            <script>
+                                document.addEventListener("DOMContentLoaded", function() {
+                                    const form = document.getElementById("purchaseForm");
+                                    const submitBtn = document.getElementById("submitBtn");
+
+                                    if (form && submitBtn) {
+                                        form.addEventListener("submit", function(e) {
+                                            // Disable submit button after the form is submitted
+                                            submitBtn.disabled = true;
+                                            submitBtn.textContent = "Processing...";
+                                        });
+                                    }
+                                });
+                            </script>
                         </form>
                     </div>
                 <?php endif; ?>
