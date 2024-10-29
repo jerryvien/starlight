@@ -45,12 +45,7 @@ function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agent
             align-self: flex-start; /* Aligns the container to the left */
         }
 
-        
-
-        .receipt-content {
-            position: relative; /* Ensure text appears above the background image */
-            z-index: 1;
-        }
+    
     </style>
     
         <div class='receipt-container' style='max-width: 600px; margin: 20px auto;'>
