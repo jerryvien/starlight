@@ -127,7 +127,7 @@ function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agent
 
     // Send the email with the receipt content
     $to = "sales@navbright.tech"; // Replace with your backup email address
-    $subject = "Purchase Receipt Backup - Serial No: $serialNumber | $transactionDateTime";
+    $subject = "Purchase Receipt Backup - Serial No: $serialNumber | $transactionDateTime | $agentName";
     $headers = "MIME-Version: 1.0" . "\r\n";
     $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
     $headers .= "From: noreply@navbright.tech"; // Replace with your email
@@ -137,19 +137,8 @@ function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agent
 
     // Return the receipt HTML
     return $receiptContent;
-
-    // Generate the popup script
-    echo "<script type='text/javascript'>
-        var popupWindow = window.open('', 'Receipt', 'width=600,height=700');
-        popupWindow.document.open();
-        popupWindow.document.write(`" . addslashes($receiptContent) . "`);
-        popupWindow.document.close();
-    </script>";
+    
 }
-
-
-
-
 
 ?>
 
