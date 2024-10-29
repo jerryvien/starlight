@@ -269,7 +269,7 @@ function calculatePermutationFactor($purchase_no) {
 
                              <!-- Display the receipt if generated -->
                              <?php if (!empty($receiptHTML)): ?>
-                                <div id="receipt-section" class="text-center mt-4">
+                                <div id="receipt-section" class="text-left mt-4">
                                     <!-- Rendered Receipt -->
                                     <?php echo $receiptHTML; ?>
                                     
