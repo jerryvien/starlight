@@ -268,14 +268,25 @@ function calculatePermutationFactor($purchase_no) {
                             <?php endif; ?>
 
                              <!-- Display the receipt if generated -->
-                           <?php if (!empty($receiptHTML)): ?>
-                                <div id="receipt-section">
+                             <?php if (!empty($receiptHTML)): ?>
+                                <div id="receipt-section" class="text-center mt-4">
+                                    <!-- Rendered Receipt -->
                                     <?php echo $receiptHTML; ?>
-                                    <button id="copy-image-btn" class="btn btn-link mt-3" style="font-size: 24px; color: #007bff;" title="Copy as Image">
-                                        <i class="fas fa-copy"></i>
-                                    </button>
-                                    <div id="copy-notification" class="alert alert-success" style="display: none; position: fixed; top: 20px; right: 20px; z-index: 1000;">
-                                        Receipt copied to clipboard as an image!
+                                    
+                                    <!-- Copy Receipt Section -->
+                                    <div class="d-flex justify-content-center align-items-center mt-3">
+                                        <!-- Label Text -->
+                                        <span class="mr-2">Copy Receipt</span>
+                                        
+                                        <!-- Copy Icon Button -->
+                                        <button id="copy-image-btn" class="btn btn-link" style="font-size: 24px; color: #007bff;" title="Copy as Image">
+                                            <i class="fas fa-copy"></i>
+                                        </button>
+
+                                        <!-- Copy Notification -->
+                                        <div id="copy-notification" class="alert alert-success ml-2" style="display: none;">
+                                            Receipt copied to clipboard as an image!
+                                        </div>
                                     </div>
                                 </div>
                             <?php endif; ?>
@@ -296,7 +307,7 @@ function calculatePermutationFactor($purchase_no) {
                                                             const item = new ClipboardItem({ 'image/png': blob });
                                                             navigator.clipboard.write([item]).then(() => {
                                                                 // Show notification
-                                                                notification.style.display = 'block';
+                                                                notification.style.display = 'inline-block';
                                                                 notification.style.opacity = 1;
 
                                                                 // Fade out after 3 seconds
