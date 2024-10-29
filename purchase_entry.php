@@ -263,13 +263,15 @@ function calculatePermutationFactor($purchase_no) {
                             <div class="alert alert-success">
                                 <?php echo $_SESSION['success_message']; ?>
                                 <?php unset($_SESSION['success_message']); // Clear message after displaying ?>
-                                 <!-- Display the receipt if generated -->
-                                <?php if (!empty($receiptHTML)): ?>
-                                    <div id="receipt-section">
-                                        <?php echo $receiptHTML; ?>
-                                    </div>
-                                <?php endif; ?>
+
                             </div>
+                            <?php endif; ?>
+
+                            <!-- Display the receipt if generated -->
+                            <?php if (!empty($receiptHTML)): ?>
+                                <div id="receipt-section">
+                                    <?php echo $receiptHTML; ?>
+                                </div>
                             <?php endif; ?>
 
                         <!-- Customer Search and Display -->
