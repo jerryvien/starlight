@@ -51,10 +51,10 @@ function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agent
         <div class='receipt-container' style='max-width: 600px; margin: 20px auto;'>
         <div class='header' style='text-align: left; font-weight: bold; font-size: 18px; margin-bottom: 20px;'>RECEIPT</div>
         <div class='content' style='margin-bottom: 15px;'>
-            <strong>Customer Name:</strong> {$customerName}<br>
-            <strong>Agent Name:</strong> {$agentName}<br>
-            <strong>Serial Number:</strong> {$serialNumber}<br>
-            <strong>Transaction Date and Time:</strong> {$transactionDateTime}<br>
+            <strong>Customer Name : </strong> {$customerName}<br>
+            <strong>Agent Name    : </strong> {$agentName}<br>
+            <strong>Serial Number : </strong> {$serialNumber}<br>
+            <strong>Transacted    : </strong> {$transactionDateTime}<br>
         </div>
         <table style='width: 100%; border-collapse: collapse; margin-bottom: 15px;'>
             <thead>
