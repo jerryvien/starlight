@@ -393,7 +393,7 @@ function calculatePermutationFactor($purchase_no) {
                                 });
                             </script>
                         <!-- Customer Search and Display -->
-                        <form method="POST" action="purchase_entry.php">
+                        <form id="purchaseForm" method="POST" action="purchase_entry.php">
 
                           
                             <!-- CSRF Token -->
