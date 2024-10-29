@@ -483,6 +483,11 @@ function calculatePermutationFactor($purchase_no) {
                                             // Disable submit button after the form is submitted
                                             submitBtn.disabled = true;
                                             submitBtn.textContent = "Processing...";
+
+                                            // Add a slight delay to ensure the form doesn't submit before the button is disabled
+                                            setTimeout(() => {
+                                                form.submit(); // Ensure the form submits
+                                            }, 100);
                                         });
                                     }
                                 });
