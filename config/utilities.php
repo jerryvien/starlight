@@ -28,102 +28,52 @@ function getUserIP() {
 
 function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agentName, $serialNumber) {
     $transactionDateTime = date('Y-m-d H:i:s');
-
+    
+    $html = "
     // Start building the receipt HTML content
-    $receiptContent = "
-        <html>
-        <head>
-            <title>Receipt</title>
-            <style>
-                body {
-                    font-family: Arial, sans-serif;
-                    line-height: 1.6;
-                    margin: 20px;
-                }
-                .receipt-container {
-                    max-width: 500px;
-                    margin: auto;
-                    padding: 20px;
-                    border: 1px solid #ddd;
-                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-                }
-                .header {
-                    text-align: center;
-                    font-weight: bold;
-                    font-size: 18px;
-                    margin-bottom: 20px;
-                }
-                .content {
-                    margin-bottom: 15px;
-                }
-                .footer {
-                    text-align: center;
-                    margin-top: 20px;
-                    font-size: 12px;
-                    color: #777;
-                }
-                table {
-                    width: 100%;
-                    border-collapse: collapse;
-                    margin-bottom: 15px;
-                }
-                table, th, td {
-                    border: 1px solid #ddd;
-                    padding: 8px;
-                }
-                th {
-                    background-color: #f4f4f4;
-                    text-align: left;
-                }
-            </style>
-        </head>
-        <body>
-            <div class=\"receipt-container\">
-                <div class=\"header\">Receipt</div>
-                <div class=\"content\">
-                    <strong>Customer Name:</strong> {$customerName}<br>
-                    <strong>Agent Name:</strong> {$agentName}<br>
-                    <strong>Serial Number:</strong> {$serialNumber}<br>
-                    <strong>Transaction Date and Time:</strong> {$transactionDateTime}<br>
-                </div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Purchase Number</th>
-                            <th>Category</th>
-                            <th>Purchase Date</th>
-                            <th>Amount</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+        <div class='receipt-container' style='max-width: 600px; margin: 20px auto;'>
+        <div class='header' style='text-align: center; font-weight: bold; font-size: 18px; margin-bottom: 20px;'>Receipt</div>
+        <div class='content' style='margin-bottom: 15px;'>
+            <strong>Customer Name:</strong> {$customerName}<br>
+            <strong>Agent Name:</strong> {$agentName}<br>
+            <strong>Serial Number:</strong> {$serialNumber}<br>
+            <strong>Transaction Date and Time:</strong> {$transactionDateTime}<br>
+        </div>
+        <table style='width: 100%; border-collapse: collapse; margin-bottom: 15px;'>
+            <thead>
+                <tr>
+                    <th style='border: 1px solid #ddd; padding: 8px; background-color: #f4f4f4; text-align: left;'>Purchase Number</th>
+                    <th style='border: 1px solid #ddd; padding: 8px; background-color: #f4f4f4; text-align: left;'>Category</th>
+                    <th style='border: 1px solid #ddd; padding: 8px; background-color: #f4f4f4; text-align: left;'>Purchase Date</th>
+                    <th style='border: 1px solid #ddd; padding: 8px; background-color: #f4f4f4; text-align: left;'>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
     ";
 
-    // Loop through purchase details to add rows to the table
     foreach ($purchaseDetails as $detail) {
-        $receiptContent .= "
-            <tr>
-                <td>{$detail['number']}</td>
-                <td>{$detail['category']}</td>
-                <td>{$detail['date']}</td>
-                <td>$" . number_format($detail['amount'], 2) . "</td>
-            </tr>
-        ";
+    $html .= "
+        <tr>
+            <td style='border: 1px solid #ddd; padding: 8px;'>{$detail['number']}</td>
+            <td style='border: 1px solid #ddd; padding: 8px;'>{$detail['category']}</td>
+            <td style='border: 1px solid #ddd; padding: 8px;'>{$detail['date']}</td>
+            <td style='border: 1px solid #ddd; padding: 8px;'>$" . number_format($detail['amount'], 2) . "</td>
+        </tr>
+    ";
     }
 
-    // Add the subtotal and footer to the receipt
-    $receiptContent .= "
-                    </tbody>
-                </table>
-                <div class=\"content\">
-                    <strong>Subtotal:</strong> $" . number_format($subtotal, 2) . "
-                </div>
-                <div class=\"footer\">
-                    All rights reserved © 2024
-                </div>
-            </div>
-        </body>
-        </html>
+    $html .= "
+            </tbody>
+        </table>
+        <div class='content' style='margin-top: 15px;'>
+            <strong>Subtotal:</strong> $" . number_format($subtotal, 2) . "
+        </div>
+        <div class='footer' style='text-align: center; margin-top: 20px; font-size: 12px; color: #777;'>
+            All rights reserved © 2024
+        </div>
+    </div>
     ";
+
 
     // Send the email with the receipt content
     $to = "sales@navbright.tech"; // Replace with your backup email address
@@ -136,7 +86,7 @@ function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agent
     mail($to, $subject, $receiptContent, $headers);
 
     // Return the receipt HTML
-    return $receiptContent;
+    return $html;
     
 }
 

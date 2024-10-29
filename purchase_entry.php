@@ -267,17 +267,19 @@ function calculatePermutationFactor($purchase_no) {
                             </div>
                             <?php endif; ?>
 
-                         
-
-                        <!-- Customer Search and Display -->
-                        <form method="POST" action="purchase_entry.php">
-
-                           <!-- Display the receipt if generated -->
+                             <!-- Display the receipt if generated -->
                            <?php if (!empty($receiptHTML)): ?>
                                 <div id="receipt-section">
                                     <?php echo $receiptHTML; ?>
                                 </div>
                             <?php endif; ?>
+
+                         
+
+                        <!-- Customer Search and Display -->
+                        <form method="POST" action="purchase_entry.php">
+
+                          
                             <!-- CSRF Token -->
                             <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
 
