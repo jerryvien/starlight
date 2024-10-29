@@ -29,6 +29,38 @@ function getUserIP() {
 function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agentName, $serialNumber) {
     $transactionDateTime = date('Y-m-d H:i:s');
 
+    <style>
+        .receipt-container {
+            max-width: 500px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Adds shadow */
+            position: relative;
+            background-color: rgba(255, 255, 255, 0.8); /* Makes the background slightly opaque */
+            align-self: flex-start; /* Aligns the container to the left */
+        }
+
+        /* Add the background image */
+        .receipt-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('/img/about.jpg'); /* Replace with your image path */
+            background-size: cover;
+            background-position: center;
+            opacity: 0.3; /* Set opacity to 30% */
+            z-index: -1; /* Set behind the content */
+        }
+
+        .receipt-content {
+            position: relative; /* Ensure text appears above the background image */
+            z-index: 1;
+        }
+    </style>
+
     $html = "
     
         <div class='receipt-container' style='max-width: 600px; margin: 20px auto;'>
