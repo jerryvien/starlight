@@ -135,6 +135,9 @@ function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agent
     // Send the email
     mail($to, $subject, $receiptContent, $headers);
 
+    // Return the receipt HTML
+    return $receiptContent;
+
     // Generate the popup script
     echo "<script type='text/javascript'>
         var popupWindow = window.open('', 'Receipt', 'width=600,height=700');

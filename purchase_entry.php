@@ -174,7 +174,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $_SESSION['success_message'] = "Purchase entries added successfully with serial number: $serial_number";
 
     // Call the generateReceiptPopup function to show the receipt
-    generateReceiptPopup($customer_name, $purchaseDetails, $subtotal, $agent_name, $serial_number);
+    $receiptHTML = generateReceiptPopup($customer_name, $purchaseDetails, $subtotal, $agent_name, $serial_number);
 }
 
 // Function to calculate permutation factor for "Box"
@@ -263,6 +263,12 @@ function calculatePermutationFactor($purchase_no) {
                             <div class="alert alert-success">
                                 <?php echo $_SESSION['success_message']; ?>
                                 <?php unset($_SESSION['success_message']); // Clear message after displaying ?>
+                                 <!-- Display the receipt if generated -->
+                                <?php if (!empty($receiptHTML)): ?>
+                                    <div id="receipt-section">
+                                        <?php echo $receiptHTML; ?>
+                                    </div>
+                                <?php endif; ?>
                             </div>
                             <?php endif; ?>
 
