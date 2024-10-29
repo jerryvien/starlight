@@ -282,9 +282,8 @@ function calculatePermutationFactor($purchase_no) {
                                         <button id="copy-image-btn" class="btn btn-link" style="font-size: 24px; color: #007bff;" title="Copy as Image">
                                             <i class="fas fa-copy"></i>
                                         </button>
-
                                         <!-- Copy Notification -->
-                                        <div id="copy-notification" class="alert alert-success ml-2" style="display: none;">
+                                        <div id="copy-notification" class="alert alert-success" style="display: none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 1000; opacity: 0.9; background-color: rgba(72, 187, 120, 0.5); color: #fff; padding: 10px 20px; border-radius: 5px;">
                                             Receipt copied to clipboard as an image!
                                         </div>
                                     </div>
@@ -307,13 +306,7 @@ function calculatePermutationFactor($purchase_no) {
                                                             const item = new ClipboardItem({ 'image/png': blob });
                                                             navigator.clipboard.write([item]).then(() => {
                                                                 // Show notification
-                                                                notification.style.display = 'inline-block';
-                                                                notification.style.opacity = 1;
-
-                                                                // Fade out after 3 seconds
-                                                                setTimeout(() => {
-                                                                    fadeOut(notification);
-                                                                }, 3000);
+                                                                showNotification();
                                                             }).catch(err => {
                                                                 console.error("Failed to copy image:", err);
                                                                 alert("Failed to copy image.");
@@ -332,18 +325,29 @@ function calculatePermutationFactor($purchase_no) {
                                         });
                                     }
 
-                                    // Function to fade out the notification
+                                    // Function to show the notification
+                                    function showNotification() {
+                                        notification.style.display = 'block';
+                                        notification.style.opacity = 0.9;
+
+                                        // Fade out after 3 seconds
+                                        setTimeout(() => {
+                                            fadeOut(notification);
+                                        }, 3000);
+                                    }
+
+                                    // Function to fade out the notification smoothly
                                     function fadeOut(element) {
-                                        let opacity = 1;
+                                        let opacity = 0.9;
                                         const fadeEffect = setInterval(() => {
-                                            if (opacity <= 0.1) {
+                                            if (opacity <= 0) {
                                                 clearInterval(fadeEffect);
                                                 element.style.display = 'none';
                                             } else {
                                                 opacity -= 0.1;
                                                 element.style.opacity = opacity;
                                             }
-                                        }, 100); // Speed of fading (0.1 every 100ms)
+                                        }, 100); // Adjust speed of fading (0.1 decrease every 100ms)
                                     }
                                 });
                             </script>
