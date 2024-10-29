@@ -32,7 +32,7 @@ function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agent
     $html = "
     
         <div class='receipt-container' style='max-width: 600px; margin: 20px auto;'>
-        <div class='header' style='text-align: left; font-weight: bold; font-size: 18px; margin-bottom: 20px;'>Receipt</div>
+        <div class='header' style='text-align: left; font-weight: bold; font-size: 18px; margin-bottom: 20px;'>RECEIPT</div>
         <div class='content' style='margin-bottom: 15px;'>
             <strong>Customer Name:</strong> {$customerName}<br>
             <strong>Agent Name:</strong> {$agentName}<br>
