@@ -289,7 +289,7 @@ function calculatePermutationFactor($purchase_no) {
                                         <div id="copy-notification" class="alert alert-success" style="display: none; position: fixed; top: 400px; left: 50%; transform: translateX(-50%); z-index: 1000; opacity: 0.9; background-color: rgba(72, 187, 120, 0.5); color: #fff; padding: 10px 20px; border-radius: 5px;">
                                             Receipt copied to clipboard as an image!
                                         </div>
-                                        <div id="download-notification" class="alert alert-success" style="display: none; position: fixed; top: 20px; right: 20px; z-index: 1000; opacity: 0.8; background: rgba(0, 128, 0, 0.5); color: white; padding: 10px; border-radius: 5px;">
+                                        <div id="download-notification" class="alert alert-success" style="display: none; position: fixed; top: 400px; right: 20px; z-index: 1000; opacity: 0.8; background: rgba(0, 128, 0, 0.5); color: white; padding: 10px; border-radius: 5px;">
                                             Receipt saved as an image!
                                         </div>
                                     </div>
