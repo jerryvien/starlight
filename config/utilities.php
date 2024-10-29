@@ -25,6 +25,23 @@ function getUserIP() {
     }
 }
 
+function isValidSerialNumber($providedSerialNumber) {
+    $key = "KENSTARLIGHT"; // Your encryption key
+
+    // Iterate through the possible random numbers used for serial generation
+    for ($random_number = 100000; $random_number <= 999999; $random_number++) {
+        // Generate the serial number based on the secret key and current random number
+        $generatedSerialNumber = substr(md5($key . $random_number), 0, 12);
+        
+        // Check if the generated serial number matches the provided one
+        if (strtoupper($generatedSerialNumber) === strtoupper($providedSerialNumber)) {
+            return true; // Valid serial number
+        }
+    }
+
+    return false; // Invalid serial number
+}
+
 
 function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agentName, $serialNumber) {
     $transactionDateTime = date('Y-m-d H:i:s');
