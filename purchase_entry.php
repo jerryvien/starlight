@@ -205,7 +205,7 @@ function calculatePermutationFactor($purchase_no) {
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
     <script src="vendor/jquery/jquery.min.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <link href="css/bootstrap.min.css" rel="stylesheet"> <!-- Ensure Bootstrap is correctly linked -->
 
 </head>
@@ -271,10 +271,44 @@ function calculatePermutationFactor($purchase_no) {
                            <?php if (!empty($receiptHTML)): ?>
                                 <div id="receipt-section">
                                     <?php echo $receiptHTML; ?>
+                                    <button id="copy-image-btn" class="btn btn-primary mt-3">Copy as Image</button>
                                 </div>
                             <?php endif; ?>
 
-                         
+                            <script>
+                                document.addEventListener("DOMContentLoaded", function() {
+                                    const copyButton = document.getElementById("copy-image-btn");
+
+                                    if (copyButton) {
+                                        copyButton.addEventListener("click", function() {
+                                            const receiptElement = document.querySelector(".receipt-container");
+
+                                            if (receiptElement) {
+                                                html2canvas(receiptElement).then(canvas => {
+                                                    canvas.toBlob(blob => {
+                                                        if (blob) {
+                                                            const item = new ClipboardItem({ 'image/png': blob });
+                                                            navigator.clipboard.write([item]).then(() => {
+                                                                alert("Receipt copied to clipboard as an image!");
+                                                            }).catch(err => {
+                                                                console.error("Failed to copy image:", err);
+                                                                alert("Failed to copy image.");
+                                                            });
+                                                        } else {
+                                                            alert("Failed to generate image.");
+                                                        }
+                                                    });
+                                                }).catch(err => {
+                                                    console.error("Error generating image:", err);
+                                                    alert("Error generating image.");
+                                                });
+                                            } else {
+                                                alert("Receipt element not found.");
+                                            }
+                                        });
+                                    }
+                                });
+                            </script>
 
                         <!-- Customer Search and Display -->
                         <form method="POST" action="purchase_entry.php">
