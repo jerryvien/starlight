@@ -39,7 +39,7 @@ if (!isset($_SESSION['form_submitted'])) {
 // Check for form resubmission using session flag
 if ($_SESSION['form_submitted'] === true) {
     // Clear session and redirect to prevent resubmission
-    unset($_SESSION['form_submitted']); // Unset only the submission flag
+    $_SESSION['form_submitted'] = false;
     header('Location: index.php'); // Redirect to login or another page
     exit();
 }
