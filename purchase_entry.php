@@ -168,7 +168,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     // Mark form as submitted
-    $_SESSION['form_submitted'] = true;
+    $_SESSION['form_submitted'] = false;
 
     // Store the success message in session
     $_SESSION['success_message'] = "Purchase entries added successfully with serial number: $serial_number";
