@@ -31,10 +31,15 @@ if (!isset($_SESSION['admin'])) {
     exit;
 }
 
+// Initialize the form submission flag
+if (!isset($_SESSION['form_submitted'])) {
+    $_SESSION['form_submitted'] = false;
+}
+
 // Check for form resubmission using session flag
-if (isset($_SESSION['form_submitted']) && $_SESSION['form_submitted'] === true) {
-    session_unset(); // Clear session
-    session_destroy(); // Destroy session
+if ($_SESSION['form_submitted'] === true) {
+    // Clear session and redirect to prevent resubmission
+    unset($_SESSION['form_submitted']); // Unset only the submission flag
     header('Location: index.php'); // Redirect to login or another page
     exit();
 }
@@ -104,6 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $subtotal = 0;
 
     // Insert each purchase entry into the database
+    $success = true; // Flag to track database insertion success
     for ($i = 0; $i < count($purchase_entries); $i++) {
         $total_price = 0;
 
@@ -167,14 +173,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         
     }
 
-    // Mark form as submitted
-    $_SESSION['form_submitted'] = true;
+    // Set form submission flag to true after successful insertion
+    if ($success) {
+        // Mark form as submitted
+        $_SESSION['form_submitted'] = true;
+        // Store the success message in session
+        $_SESSION['success_message'] = "Purchase entries added successfully with serial number: $serial_number";
 
-    // Store the success message in session
-    $_SESSION['success_message'] = "Purchase entries added successfully with serial number: $serial_number";
+        // Call the generateReceiptPopup function to show the receipt
+        $receiptHTML = generateReceiptPopup($customer_name, $purchaseDetails, $subtotal, $agent_name, $serial_number);
 
-    // Call the generateReceiptPopup function to show the receipt
-    $receiptHTML = generateReceiptPopup($customer_name, $purchaseDetails, $subtotal, $agent_name, $serial_number);
+        // Redirect to avoid duplicate submissions
+        header('Location: ' . $_SERVER['PHP_SELF']);
+        exit();
+    } else {
+        $_SESSION['success_message'] = "Error inserting purchase entries.";
+    }
+
+
 }
 
 // Function to calculate permutation factor for "Box"
