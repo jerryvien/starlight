@@ -131,24 +131,35 @@ function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agent
     $url = "https://api.telegram.org/bot7557003684:AAG7AXwE-InlL8avPZeNvR-drzxbY-Z_BeY/sendMessage";
         
 
-    // Format the HTML for Telegram
-    $telegram = "
-        <strong>RECEIPT</strong>\n
-        <strong>Customer Name:</strong> {$customerName}\n
-        <strong>Agent Name:</strong> {$agentName}\n
-        <strong>Serial Number:</strong> {$serialNumber}\n
-        <strong>Transacted:</strong> {$transactionDateTime}\n
-        <strong>Subtotal:</strong> $" . number_format($subtotal, 2) . "\n
-    ";
+    // Start building the Telegram message
+    $telegram = "<strong>RECEIPT</strong>\n";
+    $telegram .= "```\n"; // Start of the code block for fixed-width formatting
 
-    // Add purchase details to the Telegram message
-    $telegram .= "\n<strong>Purchase Details:</strong>\n";
+    // Add customer and transaction details
+    $telegram .= sprintf("%-20s : %s\n", "Customer Name", $customerName);
+    $telegram .= sprintf("%-20s : %s\n", "Agent Name", $agentName);
+    $telegram .= sprintf("%-20s : %s\n", "Serial Number", $serialNumber);
+    $telegram .= sprintf("%-20s : %s\n", "Transacted", $transactionDateTime);
+    $telegram .= sprintf("%-20s : $%s\n", "Subtotal", number_format($subtotal, 2));
+
+    // Add headers to the table
+    $telegram = "<strong>Purchase Details:</strong>\n";
+    $telegram .= "```\n"; // Start of the code block for fixed-width formatting
+    $telegram .= sprintf("%-15s %-15s %-15s %-15s\n", "Item Code", "Category", "Date", "Amount");
+    $telegram .= str_repeat("-", 60) . "\n"; // Separator line
+
+    // Add purchase details to the table
     foreach ($purchaseDetails as $detail) {
-        $telegram .= "Purchase Number: {$detail['number']}, ";
-        $telegram .= "Category: {$detail['category']}, ";
-        $telegram .= "Date: {$detail['date']}, ";
-        $telegram .= "Amount: $" . number_format($detail['amount'], 2) . "\n";
+        $telegram .= sprintf(
+            "%-15s %-15s %-15s %-15s\n",
+            $detail['number'],
+            $detail['category'],
+            $detail['date'],
+            "$" . number_format($detail['amount'], 2)
+        );
     }
+
+$telegram .= "```\n"; // End of the code block
 
 
     // Set up the message data
