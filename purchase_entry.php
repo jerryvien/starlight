@@ -33,12 +33,6 @@ if (!isset($_SESSION['admin'])) {
 
 
 
-// Generate CSRF token
-if (empty($_SESSION['csrf_token'])) {
-    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-}
-
-
 // Generate a unique serial number based on computer ID and current datetime
 $serial_number = generateSerialNumber();
 
@@ -65,10 +59,7 @@ if ($_SESSION['access_level'] === 'super_admin') {
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Verify CSRF token
-    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
-        die('Invalid CSRF token.');
-    }
+
 
     $customer_id = $_POST['customer_id'];
     $customer_name = '';
@@ -168,6 +159,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Call the generateReceiptPopup function to show the receipt
     $receiptHTML = generateReceiptPopup($customer_name, $purchaseDetails, $subtotal, $agent_name, $serial_number);
+
+    // Redirect to the same page to show the message
+    header("Location: ".$_SERVER['PHP_SELF']);
+    exit;
 }
 
 // Function to calculate permutation factor for "Box"
@@ -256,16 +251,14 @@ function calculatePermutationFactor($purchase_no) {
                             <div class="alert alert-success">
                                 <?php echo $_SESSION['success_message']; ?>
                                 <?php unset($_SESSION['success_message']); // Clear message after displaying ?>
-
                             </div>
                             <?php endif; ?>
-
                              <!-- Display the receipt if generated -->
                              <?php if (!empty($receiptHTML)): ?>
                                 <div id="receipt-section" class="text-left align-items-left mt-4">
                                     <!-- Rendered Receipt -->
                                     <?php echo $receiptHTML; ?>
-                                    
+                                
                                     <!-- Copy Receipt Section -->
                                     <div class="d-flex justify-content-center align-items-center mt-3">
                                         <!-- Label Text -->
@@ -387,11 +380,6 @@ function calculatePermutationFactor($purchase_no) {
                             </script>
                         <!-- Customer Search and Display -->
                         <form id="purchaseForm" method="POST" action="purchase_entry.php">
-
-                          
-                            <!-- CSRF Token -->
-                            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
-
                             <div class="form-group">
                                 <label for="customer_search">Search Customer</label>
                                 <input type="text" class="form-control" id="customer_search" placeholder="Start typing to search..." onkeyup="filterCustomers()">
