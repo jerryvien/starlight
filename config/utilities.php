@@ -130,9 +130,8 @@ function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agent
     // Send the message to Telegram
     $url = "https://api.telegram.org/bot7557003684:AAG7AXwE-InlL8avPZeNvR-drzxbY-Z_BeY/sendMessage";
         
-
     // Start building the Telegram message
-    $telegram = "<strong>RECEIPT</strong>\n";
+    $telegram = "<strong>OFFICIAL RECEIPT</strong>\n";
     $telegram .= "```\n"; // Start of the code block for fixed-width formatting
 
     // Add customer and transaction details
@@ -141,6 +140,8 @@ function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agent
     $telegram .= sprintf("%-20s : %s\n", "Serial Number", $serialNumber);
     $telegram .= sprintf("%-20s : %s\n", "Transacted", $transactionDateTime);
     $telegram .= sprintf("%-20s : $%s\n", "Subtotal", number_format($subtotal, 2));
+
+    $telegram .= "```\n"; // End of the code block
 
     // Add headers to the table
     $telegram = "<strong>Purchase Details:</strong>\n";
