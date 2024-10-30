@@ -134,18 +134,19 @@ function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agent
     $telegram = "<strong>OFFICIAL RECEIPT</strong>\n";
     $telegram .= "```\n"; // Start of the code block for fixed-width formatting
 
-    // Define column width for the receipt details
-    $width = 20;
+    // Define column widths
+    $colWidth1 = 20; // Width for labels
+    $colWidth2 = 25; // Width for values
 
-    // Add customer and transaction details with fixed-width formatting
-    $telegram .= sprintf("%-{$width}s : %s\n", "Customer Name", $customerName);
-    $telegram .= sprintf("%-{$width}s : %s\n", "Agent Name", $agentName);
+    // Add customer and transaction details in a table format
+    $telegram .= sprintf("%-{$colWidth1}s : %-{$colWidth2}s\n", "Customer Name", $customerName);
+    $telegram .= sprintf("%-{$colWidth1}s : %-{$colWidth2}s\n", "Agent Name", $agentName);
 
-    // Bold the serial number
-    $telegram .= sprintf("%-{$width}s : <strong>%s</strong>\n", "Serial Number", $serialNumber);
+    // Bold the serial number and maintain alignment
+    $telegram .= sprintf("%-{$colWidth1}s : <strong>%-{$colWidth2}s</strong>\n", "Serial Number", $serialNumber);
 
-    $telegram .= sprintf("%-{$width}s : %s\n", "Transacted", $transactionDateTime);
-    $telegram .= sprintf("%-{$width}s : $%s\n", "Subtotal", number_format($subtotal, 2));
+    $telegram .= sprintf("%-{$colWidth1}s : %-{$colWidth2}s\n", "Transacted", $transactionDateTime);
+    $telegram .= sprintf("%-{$colWidth1}s : $%-{$colWidth2}s\n", "Subtotal", number_format($subtotal, 2));
 
     $telegram .= "```\n"; // End of the code block for receipt details
 
@@ -169,6 +170,7 @@ function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agent
     }
 
     $telegram .= "```\n"; // End of the code block for purchase details
+
 
 
 
