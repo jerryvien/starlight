@@ -24,7 +24,7 @@ function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agent
     }
 
     // Send the message to Telegram
-    $url = "https://api.telegram.org/bot$telegramToken/sendMessage";
+    $url = "https://api.telegram.org/bot7557003684:AAG7AXwE-InlL8avPZeNvR-drzxbY-Z_BeY/sendMessage";
     
     // Set up the message data
     $data = [
