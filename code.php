@@ -1,5 +1,5 @@
 <?php
-function sendImageToTelegram($imagePath, $chatId) {
+function sendImageToTelegram($chatId) {
     $telegramToken = '7557003684:AAG7AXwE-InlL8avPZeNvR-drzxbY-Z_BeY';
     $url = "https://api.telegram.org/bot$telegramToken/sendPhoto";
 
@@ -24,6 +24,6 @@ function sendImageToTelegram($imagePath, $chatId) {
 $imagePath = __DIR__ . '/img/logo.png'; // Provide the correct path
 $chatId = '2001353148'; // Replace with your Telegram chat ID
 
-$response = sendImageToTelegram($imagePath, $chatId);
+$response = sendImageToTelegram($chatId);
 echo $response;
 ?>
