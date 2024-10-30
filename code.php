@@ -1,7 +1,7 @@
 <?php
 
 $botToken = '7557003684:AAG7AXwE-InlL8avPZeNvR-drzxbY-Z_BeY';
-$chatId = '586829264'; // Replace with your chat ID
+$chatId = '@Ken_Group'; // Replace with your chat ID
 
 $message = "Hello, World!";
 
