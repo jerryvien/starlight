@@ -1,17 +1,48 @@
 <?php
-function testMailFunction() {
-    $to = 'jerryvic0902@outlook.com'; // Replace with your email for testing
-    $subject = 'Test Email from PHP mail()';
-    $message = 'This is a test email to verify the mail() function.';
-    $headers = "From: noreply@navbright.tech\r\n"; // Replace with your sender email
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
-    if (mail($to, $subject, $message, $headers)) {
-        echo 'Test email sent successfully.';
-    } else {
-        echo 'Failed to send the test email.';
+// Include PHPMailer library files
+require 'phpmailer/src/PHPMailer.php';
+require 'phpmailer/src/SMTP.php';
+require 'phpmailer/src/Exception.php';
+
+function testPHPMailer() {
+    // Create an instance of PHPMailer
+    $mail = new PHPMailer(true);
+
+    try {
+        // SMTP server configuration
+        $mail->isSMTP();
+        $mail->Host       = 'smtp.gmail.com'; // Change this to your SMTP server (e.g., smtp.hostinger.com)
+        $mail->SMTPAuth   = true;
+        $mail->Username   = 'your_email@gmail.com'; // Replace with your SMTP username
+        $mail->Password   = 'your_app_password'; // Replace with your SMTP password or app password
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Use TLS encryption
+        $mail->Port       = 587; // SMTP port (465 for SSL, 587 for TLS)
+
+        // Set email sender and recipient
+        $mail->setFrom('your_email@gmail.com', 'Your Name'); // Sender's email and name
+        $mail->addAddress('recipient@example.com', 'Recipient Name'); // Recipient's email and name
+
+        // Email content
+        $mail->isHTML(true); // Set email format to HTML
+        $mail->Subject = 'PHPMailer Test Email';
+        $mail->Body    = '<h1>Test Email</h1><p>This is a test email sent using PHPMailer with SMTP configuration.</p>';
+        $mail->AltBody = 'This is the plain text version of the email content for non-HTML clients.';
+
+        // Attempt to send the email
+        if ($mail->send()) {
+            echo 'Test email has been sent successfully!';
+        } else {
+            echo 'Test email could not be sent.';
+        }
+    } catch (Exception $e) {
+        // Display error message if email sending fails
+        echo 'Email could not be sent. PHPMailer Error: ' . $mail->ErrorInfo;
     }
 }
 
 // Call the test function
-testMailFunction();
+testPHPMailer();
 ?>
