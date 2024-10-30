@@ -4,9 +4,9 @@ use PHPMailer\PHPMailer\Exception;
 
 // Include PHPMailer library files
 
-include('PHPmailer/PHPmailer-master/src/PHPMailer.php');
-include('PHPmailer/PHPmailer-master/src/SMTP.php');
-include('PHPmailer/PHPmailer-master/src/Exception.php');
+include 'PHPmailer/PHPmailer-master/src/PHPMailer.php';
+include 'PHPmailer/PHPmailer-master/src/SMTP.php';
+include 'PHPmailer/PHPmailer-master/src/Exception.php';
 
 
 function testPHPMailer() {
