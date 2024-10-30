@@ -11,13 +11,6 @@ error_reporting(E_ALL);
 // Set default timezone to ensure consistency
 date_default_timezone_set('Asia/Singapore'); // GMT +8 timezone
 
-
-// Generate form token if not already set
-if (!isset($_SESSION['form_token']) || empty($_SESSION['form_token'])) {
-    $_SESSION['form_token'] = bin2hex(random_bytes(32)); // Generate a new random token
-}
-
-
 // Get current hour and minute in HH:MM format
 $current_time = date('H:i');
 
@@ -66,19 +59,6 @@ if ($_SESSION['access_level'] === 'super_admin') {
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
-    // Debugging: Check if the form token exists in the session and in the POST request
-    if (!isset($_POST['form_token']) || !isset($_SESSION['form_token'])) {
-        die("Form token is missing.");
-    }
-
-    // Debugging: Check if the session token matches the form token
-    if ($_POST['form_token'] !== $_SESSION['form_token']) {
-        die("Invalid form submission. Token mismatch.");
-    }
-
-    // Invalidate the form token after successful submission to prevent reuse
-    unset($_SESSION['form_token']);
 
 
     $customer_id = $_POST['customer_id'];
@@ -261,8 +241,6 @@ function calculatePermutationFactor($purchase_no) {
                 <?php else: ?>
                     <div class="container-fluid">
                         <h1 class="h3 mb-4 text-gray-800">Purchase Record Entry</h1>
-                        <input type="hidden" name="form_token" value="<?php echo $_SESSION['form_token']; ?>">
-
                         
                             <!-- Display success message if it exists -->
                             <?php if (isset($_SESSION['success_message'])): ?>
