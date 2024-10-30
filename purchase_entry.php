@@ -8,7 +8,6 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-
 // Set default timezone to ensure consistency
 date_default_timezone_set('Asia/Singapore'); // GMT +8 timezone
 
@@ -17,7 +16,7 @@ $current_time = date('H:i');
 
 // Define start and cutoff times
 $start_time = '00:00';
-$cutoff_time = '18:55';
+$cutoff_time = '23:55';
 
 // Variable to determine if access is allowed
 $access_allowed = true;
@@ -26,14 +25,13 @@ if ($current_time < $start_time || $current_time > $cutoff_time) {
     $access_allowed = false;
 }
 
-// Check if the current time is within the allowed range
-
-
 // Redirect to login page if the user is not logged in
 if (!isset($_SESSION['admin'])) {
     header("Location: index.php");
     exit;
 }
+
+
 
 // Generate a unique serial number based on computer ID and current datetime
 $serial_number = generateSerialNumber();
@@ -61,7 +59,17 @@ if ($_SESSION['access_level'] === 'super_admin') {
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+
     $customer_id = $_POST['customer_id'];
+    $customer_name = '';
+    foreach ($customers as $customer) {
+        if ($customer['customer_id'] == $customer_id) {
+            $customer_name = $customer['customer_name'];
+            break;
+        }
+    }
+
     $purchase_entries = $_POST['purchase_no'];
     $purchase_category = $_POST['purchase_category'];
     $purchase_amount = $_POST['purchase_amount'];
@@ -69,6 +77,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Set agent ID based on access level
     $agent_id_to_save = ($_SESSION['access_level'] === 'super_admin') ? $_POST['agent_id'] : $_SESSION['agent_id'];
+    $agent_name = '';
+    foreach ($agents as $agent) {
+        if ($agent['agent_id'] == $agent_id_to_save) {
+            $agent_name = $agent['agent_name'];
+            break;
+        }
+    }
+
+    $purchaseDetails = [];
+    $subtotal = 0;
 
     // Insert each purchase entry into the database
     for ($i = 0; $i < count($purchase_entries); $i++) {
@@ -82,6 +100,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $total_price = $purchase_amount[$i]; // Straight amount stays the same
         }
 
+        $subtotal += $total_price;
+        $purchaseDetails[] = [
+            'number' => $purchase_entries[$i], 
+            'category' => $purchase_category[$i],
+            'amount' => $total_price,
+            'date' => $purchase_date[$i]
+        ];
+
         $sql = "INSERT INTO purchase_entries (customer_id, agent_id, purchase_no, purchase_category, purchase_amount, purchase_datetime, serial_number) 
                 VALUES (:customer_id, :agent_id, :purchase_no, :purchase_category, :purchase_amount, :purchase_datetime, :serial_number)";
         $stmt = $conn->prepare($sql);
@@ -93,7 +119,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->bindParam(':purchase_datetime', $purchase_date[$i]);
         $stmt->bindParam(':serial_number', $serial_number);
         $stmt->execute();
-
 
         // Update the updated_at field in customer_details table
         try {
@@ -127,13 +152,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         
     }
 
-    // Call the generateReceiptPopup function to show the receipt
-    generateReceiptPopup($customer_name, $purchaseDetails, $subtotal, $agent_name, $serial_number);
+  
 
     // Store the success message in session
     $_SESSION['success_message'] = "Purchase entries added successfully with serial number: $serial_number";
 
-    //echo "<div class='alert alert-success'>Purchase entries added successfully with serial number: $serial_number</div>";
+    // Call the generateReceiptPopup function to show the receipt
+    $receiptHTML = generateReceiptPopup($customer_name, $purchaseDetails, $subtotal, $agent_name, $serial_number);
+
+    // Redirect to the same page to show the message
+    header("Location: ".$_SERVER['PHP_SELF']);
+    exit;
 }
 
 // Function to calculate permutation factor for "Box"
@@ -164,7 +193,7 @@ function calculatePermutationFactor($purchase_no) {
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
     <script src="vendor/jquery/jquery.min.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <link href="css/bootstrap.min.css" rel="stylesheet"> <!-- Ensure Bootstrap is correctly linked -->
 
 </head>
@@ -224,9 +253,133 @@ function calculatePermutationFactor($purchase_no) {
                                 <?php unset($_SESSION['success_message']); // Clear message after displaying ?>
                             </div>
                             <?php endif; ?>
+                             <!-- Display the receipt if generated -->
+                             <?php if (!empty($receiptHTML)): ?>
+                                <div id="receipt-section" class="text-left align-items-left mt-4">
+                                    <!-- Rendered Receipt -->
+                                    <?php echo $receiptHTML; ?>
+                                
+                                    <!-- Copy Receipt Section -->
+                                    <div class="d-flex justify-content-center align-items-center mt-3">
+                                        <!-- Label Text -->
+                                        <span class="mr-2">Copy Receipt</span>
+                                        
+                                        <!-- Copy Icon Button -->
+                                        <button id="copy-image-btn" class="btn btn-link" style="font-size: 24px; color: #007bff;" title="Copy as Image">
+                                            <i class="fas fa-copy"></i>
+                                        </button>
+                                        <button id="download-image-btn" class="btn btn-link ml-2" style="font-size: 24px; color: #007bff;" title="Download as Image">
+                                            <i class="fas fa-download"></i>
+                                        </button>
+                                        <!-- Copy Notification -->
+                                        <div id="copy-notification" class="alert alert-success" style="display: none; position: fixed; top: 400px; left: 50%; transform: translateX(-50%); z-index: 1000; opacity: 0.9; background-color: rgba(72, 187, 120, 0.5); color: #fff; padding: 10px 20px; border-radius: 5px;">
+                                            Receipt copied to clipboard as an image!
+                                        </div>
+                                        <div id="download-notification" class="alert alert-success" style="display: none; position: fixed; top: 400px; right: 20px; z-index: 1000; opacity: 0.8; background: rgba(0, 128, 0, 0.5); color: white; padding: 10px; border-radius: 5px;">
+                                            Receipt saved as an image!
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
 
+                            <script>
+                                document.addEventListener("DOMContentLoaded", function() {
+                                    const copyButton = document.getElementById("copy-image-btn");
+                                    const notification = document.getElementById("copy-notification");
+
+                                    if (copyButton) {
+                                        copyButton.addEventListener("click", function() {
+                                            const receiptElement = document.querySelector(".receipt-container");
+
+                                            if (receiptElement) {
+                                                html2canvas(receiptElement).then(canvas => {
+                                                    canvas.toBlob(blob => {
+                                                        if (blob) {
+                                                            const item = new ClipboardItem({ 'image/png': blob });
+                                                            navigator.clipboard.write([item]).then(() => {
+                                                                // Show notification
+                                                                showNotification();
+                                                            }).catch(err => {
+                                                                console.error("Failed to copy image:", err);
+                                                                alert("Failed to copy image.");
+                                                            });
+                                                        } else {
+                                                            alert("Failed to generate image.");
+                                                        }
+                                                    });
+                                                }).catch(err => {
+                                                    console.error("Error generating image:", err);
+                                                    alert("Error generating image.");
+                                                });
+                                            } else {
+                                                alert("Receipt element not found.");
+                                            }
+                                        });
+                                    }
+
+                                    // Function to show the notification
+                                    function showNotification() {
+                                        notification.style.display = 'block';
+                                        notification.style.opacity = 0.9;
+
+                                        // Fade out after 3 seconds
+                                        setTimeout(() => {
+                                            fadeOut(notification);
+                                        }, 3000);
+                                    }
+
+                                    // Function to fade out the notification smoothly
+                                    function fadeOut(element) {
+                                        let opacity = 0.9;
+                                        const fadeEffect = setInterval(() => {
+                                            if (opacity <= 0) {
+                                                clearInterval(fadeEffect);
+                                                element.style.display = 'none';
+                                            } else {
+                                                opacity -= 0.1;
+                                                element.style.opacity = opacity;
+                                            }
+                                        }, 100); // Adjust speed of fading (0.1 decrease every 100ms)
+                                    }
+                                });
+
+                                document.addEventListener("DOMContentLoaded", function() {
+                                    const downloadButton = document.getElementById("download-image-btn");
+
+                                    if (downloadButton) {
+                                        downloadButton.addEventListener("click", function() {
+                                            const receiptElement = document.querySelector(".receipt-container");
+
+                                            if (receiptElement) {
+                                                // Convert the receipt to an image using html2canvas
+                                                html2canvas(receiptElement).then(canvas => {
+                                                    // Create a temporary link to download the image
+                                                    const link = document.createElement('a');
+                                                    link.href = canvas.toDataURL("image/png");
+                                                    link.download = "receipt.png";  // Name of the image file
+                                                    link.click();
+
+                                                    // Show temporary notification
+                                                    const notification = document.getElementById("download-notification");
+                                                    if (notification) {
+                                                        notification.style.display = "block";
+                                                        setTimeout(() => {
+                                                            notification.style.display = "none";
+                                                        }, 3000); // 3-second fade out
+                                                    }
+                                                }).catch(err => {
+                                                    console.error("Error generating image:", err);
+                                                    alert("Error generating image.");
+                                                });
+                                            } else {
+                                                alert("Receipt element not found.");
+                                            }
+                                        });
+                                    }
+                                });
+                            </script>
                         <!-- Customer Search and Display -->
-                        <form method="POST" action="purchase_entry.php">
+                        <form id="purchaseForm" method="POST" action="purchase_entry.php">
                             <div class="form-group">
                                 <label for="customer_search">Search Customer</label>
                                 <input type="text" class="form-control" id="customer_search" placeholder="Start typing to search..." onkeyup="filterCustomers()">
@@ -269,7 +422,7 @@ function calculatePermutationFactor($purchase_no) {
                                 <div class="form-group row">
                                     <div class="col-md-3">
                                         <label for="purchase_no_0">Purchase Number</label>
-                                        <input type="text" class="form-control" name="purchase_no[]" id="purchase_no_0" pattern="\d{2,3}" title="Please enter a number with 2 or 3 digits" required>
+                                        <input type="text" class="form-control" name="purchase_no[]" id="purchase_no_0" " title="Please enter a number with 2 or 3 digits" required>
                                     </div>
                                     <div class="col-md-2">
                                         <label for="purchase_category_0">Category</label>
@@ -300,7 +453,26 @@ function calculatePermutationFactor($purchase_no) {
                             </div>
 
                             <!-- Submit Button -->
-                            <button type="submit" class="btn btn-success mt-3">Submit Purchase Entry</button>
+                            <button type="submit" id="submitBtn" class="btn btn-success mt-3">Submit Purchase Entry</button>
+                            <script>
+                                document.addEventListener("DOMContentLoaded", function() {
+                                    const form = document.getElementById("purchaseForm");
+                                    const submitBtn = document.getElementById("submitBtn");
+
+                                    if (form && submitBtn) {
+                                        form.addEventListener("submit", function(e) {
+                                            // Disable submit button after the form is submitted
+                                            submitBtn.disabled = true;
+                                            submitBtn.textContent = "Processing...";
+
+                                            // Add a slight delay to ensure the form doesn't submit before the button is disabled
+                                        setTimeout(() => {
+                                            form.submit(); // Ensure the form submits
+                                        }, 100);
+                                        });
+                                    }
+                                });
+                            </script>
                         </form>
                     </div>
                 <?php endif; ?>
@@ -359,7 +531,7 @@ function calculatePermutationFactor($purchase_no) {
                 col1.classList.add('col-md-3');
                 col1.innerHTML = `
                     <label for="purchase_no_${i}">Purchase Number</label>
-                    <input type="text" class="form-control" name="purchase_no[]" id="purchase_no_${i}" pattern="\\d{2,3}" title="Please enter a number with 2 or 3 digits" required>
+                    <input type="text" class="form-control" name="purchase_no[]" id="purchase_no_${i}" " title="Please enter a number with 2 or 3 digits" required>
                 `;
                 
                 // Purchase Category Field
@@ -465,3 +637,7 @@ function calculatePermutationFactor($purchase_no) {
 </body>
 
 </html>
+
+<?php
+
+?>
