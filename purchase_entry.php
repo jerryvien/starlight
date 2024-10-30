@@ -13,8 +13,8 @@ date_default_timezone_set('Asia/Singapore'); // GMT +8 timezone
 
 
 // Generate form token if not already set
-if (!isset($_SESSION['form_token'])) {
-    $_SESSION['form_token'] = bin2hex(random_bytes(32)); // Generate a random token
+if (!isset($_SESSION['form_token']) || empty($_SESSION['form_token'])) {
+    $_SESSION['form_token'] = bin2hex(random_bytes(32)); // Generate a new random token
 }
 
 
@@ -67,11 +67,17 @@ if ($_SESSION['access_level'] === 'super_admin') {
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    if (!isset($_POST['form_token']) || $_POST['form_token'] !== $_SESSION['form_token']) {
-        die("Invalid form submission."); // Stop duplicate submission
+    // Debugging: Check if the form token exists in the session and in the POST request
+    if (!isset($_POST['form_token']) || !isset($_SESSION['form_token'])) {
+        die("Form token is missing.");
     }
 
-    // Invalidate the form token after successful submission
+    // Debugging: Check if the session token matches the form token
+    if ($_POST['form_token'] !== $_SESSION['form_token']) {
+        die("Invalid form submission. Token mismatch.");
+    }
+
+    // Invalidate the form token after successful submission to prevent reuse
     unset($_SESSION['form_token']);
 
 
