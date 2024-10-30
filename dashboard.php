@@ -364,6 +364,17 @@ try {
                                     </div>
                                 </div>
                             </div>
+                            <!-- Third Tab: Winning Report -->
+                            <div class="tab-pane fade" id="top-Dashboard" role="tabpanel" aria-labelledby="top-number-tab">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                    <iframe width="600" height="450" src="https://lookerstudio.google.com/embed/reporting/05b5a899-3b5b-44f1-84ba-999a184be778/page/UkPIE" frameborder="0" style="border:0" allowfullscreen sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe>
+                                    </div>
+                                    <div class="col-md-6">
+                                        
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
