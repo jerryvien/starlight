@@ -3,9 +3,9 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 // Include PHPMailer library files
-require 'phpmailer/src/PHPMailer.php';
-require 'phpmailer/src/SMTP.php';
-require 'phpmailer/src/Exception.php';
+require 'PHPmailer/src/PHPMailer.php';
+require 'PHPmailer/src/SMTP.php';
+require 'PHPmailer/src/Exception.php';
 
 function testPHPMailer() {
     // Create an instance of PHPMailer
