@@ -357,7 +357,7 @@ try {
                             <div class="tab-pane fade" id="top-number" role="tabpanel" aria-labelledby="top-number-tab">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <?php include('PHP_Data/top_winning_number.php'); ?>
+                                    <iframe width="600" height="450" src="https://lookerstudio.google.com/embed/reporting/05b5a899-3b5b-44f1-84ba-999a184be778/page/UkPIE" frameborder="0" style="border:0" allowfullscreen sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe>
                                     </div>
                                     <div class="col-md-6">
                                         
