@@ -159,10 +159,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Call the generateReceiptPopup function to show the receipt
     $receiptHTML = generateReceiptPopup($customer_name, $purchaseDetails, $subtotal, $agent_name, $serial_number);
-
-    // Redirect to the same page to show the message
-    header("Location: ".$_SERVER['PHP_SELF']);
-    exit;
 }
 
 // Function to calculate permutation factor for "Box"
