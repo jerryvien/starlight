@@ -133,8 +133,8 @@ function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agent
     // Set up the message data
     $data = [
         'chat_id' => '-1002250872376',
-        'text' => $html,
-        'parse_mode' => 'HTML' // Allows basic HTML formatting
+        'text' => 'hello world',
+        //'parse_mode' => 'HTML' // Allows basic HTML formatting
     ];
 
    // Use cURL to send the message to Telegram
