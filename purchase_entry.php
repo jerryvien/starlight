@@ -464,4 +464,3 @@ function calculatePermutationFactor($purchase_no) {
 </body>
 
 </html>
-
