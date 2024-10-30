@@ -130,11 +130,32 @@ function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agent
     // Send the message to Telegram
     $url = "https://api.telegram.org/bot7557003684:AAG7AXwE-InlL8avPZeNvR-drzxbY-Z_BeY/sendMessage";
         
+
+    // Format the HTML for Telegram
+    $telegram = "
+        <strong>RECEIPT</strong>\n
+        <strong>Customer Name:</strong> {$customerName}\n
+        <strong>Agent Name:</strong> {$agentName}\n
+        <strong>Serial Number:</strong> {$serialNumber}\n
+        <strong>Transacted:</strong> {$transactionDateTime}\n
+        <strong>Subtotal:</strong> $" . number_format($subtotal, 2) . "\n
+    ";
+
+    // Add purchase details to the Telegram message
+    $telegram .= "\n<strong>Purchase Details:</strong>\n";
+    foreach ($purchaseDetails as $detail) {
+        $html .= "Purchase Number: {$detail['number']}, ";
+        $html .= "Category: {$detail['category']}, ";
+        $html .= "Date: {$detail['date']}, ";
+        $html .= "Amount: $" . number_format($detail['amount'], 2) . "\n";
+    }
+
+
     // Set up the message data
     $data = [
         'chat_id' => '-1002250872376',
-        'text' => 'hello world',
-        //'parse_mode' => 'HTML' // Allows basic HTML formatting
+        'text' => $telegram,
+        'parse_mode' => 'HTML' // Allows basic HTML formatting
     ];
 
    // Use cURL to send the message to Telegram
