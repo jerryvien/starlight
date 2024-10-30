@@ -134,20 +134,26 @@ function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agent
     $telegram = "<strong>OFFICIAL RECEIPT</strong>\n";
     $telegram .= "```\n"; // Start of the code block for fixed-width formatting
 
-    // Add customer and transaction details
-    $telegram .= sprintf("%-20s : %s\n", "Customer Name", $customerName);
-    $telegram .= sprintf("%-20s : %s\n", "Agent Name", $agentName);
-    $telegram .= sprintf("%-20s : %s\n", "Serial Number", $serialNumber);
-    $telegram .= sprintf("%-20s : %s\n", "Transacted", $transactionDateTime);
-    $telegram .= sprintf("%-20s : $%s\n", "Subtotal", number_format($subtotal, 2));
+    // Define column width for the receipt details
+    $width = 20;
 
-    $telegram .= "```\n"; // End of the code block for the receipt details
+    // Add customer and transaction details with fixed-width formatting
+    $telegram .= sprintf("%-{$width}s : %s\n", "Customer Name", $customerName);
+    $telegram .= sprintf("%-{$width}s : %s\n", "Agent Name", $agentName);
+
+    // Bold the serial number
+    $telegram .= sprintf("%-{$width}s : <strong>%s</strong>\n", "Serial Number", $serialNumber);
+
+    $telegram .= sprintf("%-{$width}s : %s\n", "Transacted", $transactionDateTime);
+    $telegram .= sprintf("%-{$width}s : $%s\n", "Subtotal", number_format($subtotal, 2));
+
+    $telegram .= "```\n"; // End of the code block for receipt details
 
     // Add headers to the purchase details table
     $telegram .= "<strong>Purchase Details:</strong>\n";
     $telegram .= "```\n"; // Start of the code block for purchase details
 
-    // Define column headers with fixed width
+    // Define fixed column headers for purchase details
     $telegram .= sprintf("%-15s %-20s %-15s %-10s\n", "Item Code", "Category", "Date", "Amount");
     $telegram .= str_repeat("-", 60) . "\n"; // Separator line
 
@@ -163,6 +169,7 @@ function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agent
     }
 
     $telegram .= "```\n"; // End of the code block for purchase details
+
 
 
 
