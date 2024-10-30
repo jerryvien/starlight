@@ -127,15 +127,25 @@ function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agent
       </div>
     ";
 
-    // Send the email with the receipt content
-    $to = "jerryvic0902@outlook.com"; // Replace with your backup email address
-    $subject = "Purchase Receipt Backup - Serial No: $serialNumber | $transactionDateTime | $agentName";
-    $headers = "MIME-Version: 1.0" . "\r\n";
-    $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-    $headers .= "From: noreply@navbright.tech"; // Replace with your email
+    // Send the message to Telegram
+    $url = "https://api.telegram.org/bot7557003684:AAG7AXwE-InlL8avPZeNvR-drzxbY-Z_BeY/sendMessage";
+        
+    // Set up the message data
+    $data = [
+        'chat_id' => '-1002250872376',
+        'text' => $html,
+        'parse_mode' => 'HTML' // Allows basic HTML formatting
+    ];
 
-    // Send the email
-    mail($to, $subject, $html, $headers);
+   // Use cURL to send the message to Telegram
+   $ch = curl_init();
+   curl_setopt($ch, CURLOPT_URL, $url);
+   curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+   curl_setopt($ch, CURLOPT_POST, true);
+   curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+   
+   $response = curl_exec($ch);
+   curl_close($ch);
 
     // Return the receipt HTML
     return $html;
