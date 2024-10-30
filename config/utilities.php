@@ -144,10 +144,10 @@ function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agent
     // Add purchase details to the Telegram message
     $telegram .= "\n<strong>Purchase Details:</strong>\n";
     foreach ($purchaseDetails as $detail) {
-        $html .= "Purchase Number: {$detail['number']}, ";
-        $html .= "Category: {$detail['category']}, ";
-        $html .= "Date: {$detail['date']}, ";
-        $html .= "Amount: $" . number_format($detail['amount'], 2) . "\n";
+        $telegram .= "Purchase Number: {$detail['number']}, ";
+        $telegram .= "Category: {$detail['category']}, ";
+        $telegram .= "Date: {$detail['date']}, ";
+        $telegram .= "Amount: $" . number_format($detail['amount'], 2) . "\n";
     }
 
 
