@@ -14,16 +14,16 @@ function testPHPMailer() {
     try {
         // SMTP server configuration
         $mail->isSMTP();
-        $mail->Host       = 'smtp.gmail.com'; // Change this to your SMTP server (e.g., smtp.hostinger.com)
+        $mail->Host       = 'smtp.hostinger.com'; // Change this to your SMTP server (e.g., smtp.hostinger.com)
         $mail->SMTPAuth   = true;
-        $mail->Username   = 'your_email@gmail.com'; // Replace with your SMTP username
-        $mail->Password   = 'your_app_password'; // Replace with your SMTP password or app password
+        $mail->Username   = 'sales@navbright.tech'; // Replace with your SMTP username
+        $mail->Password   = 'JerryYee0902@'; // Replace with your SMTP password or app password
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Use TLS encryption
-        $mail->Port       = 587; // SMTP port (465 for SSL, 587 for TLS)
+        $mail->Port       = 465; // SMTP port (465 for SSL, 587 for TLS)
 
         // Set email sender and recipient
-        $mail->setFrom('your_email@gmail.com', 'Your Name'); // Sender's email and name
-        $mail->addAddress('recipient@example.com', 'Recipient Name'); // Recipient's email and name
+        $mail->setFrom('sales@navbright.tech', 'Account Navbright'); // Sender's email and name
+        $mail->addAddress('account@navbright.tech', 'Account Team'); // Recipient's email and name
 
         // Email content
         $mail->isHTML(true); // Set email format to HTML
