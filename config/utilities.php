@@ -141,18 +141,20 @@ function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agent
     $telegram .= sprintf("%-20s : %s\n", "Transacted", $transactionDateTime);
     $telegram .= sprintf("%-20s : $%s\n", "Subtotal", number_format($subtotal, 2));
 
-    $telegram .= "```\n"; // End of the code block
+    $telegram .= "```\n"; // End of the code block for the receipt details
 
-    // Add headers to the table
-    $telegram = "<strong>Purchase Details:</strong>\n";
-    $telegram .= "```\n"; // Start of the code block for fixed-width formatting
-    $telegram .= sprintf("%-15s %-15s %-15s %-15s\n", "Item Code", "Category", "Date", "Amount");
+    // Add headers to the purchase details table
+    $telegram .= "<strong>Purchase Details:</strong>\n";
+    $telegram .= "```\n"; // Start of the code block for purchase details
+
+    // Define column headers with fixed width
+    $telegram .= sprintf("%-15s %-20s %-15s %-10s\n", "Item Code", "Category", "Date", "Amount");
     $telegram .= str_repeat("-", 60) . "\n"; // Separator line
 
-    // Add purchase details to the table
+    // Add purchase details to the table with fixed-width formatting
     foreach ($purchaseDetails as $detail) {
         $telegram .= sprintf(
-            "%-15s %-15s %-15s %-15s\n",
+            "%-15s %-20s %-15s %-10s\n",
             $detail['number'],
             $detail['category'],
             $detail['date'],
@@ -160,7 +162,8 @@ function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agent
         );
     }
 
-$telegram .= "```\n"; // End of the code block
+    $telegram .= "```\n"; // End of the code block for purchase details
+
 
 
     // Set up the message data
