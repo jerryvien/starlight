@@ -16,7 +16,7 @@ $current_time = date('H:i');
 
 // Define start and cutoff times
 $start_time = '00:00';
-$cutoff_time = '20:55';
+$cutoff_time = '23:55';
 
 // Variable to determine if access is allowed
 $access_allowed = true;
