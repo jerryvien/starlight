@@ -449,7 +449,7 @@ function calculatePermutationFactor($purchase_no) {
                             </div>
 
                             <!-- Submit Button -->
-                            <button type="submit" id="submitBtn" class="btn btn-success mt-3">Submit Purchase Entry</button>
+                            <button type="submit" id="submitBtn123" class="btn btn-success mt-3">Submit Purchase Entry</button>
                             <script>
                                 document.addEventListener("DOMContentLoaded", function() {
                                     const form = document.getElementById("purchaseForm");
