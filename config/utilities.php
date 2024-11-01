@@ -197,7 +197,8 @@ function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agent
 
 
 
-// Function to update record_creation_datetime and other columns to GMT+8 and set timezone_updated to 1 where applicable
+
+// Function to update record_creation_datetime and other timestamp columns to GMT+8 and set timezone_updated to 1 for all tables
 function updateTimeZoneToGMT8($conn) {
     try {
         // Set the time zone for the current session to Malaysia time (GMT+8)
@@ -205,40 +206,24 @@ function updateTimeZoneToGMT8($conn) {
 
         // Array of tables and columns to update
         $tablesToUpdate = [
-            "purchase_entries" => [
-                "columns" => ["record_creation_datetime"],
-                "timezone_updated_column" => "timezone_updated"
-            ],
-            "admin_access" => [
-                "columns" => ["created_at", "updated_at"]
-            ],
-            "admin_access_change_log" => [
-                "columns" => ["change_time"]
-            ],
-            "customer_details" => [
-                "columns" => ["created_at", "updated_at"]
-            ],
-            "winning_record" => [
-                "columns" => ["created_at", "last_updated"]
-            ],
-            "user_activity_log" => [
-                "columns" => ["login_time", "created_at"]
-            ]
+            "purchase_entries" => ["record_creation_datetime"],
+            "admin_access" => ["created_at", "updated_at"],
+            "admin_access_change_log" => ["change_time"],
+            "customer_details" => ["created_at", "updated_at"],
+            "winning_record" => ["created_at", "last_updated"],
+            "user_activity_log" => ["login_time", "created_at"]
         ];
 
         // Loop through each table and update the specified columns
-        foreach ($tablesToUpdate as $table => $config) {
-            $columns = $config['columns'];
-            $timezoneUpdatedColumn = isset($config['timezone_updated_column']) ? $config['timezone_updated_column'] : null;
-
+        foreach ($tablesToUpdate as $table => $columns) {
             foreach ($columns as $column) {
-                // SQL query to update each column, only if timezone_updated is not 1 (where applicable)
+                // SQL query to update each column and set timezone_updated to 1
                 $sql = "UPDATE $table 
-                        SET $column = DATE_ADD($column, INTERVAL 8 HOUR)" .
-                        ($timezoneUpdatedColumn ? ", $timezoneUpdatedColumn = 1" : "") .
-                        " WHERE $column IS NOT NULL" .
-                        ($timezoneUpdatedColumn ? " AND $timezoneUpdatedColumn != 1" : "");
-                
+                        SET $column = DATE_ADD($column, INTERVAL 8 HOUR), 
+                            timezone_updated = 1
+                        WHERE $column IS NOT NULL AND timezone_updated != 1";
+
+                // Prepare and execute the query
                 $stmt = $conn->prepare($sql);
                 $stmt->execute();
             }
@@ -251,6 +236,7 @@ function updateTimeZoneToGMT8($conn) {
         return "Error: " . $e->getMessage();
     }
 }
+
 
 
 ?>
