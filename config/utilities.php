@@ -196,28 +196,62 @@ function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agent
 
 
 
-// Function to update record_creation_datetime from UTC to GMT+8 using an existing connection
+
+// Function to update record_creation_datetime and other columns to GMT+8 and set timezone_updated to 1 where applicable
 function updateTimeZoneToGMT8($conn) {
     try {
         // Set the time zone for the current session to Malaysia time (GMT+8)
         $conn->exec("SET time_zone = '+08:00'");
 
-        // SQL query to update record_creation_datetime
-        $sql = "UPDATE purchase_entries 
-                SET record_creation_datetime = DATE_ADD(record_creation_datetime, INTERVAL 8 HOUR),
-                    timezone_updated = 1
-                WHERE timezone_updated != 1";
+        // Array of tables and columns to update
+        $tablesToUpdate = [
+            "purchase_entries" => [
+                "columns" => ["record_creation_datetime"],
+                "timezone_updated_column" => "timezone_updated"
+            ],
+            "admin_access" => [
+                "columns" => ["created_at", "updated_at"]
+            ],
+            "admin_access_change_log" => [
+                "columns" => ["change_time"]
+            ],
+            "customer_details" => [
+                "columns" => ["created_at", "updated_at"]
+            ],
+            "winning_record" => [
+                "columns" => ["created_at", "last_updated"]
+            ],
+            "user_activity_log" => [
+                "columns" => ["login_time", "created_at"]
+            ]
+        ];
 
-        // Execute the query
-        $stmt = $conn->prepare($sql);
-        $stmt->execute();
+        // Loop through each table and update the specified columns
+        foreach ($tablesToUpdate as $table => $config) {
+            $columns = $config['columns'];
+            $timezoneUpdatedColumn = isset($config['timezone_updated_column']) ? $config['timezone_updated_column'] : null;
+
+            foreach ($columns as $column) {
+                // SQL query to update each column, only if timezone_updated is not 1 (where applicable)
+                $sql = "UPDATE $table 
+                        SET $column = DATE_ADD($column, INTERVAL 8 HOUR)" .
+                        ($timezoneUpdatedColumn ? ", $timezoneUpdatedColumn = 1" : "") .
+                        " WHERE $column IS NOT NULL" .
+                        ($timezoneUpdatedColumn ? " AND $timezoneUpdatedColumn != 1" : "");
+                
+                $stmt = $conn->prepare($sql);
+                $stmt->execute();
+            }
+        }
 
         // Return success message
-        return "Records updated successfully.";
+        return "Records updated successfully for all tables.";
     } catch (PDOException $e) {
         // Return error message if an exception occurs
         return "Error: " . $e->getMessage();
     }
 }
+
+
 ?>
 
