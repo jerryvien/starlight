@@ -143,7 +143,7 @@ function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agent
     $telegram .= sprintf("%-{$colWidth1}s : %-{$colWidth2}s\n", "Agent Name", $agentName);
 
     // Bold the serial number and maintain alignment
-    $telegram .= sprintf("%-{$colWidth1}s : %-{$colWidth2}s\n", "Serial Number", $serialNumber);
+    $telegram .= sprintf("%-{$colWidth1}s : <strong>%-{$colWidth2}s</strong>\n", "Serial Number", $serialNumber);
 
     $telegram .= sprintf("%-{$colWidth1}s : %-{$colWidth2}s\n", "Transacted", $transactionDateTime);
     $telegram .= sprintf("%-{$colWidth1}s : $%-{$colWidth2}s\n", "Subtotal", number_format($subtotal, 2));
