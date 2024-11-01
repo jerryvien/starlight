@@ -174,6 +174,9 @@ try {
 } catch (Exception $e) {
     die("Error fetching recent purchases: " . $e->getMessage());
 }
+
+// Example usage of the function with the existing connection
+updateTimeZoneToGMT8($conn);
 ?>
 
 <!DOCTYPE html>

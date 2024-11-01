@@ -194,5 +194,30 @@ function generateReceiptPopup($customerName, $purchaseDetails, $subtotal, $agent
     return $html;
 }
 
+
+
+// Function to update record_creation_datetime from UTC to GMT+8 using an existing connection
+function updateTimeZoneToGMT8($conn) {
+    try {
+        // Set the time zone for the current session to Malaysia time (GMT+8)
+        $conn->exec("SET time_zone = '+08:00'");
+
+        // SQL query to update record_creation_datetime
+        $sql = "UPDATE purchase_entries 
+                SET record_creation_datetime = DATE_ADD(record_creation_datetime, INTERVAL 8 HOUR),
+                    timezone_updated = 1
+                WHERE timezone_updated != 1";
+
+        // Execute the query
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+
+        // Return success message
+        return "Records updated successfully.";
+    } catch (PDOException $e) {
+        // Return error message if an exception occurs
+        return "Error: " . $e->getMessage();
+    }
+}
 ?>
 
